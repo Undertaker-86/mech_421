@@ -12,6 +12,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Collections.Concurrent;
 using System.Diagnostics.Eventing.Reader;
+using System.Globalization;
 
 namespace ex8
 {
@@ -36,18 +37,19 @@ namespace ex8
         private int current_ax, current_ay, current_az;
 
         // data points
-        private struct DataPoint { public int ax, ay, az; }
+        private struct DataPoint { public int ax, ay, az; public double t; }
         private Queue<DataPoint> data_history = new Queue<DataPoint>();
         private const int AVERAGE_WINDOW_SIZE = 100;
         private double avg_ax, avg_ay, avg_az;
 
-        private enum GestureState { idle, z_detected, x_detected, xy_detected }
+        private enum GestureState { idle, x_detected, y_detected, z_detected, wait_after_x, wait_after_y, wait_after_z, cooldown }
 
 
         private GestureState current_gesture_state = GestureState.idle;
         private int gesture_timeout_counter = 0;
-        private const int GESTURE_TIMEOUT_LIMIT = 200; // Timeout after x data points
-        private const int AFTER_DETECTION_TIMEOUT = 3000;
+        private const int GESTURE_TIMEOUT_LIMIT = 300; // Timeout after x data points
+        private const int WAIT_DURATION = 50; // Wait duration between sequential motions (in data points)
+        private const int AFTER_DETECTION_TIMEOUT = 300;
 
         private string last_detected_gesture = "";
         private int gesture_display_counter = 0;
@@ -80,7 +82,10 @@ namespace ex8
         private void timer1_Tick(object sender, EventArgs e)
         {
             ProcessDataQueue();
-            UpdateUI();
+            if (serialPort1.IsOpen)
+            {
+                UpdateUI();
+            }
         }
 
         private void ProcessDataQueue()
@@ -108,11 +113,12 @@ namespace ex8
                         // complete cycle
                         var new_point = new DataPoint { ax = current_ax,
                                                         ay = current_ay,
-                                                        az = current_az
+                                                        az = current_az,
+                                                        t = stopwatch.Elapsed.TotalSeconds
                                                         };
+                        session_data.Add(new_point);
                         updateAverages(new_point);
                         ProcessGesture(new_point);
-                        session_data.Add(new_point);
 
                         current_parse_state = ParseState.waiting_for_header;
                         break;
@@ -142,18 +148,38 @@ namespace ex8
             const int POS_Y_THRESHOLD = 150;
             const int POS_Z_THRESHOLD = 185;
 
+            // Skip processing during cooldown
+            if (current_gesture_state == GestureState.cooldown)
+            {
+                gesture_timeout_counter++;
+                if (gesture_timeout_counter >= AFTER_DETECTION_TIMEOUT)
+                {
+                    current_gesture_state = GestureState.idle;
+                    LogHistory("READY: Now accepting new gestures");
+                }
+                return;
+            }
+
+            // Handle timeout for all non-idle states
             if (current_gesture_state != GestureState.idle)
             {
                 gesture_timeout_counter++;
                 if (gesture_timeout_counter > GESTURE_TIMEOUT_LIMIT)
                 {
-                    if (current_gesture_state == GestureState.x_detected)
+                    if (current_gesture_state == GestureState.wait_after_x)
                     {
                         DetectGesture("Simple Punch");
-                        delayForSpecifiedTime();
+                        LogHistory("ENTER NEXT MOTION: Simple punch completed after timeout");
+                        current_gesture_state = GestureState.cooldown;
+                        gesture_timeout_counter = 0;
+                        LogHistory("COOLDOWN: Waiting before accepting new gestures");
                     }
-                    current_gesture_state = GestureState.idle;
-                    LogHistory("--- Gesture Timed Out ---");
+                    else
+                    {
+                        current_gesture_state = GestureState.idle;
+                        LogHistory("--- Gesture Timed Out ---");
+                    }
+                    return;
                 }
             }
 
@@ -163,63 +189,96 @@ namespace ex8
                     {
                         if (point.ax > POS_X_THRESHOLD)
                         {
-                            //DetectGesture("Simple Punch");
                             current_gesture_state = GestureState.x_detected;
                             gesture_timeout_counter = 0;
+                            LogHistory("ACCEPTED: +X motion detected");
                             LogHistory($"State change: Idle -> {current_gesture_state}");
                         }
                         else if (point.az > POS_Z_THRESHOLD)
                         {
                             current_gesture_state = GestureState.z_detected;
                             gesture_timeout_counter = 0;
+                            LogHistory("ACCEPTED: +Z motion detected");
                             LogHistory($"State change: Idle -> {current_gesture_state}");
-                        }
-                        break;
-                    }
-
-                case GestureState.z_detected:
-                    {
-                        if (point.ax > POS_X_THRESHOLD)
-                        {
-                            DetectGesture("High Punch");
-                            delayForSpecifiedTime();
-                            current_gesture_state = GestureState.idle;
                         }
                         break;
                     }
 
                 case GestureState.x_detected:
                     {
-                        if (point.ay > POS_Y_THRESHOLD)
+                        if (gesture_timeout_counter >= WAIT_DURATION)
                         {
-                            GestureState previous_gesture_state = current_gesture_state;
-                            current_gesture_state = GestureState.xy_detected;
-                            //delayForSpecifiedTime();
-                            LogHistory($"State change: {previous_gesture_state} -> {current_gesture_state}");
+                            current_gesture_state = GestureState.wait_after_x;
+                            LogHistory("WAIT: Waiting for next motion after +X");
                         }
                         break;
                     }
 
-                case GestureState.xy_detected:
+                case GestureState.wait_after_x:
+                    {
+                        if (point.ay > POS_Y_THRESHOLD)
+                        {
+                            current_gesture_state = GestureState.y_detected;
+                            gesture_timeout_counter = 0;
+                            LogHistory("ACCEPTED: +Y motion detected");
+                            LogHistory($"State change: wait_after_x -> {current_gesture_state}");
+                        }
+                        break;
+                    }
+
+                case GestureState.y_detected:
+                    {
+                        if (gesture_timeout_counter >= WAIT_DURATION)
+                        {
+                            current_gesture_state = GestureState.wait_after_y;
+                            LogHistory("WAIT: Waiting for next motion after +Y");
+                        }
+                        break;
+                    }
+
+                case GestureState.wait_after_y:
                     {
                         if (point.az > POS_Z_THRESHOLD)
                         {
                             DetectGesture("Right-Hook");
-                            delayForSpecifiedTime();
-                            current_gesture_state = GestureState.idle;
+                            LogHistory("ENTER NEXT MOTION: Right-hook sequence completed");
+                            current_gesture_state = GestureState.cooldown;
+                            gesture_timeout_counter = 0;
+                            LogHistory("COOLDOWN: Waiting before accepting new gestures");
                         }
+                        break;
                     }
-                    break;
+
+                case GestureState.z_detected:
+                    {
+                        if (gesture_timeout_counter >= WAIT_DURATION)
+                        {
+                            current_gesture_state = GestureState.wait_after_z;
+                            LogHistory("WAIT: Waiting for next motion after +Z");
+                        }
+                        break;
+                    }
+
+                case GestureState.wait_after_z:
+                    {
+                        if (point.ax > POS_X_THRESHOLD)
+                        {
+                            DetectGesture("High Punch");
+                            LogHistory("ENTER NEXT MOTION: High punch sequence completed");
+                            current_gesture_state = GestureState.cooldown;
+                            gesture_timeout_counter = 0;
+                            LogHistory("COOLDOWN: Waiting before accepting new gestures");
+                        }
+                        break;
+                    }
             }
         }
 
-        private void delayForSpecifiedTime()
+        private void ResetToIdle()
         {
-            for (int i = 0; i < AFTER_DETECTION_TIMEOUT; i++)
-            {
-                // do nothing
-            }
-            textBoxHistory.AppendText("New Frame Input" + Environment.NewLine);
+            current_gesture_state = GestureState.idle;
+            gesture_timeout_counter = 0;
+            LogHistory("Ready for new gesture input");
         }
         private void UpdateUI()
         {
@@ -265,11 +324,11 @@ namespace ex8
             int devY = Math.Abs(current_ay - RESTING_NEUTRAL);
             int devZ = Math.Abs(current_az - RESTING_Z);
 
-            string orientation = "Neutral";
+            string orientation = "Z+";
 
             if (devX > devY && devX > devZ && devX > ORIENTATION_THRESHOLD)
             {
-                orientation = current_ax > RESTING_NEUTRAL ? "X+" : "X-"; // This is old c syntax
+                orientation = current_ax > RESTING_NEUTRAL ? "X+" : "X-"; // This is c syntax
                 // it says is cond 1 satisfied? if yes go to option 1 else option 2
             }
             else if (devY > devX && devY > devZ && devY > ORIENTATION_THRESHOLD)
@@ -280,7 +339,7 @@ namespace ex8
             {
                 orientation = current_az > RESTING_Z ? "Z+" : "Z-"; 
             }
-            textBoxOrientation.Text = orientation;
+            textBoxOrientation.AppendText(orientation + Environment.NewLine);
         }
         private void DetectGesture(string s)
         {
@@ -374,13 +433,15 @@ namespace ex8
             {
                 using (StreamWriter file = new StreamWriter(textBoxSelectFile.Text))
                 {
-                    file.WriteLine("Ax, Ay, Az, t");
+                    file.WriteLine("Ax,Ay,Az,t_seconds");
                     foreach (var point in session_data)
                     {
-                        file.WriteLine($"{point.ax}, {point.ay}, {point.az}, {stopwatch.Elapsed.TotalSeconds},");
+                        file.WriteLine(string.Format(CultureInfo.InvariantCulture,
+                            "{0},{1},{2},{3:F6}",
+                            point.ax, point.ay, point.az, point.t));
                     }
                 }
-                MessageBox.Show($"Succesfully saved {session_data.Count} points", "Success",
+                MessageBox.Show($"Successfully saved {session_data.Count} points", "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)

@@ -227,7 +227,7 @@
             // 
             this.buttonSelectFile.Location = new System.Drawing.Point(1533, 36);
             this.buttonSelectFile.Name = "buttonSelectFile";
-            this.buttonSelectFile.Size = new System.Drawing.Size(198, 33);
+            this.buttonSelectFile.Size = new System.Drawing.Size(198, 57);
             this.buttonSelectFile.TabIndex = 20;
             this.buttonSelectFile.Text = "Select File";
             this.buttonSelectFile.UseVisualStyleBackColor = true;
@@ -236,15 +236,16 @@
             // textBoxSelectFile
             // 
             this.textBoxSelectFile.Location = new System.Drawing.Point(1310, 36);
+            this.textBoxSelectFile.Multiline = true;
             this.textBoxSelectFile.Name = "textBoxSelectFile";
-            this.textBoxSelectFile.Size = new System.Drawing.Size(198, 31);
+            this.textBoxSelectFile.Size = new System.Drawing.Size(198, 57);
             this.textBoxSelectFile.TabIndex = 21;
             // 
             // buttonSaveData
             // 
-            this.buttonSaveData.Location = new System.Drawing.Point(1533, 95);
+            this.buttonSaveData.Location = new System.Drawing.Point(1533, 117);
             this.buttonSaveData.Name = "buttonSaveData";
-            this.buttonSaveData.Size = new System.Drawing.Size(198, 33);
+            this.buttonSaveData.Size = new System.Drawing.Size(198, 55);
             this.buttonSaveData.TabIndex = 22;
             this.buttonSaveData.Text = "Save to CSV";
             this.buttonSaveData.UseVisualStyleBackColor = true;
