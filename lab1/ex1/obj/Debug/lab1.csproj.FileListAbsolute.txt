@@ -1,0 +1,10 @@
+D:\repository\MECH_421\lab\lab1\obj\Debug\lab1.csproj.AssemblyReference.cache
+D:\repository\MECH_421\lab\lab1\obj\Debug\lab1.Form1.resources
+D:\repository\MECH_421\lab\lab1\obj\Debug\lab1.csproj.GenerateResource.cache
+D:\repository\MECH_421\lab\lab1\obj\Debug\lab1.csproj.CoreCompileInputs.cache
+D:\repository\MECH_421\lab\lab1\bin\Debug\lab1_ex1.exe.config
+D:\repository\MECH_421\lab\lab1\bin\Debug\lab1_ex1.exe
+D:\repository\MECH_421\lab\lab1\bin\Debug\lab1_ex1.pdb
+D:\repository\MECH_421\lab\lab1\obj\Debug\lab1_ex1.Properties.Resources.resources
+D:\repository\MECH_421\lab\lab1\obj\Debug\lab1_ex1.exe
+D:\repository\MECH_421\lab\lab1\obj\Debug\lab1_ex1.pdb

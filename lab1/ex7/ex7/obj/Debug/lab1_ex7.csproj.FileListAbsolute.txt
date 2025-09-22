@@ -1,0 +1,22 @@
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\bin\Debug\lab1_ex7.exe.config
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\bin\Debug\lab1_ex7.exe
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\bin\Debug\lab1_ex7.pdb
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.csproj.AssemblyReference.cache
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.Form1.resources
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.Properties.Resources.resources
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.csproj.GenerateResource.cache
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.csproj.CoreCompileInputs.cache
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.exe
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.pdb
+E:\School\Year 4\MECH_421\Lab\lab1_ex7\obj\Debug\lab1_ex7.exe.config
+D:\repository\MECH_421\lab1\ex7\ex7\bin\Debug\lab1_ex7.exe.config
+D:\repository\MECH_421\lab1\ex7\ex7\bin\Debug\lab1_ex7.exe
+D:\repository\MECH_421\lab1\ex7\ex7\bin\Debug\lab1_ex7.pdb
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.csproj.AssemblyReference.cache
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.exe.config
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.Form1.resources
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.Properties.Resources.resources
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.csproj.GenerateResource.cache
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.csproj.CoreCompileInputs.cache
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.exe
+D:\repository\MECH_421\lab1\ex7\ex7\obj\Debug\lab1_ex7.pdb

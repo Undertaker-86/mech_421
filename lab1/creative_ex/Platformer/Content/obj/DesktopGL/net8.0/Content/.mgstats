@@ -1,0 +1,4 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"D:/repository/MECH_421/lab1/creative_ex/Platformer/Content/characters.png","D:/repository/MECH_421/lab1/creative_ex/Platformer/Content/bin/DesktopGL/Content/characters.xnb","TextureProcessor","Texture2DContent",12754,376917,0.167062
+"D:/repository/MECH_421/lab1/creative_ex/Platformer/Content/goblin.png","D:/repository/MECH_421/lab1/creative_ex/Platformer/Content/bin/DesktopGL/Content/goblin.xnb","TextureProcessor","Texture2DContent",35496,901205,0.0295756
+"D:/repository/MECH_421/lab1/creative_ex/Platformer/Content/pixel_art_sword_slash_sprites.png","D:/repository/MECH_421/lab1/creative_ex/Platformer/Content/bin/DesktopGL/Content/pixel_art_sword_slash_sprites.xnb","TextureProcessor","Texture2DContent",2349,108373,0.007832
