@@ -32,3 +32,4 @@ D:\repository\MECH_421\lab1\creative_ex\Platformer\obj\Debug\net8.0\ref\Platform
 D:\repository\MECH_421\lab1\creative_ex\Platformer\bin\Debug\net8.0\Content\characters.xnb
 D:\repository\MECH_421\lab1\creative_ex\Platformer\bin\Debug\net8.0\Content\goblin.xnb
 D:\repository\MECH_421\lab1\creative_ex\Platformer\bin\Debug\net8.0\Content\pixel_art_sword_slash_sprites.xnb
+D:\repository\MECH_421\lab1\creative_ex\Platformer\obj\Debug\net8.0\Platformer.sourcelink.json

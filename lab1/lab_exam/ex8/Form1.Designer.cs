@@ -58,6 +58,16 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label11 = new System.Windows.Forms.Label();
             this.textBoxStateHistory = new System.Windows.Forms.TextBox();
+            this.textBoxAvgAcceleration = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBoxMinAy = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBoxMinAz = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxMinAx = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBoxBufferSize = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // comboBoxCOMPorts
@@ -91,14 +101,14 @@
             // 
             this.textBoxAx.Location = new System.Drawing.Point(562, 39);
             this.textBoxAx.Name = "textBoxAx";
-            this.textBoxAx.Size = new System.Drawing.Size(198, 31);
+            this.textBoxAx.Size = new System.Drawing.Size(109, 31);
             this.textBoxAx.TabIndex = 3;
             // 
             // textBoxAz
             // 
             this.textBoxAz.Location = new System.Drawing.Point(562, 147);
             this.textBoxAz.Name = "textBoxAz";
-            this.textBoxAz.Size = new System.Drawing.Size(198, 31);
+            this.textBoxAz.Size = new System.Drawing.Size(109, 31);
             this.textBoxAz.TabIndex = 5;
             // 
             // label2
@@ -114,7 +124,7 @@
             // 
             this.textBoxAy.Location = new System.Drawing.Point(562, 92);
             this.textBoxAy.Name = "textBoxAy";
-            this.textBoxAy.Size = new System.Drawing.Size(198, 31);
+            this.textBoxAy.Size = new System.Drawing.Size(109, 31);
             this.textBoxAy.TabIndex = 7;
             // 
             // label3
@@ -128,7 +138,7 @@
             // 
             // textBoxAvgAy
             // 
-            this.textBoxAvgAy.Location = new System.Drawing.Point(996, 89);
+            this.textBoxAvgAy.Location = new System.Drawing.Point(891, 89);
             this.textBoxAvgAy.Name = "textBoxAvgAy";
             this.textBoxAvgAy.Size = new System.Drawing.Size(198, 31);
             this.textBoxAvgAy.TabIndex = 13;
@@ -136,15 +146,15 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(792, 92);
+            this.label4.Location = new System.Drawing.Point(687, 92);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(197, 25);
+            this.label4.Size = new System.Drawing.Size(201, 25);
             this.label4.TabIndex = 12;
-            this.label4.Text = "Avg 100p Ay (Byte)";
+            this.label4.Text = "Max 100p Ay (Byte)";
             // 
             // textBoxAvgAz
             // 
-            this.textBoxAvgAz.Location = new System.Drawing.Point(996, 144);
+            this.textBoxAvgAz.Location = new System.Drawing.Point(891, 144);
             this.textBoxAvgAz.Name = "textBoxAvgAz";
             this.textBoxAvgAz.Size = new System.Drawing.Size(198, 31);
             this.textBoxAvgAz.TabIndex = 11;
@@ -152,15 +162,15 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(792, 147);
+            this.label5.Location = new System.Drawing.Point(687, 147);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(197, 25);
+            this.label5.Size = new System.Drawing.Size(201, 25);
             this.label5.TabIndex = 10;
-            this.label5.Text = "Avg 100p Az (Byte)";
+            this.label5.Text = "Max 100p Az (Byte)";
             // 
             // textBoxAvgAx
             // 
-            this.textBoxAvgAx.Location = new System.Drawing.Point(996, 36);
+            this.textBoxAvgAx.Location = new System.Drawing.Point(891, 36);
             this.textBoxAvgAx.Name = "textBoxAvgAx";
             this.textBoxAvgAx.Size = new System.Drawing.Size(198, 31);
             this.textBoxAvgAx.TabIndex = 9;
@@ -168,11 +178,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(792, 39);
+            this.label6.Location = new System.Drawing.Point(687, 39);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(197, 25);
+            this.label6.Size = new System.Drawing.Size(201, 25);
             this.label6.TabIndex = 8;
-            this.label6.Text = "Avg 100p Ax (Byte)";
+            this.label6.Text = "Max 100p Ax (Byte)";
             // 
             // textBoxQueueSize
             // 
@@ -192,16 +202,16 @@
             // 
             // textBoxOrientation
             // 
-            this.textBoxOrientation.Location = new System.Drawing.Point(1247, 253);
+            this.textBoxOrientation.Location = new System.Drawing.Point(1247, 290);
             this.textBoxOrientation.Multiline = true;
             this.textBoxOrientation.Name = "textBoxOrientation";
-            this.textBoxOrientation.Size = new System.Drawing.Size(526, 587);
+            this.textBoxOrientation.Size = new System.Drawing.Size(526, 550);
             this.textBoxOrientation.TabIndex = 17;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(1423, 215);
+            this.label8.Location = new System.Drawing.Point(1419, 262);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(190, 25);
             this.label8.TabIndex = 16;
@@ -209,7 +219,7 @@
             // 
             // textBoxGesture
             // 
-            this.textBoxGesture.Location = new System.Drawing.Point(232, 147);
+            this.textBoxGesture.Location = new System.Drawing.Point(232, 185);
             this.textBoxGesture.Name = "textBoxGesture";
             this.textBoxGesture.Size = new System.Drawing.Size(198, 31);
             this.textBoxGesture.TabIndex = 19;
@@ -217,7 +227,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(39, 150);
+            this.label9.Location = new System.Drawing.Point(39, 188);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(88, 25);
             this.label9.TabIndex = 18;
@@ -225,7 +235,7 @@
             // 
             // buttonSelectFile
             // 
-            this.buttonSelectFile.Location = new System.Drawing.Point(1533, 36);
+            this.buttonSelectFile.Location = new System.Drawing.Point(1667, 38);
             this.buttonSelectFile.Name = "buttonSelectFile";
             this.buttonSelectFile.Size = new System.Drawing.Size(198, 57);
             this.buttonSelectFile.TabIndex = 20;
@@ -235,7 +245,7 @@
             // 
             // textBoxSelectFile
             // 
-            this.textBoxSelectFile.Location = new System.Drawing.Point(1310, 36);
+            this.textBoxSelectFile.Location = new System.Drawing.Point(1667, 115);
             this.textBoxSelectFile.Multiline = true;
             this.textBoxSelectFile.Name = "textBoxSelectFile";
             this.textBoxSelectFile.Size = new System.Drawing.Size(198, 57);
@@ -243,7 +253,7 @@
             // 
             // buttonSaveData
             // 
-            this.buttonSaveData.Location = new System.Drawing.Point(1533, 117);
+            this.buttonSaveData.Location = new System.Drawing.Point(1667, 185);
             this.buttonSaveData.Name = "buttonSaveData";
             this.buttonSaveData.Size = new System.Drawing.Size(198, 55);
             this.buttonSaveData.TabIndex = 22;
@@ -253,16 +263,16 @@
             // 
             // textBoxHistory
             // 
-            this.textBoxHistory.Location = new System.Drawing.Point(668, 253);
+            this.textBoxHistory.Location = new System.Drawing.Point(668, 290);
             this.textBoxHistory.Multiline = true;
             this.textBoxHistory.Name = "textBoxHistory";
-            this.textBoxHistory.Size = new System.Drawing.Size(526, 587);
+            this.textBoxHistory.Size = new System.Drawing.Size(526, 550);
             this.textBoxHistory.TabIndex = 24;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(831, 215);
+            this.label10.Location = new System.Drawing.Point(827, 262);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(204, 25);
             this.label10.TabIndex = 23;
@@ -280,7 +290,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(279, 215);
+            this.label11.Location = new System.Drawing.Point(275, 262);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(135, 25);
             this.label11.TabIndex = 25;
@@ -288,17 +298,107 @@
             // 
             // textBoxStateHistory
             // 
-            this.textBoxStateHistory.Location = new System.Drawing.Point(83, 253);
+            this.textBoxStateHistory.Location = new System.Drawing.Point(83, 290);
             this.textBoxStateHistory.Multiline = true;
             this.textBoxStateHistory.Name = "textBoxStateHistory";
-            this.textBoxStateHistory.Size = new System.Drawing.Size(526, 587);
+            this.textBoxStateHistory.Size = new System.Drawing.Size(526, 550);
             this.textBoxStateHistory.TabIndex = 26;
+            // 
+            // textBoxAvgAcceleration
+            // 
+            this.textBoxAvgAcceleration.Location = new System.Drawing.Point(1347, 197);
+            this.textBoxAvgAcceleration.Name = "textBoxAvgAcceleration";
+            this.textBoxAvgAcceleration.Size = new System.Drawing.Size(198, 31);
+            this.textBoxAvgAcceleration.TabIndex = 28;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(1106, 198);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(229, 25);
+            this.label12.TabIndex = 27;
+            this.label12.Text = "Avg 50p magnitude (g)";
+            // 
+            // textBoxMinAy
+            // 
+            this.textBoxMinAy.Location = new System.Drawing.Point(1347, 92);
+            this.textBoxMinAy.Name = "textBoxMinAy";
+            this.textBoxMinAy.Size = new System.Drawing.Size(198, 31);
+            this.textBoxMinAy.TabIndex = 34;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(1106, 93);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(164, 25);
+            this.label13.TabIndex = 33;
+            this.label13.Text = "Min 100p Ay (g)";
+            // 
+            // textBoxMinAz
+            // 
+            this.textBoxMinAz.Location = new System.Drawing.Point(1347, 147);
+            this.textBoxMinAz.Name = "textBoxMinAz";
+            this.textBoxMinAz.Size = new System.Drawing.Size(198, 31);
+            this.textBoxMinAz.TabIndex = 32;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(1106, 148);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(164, 25);
+            this.label14.TabIndex = 31;
+            this.label14.Text = "Min 100p Az (g)";
+            // 
+            // textBoxMinAx
+            // 
+            this.textBoxMinAx.Location = new System.Drawing.Point(1347, 39);
+            this.textBoxMinAx.Name = "textBoxMinAx";
+            this.textBoxMinAx.Size = new System.Drawing.Size(198, 31);
+            this.textBoxMinAx.TabIndex = 30;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(1106, 40);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(164, 25);
+            this.label15.TabIndex = 29;
+            this.label15.Text = "Min 100p Ax (g)";
+            // 
+            // textBoxBufferSize
+            // 
+            this.textBoxBufferSize.Location = new System.Drawing.Point(232, 142);
+            this.textBoxBufferSize.Name = "textBoxBufferSize";
+            this.textBoxBufferSize.Size = new System.Drawing.Size(198, 31);
+            this.textBoxBufferSize.TabIndex = 36;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(39, 145);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(180, 25);
+            this.label16.TabIndex = 35;
+            this.label16.Text = "Buffer Size (Byte)";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1804, 868);
+            this.ClientSize = new System.Drawing.Size(1877, 868);
+            this.Controls.Add(this.textBoxBufferSize);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBoxMinAy);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.textBoxMinAz);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.textBoxMinAx);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.textBoxAvgAcceleration);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.textBoxStateHistory);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.textBoxHistory);
@@ -366,6 +466,16 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBoxStateHistory;
+        private System.Windows.Forms.TextBox textBoxAvgAcceleration;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBoxMinAy;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBoxMinAz;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox textBoxMinAx;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBoxBufferSize;
+        private System.Windows.Forms.Label label16;
     }
 }
 
