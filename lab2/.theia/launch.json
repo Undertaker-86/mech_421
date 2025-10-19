@@ -1,0 +1,149 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ex3",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex3",
+                "resourceId": "/ex3"
+            }
+        },
+        {
+            "name": "ex4",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex4",
+                "resourceId": "/ex4"
+            }
+        },
+        {
+            "name": "Ryan_lab2_ex3",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Ryan_lab2_ex3",
+                "resourceId": "/Ryan_lab2_ex3"
+            }
+        },
+        {
+            "name": "Ryan_lab2_ex4",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Ryan_lab2_ex4",
+                "resourceId": "/Ryan_lab2_ex4"
+            }
+        },
+        {
+            "name": "ex5",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex5",
+                "resourceId": "/ex5"
+            }
+        },
+        {
+            "name": "ex6",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex6",
+                "resourceId": "/ex6"
+            }
+        },
+        {
+            "name": "ex7",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex7",
+                "resourceId": "/ex7"
+            }
+        },
+        {
+            "name": "ryan_lab2_ex5",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ryan_lab2_ex5",
+                "resourceId": "/ryan_lab2_ex5"
+            }
+        },
+        {
+            "name": "ryan_lab2_ex6",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ryan_lab2_ex6",
+                "resourceId": "/ryan_lab2_ex6"
+            }
+        },
+        {
+            "name": "ryan_lab2_ex8",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ryan_lab2_ex8",
+                "resourceId": "/ryan_lab2_ex8"
+            }
+        },
+        {
+            "name": "ryan_lab2_ex9",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ryan_lab2_ex9",
+                "resourceId": "/ryan_lab2_ex9"
+            }
+        },
+        {
+            "name": "ryan_lab2_ex10",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ryan_lab2_ex10",
+                "resourceId": "/ryan_lab2_ex10"
+            }
+        },
+        {
+            "name": "ryan_lab2_ex7",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ryan_lab2_ex7",
+                "resourceId": "/ryan_lab2_ex7"
+            }
+        },
+        {
+            "name": "ex8",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex8",
+                "resourceId": "/ex8"
+            }
+        },
+        {
+            "name": "ex9",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex9",
+                "resourceId": "/ex9"
+            }
+        },
+        {
+            "name": "ex10",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex10",
+                "resourceId": "/ex10"
+            }
+        }
+    ]
+}

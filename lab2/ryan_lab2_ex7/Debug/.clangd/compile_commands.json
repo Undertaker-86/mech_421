@@ -1,0 +1,117 @@
+[
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/adc10_b.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/comp_d.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/crc.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/cs.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/dma.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/eusci_a_spi.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/eusci_a_uart.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/eusci_b_i2c.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/eusci_b_spi.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/framctl.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/gpio.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/mpu.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/mpy32.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/pmm.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/ref.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/rtc_b.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/sfr.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/sysctl.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/timer_a.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/timer_b.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/tlv.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx/wdt_a.c"
+   },
+   {
+      "directory" : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/Debug",
+      "command"   : "clang++ -I\"C:/ti/ccs2030/ccs/ccs_base/msp430/include\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7\" -I\"D:/repository/MECH_421/lab2/ryan_lab2_ex7/driverlib/MSP430FR57xx\" -I\"C:/ti/ccs2030/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/include\" -D__MSP430FR5739__ -D_MPU_ENABLE -DDEPRECATED -xc",
+      "file"      : "D:/repository/MECH_421/lab2/ryan_lab2_ex7/main.c"
+   }
+]

@@ -1,0 +1,292 @@
+Getting Started Guide 
+
+IAR KickStart Kit™ for TI MSP430FR5739 
+
+This getting started guide briefly describes how to get started using IAR Embedded 
+Workbench® with the TI MSP-EXP430FR5739 Experimenter’s Board.  
+
+For more detailed information, see the IAR Embedded Workbench IDE Project Management 
+and Building Guide and C-SPY Debugging Guide. These documents are available from the 
+Help menu and IAR Information Center in the IAR Embedded Workbench IDE. 
+
+Features of the MSP-EXP430FR5739 Experimenter’s Board 
+
+• 
+
+Integrated TI MSP430FR5739 device 
+
+•  USB debugging and programming interface  
+
+•  3-axis accelerometer 
+
+•  NTC thermistor for temperature sensing 
+
+•  2 user input switches and a reset switch 
+
+•  8 LEDs for output display 
+
+•  Connectivity to the MSP-EXP430F5438 Experimenter Board 
+
+•  Connectivity to CCxxx radio daughter cards 
+
+•  Easily accessible device pins for 
+
+debugging purposes  
+
+•  Separate power jumpers to measure 
+power to the MSP430 and the RF 
+daughter card. High quality stereo audio 
+output 
+
+•  User experience: Demo code with 4 
+modes to test FRAM features 
+
+GS-MSP-EXP430F5739-4 
+
+1 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Software installation  
+
+1  Download the latest IAR Embedded Workbench for MSP430 from www.iar.com/kit_updates. 
+2  Run the software installer. It may take several minutes for the installation files to unpack.  
+
+Figure 1 - Software installer 
+
+3  Click Install IAR Embedded Workbench and follow the prompt instructions to install the 
+
+software. We recommend that you use the default directories on your installation. 
+
+4  When you start IAR Embedded Workbench for the first time, the License Wizard will open. 
+
+Choose Register with IAR Systems to get an evaluation license (the internet access is needed). 
+
+Figure 2 - Register to get an evaluation license 
+
+5  Click Register, choose a time or code size limited evaluation license, and then register to get your 
+
+license number, which will be delivered to you via e-mail within a few minutes. 
+
+6  Activate the license in the License Wizard window. 
+
+You may register both the kickstart and the evaluation license, activate and switch in between 
+from the License Manager. For further information, see the IAR Embedded Workbench, 
+Licensing Guide, under the User Guide section in the Information Center (Figure 2). 
+
+We assume that you have already installed Java software in your computer. A free version is 
+available from www.java.com. 
+
+GS-MSP-EXP430F5739-4 
+
+2 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Hardware configuration 
+
+1  Connect the MSP-EXP430FR5739 evaluation board to the PC using the enclosed USB cable. The 
+driver files will be automatically located and installed. This also supplies power to the board.  
+
+For more details, please read the MSP-EXP430FR5739 FRAM Experimenter Board User's Guide.  
+
+Running example application 
+
+To take the full advantage of the example application, some working knowledge of IAR 
+Embedded Workbench IDE is preferred. For a quick introduction, see the GETTING STARTED 
+and the TUTORIALS in the IAR Information Center for MSP430.  
+
+The example application described here is MSP-EXP430FR5739 Experimenter's Board 
+User Experience Demo. 
+
+1  From the Start menu, start the IAR Embedded Workbench IDE by choosing All Programs> IAR 
+Systems> IAR Embedded Workbench for MSP430 x.xx >IAR Embedded Workbench. You 
+will get straight into the IAR Information Center for MSP430. 
+
+2  Click EXAMPLE PROJECTS and select Hardware boards>MSP-EXP430FR5739. 
+
+Figure 3 - IAR Information Center for MSP430 
+
+3  Open project MSP-EXP430FR5739 (click the 
+
+ icon). 
+
+4  Click Choose to select a destination folder to save a copy of this project for testing, so that the 
+
+original project will not be updated for any changes you made during testing. 
+
+5  Read the demo description and make sure that the compilation target, at the top of the workspace 
+
+window is set to Debug.  
+
+GS-MSP-EXP430F5739-4 
+
+3 
+
+ 
+ 
+ 
+ 
+ 
+ 
+Figure 4 - Example description and compilation target 
+
+6  Choose Project>Make or click the Make button 
+
+ on the toolbar (Figure 5). The project 
+
+should be compiled and linked without any errors (you may ignore the warnings).  
+
+7  Click the Download and Debug button 
+
+ to download your program to the evaluation board.  
+
+8  Click the Go button 
+
+ to start the application. The user LED on the board will blink. 
+
+Figure 5 - IAR Embedded Workbench IDE - Menu and Toolbar 
+
+9  Start the PC GUI application by double clicking FRAM_GUI.exe, which is located under the 
+
+IAR Embedded Workbench installation path   
+IAR Systems\Embedded Workbench 6.5\430\examples\examples\Hardware 
+boards\MSP-EXP430FR5739\MSP-EXP430FR5739\FRAM_GUI 
+Note: The Java software must be installed on your computer when running this application. 
+
+Figure 6 - PC GUI for FRAM User Experience Demo 
+
+GS-MSP-EXP430F5739-4 
+
+4 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+10  Press switch S1 and S2 on the board to select the demo mode: 
+
+-  Press switch S1 for mode selection. After you press S1, LED8 through LED5 light up to 
+
+show the corresponding mode. 
+
+-  Press switch S2 when inside a mode to turn off the display (LED and UART output). This 
+
+is useful when measuring power. 
+
+-  Press S1 to exit a mode and return to mode selection. 
+
+11  To stop C-SPY, click the Break button
+
+. 
+
+12  To exit C-SPY, click the Stop Debugging button
+
+. 
+
+Learning more 
+
+You can find more information about TI FRAM technology and kit documentation at   
+
+http://www.ti.com/fram and http://www.ti.com/tool/msp-exp430fr5739  
+
+For the latest updates on the kit and IAR Embedded Workbench for MSP430, please check at 
+http://www.iar.com/kit_updates and http://www.iar.com/ew430  
+
+GS-MSP-EXP430F5739-4 
+
+5 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Troubleshooting 
+
+If you are unable to find the cause of a problem, try resetting the evaluation board by using the 
+reset button on the board. Then restart the C-SPY Debugger in the IAR Embedded Workbench 
+IDE. You can also try disconnecting and reconnecting the power to the evaluation board, pressing 
+the reset button and then restarting C-SPY. 
+
+Disclaimer 
+
+Information given in this document is intended as a help for the user. IAR Systems shall not be 
+held liable for any losses or problems arising from using the information given in this document. 
+Neither whole nor any part of the information in this document may be adapted or reproduced. 
+
+IAR KickStart Kit content 
+
+Trademarks etc. 
+
+•  TI MSP-EXP430FR5739 
+Experimenter’s Board 
+
+•  USB cable 
+
+• 
+
+IAR Getting Started Guide  
+
+IAR Systems, IAR Embedded Workbench, C-SPY, 
+visualSTATE, IAR KickStart Kit, I-jet, IAR and the IAR 
+Systems logotype are trademarks or registered trademarks 
+owned by IAR Systems AB. 
+
+All other trademarks or registered trademarks mentioned 
+in this document are the properties of their respective 
+owners. 
+© Copyright 2014 IAR Systems AB 
+
+Part number:  GS-MSP-EXP430FR5739-4 
+The fourth edition: February 2014 
+
+GS-MSP-EXP430F5739-4 
+
+6 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+

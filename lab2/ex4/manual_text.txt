@@ -1,0 +1,4119 @@
+Product
+Folder
+Sample &
+Buy
+T echnical
+Documents
+Tools &
+Software
+Support &
+Community
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+MSP430FR5739-EPMixed-SignalMicrocontrollers
+1 Device Overview
+1.1 Features
+1
+– Hardware UART Bootstrap Loader (BSL)• Embedded Microcontroller
+• Power Management System– 16-Bit RISC Architecture up to 24-MHz Clock
+– Fully Integrated LDO– Wide Supply Voltage Range (2 to 3.6 V)
+– Supply Voltage Supervisor for Core and Supply– –55°C to 85°C Operation
+Voltages With Reset Capability• Optimized Ultra-Low-Power Modes
+– Always-On Zero-Power Brownout Detection– Active Mode: 81.4 µA/MHz (Typical)
+– Serial On-Board Programming With No External– Standby (LPM3 With VLO): 6.3 µA (Typical) Voltage Needed– Real-Time Clock (LPM3.5 With Crystal): 1.5 µA • Flexible Clock System(Typical)
+– Fixed-Frequency DCO With Six Selectable– Shutdown (LPM4.5): 0.32 µA (Typical) Factory-Trimmed Frequencies (Device• Ultra-Low-Power Ferroelectric RAM (FRAM) Dependent)– Up to 16KB of Nonvolatile Memory – Low-Power Low-Frequency Internal Clock– Ultra-Low-Power Writes Source (VLO)
+– Fast Write at 125 ns per Word (16KB in 1 ms) – 32-kHz Crystals (LFXT)
+– Built-In Error Correction Coding (ECC) and – High-Frequency Crystals (HFXT)Memory Protection Unit (MPU) • Development Tools and Software– Universal Memory = Program + Data + Storage – Free Professional Development Environment– 1015 Write Cycle Endurance ( Code Composer Studio™ IDE)
+– Radiation Resistant and Nonmagnetic – Low-Cost Full-Featured Kit
+• Intelligent Digital Peripherals (MSP-EXP430FR5739)
+– 32-Bit Hardware Multiplier (MPY) – Full Development Kit (MSP-FET430U40A)
+– Three-Channel Internal DMA – Target Board (MSP-TS430RHA40A)
+– Real-Time Clock (RTC) With Calendar and • Family Members
+Alarm Functions – Variants and Available Packages Summarized
+– Five 16-Bit Timers With up to Three in
+Capture/Compare Registers – For Complete Module Descriptions, See the
+– 16-Bit Cyclic Redundancy Checker (CRC) MSP430FR57xx Family User's Guide
+• High-Performance Analog (SLAU272)
+– 16-Channel Analog Comparator With Voltage • Supports Defense, Aerospace, and Medical
+Reference and Programmable Hysteresis Applications
+– 14-Channel 10-Bit Analog-to-Digital Converter – Controlled Baseline
+With Internal Reference and Sample-and-Hold – One Assembly and Test Site
+• 200 ksps at 100-µA Consumption – One Fabrication Site
+• Enhanced Serial Communication – Available in Extended (–55°C to 85°C)
+– eUSCI_A0 and eUSCI_A1 Support: Temperature Range
+• UART With Automatic Baud-Rate Detection (Some Noted Parameters Specified for –40°C
+to 85°C Only)• IrDA Encode and Decode
+– Extended Product Life Cycle• SPI at Rates up to 10 Mbps
+– Extended Product-Change Notification– eUSCI_B0 Supports:
+– Product Traceability• I2C With Multiple Slave Addressing
+• SPI at Rates up to 10 Mbps
+1
+An IMPORTANT NOTICE at the end of this data sheet addresses availability, warranty, changes, use in safety-critical applications,
+intellectual property matters and other important disclaimers. PRODUCTION DATA.
+Clock
+System
+16 KB
+8 KB
+FRAM
+(FR5739)
+(FR5735)
+4 KB
+(FR5731)
+1 KB
+RAM
+MCLK
+ACLK
+SMCLK
+CPUXV2
+and
+Working
+Registers
+EEM
+(S: 3+1)
+PJ.4/XIN PJ.5/XOUT
+JTAG/
+SBW
+Interface
+DMA
+3 Channel
+Power
+Management
+SVS
+SYS
+Watchdog
+MPY32
+TA0
+TA1
+(2) Timer_A
+3 CC
+Registers
+TB0
+TB1
+TB2
+(3) Timer_B
+3 CC
+Registers
+ADC10_B
+200KSPS
+14 channels
+(12 ext/2 int)
+10 Bit
+DVCC DVSS AVCC AVSS
+RST/NMI/SBWTDIO
+RTC_B
+Comp_D
+16 channels
+VCORE
+MAB
+MDB
+TEST/SBWTCK
+PJ.0/TDO
+PJ.1/TDI/TCLK
+PJ.2/TMS
+PJ.3/TCK
+I/O Ports
+P1/P2
+2×8 I/Os
+Interrupt
+& Wakeup
+PA
+1×16 I/Os
+PA
+P1.x P2.x
+I/O Ports
+P3/P4
+1×8 I/Os
+1x 2 I/Os
+Interrupt
+& Wakeup
+PB
+1×10 I/Os
+PB
+P3.x P4.x
+REF
+CRC
+eUSCI_A0:
+UART,
+IrDA, SPI
+eUSCI_B0:
+SPI, I2C
+Boot
+ROM
+Memory
+Protection
+Unit
+eUSCI_A1:
+UART,
+IrDA, SPI
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+1.2 Applications
+• Home Automation • Sensor Management
+• Security • Data Acquisition
+CAUTION These products use FRAM nonvolatile memory technology. FRAM retention is sensitive to extreme temperatures,
+such as those experienced during reflow or hand soldering. See Absolute Maximum Ratings for more information.
+CAUTION System-level ESD protection must be applied in compliance with the device-level ESD specification to prevent
+electrical overstress or disturb of data or code memory. See the application report MSP430™ System-Level ESD
+Considerations (SLAA530) for more information.
+1.3 Description
+The Texas Instruments MSP430FR573x family of ultra-low-power microcontrollers consists of multiple
+devices that feature embedded FRAM nonvolatile memory, ultra-low-power 16-bit MSP430™ CPU, and
+different peripherals targeted for various applications. The architecture, FRAM, and peripherals, combined
+with seven low-power modes, are optimized to achieve extended battery life in portable and wireless
+sensing applications. FRAM is a new nonvolatile memory that combines the speed, flexibility, and
+endurance of SRAM with the stability and reliability of flash, all at lower total power consumption.
+Peripherals include a 10-bit analog-to-digital converter (ADC), a 16-channel comparator with voltage
+reference generation and hysteresis capabilities, three enhanced serial channels capable of I2C, SPI, or
+UART protocols, an internal DMA, a hardware multiplier, an RTC, five 16-bit timers, and digital I/Os.
+Device Information(1)
+PART NUMBER PACKAGE BODY SIZE(2)
+MSP430FR5739-EP VQFN (40) 6.00 mm × 6.00 mm
+(1) For the most current part, package, and ordering information, see the Package Option Addendum in Section 9, or see the TI web site at
+www.ti.com.
+(2) The dimensions shown here are approximations. For the package dimensions with tolerances, see the Mechanical Data in Section 9.
+1.4 Functional Block Diagram
+This section shows the functional block diagram for the MSP430FR5739 device in the RHA package.
+2 Device Overview Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table of Contents
+1 Device Overview ......................................... 1 4.31 REF, External Reference ........................... 30
+1.1 Features .............................................. 1 4.32 REF, Built-In Reference............................. 30
+1.2 Applications........................................... 2 4.33 REF, Temperature Sensor and Built-In VMID ....... 31
+1.3 Description............................................ 2 4.34 Comparator_D....................................... 32
+1.4 Functional Block Diagram ............................ 2 4.35 FRAM................................................ 32
+2 Revision History ......................................... 4 4.36 JTAG and Spy-Bi-Wire Interface.................... 33
+3 Pin Configuration and Functions..................... 5 5 Detailed Description ................................... 34
+3.1 Pin Diagram .......................................... 5 5.1 Functional Block Diagram........................... 34
+3.2 Signal Descriptions ................................... 6 5.2 CPU ................................................. 34
+4 Specifications ........................................... 10 5.3 Operating Modes.................................... 34
+4.1 Absolute Maximum Ratings ........................ 10 5.4 Interrupt Vector Addresses.......................... 36
+4.2 Recommended Operating Conditions............... 10 5.5 Memory Organization ............................... 38
+4.3 Thermal Information................................. 10 5.6 Bootstrap Loader (BSL) ............................. 39
+4.4 Active Mode Supply Current Into VCC Excluding 5.7 JTAG Operation ..................................... 39
+External Current..................................... 11 5.8 FRAM ............................................... 40
+4.5 Low-Power Mode Supply Currents (Into VCC) 5.9 Memory Protection Unit (MPU) ..................... 40Excluding External Current.......................... 13
+5.10 Peripherals .......................................... 404.6 Schmitt-Trigger Inputs – General Purpose I/O
+6 Input/Output Schematics ............................ 60(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to
+P4.1, PJ.0 to PJ.5, RST/NMI)....................... 14 6.1 Port P1, P1.0 to P1.2, Input/Output With Schmitt
+Trigger............................................... 604.7 Inputs – Ports P1 and P2
+(P1.0 to P1.7, P2.0 to P2.7) ........................ 14 6.2 Port P1, P1.3 to P1.5, Input/Output With Schmitt
+Trigger............................................... 624.8 Leakage Current – General Purpose I/O
+(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to 6.3 Port P1, P1.6 to P1.7, Input/Output With Schmitt
+P4.1, PJ.0 to PJ.5, RST/NMI)....................... 14 Trigger............................................... 64
+4.9 Outputs – General Purpose I/O 6.4 Port P2, P2.0 to P2.2, Input/Output With Schmitt
+(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to Trigger............................................... 65
+P4.1, PJ.0 to PJ.5) ................................. 15 6.5 Port P2, P2.3 to P2.4, Input/Output With Schmitt
+4.10 Output Frequency – General Purpose I/O Trigger............................................... 66
+(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to 6.6 Port P2, P2.5 to P2.6, Input/Output With SchmittP4.1, PJ.0 to PJ.5) ................................. 15 Trigger............................................... 68
+4.11 Typical Characteristics – Outputs ................... 16 6.7 Port P2, P2.7, Input/Output With Schmitt Trigger... 69
+4.12 Crystal Oscillator, XT1, Low-Frequency (LF) Mode 18 6.8 Port P3, P3.0 to P3.3, Input/Output With Schmitt
+4.13 Crystal Oscillator, XT1, High-Frequency (HF) Mode Trigger............................................... 70
+...................................................... 19 6.9 Port P3, P3.4 to P3.6, Input/Output With Schmitt
+4.14 Internal Very-Low-Power Low-Frequency Oscillator Trigger............................................... 72
+(VLO) ................................................ 20 6.10 Port P3, P3.7, Input/Output With Schmitt Trigger... 73
+4.15 DCO Frequencies ................................... 21 6.11 Port P4, P4.0, Input/Output With Schmitt Trigger... 74
+4.16 MODOSC............................................ 21 6.12 Port P4, P4.1, Input/Output With Schmitt Trigger... 75
+4.17 PMM, Core Voltage ................................. 22 6.13 Port J, J.0 to J.3 JTAG pins TDO, TMS, TCK,
+4.18 PMM, SVS, BOR.................................... 22 TDI/TCLK, Input/Output With Schmitt Trigger or
+Output ............................................... 764.19 Wake-Up from Low Power Modes .................. 22
+6.14 Port PJ, PJ.4 and PJ.5 Input/Output With Schmitt4.20 Timer_A ............................................. 23
+Trigger............................................... 794.21 Timer_B ............................................. 23
+7 Device Descriptors (TLV) ............................. 814.22 eUSCI (UART Mode) Recommended Operating
+8 Device and Documentation Support ............... 84Conditions ........................................... 23
+8.1 Device Support ...................................... 844.23 eUSCI (UART Mode)................................ 23
+8.2 Documentation Support ............................. 864.24 eUSCI (SPI Master Mode) Recommended
+Operating Conditions................................ 24 8.3 Community Resources .............................. 87
+4.25 eUSCI (SPI Master Mode) .......................... 24 8.4 Trademarks.......................................... 87
+4.26 eUSCI (SPI Slave Mode) ........................... 26 8.5 Electrostatic Discharge Caution..................... 87
+4.27 eUSCI (I2C Mode)................................... 28 8.6 Glossary ............................................. 87
+4.28 10-Bit ADC, Power Supply and Input Range 9 Mechanical Packaging and Orderable
+Conditions ........................................... 29 Information .............................................. 87
+4.29 10-Bit ADC, Timing Parameters .................... 29 9.1 Packaging Information .............................. 87
+4.30 10-Bit ADC, Linearity Parameters .................. 29
+Copyright © 2014, Texas Instruments Incorporated Table of Contents 3
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+2 Revision History
+Changes from Original (November 2014) to Revision A Page
+• Updated device status to production data ........................................................................................ 1
+4 Revision History Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+21
+22
+23
+24
+25
+26
+27
+28
+29
+P2.2/TB2.2/UCB0CLK/TB1.0
+P2.0/TB2.0/UCA0TXD/UCA0SIMO/TB0CLK/ACLK
+TEST/SBWTCK
+P2.1/TB2.1/UCA0RXD/UCA0SOMI/TB0.0
+P3.4/TB1.1/TB2CLK/SMCLK
+P3.5/TB1.2/CDOUT
+P3.6/TB2.1/TB1CLK
+RST/NMI/SBWTDIOPJ.0/TDO/TB0OUTH/SMCLK/CD6
+313233343536373839
+P2.3/T A0.0/UCA1STE/A6*/CD10
+P2.4/T A1.0/UCA1CLK/A7*/CD1 1
+A VCC
+PJ.5/XOUT
+PJ.4/XIN
+A VSS
+P2.7
+P1.0/T A0.1/DMAE0/RTCCLK/A0*/CD0/VeREF-* 1
+9
+8
+7
+6
+5
+4
+3
+2
+P1.3/T A1.2/UCB0STE/A3*/CD3
+P3.3/A15*/CD15
+P3.2/A14*/CD14
+P3.1/A13*/CD13
+P3.0/A12*/CD12
+P1.2/T A1.1/T A0CLK/CDOUT/A2*/CD2
+P1.1/T A0.2/T A1CLK/CDOUT/A1*/CD1/VeREF+*
+VCORE
+1 1 1918171615141312
+P1.7/TB1.2/UCB0SOMI/UCB0SCL/T A1.0
+P1.6/TB1.1/UCB0SIMO/UCB0SDA/T A0.0
+P2.6/TB1.0/UCA1RXD/UCA1SOMI
+P2.5/TB0.0/UCA1TXD/UCA1SIMO
+P4.1P4.0/TB2.0
+DVCC
+DVSS
+40
+30
+10
+20
+RHA P ACKAGE
+(TOP VIEW)
+P1.4/TB0.1/UCA0STE/A4*/CD4
+P1.5/TB0.2/UCA0CLK/A5*/CD5
+PJ.3/TCK/CD9
+PJ.1/TDI/TCLK/TB1OUTH/MCLK/CD7
+PJ.2/TMS/TB2OUTH/ACLK/CD8
+P3.7/TB2.2
+A VSS
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+3 Pin Configuration and Functions
+3.1 Pin Diagram
+Figure 3-1 shows the pin diagram for the MSP430FR5739-EP device in the 40-pin RHA package.
+* Not available on MSP430FR5739-EP
+Note: Exposed thermal pad connection to VSS recommended.
+Figure 3-1. 40-Pin RHA Package (Top View)
+Copyright © 2014, Texas Instruments Incorporated Pin Configuration and Functions 5
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+3.2 Signal Descriptions
+Table 3-1 describes the signals.
+Table 3-1. Signal Descriptions
+PIN
+I/O (1) DESCRIPTION
+NAME NO.
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TA0 CCR1 capture: CCI1A input, compare: Out1
+External DMA trigger
+P1.0/TA0.1/DMAE0/ 1 I/O RTC clock calibration outputRTCCLK/A0/CD0/VeREF-
+Analog input A0 – ADC (not available on devices without ADC)
+Comparator_D input CD0
+External applied reference voltage (not available on devices without ADC)
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TA0 CCR2 capture: CCI2A input, compare: Out2
+TA1 input clock
+P1.1/TA0.2/TA1CLK/ 2 I/O Comparator_D outputCDOUT/A1/CD1/VeREF+
+Analog input A1 – ADC (not available on devices without ADC)
+Comparator_D input CD1
+Input for an external reference voltage to the ADC (not available on devices without ADC)
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TA1 CCR1 capture: CCI1A input, compare: Out1
+TA0 input clockP1.2/TA1.1/TA0CLK/ CDOUT/A2/CD2 3 I/O
+Comparator_D output
+Analog input A2 – ADC (not available on devices without ADC)
+Comparator_D input CD2
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+P3.0/A12/CD12 4 I/O Analog input A12 – ADC (not available on devices without ADC)
+Comparator_D input CD12
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+P3.1/A13/CD13 5 I/O Analog input A13 – ADC
+Comparator_D input CD13
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+P3.2/A14/CD14 6 I/O Analog input A14 – ADC (not available on devices without ADC)
+Comparator_D input CD14
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+P3.3/A15/CD15 7 I/O Analog input A15 – ADC (not available on devices without ADC)
+Comparator_D input CD15
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TA1 CCR2 capture: CCI2A input, compare: Out2
+P1.3/TA1.2/UCB0STE/ A3/CD3 8 I/O Slave transmit enable – eUSCI_B0 SPI mode
+Analog input A3 – ADC (not available on devices without ADC)
+Comparator_D input CD3
+(1) I = input, O = output, N/A = not available
+6 Pin Configuration and Functions Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 3-1. Signal Descriptions (continued)
+PIN
+I/O (1) DESCRIPTION
+NAME NO.
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB0 CCR1 capture: CCI1A input, compare: Out1
+P1.4/TB0.1/UCA0STE/ A4/CD4 9 I/O Slave transmit enable – eUSCI_A0 SPI mode
+Analog input A4 – ADC (not available on devices without ADC)
+Comparator_D input CD4
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB0 CCR2 capture: CCI2A input, compare: Out2
+Clock signal input – eUSCI_A0 SPI slave mode,P1.5/TB0.2/UCA0CLK/ A5/CD5 10 I/O
+Clock signal output – eUSCI_A0 SPI master mode
+Analog input A5 – ADC (not available on devices without ADC)
+Comparator_D input CD5
+General-purpose digital I/O
+Test data output port
+PJ.0/TDO/TB0OUTH/ SMCLK/CD6 (2) 11 I/O Switch all PWM outputs high impedance input – TB0
+SMCLK output
+Comparator_D input CD6
+General-purpose digital I/O
+Test data input or test clock input
+PJ.1/TDI/TCLK/TB1OUTH/ 12 I/O Switch all PWM outputs high impedance input – TB1 (not available on devices without TB1)MCLK/CD7 (2)
+MCLK output
+Comparator_D input CD7
+General-purpose digital I/O
+Test mode select
+PJ.2/TMS/TB2OUTH/ ACLK/CD8 (2) 13 I/O Switch all PWM outputs high impedance input – TB2 (not available on devices without TB2)
+ACLK output
+Comparator_D input CD8
+General-purpose digital I/O
+PJ.3/TCK/CD9 (2) 14 I/O Test clock
+Comparator_D input CD9
+General-purpose digital I/O with port interrupt and wake up from LPMx.5P4.0/TB2.0 15 I/O
+TB2 CCR0 capture: CCI0B input, compare: Out0 (not available on devices without TB2)
+P4.1 16 I/O General-purpose digital I/O with port interrupt and wake up from LPMx.5
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB0 CCR0 capture: CCI0A input, compare: Out0P2.5/TB0.0/UCA1TXD/ UCA1SIMO 17 I/O
+Transmit data – eUSCI_A1 UART mode, Slave in, master out – eUSCI_A1 SPI mode (not available
+on devices without UCSI_A1)
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB1 CCR0 capture: CCI0A input, compare: Out0 (not available on devices without TB1)P2.6/TB1.0/UCA1RXD/ UCA1SOMI 18 I/O
+Receive data – eUSCI_A1 UART mode, Slave out, master in – eUSCI_A1 SPI mode (not available
+on devices without UCSI_A1)
+(2) See Section 5.7 for use with JTAG function.
+Copyright © 2014, Texas Instruments Incorporated Pin Configuration and Functions 7
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 3-1. Signal Descriptions (continued)
+PIN
+I/O (1) DESCRIPTION
+NAME NO.
+Test mode pin – enable JTAG pinsTEST/SBWTCK (2) (3) 19 I
+Spy-Bi-Wire input clock
+Reset input active low
+RST/NMI/SBWTDIO (2) (3) 20 I/O Non-maskable interrupt input
+Spy-Bi-Wire data input/output
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB2 CCR0 capture: CCI0A input, compare: Out0 (not available on devices without TB2)
+P2.0/TB2.0/UCA0TXD/ Transmit data – eUSCI_A0 UART mode21 I/OUCA0SIMO/TB0CLK/ACLK (3)
+Slave in, master out – eUSCI_A0 SPI mode
+TB0 clock input
+ACLK output
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB2 CCR1 capture: CCI1A input, compare: Out1 (not available on devices without TB2)
+P2.1/TB2.1/UCA0RXD/ 22 I/O Receive data – eUSCI_A0 UART modeUCA0SOMI/TB0.0 (3)
+Slave out, master in – eUSCI_A0 SPI mode
+TB0 CCR0 capture: CCI0A input, compare: Out0
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB2 CCR2 capture: CCI2A input, compare: Out2 (not available on devices without TB2)
+P2.2/TB2.2/UCB0CLK/ TB1.0 23 I/O
+Clock signal input – eUSCI_B0 SPI slave mode,
+Clock signal output – eUSCI_B0 SPI master mode
+TB1 CCR0 capture: CCI0A input, compare: Out0 (not available on devices without TB1)
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB1 CCR1 capture: CCI1B input, compare: Out1 (not available on devices without TB1)P3.4/TB1.1/TB2CLK/ SMCLK 24 I/O
+TB2 clock input (not available on devices without TB2)
+SMCLK output
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+P3.5/TB1.2/CDOUT 25 I/O TB1 CCR2 capture: CCI2B input, compare: Out2 (not available on devices without TB1)
+Comparator_D output
+General-purpose digital I/O with port interrupt and wake up from LPMx.5 (not available on package
+options PW, RGE)
+P3.6/TB2.1/TB1CLK 26 I/O
+TB2 CCR1 capture: CCI1B input, compare: Out1 (not available on devices without TB2)
+TB1 clock input (not available on devices without TB1)
+General-purpose digital I/O with port interrupt and wake up from LPMx.5P3.7/TB2.2 27 I/O
+TB2 CCR2 capture: CCI2B input, compare: Out2 (not available on devices without TB2)
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB1 CCR1 capture: CCI1A input, compare: Out1 (not available on devices without TB1)
+P1.6/TB1.1/UCB0SIMO/ 28 I/O Slave in, master out – eUSCI_B0 SPI modeUCB0SDA/TA0.0
+I2C data – eUSCI_B0 I2C mode
+TA0 CCR0 capture: CCI0A input, compare: Out0
+(3) See Section 5.6 and Section 5.7 for use with BSL and JTAG functions.
+8 Pin Configuration and Functions Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 3-1. Signal Descriptions (continued)
+PIN
+I/O (1) DESCRIPTION
+NAME NO.
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TB1 CCR2 capture: CCI2A input, compare: Out2 (not available on devices without TB1)
+P1.7/TB1.2/UCB0SOMI/ 29 I/O Slave out, master in – eUSCI_B0 SPI modeUCB0SCL/TA1.0
+I2C clock – eUSCI_B0 I2C mode
+TA1 CCR0 capture: CCI0A input, compare: Out0
+VCORE (4) 30 Regulated core power supply (internal use only, no external current loading)
+DVSS 31 Digital ground supply
+DVCC 32 Digital power supply
+P2.7 33 I/O General-purpose digital I/O with port interrupt and wake up from LPMx.5
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TA0 CCR0 capture: CCI0B input, compare: Out0
+P2.3/TA0.0/UCA1STE/ A6/CD10 34 I/O Slave transmit enable – eUSCI_A1 SPI mode (not available on devices without eUSCI_A1)
+Analog input A6 – ADC (not available on devices without ADC)
+Comparator_D input CD10
+General-purpose digital I/O with port interrupt and wake up from LPMx.5
+TA1 CCR0 capture: CCI0B input, compare: Out0
+Clock signal input – eUSCI_A1 SPI slave mode, Clock signal output – eUSCI_A1 SPI master modeP2.4/TA1.0/UCA1CLK/ A7/CD11 35 I/O
+(not available on devices without eUSCI_A1)
+Analog input A7 – ADC (not available on devices without ADC)
+Comparator_D input CD11
+AVSS 36 Analog ground supply
+General-purpose digital I/OPJ.4/XIN 37 I/O
+Input terminal for crystal oscillator XT1
+General-purpose digital I/OPJ.5/XOUT 38 I/O
+Output terminal of crystal oscillator XT1
+AVSS 39 Analog ground supply
+AVCC 40 Analog power supply
+QFN Pad Pad QFN package pad. Connection to VSS recommended.
+(4) VCORE is for internal use only. No external current loading is possible. VCORE should only be connected to the recommended
+capacitor value, CVCORE.
+Copyright © 2014, Texas Instruments Incorporated Pin Configuration and Functions 9
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4 Specifications
+4.1 Absolute Maximum Ratings(1)
+over operating free-air temperature range (unless otherwise noted)
+MIN MAX UNIT
+Voltage applied at VCC to VSS –0.3 4.1 V
+Voltage applied to any pin (excluding VCORE) (2) –0.3 VCC + 0.3 V V
+Diode current at any device pin ±2 mA
+TJ Maximum junction temperature 95 °C
+Tstg Storage temperature range(3) (4) (5) –55 125 °C
+(1) Stresses beyond those listed under Absolute Maximum Ratings may cause permanent damage to the device. These are stress ratings
+only, and functional operation of the device at these or any other conditions beyond those indicated under Recommended Operating
+Conditions is not implied. Exposure to absolute-maximum-rated conditions for extended periods may affect device reliability.
+(2) All voltages referenced to VSS. VCORE is for internal device use only. No external DC loading or voltage should be applied.
+(3) Data retention on FRAM memory cannot be ensured when exceeding the specified maximum storage temperature, Tstg.
+(4) For soldering during board manufacturing, it is required to follow the current JEDEC J-STD-020 specification with peak reflow
+temperatures not higher than classified on the device label on the shipping boxes or reels.
+(5) Programming of devices with user application code should only be performed after reflow or hand soldering. Factory programmed
+information, such as calibration values, are designed to withstand the temperatures reached in the current JEDEC J-STD-020
+specification.
+4.2 Recommended Operating Conditions
+Typical values are specified at VCC = 3.3 V and TA = 25°C (unless otherwise noted)
+MIN NOM MAX UNIT
+VCC Supply voltage during program execution and FRAM programming (AVCC = DVCC) (1) 2.0 3.6 V
+VSS Supply voltage (AVSS = DVSS) 0 V
+TA Operating free-air temperature –55 85 °C
+TJ Operating junction temperature –55 85 °C
+CVCORE Required capacitor at VCORE(2) 470 nF
+CVCC/ Capacitor ratio of VCC to VCORE 10CVCORE
+No FRAM wait states(4), 2 V ≤ VCC ≤ 3.6 V 0 8.0
+With FRAM wait states(4),Processor frequency (maximumƒSYSTEM MHzNACCESS = {2},MCLK frequency)(3)
+0 24.0NPRECHG = {1},
+2 V ≤ VCC ≤ 3.6 V
+(1) It is recommended to power AVCC and DVCC from the same source. A maximum difference of 0.3 V between AVCC and DVCC can be
+tolerated during power up and operation.
+(2) A capacitor tolerance of ±20% or better is required.
+(3) Modules may have a different maximum input clock specification. See the specification of the respective module in this data sheet.
+(4) When using manual wait state control, see the MSP430FR57xx Family User's Guide (SLAU272) for recommended settings for common
+system frequencies.
+4.3 Thermal Information
+MSP430FR5739-EP
+THERMAL METRIC(1) VQFN UNIT
+40 PINS
+RθJA Junction-to-ambient thermal resistance 37.8
+RθJC(top) Junction-to-case (top) thermal resistance 27.4
+RθJB Junction-to-board thermal resistance 12.6
+°C/W
+ψJT Junction-to-top characterization parameter 0.4
+ψJB Junction-to-board characterization parameter 12.6
+RθJC(bot) Junction-to-case (bottom) thermal resistance 3.6
+(1) For more information about traditional and new thermal metrics, see the IC Package Thermal Metrics application report, SPRA953.
+10 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+f = f x 1 / [# of wait states x ((1 - cache hit ratio percent/100)) + 1]MCLK,eff,MHZ MCLK,MHZ
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.4 Active Mode Supply Current Into VCC Excluding External Current
+over recommended operating free-air temperature (unless otherwise noted)(1) (2) (3)
+Frequency (ƒMCLK = ƒSMCLK)(4)
+EXECUTIONPARAMETER VCC 1 MHz 4 MHz 8 MHz 16 MHz 20 MHz 24 MHz UNITMEMORY
+TYP MAX TYP MAX TYP MAX TYP MAX TYP MAX TYP MAX
+IAM, FRAM_UNI
+(5) FRAM 3 V 0.27 0.58 1.0 1.53 1.9 2.2 mA
+FRAM
+IAM,0%
+(6) 0% cache hit 3 V 0.42 0.75 1.2 1.7 2.2 2.9 2.3 3.0 2.8 3.7 3.45 4.3
+ratio
+FRAM
+IAM,50%
+(6) (7) 50% cache hit 3 V 0.31 0.73 1.3 1.75 2.1 2.5
+ratio
+FRAM
+IAM,66%
+(6) (7) 66% cache hit 3 V 0.27 0.58 1.0 1.55 1.9 2.2 mA
+ratio
+FRAM
+IAM,75%
+(6) (7) 75% cache hit 3 V 0.25 0.5 0.82 1.3 1.6 1.8
+ratio
+FRAM
+IAM,100%
+(6) (7) 100% cache hit 3 V 0.2 0.44 0.3 0.56 0.42 0.81 0.73 1.17 0.88 1.32 1.0 1.53
+ratio
+IAM, RAM
+(7) (8) RAM 3 V 0.2 0.41 0.35 0.56 0.55 0.77 1.0 1.27 1.20 1.47 1.45 1.8 mA
+(1) All inputs are tied to 0 V or to VCC. Outputs do not source or sink any current.
+(2) The currents are characterized with a Micro Crystal CC4V-T1A SMD crystal with a load capacitance of 9 pF. The internal and external
+load capacitance are chosen to closely match the required 9 pF.
+(3) Characterized with program executing typical data processing.
+(4) At MCLK frequencies above 8 MHz, the FRAM requires wait states. When wait states are required, the effective MCLK frequency,
+ƒMCLK,eff, decreases. The effective MCLK frequency is also dependent on the cache hit ratio. SMCLK is not affected by the number of
+wait states or the cache hit ratio. The following equation can be used to compute ƒMCLK,eff:
+(5) Program and data reside entirely in FRAM. No wait states enabled. DCORSEL = 0, DCOFSELx = 3 (ƒDCO = 8 MHz). MCLK = SMCLK.
+(6) Program resides in FRAM. Data resides in SRAM. Average current dissipation varies with cache hit-to-miss ratio as specified. Cache hit
+ratio represents number cache accesses divided by the total number of FRAM accesses. For example, a 25% ratio implies one of every
+four accesses is from cache, the remaining are FRAM accesses.
+For 1, 4, and 8 MHz, DCORSEL = 0, DCOFSELx = 3 (ƒDCO = 8 MHz). MCLK = SMCLK. No wait states enabled.
+For 16 MHz, DCORSEL = 1, DCOFSELx = 0 (ƒDCO = 16 MHz). MCLK = SMCLK. One wait state enabled.
+For 20 MHz, DCORSEL = 1, DCOFSELx = 2 (ƒDCO = 20 MHz). MCLK = SMCLK. Three wait states enabled.
+For 24 MHz, DCORSEL = 1, DCOFSELx = 3 (ƒDCO = 24 MHz). MCLK = SMCLK. Three wait states enabled.
+(7) See Figure 4-1 for typical curves. Each characteristic equation shown in the graph is computed using the least squares method for best
+linear fit using the typical data shown in Section 4.4.
+ƒACLK = 32786 Hz, ƒMCLK = ƒSMCLK at specified frequency. No peripherals active.
+XTS = CPUOFF = SCG0 = SCG1 = OSCOFF= SMCLKOFF = 0.
+(8) All execution is from RAM.
+For 1, 4, and 8 MHz, DCORSEL = 0, DCOFSELx = 3 (ƒDCO = 8 MHz). MCLK = SMCLK.
+For 16 MHz, DCORSEL = 1, DCOFSELx = 0 (ƒDCO = 16 MHz). MCLK = SMCLK.
+For 20 MHz, DCORSEL = 1, DCOFSELx = 2 (ƒDCO = 20 MHz). MCLK = SMCLK.
+For 24 MHz, DCORSEL = 1, DCOFSELx = 3 (ƒDCO = 24 MHz). MCLK = SMCLK.
+Copyright © 2014, Texas Instruments Incorporated Specifications 11
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+Typical Active Mode Supply Current, No Wait States
+0.00
+0.50
+1.00
+1.50
+2.00
+2.50
+0 1 2 3 4 5 6 7 8 9
+fMCLK = fSMCLK, MHz
+IAM, mA
+IAM,50% (mA) = 0.1415 * (f, MHz) + 0.1669
+IAM,66%(mA) = 0.1043 * (f, MHz) + 0.1646
+IAM,75% (mA) = 0.0814 * (f, MHz) + 0.1708
+IAM,100% (mA) = 0.0314 * (f, MHz) + 0.1708
+IAM,RAM (mA) = 0.05 * (f, MHz) + 0.150
+IAM,0% (mA) = 0.2541 * (f, MHz) + 0.1724
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Figure 4-1. Typical Active Mode Supply Currents, No Wait States
+12 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.5 Low-Power Mode Supply Currents (Into VCC) Excluding External Current
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted) (1) (2)
+–55°C 25°C 85°C
+PARAMETER VCC UNIT
+TYP MAX TYP MAX TYP MAX
+2 V,ILPM0,1MHz Low-power mode 0 (3) (4) 166 175 225 µA3 V
+2 V,
+LPM0,8MHz Low-power mode 0 (5) (4) 170 177 244 225 360 µA3 V
+2 V,
+LPM0,24MHz Low-power mode 0 (6) (4) 274 285 340 340 455 µA3 V
+2 V,ILPM2 Low-power mode 2 (7) (8) 56 61 80 110 210 µA3 V
+Low-power mode 3, crystal 2 V,ILPM3,XT1LF 3.4 6.4 15 48 150 µAmode (9) (8) 3 V
+Low-power mode 3, VLO mode 2 V,ILPM3,VLO 3.3 6.3 15 48 150 µA(10) (8) 3 V
+2 V,ILPM4 Low-power mode 4 (11) (8) 2.9 5.9 15 48 150 µA3 V
+2 V,ILPM3.5 Low-power mode 3.5 (12) 1.3 1.5 2.2 2.8 5.0 µA3 V
+2 V,ILPM4.5 Low-power mode 4.5 (13) 0.3 0.32 0.66 0.57 2.55 µA3 V
+(1) All inputs are tied to 0 V or to VCC. Outputs do not source or sink any current.
+(2) The currents are characterized with a Micro Crystal CC4V-T1A SMD crystal with a load capacitance of 9 pF. The internal and external
+load capacitance are chosen to closely match the required 9 pF.
+(3) Current for watchdog timer clocked by SMCLK included. ACLK = low-frequency crystal operation (XTS = 0, XT1DRIVEx = 0).
+CPUOFF = 1, SCG0 = 0, SCG1 = 0, OSCOFF = 0 (LPM0), ƒACLK = 32768 Hz, ƒMCLK = 0 MHz, ƒSMCLK = 1 MHz. DCORSEL = 0,
+DCOFSELx = 3 (ƒDCO = 8 MHz)
+(4) Current for brownout, high-side supervisor (SVSH) and low-side supervisor (SVSL) included.
+(5) Current for watchdog timer clocked by SMCLK included. ACLK = low-frequency crystal operation (XTS = 0, XT1DRIVEx = 0).
+CPUOFF = 1, SCG0 = 0, SCG1 = 0, OSCOFF = 0 (LPM0), ƒACLK = 32768 Hz, ƒMCLK = 0 MHz, ƒSMCLK = 8 MHz. DCORSEL = 0,
+DCOFSELx = 3 (ƒDCO = 8 MHz)
+(6) Current for watchdog timer clocked by SMCLK included. ACLK = low-frequency crystal operation (XTS = 0, XT1DRIVEx = 0).
+CPUOFF = 1, SCG0 = 0, SCG1 = 0, OSCOFF = 0 (LPM0), ƒACLK = 32768 Hz, ƒMCLK = 0 MHz, ƒSMCLK = 24 MHz. DCORSEL = 1,
+DCOFSELx = 3 (ƒDCO = 24 MHz)
+(7) Current for watchdog timer (clocked by ACLK) and RTC (clocked by XT1 LF mode) included. ACLK = low-frequency crystal operation
+(XTS = 0, XT1DRIVEx = 0).
+CPUOFF = 1, SCG0 = 0, SCG1 = 1, OSCOFF = 0 (LPM2), ƒACLK = 32768 Hz, ƒMCLK = 0 MHz, ƒSMCLK = ƒDCO = 0 MHz, DCORSEL = 0,
+DCOFSELx = 3, DCO bias generator enabled.
+(8) Current for brownout, high-side supervisor (SVSH) included. Low-side supervisor disabled (SVSL).
+(9) Current for watchdog timer (clocked by ACLK) and RTC (clocked by XT1 LF mode) included. ACLK = low-frequency crystal operation
+(XTS = 0, XT1DRIVEx = 0).
+CPUOFF = 1, SCG0 = 1, SCG1 = 1, OSCOFF = 0 (LPM3), ƒACLK = 32768 Hz, ƒMCLK = ƒSMCLK = ƒDCO = 0 MHz
+(10) Current for watchdog timer (clocked by ACLK) included. ACLK = VLO.
+CPUOFF = 1, SCG0 = 1, SCG1 = 1, OSCOFF = 0 (LPM3), ƒACLK = ƒVLO, ƒMCLK = ƒSMCLK = ƒDCO = 0 MHz
+(11) CPUOFF = 1, SCG0 = 1, SCG1 = 1, OSCOFF = 1 (LPM4), ƒDCO = ƒACLK = ƒMCLK = ƒSMCLK = 0 MHz
+(12) Internal regulator disabled. No data retention. RTC active clocked by XT1 LF mode.
+CPUOFF = 1, SCG0 = 1, SCG1 = 1, OSCOFF = 1, PMMREGOFF = 1 (LPM3.5), ƒDCO = ƒACLK = ƒMCLK = ƒSMCLK = 0 MHz
+(13) Internal regulator disabled. No data retention.
+CPUOFF = 1, SCG0 = 1, SCG1 = 1, OSCOFF = 1, PMMREGOFF = 1 (LPM4.5), ƒDCO = ƒACLK = ƒMCLK = ƒSMCLK = 0 MHz
+Copyright © 2014, Texas Instruments Incorporated Specifications 13
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.6 Schmitt-Trigger Inputs – General Purpose I/O
+(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to P4.1, PJ.0 to PJ.5, RST/NMI)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+2 V 0.7 1.7
+VIT+ Positive-going input threshold voltage V
+3 V 1.45 2.12
+2 V 0.41 1.101
+VIT– Negative-going input threshold voltage V
+3 V 0.72 1.68
+2 V 0.24 0.855
+Vhys Input voltage hysteresis (VIT+ – VIT–) V
+3 V 0.27 1.02
+For pullup: VIN = VSSRPull Pullup or pulldown resistor 19 35 51 kΩFor pulldown: VIN = VCC
+CI Input capacitance VIN = VSS or VCC 5 pF
+4.7 Inputs – Ports P1 and P2 (1)
+(P1.0 to P1.7, P2.0 to P2.7)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN MAX UNIT
+t(int) External interrupt timing (2) External trigger pulse duration to set interrupt flag 2 V, 3 V 20 ns
+(1) Some devices may contain additional ports with interrupts. See the block diagram and terminal function descriptions.
+(2) An external signal sets the interrupt flag every time the minimum interrupt pulse duration t(int) is met. It may be set by trigger signals
+shorter than t(int).
+4.8 Leakage Current – General Purpose I/O
+(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to P4.1, PJ.0 to PJ.5, RST/NMI)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN MAX UNIT
+Ilkg(Px.x) High-impedance leakage current (1) (2) 2 V, 3 V –65 65 nA
+(1) The leakage current is measured with VSS or VCC applied to the corresponding pin(s), unless otherwise noted.
+(2) The leakage of the digital port pins is measured individually. The port pin is selected for input and the pullup/pulldown resistor is
+disabled.
+14 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.9 Outputs – General Purpose I/O
+(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to P4.1, PJ.0 to PJ.5)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN MAX UNIT
+I(OHmax) = –1 mA (1) VCC – 0.25 VCC
+2 V
+I(OHmax) = –3 mA (2) VCC – 0.60 VCC
+VOH High-level output voltage V
+I(OHmax) = –2 mA (1) VCC – 0.25 VCC
+3 V
+I(OHmax) = –6 mA (2) VCC – 0.60 VCC
+I(OLmax) = 1 mA (1) VSS VSS + 0.25
+2 V
+I(OLmax) = 3 mA (2) VSS VSS + 0.60
+VOL Low-level output voltage V
+I(OLmax) = 2 mA (1) VSS VSS + 0.25
+3 V
+I(OLmax) = 6 mA (2) VSS VSS + 0.60
+(1) The maximum total current, I(OHmax) and I(OLmax), for all outputs combined, should not exceed ±48 mA to hold the maximum voltage drop
+specified.
+(2) The maximum total current, I(OHmax) and I(OLmax), for all outputs combined, should not exceed ±100 mA to hold the maximum voltage
+drop specified.
+4.10 Output Frequency – General Purpose I/O
+(P1.0 to P1.7, P2.0 to P2.7, P3.0 to P3.7, P4.0 to P4.1, PJ.0 to PJ.5)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN MAX UNIT
+2 V 16Port output frequencyƒPx.y Px.y (1) (2) MHz(with load) 3 V 24
+2 V 16ACLK, SMCLK, or MCLK at configured output port,ƒPort_CLK Clock output frequency MHzCL = 20 pF, no DC loading (2)
+3 V 24
+(1) A resistive divider with 2 × 1.6 kΩ between VCC and VSS is used as load. The output is connected to the center tap of the divider.
+CL = 20 pF is connected from the output to VSS.
+(2) The output voltage reaches at least 10% and 90% VCC at the specified toggle frequency.
+Copyright © 2014, Texas Instruments Incorporated Specifications 15
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+0
+5
+10
+15
+20
+25
+30
+35
+0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 3.0
+VOL Low-Level Output Voltage - V
+IOL - Typical Low-Level Output Current - mA
+TA = -40 /c176C
+TA = 25 /c176C
+TA = 85 /c176C
+0
+2
+4
+6
+8
+10
+12
+14
+16
+0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0
+VOL Low-Level Output Voltage - V
+IOL - Typical Low-Level Output Current - mA
+TA = -40 /c176C
+TA = 25 /c176C
+TA = 85 /c176C
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.11 Typical Characteristics – Outputs
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+VCC = 2.0 V Measured at Px.y
+Figure 4-2. Typical Low-Level Output Current vs Low-Level Output Voltage
+VCC = 3.0 V Measured at Px.y
+Figure 4-3. Typical Low-Level Output Current vs Low-Level Output Voltage
+16 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+-40
+-35
+-30
+-25
+-20
+-15
+-10
+-5
+0
+0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 3.0
+VOH High-Level Output Voltage - V
+IOH - Typical High-Level Output Current - mA
+TA = -40 /c176C
+TA = 85 /c176C
+TA = 25 /c176C
+-16
+-14
+-12
+-10
+-8
+-6
+-4
+-2
+0
+0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0
+VOH High-Level Output Voltage - V
+IOH - Typical High-Level Output Current - mA
+TA = -40 /c176C
+TA = 85 /c176C
+TA = 25 /c176C
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+VCC = 2.0 V Measured at Px.y
+Figure 4-4. Typical High-Level Output Current vs High-Level Output Voltage
+VCC = 3.0 V Measured at Px.y
+Figure 4-5. Typical High-Level Output Current vs High-Level Output Voltage
+Copyright © 2014, Texas Instruments Incorporated Specifications 17
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.12 Crystal Oscillator, XT1, Low-Frequency (LF) Mode(1)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)(2)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+ƒOSC = 32768 Hz, XTS = 0,
+XT1BYPASS = 0, XT1DRIVE = {1}, 3 V 60
+CL,eff = 9 pF, TA = 25°C,
+Additional current consumption ƒOSC = 32768 Hz, XTS = 0,
+ΔIVCC.LF XT1 LF mode from lowest drive XT1BYPASS = 0, XT1DRIVE = {2}, 3 V 90 nA
+setting TA = 25°C, CL,eff = 9 pF
+ƒOSC = 32768 Hz, XTS = 0,
+XT1BYPASS = 0, XT1DRIVE = {3}, 3 V 140
+TA = 25°C, CL,eff = 12 pF
+XT1 oscillator crystal frequency,ƒXT1,LF0 XTS = 0, XT1BYPASS = 0 32768 HzLF mode
+XT1 oscillator logic-level square-ƒXT1,LF,SW XTS = 0, XT1BYPASS = 1 (3) (4) 10 32.768 50 kHzwave input frequency, LF mode
+XTS = 0,
+XT1BYPASS = 0, XT1DRIVE = {0}, 210
+ƒXT1,LF = 32768 Hz, CL,eff = 6 pFOscillation allowance forOALF kΩLF crystals (5)
+XTS = 0,
+XT1BYPASS = 0, XT1DRIVE = {3}, 300
+ƒXT1,LF = 32768 Hz, CL,eff = 12 pF
+XTS = 0, Measured at ACLK,Duty cycle, LF mode 30 70 %ƒXT1,LF = 32768 Hz
+Oscillator fault frequency, LF modeƒFault,LF XTS = 0 (7) 10 10000 Hz(6)
+ƒOSC = 32768 Hz, XTS = 0,
+XT1BYPASS = 0, XT1DRIVE = {0}, 1000
+TA = 25°C, CL,eff = 6 pF
+tSTART,LF Startup time, LF mode (8) 3 V ms
+ƒOSC = 32768 Hz, XTS = 0,
+XT1BYPASS = 0, XT1DRIVE = {3}, 1000
+TA = 25°C, CL,eff = 12 pF
+Integrated effective loadCL,eff XTS = 0 1 pFcapacitance, LF mode (9) (10)
+(1) To improve EMI on the XT1 oscillator, the following guidelines should be observed.
+• Keep the trace between the device and the crystal as short as possible.
+• Design a good ground plane around the oscillator pins.
+• Prevent crosstalk from other clock or data lines into oscillator pins XIN and XOUT.
+• Avoid running PCB traces underneath or adjacent to the XIN and XOUT pins.
+• Use assembly materials and processes that avoid any parasitic load on the oscillator XIN and XOUT pins.
+• If conformal coating is used, ensure that it does not induce capacitive or resistive leakage between the oscillator pins.
+(2) –40°C to 85°C
+(3) When XT1BYPASS is set, XT1 circuits are automatically powered down. Input signal is a digital square wave with parametrics defined in
+the Schmitt-trigger Inputs section of this data sheet.
+(4) Maximum frequency of operation of the entire device cannot be exceeded.
+(5) Oscillation allowance is based on a safety factor of 5 for recommended crystals. The oscillation allowance is a function of the XT1DRIVE
+settings and the effective load. In general, comparable oscillator allowance can be achieved based on the following guidelines, but
+should be evaluated based on the actual crystal selected for the application:
+• For XT1DRIVE = {0}, CL,eff ≤ 6 pF.
+• For XT1DRIVE = {1}, 6 pF ≤ CL,eff ≤ 9 pF.
+• For XT1DRIVE = {2}, 6 pF ≤ CL,eff ≤ 10 pF.
+• For XT1DRIVE = {3}, 6 pF ≤ CL,eff ≤ 12 pF.
+(6) Frequencies below the MIN specification set the fault flag. Frequencies above the MAX specification do not set the fault flag.
+Frequencies in between might set the flag.
+(7) Measured with logic-level input frequency but also applies to operation with crystals.
+(8) Includes startup counter of 4096 clock cycles.
+(9) Requires external capacitors at both terminals.
+(10) Values are specified by crystal manufacturers. Include parasitic bond and package capacitance (approximately 2 pF per pin).
+Recommended values supported are 6 pF, 9 pF, and 12 pF. Maximum shunt capacitance of 1.6 pF.
+18 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.13 Crystal Oscillator, XT1, High-Frequency (HF) Mode(1)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)(2)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+ƒOSC = 4 MHz,
+XTS = 1, XOSCOFF = 0, 175XT1BYPASS = 0, XT1DRIVE = {0},
+TA = 25°C, CL,eff = 16 pF
+ƒOSC = 8 MHz,
+XTS = 1, XOSCOFF = 0, 300XT1BYPASS = 0, XT1DRIVE = {1},
+TA = 25°C, CL,eff = 16 pFXT1 oscillator crystal current HFIVCC,HF 3 V µAmode ƒOSC = 16 MHz,
+XTS = 1, XOSCOFF = 0, 350XT1BYPASS = 0, XT1DRIVE = {2},
+TA = 25°C, CL,eff = 16 pF
+ƒOSC = 24 MHz,
+XTS = 1, XOSCOFF = 0, 550XT1BYPASS = 0, XT1DRIVE = {3},
+TA = 25°C, CL,eff = 16 pF
+XT1 oscillator crystal frequency, XTS = 1,ƒXT1,HF0 4 6 MHzHF mode 0 XT1BYPASS = 0, XT1DRIVE = {0} (3)
+XT1 oscillator crystal frequency, XTS = 1,ƒXT1,HF1 6 10 MHzHF mode 1 XT1BYPASS = 0, XT1DRIVE = {1} (3)
+XT1 oscillator crystal frequency, XTS = 1,ƒXT1,HF2 10 16 MHzHF mode 2 XT1BYPASS = 0, XT1DRIVE = {2} (3)
+XT1 oscillator crystal frequency, XTS = 1,ƒXT1,HF3 16 24 MHzHF mode 3 XT1BYPASS = 0, XT1DRIVE = {3} (3)
+XT1 oscillator logic-level square- XTS = 1,ƒXT1,HF,SW 1 24 MHzwave input frequency, HF mode XT1BYPASS = 1 (4) (3)
+XTS = 1,
+XT1BYPASS = 0, XT1DRIVE = {0}, 450
+ƒXT1,HF = 4 MHz, CL,eff = 16 pF
+XTS = 1,
+XT1BYPASS = 0, XT1DRIVE = {1}, 320
+ƒXT1,HF = 8 MHz, CL,eff = 16 pFOscillation allowance forOAHF ΩHF crystals (5)
+XTS = 1,
+XT1BYPASS = 0, XT1DRIVE = {2}, 200
+ƒXT1,HF = 16 MHz, CL,eff = 16 pF
+XTS = 1,
+XT1BYPASS = 0, XT1DRIVE = {3}, 200
+ƒXT1,HF = 24 MHz, CL,eff = 16 pF
+ƒOSC = 4 MHz, XTS = 1,
+XT1BYPASS = 0, XT1DRIVE = {0}, 8
+TA = 25°C, CL,eff = 16 pF
+tSTART,HF Startup time, HF mode (6) 3 V ms
+ƒOSC = 24 MHz, XTS = 1,
+XT1BYPASS = 0, XT1DRIVE = {3}, 2
+TA = 25°C, CL,eff = 16 pF
+(1) To improve EMI on the XT1 oscillator the following guidelines should be observed.
+• Keep the traces between the device and the crystal as short as possible.
+• Design a good ground plane around the oscillator pins.
+• Prevent crosstalk from other clock or data lines into oscillator pins XIN and XOUT.
+• Avoid running PCB traces underneath or adjacent to the XIN and XOUT pins.
+• Use assembly materials and processes that avoid any parasitic load on the oscillator XIN and XOUT pins.
+• If conformal coating is used, ensure that it does not induce capacitive or resistive leakage between the oscillator pins.
+(2) –40°C to 85°C
+(3) Maximum frequency of operation of the entire device cannot be exceeded.
+(4) When XT1BYPASS is set, XT1 circuits are automatically powered down. Input signal is a digital square wave with parametrics defined in
+the Schmitt-trigger Inputs section of this data sheet.
+(5) Oscillation allowance is based on a safety factor of 5 for recommended crystals.
+(6) Includes startup counter of 4096 clock cycles.
+Copyright © 2014, Texas Instruments Incorporated Specifications 19
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Crystal Oscillator, XT1, High-Frequency (HF) Mode(1) (continued)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)(2)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+Integrated effective loadCL,eff XTS = 1 1 pFcapacitance (7) (8)
+XTS = 1, Measured at ACLK,Duty cycle, HF mode 40 50 60 %ƒXT1,HF2 = 24 MHz
+Oscillator fault frequency, HF modeƒFault,HF XTS = 1 (10) 145 900 kHz(9)
+(7) Includes parasitic bond and package capacitance (approximately 2 pF per pin). Because the PCB adds additional capacitance, it is
+recommended to verify the correct load by measuring the ACLK frequency. For a correct setup, the effective load capacitance should
+always match the specification of the used crystal.
+(8) Requires external capacitors at both terminals. Values are specified by crystal manufacturers. Recommended values supported are 14
+pF, 16 pF, and 18 pF. Maximum shunt capacitance of 7 pF.
+(9) Frequencies below the MIN specification set the fault flag. Frequencies above the MAX specification do not set the fault flag.
+Frequencies in between might set the flag.
+(10) Measured with logic-level input frequency but also applies to operation with crystals.
+4.14 Internal Very-Low-Power Low-Frequency Oscillator (VLO)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+ƒVLO VLO frequency Measured at ACLK 2 V to 3.6 V 4.3 8.3 13.3 kHz
+dƒVLO/dT VLO frequency temperature drift Measured at ACLK (1) 2 V to 3.6 V 0.5 %/°C
+dƒVLO/dVC VLO frequency supply voltage drift Measured at ACLK (2) 2 V to 3.6 V 4 %/V
+C
+ƒVLO,DC Duty cycle Measured at ACLK 2 V to 3.6 V 35% 50% 65%
+(1) Calculated using the box method: (MAX(–55 to 85°C) – MIN(–55 to 85°C)) / MIN(–55 to 85°C) / (85°C – (–55°C))
+(2) Calculated using the box method: (MAX(2.0 to 3.6 V) – MIN(2.0 to 3.6 V)) / MIN(2.0 to 3.6 V) / (3.6 V – 2 V)
+20 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.15 DCO Frequencies
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+VCCPARAMETER TEST CONDITIONS MIN TYP MAX UNITTA
+Measured at ACLK, 2 V to 3.6 V 5.37 ±5% MHzDCORSEL = 0 –55°C to 85°C
+ƒDCO,LO DCO frequency low, trimmed
+Measured at ACLK, 2 V to 3.6 V 16.2 ±5% MHzDCORSEL = 1 –55°C to 85°C
+Measured at ACLK, 2 V to 3.6 V 6.67 ±5% MHzDCORSEL = 0 –55°C to 85°C
+ƒDCO,MID DCO frequency mid, trimmed
+Measured at ACLK, 2 V to 3.6 V 20 ±5% MHzDCORSEL = 1 –55°C to 85°C
+Measured at ACLK, 2 V to 3.6 V 8 ±5% MHzDCORSEL = 0 –55°C to 85°C
+ƒDCO,HI DCO frequency high, trimmed
+Measured at ACLK, 2 V to 3.6 V 23.8 ±5% MHzDCORSEL = 1 –55°C to 85°C
+Measured at ACLK, divide by 1, 2 V to 3.6 VƒDCO,DC Duty cycle No external divide, all DCO 35% 50% 65%–55°C to 85°Csettings
+4.16 MODOSC
+over operating free-air temperature range (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+IMODOSC Current consumption Enabled 2 V to 3.6 V 44 µA
+ƒMODOSC MODOSC frequency 2 V to 3.6 V 4.2 5.0 5.7 MHz
+ƒMODOSC,DC Duty cycle Measured at ACLK, divide by 1 2 V to 3.6 V 35% 50% 65%
+Copyright © 2014, Texas Instruments Incorporated Specifications 21
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.17 PMM, Core Voltage
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS MIN TYP MAX UNIT
+VCORE(AM) Core voltage, active mode 2 V ≤ DVCC ≤ 3.6 V 1.5 V
+VCORE(LPM) Core voltage, low-current mode 2 V ≤ DVCC ≤ 3.6 V 1.5 V
+4.18 PMM, SVS, BOR
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS MIN TYP MAX UNIT
+ISVSH,AM SVSH current consumption, active mode VCC = 3.6 V 5 µA
+ISVSH,LPM SVSH current consumption, low power modes VCC = 3.6 V 0.8 µA
+VSVSH- SVSH on voltage level, falling supply voltage 1.81 1.88 1.95 V
+VSVSH+ SVSH off voltage level, rising supply voltage 1.85 1.93 2 V
+tPD,SVSH, AM SVSH propagation delay, active mode dVCC/dt = 10 mV/µs 10 µs
+tPD,SVSH, LPM SVSH propagation delay, low power modes dVCC/dt = 1 mV/µs 30 µs
+ISVSL SVSL current consumption 0.3 µA
+VSVSL– SVSL on voltage level 1.42 V
+VSVSL+ SVSL off voltage level 1.47 V
+4.19 Wake-Up from Low Power Modes
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+VCCPARAMETER TEST CONDITIONS MIN TYP MAX UNITTA
+Wake-up time from LPM0 to active 2 V, 3 VtWAKE-UP LPM0 0.58 1.1 µsmode (1) –55°C to 85°C
+Wake-up time from LPM1, LPM2 to 2 V, 3 VtWAKE-UP LPM12 12 25 µsactive mode (1) –55°C to 85°C
+Wake-up time from LPM3 or LPM4 to 2 V, 3 VtWAKE-UP LPM34 78 165 µsactive mode (1) –55°C to 85°C
+2 V, 3 V 310 575 µs0°C to 85°CWake-up time from LPM3.5 ortWAKE-UP LPMx.5 LPM4.5 to active mode (1)
+2 V, 3 V 310 1100 µs–55°C to 85°C
+Wake-up time from RST to active 2 V, 3 VtWAKE-UP RESET VCC stable 230 µsmode (2) –55°C to 85°C
+Wake-up time from BOR or power-up 2 V, 3 VtWAKE-UP BOR dVCC/dt = 2400 V/s 1.6 msto active mode –55°C to 85°C
+Pulse duration required at RST/NMI 2 V, 3 VtRESET 4 nsterminal to accept a reset event(3) –55°C to 85°C
+(1) The wake-up time is measured from the edge of an external wake-up signal (for example, port interrupt or wake-up event) until the first
+instruction of the user program is executed.
+(2) The wake-up time is measured from the rising edge of the RST signal until the first instruction of the user program is executed.
+(3) Meeting or exceeding this time makes sures a reset event occurs. Pulses shorter than this minimum time may or may not cause a reset
+event to occur.
+22 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.20 Timer_A
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+Internal: SMCLK, ACLK
+ƒTA Timer_A input clock frequency External: TACLK 2 V, 3 V 24 MHz
+Duty cycle = 50% ± 10%
+All capture inputs, Minimum pulsetTA,cap Timer_A capture timing 2 V, 3 V 20 nsduration required for capture
+4.21 Timer_B
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+Internal: SMCLK, ACLK
+ƒTB Timer_B input clock frequency External: TBCLK 2 V, 3 V 24 MHz
+Duty cycle = 50% ± 10%
+All capture inputs, Minimum pulsetTB,cap Timer_B capture timing 2 V, 3 V 20 nsduration required for capture
+4.22 eUSCI (UART Mode) Recommended Operating Conditions
+PARAMETER CONDITIONS VCC MIN TYP MAX UNIT
+Internal: SMCLK, ACLK
+ƒeUSCI eUSCI input clock frequency External: UCLK ƒSYSTEM MHz
+Duty cycle = 50% ± 10%
+BITCLK clock frequencyƒBITCLK 5 MHz(equals baud rate in MBaud)
+4.23 eUSCI (UART Mode)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+UCGLITx = 0 5 15 20
+UCGLITx = 1 20 45 60
+tt UART receive deglitch time(1) 2 V, 3 V ns
+UCGLITx = 2 35 80 120
+UCGLITx = 3 50 110 180
+(1) Pulses on the UART receive input (UCxRX) shorter than the UART receive deglitch time are suppressed. To ensure that pulses are
+correctly recognized, their duration should exceed the maximum specification of the deglitch time.
+Copyright © 2014, Texas Instruments Incorporated Specifications 23
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.24 eUSCI (SPI Master Mode) Recommended Operating Conditions
+PARAMETER CONDITIONS VCC MIN TYP MAX UNIT
+Internal: SMCLK, ACLKƒeUSCI eUSCI input clock frequency ƒSYSTEM MHzDuty cycle = 50% ± 10%
+4.25 eUSCI (SPI Master Mode)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted) (1)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+UCSTEM = 0, 2 V, 3 V 1UCMODEx = 01 or 10 UCxCLKtSTE,LEAD STE lead time, STE active to clock cyclesUCSTEM = 1, 2 V, 3 V 1UCMODEx = 01 or 10
+UCSTEM = 0, 2 V, 3 V 1UCMODEx = 01 or 10STE lag time, Last clock to STE UCxCLKtSTE,LAG inactive cyclesUCSTEM = 1, 2 V, 3 V 1UCMODEx = 01 or 10
+UCSTEM = 0, 2 V, 3 V 55UCMODEx = 01 or 10STE access time, STE active to SIMOtSTE,ACC nsdata out UCSTEM = 1, 2 V, 3 V 35UCMODEx = 01 or 10
+UCSTEM = 0, 2 V, 3 V 40UCMODEx = 01 or 10STE disable time, STE inactive totSTE,DIS nsSIMO high impedance UCSTEM = 1, 2 V, 3 V 30UCMODEx = 01 or 10
+2 V 35
+tSU,MI SOMI input data setup time ns
+3 V 35
+2 V 0
+tHD,MI SOMI input data hold time ns
+3 V 0
+2 V 30UCLK edge to SIMO valid,tVALID,MO SIMO output data valid time (2) nsCL = 20 pF 3 V 30
+2 V 0
+tHD,MO SIMO output data hold time (3) CL = 20 pF ns
+3 V 0
+(1) ƒUCxCLK = 1/2tLO/HI with tLO/HI = max(tVALID,MO(eUSCI) + tSU,SI(Slave), tSU,MI(eUSCI) + tVALID,SO(Slave)).
+For the slave's parameters tSU,SI(Slave) and tVALID,SO(Slave) see the SPI parameters of the attached slave.
+(2) Specifies the time to drive the next valid data to the SIMO output after the output changing UCLK clock edge. See the timing diagrams
+in Figure 4-6 and Figure 4-7.
+(3) Specifies how long data on the SIMO output is valid after the output changing UCLK clock edge. Negative values indicate that the data
+on the SIMO output can become invalid before the output changing clock edge observed on UCLK. See the timing diagrams in Figure 4-
+6 and Figure 4-7.
+24 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+tSU,MI
+tHD,MI
+UCLK
+SOMI
+SIMO
+tVALID,MO
+CKPL =□0
+CKPL =□1
+tLOW/HIGH tLOW/HIGH
+1/fUCxCLK
+tSTE,LEAD tSTE,LAG
+tSTE,ACC tSTE,DIS
+UCMODEx□=□01
+UCMODEx□=□10
+STE
+tSU,MI
+tHD,MI
+UCLK
+SOMI
+SIMO
+tVALID,MO
+CKPL =□0
+CKPL =□1
+tLOW/HIGH tLOW/HIGH
+1/fUCxCLK
+STE tSTE,LEAD tSTE,LAG
+tSTE,ACC tSTE,DIS
+UCMODEx□=□01
+UCMODEx□=□10
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Figure 4-6. SPI Master Mode, CKPH = 0
+Figure 4-7. SPI Master Mode, CKPH = 1
+Copyright © 2014, Texas Instruments Incorporated Specifications 25
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.26 eUSCI (SPI Slave Mode)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted) (1)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+2 V 7
+tSTE,LEAD STE lead time, STE active to clock ns
+3 V 7
+2 V 0
+tSTE,LAG STE lag time, Last clock to STE inactive ns
+3 V 0
+2 V 65
+tSTE,ACC STE access time, STE active to SOMI data out ns
+3 V 40
+2 V 40STE disable time, STE inactive to SOMI hightSTE,DIS nsimpedance 3 V 35
+2 V 2
+tSU,SI SIMO input data setup time ns
+3 V 2
+2 V 5
+tHD,SI SIMO input data hold time ns
+3 V 5
+2 V 30UCLK edge to SOMI valid,tVALID,SO SOMI output data valid time (2) nsCL = 20 pF 3 V 30
+2 V 4
+tHD,SO SOMI output data hold time (3) CL = 20 pF ns
+3 V 4
+(1) ƒUCxCLK = 1/2tLO/HI with tLO/HI ≥ max(tVALID,MO(Master) + tSU,SI(eUSCI), tSU,MI(Master) + tVALID,SO(eUSCI)).
+For the master's parameters tSU,MI(Master) and tVALID,MO(Master) see the SPI parameters of the attached slave.
+(2) Specifies the time to drive the next valid data to the SOMI output after the output changing UCLK clock edge. See the timing diagrams
+in Figure 4-8 and Figure 4-9.
+(3) Specifies how long data on the SOMI output is valid after the output changing UCLK clock edge. See the timing diagrams in Figure 4-8
+and Figure 4-9.
+26 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+UCLK
+CKPL =□0
+CKPL =□1
+SOMI
+SIMO
+tSU,SI
+tHD,SI
+tVALID,SO
+tLOW/HIGH
+1/fUCxCLK
+tLOW/HIGH
+tDIStACC
+STE tSTE,LEAD tSTE,LAG
+UCMODEx□=□01
+UCMODEx□=□10
+UCLK
+CKPL =□0
+CKPL =□1
+SOMI
+SIMO
+tSU,SIMO
+tHD,SIMO
+tVALID,SOMI
+tLOW/HIGH
+1/fUCxCLK
+tLOW/HIGH
+tDIStACC
+STE tSTE,LEAD tSTE,LAG
+UCMODEx□=□01
+UCMODEx□=□10
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Figure 4-8. SPI Slave Mode, CKPH = 0
+Figure 4-9. SPI Slave Mode, CKPH = 1
+Copyright © 2014, Texas Instruments Incorporated Specifications 27
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+SDA
+SCL
+tHD,DA T
+tSU,DA T
+tHD,ST A
+tHIGHtLOW
+tBUFtHD,ST AtSU,ST A
+tSP
+tSU,STO
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.27 eUSCI (I2C Mode)
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted) (see Figure 4-10)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+Internal: SMCLK, ACLK
+ƒeUSCI eUSCI input clock frequency External: UCLK ƒSYSTEM MHz
+Duty cycle = 50% ±10%
+ƒSCL SCL clock frequency 2 V, 3 V 0 400 kHz
+ƒSCL = 100 kHz 4.0
+tHD,STA Hold time (repeated) START 2 V, 3 V µs
+ƒSCL > 100 kHz 0.6
+ƒSCL = 100 kHz 4.7
+tSU,STA Setup time for a repeated START 2 V, 3 V µs
+ƒSCL > 100 kHz 0.6
+tHD,DAT Data hold time 2 V, 3 V 0 ns
+tSU,DAT Data setup time 2 V, 3 V 250 ns
+ƒSCL = 100 kHz 4.0
+tSU,STO Setup time for STOP 2 V, 3 V µs
+ƒSCL > 100 kHz 0.6
+UCGLITx = 0 50 600 ns
+UCGLITx = 1 25 300 nsPulse duration of spikes suppressed bytSP 2 V, 3 Vinput filter UCGLITx = 2 12.5 150 ns
+UCGLITx = 3 6.25 75 ns
+UCCLTOx = 1 27 ms
+tTIMEOUT Clock low timeout UCCLTOx = 2 2 V, 3 V 30 ms
+UCCLTOx = 3 33 ms
+Figure 4-10. I2C Mode Timing
+28 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.28 10-Bit ADC, Power Supply and Input Range Conditions
+over operating free-air temperature range (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+AVCC and DVCC are connected together,
+AVCC Analog supply voltage AVSS and DVSS are connected together, 2.0 3.6 V
+V(AVSS) = V(DVSS) = 0 V
+V(Ax) Analog input voltage range All ADC10 pins 0 AVCC V
+Operating supply current into ƒADC10CLK = 5 MHz, ADC10ON = 1, 2 V 90 150
+IADC10_A AVCC terminal, reference REFON = 0, SHT0 = 0, SHT1 = 0, µA
+3 V 100 170current not included ADC10DIV = 0
+Only one terminal Ax can be selected at one
+CI Input capacitance time from the pad to the ADC10_A capacitor 2.2 V 6 pF
+array including wiring and pad
+RI Input MUX ON resistance AVCC ≥ 2 V, 0 V ≤ VAx ≤ AVCC 36 kΩ
+4.29 10-Bit ADC, Timing Parameters
+over operating free-air temperature range (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+For specified performance of ADC10 linearity 2 V toƒADC10CLK 0.45 5 5.5 MHzparameters 3.6 V
+Internal ADC10 oscillator 2 V toƒADC10OSC ADC10DIV = 0, ƒADC10CLK = ƒADC10OSC 4.2 4.5 5.7 MHz(MODOSC) 3.6 V
+REFON = 0, Internal oscillator, 2 V to12 ADC10CLK cycles, 10-bit mode, 2.18 2.673.6 VƒADC10OSC = 4.5 MHz to 5.5 MHztCONVERT Conversion time µs
+External ƒADC10CLK from ACLK, MCLK, or SMCLK, 2 V to (1)
+ADC10SSEL ≠ 0 3.6 V
+The error in a conversion started after tADC10ON isTurn on settling time oftADC10ON less than ±0.5 LSB, 100 nsthe ADC Reference and input signal already settled
+RS = 1000 Ω, RI = 36000 Ω, CI = 3.5 pF, 2 V 1.5
+tSample Sampling time Approximately eight Tau (τ) are required to get an µs
+3 V 2.0error of less than ±0.5 LSB
+(1) 12 × ADC10DIV × 1/ƒADC10CLK
+4.30 10-Bit ADC, Linearity Parameters
+over operating free-air temperature range (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+1.4 V ≤ (VeREF+ – VREF–/VeREF–)min ≤ 1.6 V –1.4 1.4IntegralEI 3.6 V LSBlinearity error 1.6 V < (VeREF+ – VREF–/VeREF–)min ≤ VAVCC –1.3 1.3
+DifferentialED (VeREF+ – VREF–/VeREF–)min ≤ (VeREF+ – VREF–/VeREF–) 3.6 V –1.2 1.2 LSBlinearity error
+EO Offset error (VeREF+ – VREF–/VeREF–)min ≤ (VeREF+ – VREF–/VeREF–) 3.6 V ±2.5 mV
+Gain error, external (VeREF+ – VREF–/VeREF–)min ≤ (VeREF+ – VREF–/VeREF–) 3.6 V –1.4 1.4 LSBreference
+EG
+Gain error, internal ±4reference (1)
+Total unadjusted
+error, external (VeREF+ – VREF–/VeREF–)min ≤ (VeREF+ – VREF–/VeREF–) 3.6 V ±2.3 LSB
+reference
+ET
+Total unadjusted
+error, internal ±4
+reference (1)
+(1) Error is dominated by the internal reference.
+Copyright © 2014, Texas Instruments Incorporated Specifications 29
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.31 REF, External Reference
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted) (1)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+VeREF+ Positive external reference voltage input VeREF+ > VeREF– (2) 1.4 AVCC V
+VeREF– Negative external reference voltage input VeREF+ > VeREF– (3) 0 1.2 V
+(VeREF+ – Differential external reference voltage input VeREF+ > VeREF– (4) 1.4 AVCC VVREF–/VeREF–)
+1.4 V ≤ VeREF+ ≤ VAVCC,
+VeREF– = 0 V,
+ƒADC10CLK = 5 MHz, 2.2 V, 3 V ±6 µA
+ADC10SHTx = 1h,
+Conversion rate 200 kspsIVeREF+, Static input currentIVeREF– 1.4 V ≤ VeREF+ ≤ VAVCC,
+VeREF– = 0 V,
+ƒADC10CLK = 5 MHz, 2.2 V, 3 V ±1 µA
+ADC10SHTx = 8h,
+Conversion rate 20 ksps
+CVREF+, Capacitance at VREF+ or VREF- terminal(5) 10 µFCVREF-
+(1) The external reference is used during ADC conversion to charge and discharge the capacitance array. The input capacitance, Ci, is also
+the dynamic load for an external reference during conversion. The dynamic impedance of the reference supply should follow the
+recommendations on analog-source impedance to allow the charge to settle for 10-bit accuracy.
+(2) The accuracy limits the minimum positive external reference voltage. Lower reference voltage levels may be applied with reduced
+accuracy requirements.
+(3) The accuracy limits the maximum negative external reference voltage. Higher reference voltage levels may be applied with reduced
+accuracy requirements.
+(4) The accuracy limits minimum external differential reference voltage. Lower differential reference voltage levels may be applied with
+reduced accuracy requirements.
+(5) Two decoupling capacitors, 10 µF and 100 nF, should be connected to VREF to decouple the dynamic current required for an external
+reference source if it is used for the ADC10_B. Also see the MSP430FR57xx Family User's Guide (SLAU272).
+4.32 REF, Built-In Reference
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+REFVSEL = {2} for 2.5 V, REFON = 1 3 V 2.39 2.5 2.61
+Positive built-in referenceVREF+ REFVSEL = {1} for 2 V, REFON = 1 3 V 1.91 2.0 2.09 Vvoltage output
+REFVSEL = {0} for 1.5 V, REFON = 1 3 V 1.43 1.5 1.57
+REFVSEL = {0} for 1.5 V 2.0AVCC minimum voltage,
+AVCC(min) Positive built-in reference REFVSEL = {1} for 2 V 2.2 V
+active REFVSEL = {2} for 2.5 V 2.7
+Operating supply current into ƒADC10CLK = 5 MHz,IREF+ 3 V 33 µAAVCC terminal (1) REFON = 1, REFBURST = 0
+Temperature coefficient of ppm/TREF+ REFVSEL = (0, 1, 2}, REFON = 1 ±35built-in reference °C
+AVCC = AVCC (min) - AVCC(max),
+TA = 25°C, REFON = 1, 1600
+REFVSEL = (0} for 1.5 V
+AVCC = AVCC (min) - AVCC(max),Power supply rejection ratioPSRR_DC TA = 25°C, REFON = 1, 1900 µV/V(DC) REFVSEL = (1} for 2 V
+AVCC = AVCC (min) - AVCC(max),
+TA = 25°C, REFON = 1, 3600
+REFVSEL = (2} for 2.5 V
+Settling time of reference AVCC = AVCC (min) - AVCC(max),tSETTLE 30 µsvoltage (2) REFVSEL = (0, 1, 2}, REFON = 0 → 1
+(1) The internal reference current is supplied by terminal AVCC. Consumption is independent of the ADC10ON control bit, unless a
+conversion is active. The REFON bit enables to settle the built-in reference before starting an A/D conversion.
+(2) The condition is that the error in a conversion started after tREFON is less than ±0.5 LSB.
+30 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+600
+650
+700
+750
+800
+850
+900
+950
+1000
+1050
+-40 -30 -20 -10 0 10 20 30 40 50 60 70 80
+Ambient Temperature - Degrees Celsius
+Typical Temperature Sensor Voltage - mV
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.33 REF, Temperature Sensor and Built-In VMID
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS VCC MIN TYP MAX UNIT
+ADC10ON = 1, INCH = 0Ah,VSENSOR See (1) 2 V, 3 V 790 mVTA = 0°C
+TCSENSOR ADC10ON = 1, INCH = 0Ah 2 V, 3 V 2.55 mV/°C
+2 V 30Sample time required if ADC10ON = 1, INCH = 0Ah,tSENSOR(sample) µschannel 10 is selected (2) Error of conversion result ≤ 1 LSB 3 V 30
+2 V 0.96 1.0 1.04ADC10ON = 1, INCH = 0Bh,VMID AVCC divider at channel 11 VVMID is ~0.5 × VAVCC 3 V 1.43 1.5 1.57
+Sample time required if ADC10ON = 1, INCH = 0Bh,tVMID(sample) 2 V, 3 V 1000 nschannel 11 is selected (3) Error of conversion result ≤ 1 LSB
+(1) The temperature sensor offset can vary significantly. A single-point calibration is recommended to minimize the offset error of the built-in
+temperature sensor.
+(2) The typical equivalent impedance of the sensor is 51 kΩ. The sample time required includes the sensor-on time tSENSOR(on).
+(3) The on-time tVMID(on) is included in the sampling time tVMID(sample); no additional on time is needed.
+Figure 4-11. Typical Temperature Sensor Voltage
+Copyright © 2014, Texas Instruments Incorporated Specifications 31
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+4.34 Comparator_D
+over operating free-air temperature range (unless otherwise noted)
+PARAMETER TEST CONDITIONS MIN TYP MAX UNIT
+Overdrive = 10 mV, 49 100 202 nsVIN- = (VIN+ – 400 mV) to (VIN+ + 10 mV)
+Propagation delay, Overdrive = 100 mV,tpd 80 nsAVCC = 2 V to 3.6 V VIN- = (VIN+ – 400 mV) to (VIN+ + 100 mV)
+Overdrive = 250 mV, 50 ns(VIN+ – 400 mV) to (VIN+ + 250 mV)
+CDF = 1, CDFDLY = 00 0.28 0.5 1.1 µs
+Filter timer added to the CDF = 1, CDFDLY = 01 0.49 0.9 1.8 µs
+tfilter propagation delay of the
+CDF = 1, CDFDLY = 10 0.85 1.6 3.31 µscomparator
+CDF = 1, CDFDLY = 11 1.59 3.0 6.5 µs
+Voffset Input offset AVCC = 2 V to 3.6 V –26 26 mV
+Common mode inputVic AVCC = 2 V to 3.6 V 0 AVCC – 1 Vrange
+Icomp(AVCC) Comparator only CDON = 1, AVCC = 2 V to 3.6 V 28 µA
+Reference buffer and R-Iref(AVCC) CDREFLx = 01, AVCC = 2 V to 3.6 V 20 µAladder
+CDON = 0 to CDON = 1,tenable,comp Comparator enable time 1.1 2.3 µsAVCC = 2 V to 3.6 V
+Resistor ladder enable CDON = 0 to CDON = 1,tenable,rladder 1.1 2.3 µstime AVCC = 2 V to 3.6 V
+VIN × VIN × VIN ×Reference voltage for a VIN = voltage input to the R-ladder,VCB_REF (n + 0.49) (n + 1) (n + 1.51) Vtap n = 0 to 31 / 32 / 32 / 32
+4.35 FRAM
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER TEST CONDITIONS MIN TYP MAX UNIT
+DVCC(WRITE) Write supply voltage 2.0 3.6 V
+tWRITE Word or byte write time 120 ns
+tACCESS Read access time (1) 60 ns
+tPRECHARGE Precharge time (1) 60 ns
+tCYCLE Cycle time, read or write operation (1) 120 ns
+Read and write endurance 1015 cycles
+TJ = 25°C 100
+tRetention Data retention duration TJ = 70°C 40 years
+TJ = 85°C 10
+(1) When using manual wait state control, see the MSP430FR57xx Family User's Guide (SLAU272) for recommended settings for common
+system frequencies.
+32 Specifications Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+4.36 JTAG and Spy-Bi-Wire Interface
+over recommended ranges of supply voltage and operating free-air temperature (unless otherwise noted)
+PARAMETER VCC MIN TYP MAX UNIT
+ƒSBW Spy-Bi-Wire input frequency 2 V, 3 V 0 20 MHz
+tSBW,Low Spy-Bi-Wire low clock pulse duration 2 V, 3 V 0.025 15 µs
+tSBW, En Spy-Bi-Wire enable time (TEST high to acceptance of first clock edge) (1) 2 V, 3 V 1 µs
+tSBW,Rst Spy-Bi-Wire return to normal operation time 18 37 µs
+2 V 0 5 MHz
+ƒTCK TCK input frequency, 4-wire JTAG (2)
+3 V 0 10 MHz
+Rinternal Internal pulldown resistance on TEST 2 V, 3 V 19 35 51.5 kΩ
+(1) Tools accessing the Spy-Bi-Wire interface must wait for the tSBW,En time after pulling the TEST/SBWTCK pin high before applying the
+first SBWTCK clock edge.
+(2) ƒTCK may be restricted to meet the timing requirements of the module selected.
+Copyright © 2014, Texas Instruments Incorporated Specifications 33
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+Clock
+System
+16 KB
+8 KB
+FRAM
+(FR5739)
+(FR5735)
+4 KB
+(FR5731)
+1 KB
+RAM
+MCLK
+ACLK
+SMCLK
+CPUXV2
+and
+Working
+Registers
+EEM
+(S: 3+1)
+PJ.4/XIN PJ.5/XOUT
+JTAG/
+SBW
+Interface
+DMA
+3 Channel
+Power
+Management
+SVS
+SYS
+Watchdog
+MPY32
+TA0
+TA1
+(2) Timer_A
+3 CC
+Registers
+TB0
+TB1
+TB2
+(3) Timer_B
+3 CC
+Registers
+ADC10_B
+200KSPS
+14 channels
+(12 ext/2 int)
+10 Bit
+DVCC DVSS AVCC AVSS
+RST/NMI/SBWTDIO
+RTC_B
+Comp_D
+16 channels
+VCORE
+MAB
+MDB
+TEST/SBWTCK
+PJ.0/TDO
+PJ.1/TDI/TCLK
+PJ.2/TMS
+PJ.3/TCK
+I/O Ports
+P1/P2
+2×8 I/Os
+Interrupt
+& Wakeup
+PA
+1×16 I/Os
+PA
+P1.x P2.x
+I/O Ports
+P3/P4
+1×8 I/Os
+1x 2 I/Os
+Interrupt
+& Wakeup
+PB
+1×10 I/Os
+PB
+P3.x P4.x
+REF
+CRC
+eUSCI_A0:
+UART,
+IrDA, SPI
+eUSCI_B0:
+SPI, I2C
+Boot
+ROM
+Memory
+Protection
+Unit
+eUSCI_A1:
+UART,
+IrDA, SPI
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+5 Detailed Description
+5.1 Functional Block Diagram
+This section shows the functional block diagram for the MSP430FR5739-EP in the RHA package.
+5.2 CPU
+The MSP430 CPU has a 16-bit RISC architecture that is highly transparent to the application. All
+operations, other than program-flow instructions, are performed as register operations in conjunction with
+seven addressing modes for source operand and four addressing modes for destination operand.
+The CPU is integrated with 16 registers that provide reduced instruction execution time. The register-to-
+register operation execution time is one cycle of the CPU clock.
+Four of the registers, R0 to R3, are dedicated as program counter, stack pointer, status register, and
+constant generator, respectively. The remaining registers are general-purpose registers.
+Peripherals are connected to the CPU using data, address, and control buses, and can be handled with all
+instructions.
+The instruction set consists of the original 51 instructions with three formats and seven address modes
+and additional instructions for the expanded address range. Each instruction can operate on word and
+byte data.
+5.3 Operating Modes
+The MSP430 has one active mode and seven software-selectable low-power modes of operation. An
+interrupt event can wake up the device from low-power modes LPM0 through LPM4, service the request,
+and restore back to the low-power mode on return from the interrupt program. Low-power modes LPM3.5
+and LPM4.5 disable the core supply to minimize power consumption.
+The following eight operating modes can be configured by software:
+34 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+• Active mode (AM) • Low-power mode 3 (LPM3)
+– All clocks are active – CPU is disabled
+– ACLK active• Low-power mode 0 (LPM0)
+– MCLK and SMCLK disabled– CPU is disabled
+– DCO disabled– ACLK active
+– Complete data retention– MCLK disabled
+– SMCLK optionally active • Low-power mode 4 (LPM4)
+– Complete data retention – CPU is disabled
+– ACLK, MCLK, SMCLK disabled• Low-power mode 1 (LPM1)
+– Complete data retention– CPU is disabled
+– ACLK active • Low-power mode 3.5 (LPM3.5)
+– MCLK disabled – RTC operation
+– SMCLK optionally active – Internal regulator disabled
+– DCO disabled – No data retention
+– Complete data retention – I/O pad state retention
+– Wakeup from RST, general-purpose• Low-power mode 2 (LPM2)
+I/O, RTC events– CPU is disabled
+• Low-power mode 4.5 (LPM4.5)– ACLK active
+– Internal regulator disabled– MCLK disabled
+– No data retention– SMCLK optionally active
+– I/O pad state retention– DCO disabled
+– Wakeup from RST and general-purpose– Complete data retention
+I/O
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 35
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+5.4 Interrupt Vector Addresses
+The interrupt vectors and the power-up start address are located in the address range 0FFFFh to 0FF80h.
+The vector contains the 16-bit address of the appropriate interrupt-handler instruction sequence.
+Table 5-1. Interrupt Sources, Flags, and Vectors
+SYSTEM WORDINTERRUPT SOURCE INTERRUPT FLAG PRIORITYINTERRUPT ADDRESS
+System Reset
+Power-Up, Brownout, Supply SVSLIFG, SVSHIFG
+Supervisors PMMRSTIFG
+External Reset RST WDTIFG
+Watchdog Timeout (Watchdog WDTPW, FRCTLPW, MPUPW, CSPW, PMMPW
+mode) DBDIFG Reset 0FFFEh 63, highest
+WDT, FRCTL MPU, CS, PMM MPUSEGIIFG, MPUSEG1IFG, MPUSEG2IFG,
+Password Violation MPUSEG3IFG
+FRAM double bit error detection PMMPORIFG, PMMBORIFG
+MPU segment violation (SYSRSTIV) (1) (2)
+Software POR, BOR
+System NMI VMAIFGVacant Memory Access JMBNIFG, JMBOUTIFGJTAG Mailbox ACCTIMIFG (Non)maskable 0FFFCh 62FRAM access time error SBDIFG, DBDIFGFRAM single, double bit error (SYSSNIV) (1)
+detection
+User NMI NMIIFG, OFIFGExternal NMI (Non)maskable 0FFFAh 61(SYSUNIV) (1) (2)
+Oscillator Fault
+Comparator_D interrupt flagsComparator_D Maskable 0FFF8h 60(CBIV) (1) (3)
+TB0 TB0CCR0 CCIFG0 (3) Maskable 0FFF6h 59
+TB0CCR1 CCIFG1 to TB0CCR2 CCIFG2,
+TB0 TB0IFG Maskable 0FFF4h 58
+(TB0IV) (1) (3)
+Watchdog Timer WDTIFG Maskable 0FFF2h 57(Interval Timer Mode)
+UCA0RXIFG, UCA0TXIFG (SPI mode)
+UCA0STTIFG, UCA0TXCPTIFG, UCA0RXIFG,eUSCI_A0 Receive and Transmit Maskable 0FFF0h 56UXA0TXIFG (UART mode)
+(UCA0IV) (1) (3)
+UCB0STTIFG, UCB0TXCPTIFG, UCB0RXIFG,
+UCB0TXIFG (SPI mode)
+UCB0ALIFG, UCB0NACKIFG, UCB0STTIFG,
+UCB0STPIFG, UCB0RXIFG0, UCB0TXIFG0,eUSCI_B0 Receive and Transmit Maskable 0FFEEh 55UCB0RXIFG1, UCB0TXIFG1, UCB0RXIFG2,
+UCB0TXIFG2, UCB0RXIFG3, UCB0TXIFG3,
+UCB0CNTIFG, UCB0BIT9IFG (I2C mode)
+(UCB0IV) (1) (3)
+ADC10OVIFG, ADC10TOVIFG, ADC10HIIFG,
+ADC10LOIFGADC10_B Maskable 0FFECh 54ADC10INIFG, ADC10IFG0
+(ADC10IV) (1) (3) (4)
+TA0 TA0CCR0 CCIFG0 (3) Maskable 0FFEAh 53
+TA0CCR1 CCIFG1 to TA0CCR2 CCIFG2,
+TA0 TA0IFG Maskable 0FFE8h 52
+(TA0IV) (1) (3)
+(1) Multiple source flags
+(2) A reset is generated if the CPU tries to fetch instructions from within peripheral space or vacant memory space.
+(Non)maskable: the individual interrupt-enable bit can disable an interrupt event, but the general-interrupt enable cannot disable it.
+(3) Interrupt flags are located in the module.
+(4) Only on devices with ADC, otherwise reserved.
+36 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-1. Interrupt Sources, Flags, and Vectors (continued)
+SYSTEM WORDINTERRUPT SOURCE INTERRUPT FLAG PRIORITYINTERRUPT ADDRESS
+UCA1RXIFG, UCA1TXIFG (SPI mode)
+UCA1STTIFG, UCA1TXCPTIFG, UCA1RXIFG,eUSCI_A1 Receive and Transmit Maskable 0FFE6h 51UXA1TXIFG (UART mode)
+(UCA1IV) (1) (3)
+DMA0IFG, DMA1IFG, DMA2IFGDMA Maskable 0FFE4h 50(DMAIV) (1) (3)
+TA1 TA1CCR0 CCIFG0 (3) Maskable 0FFE2h 49
+TA1CCR1 CCIFG1 to TA1CCR2 CCIFG2,
+TA1 TA1IFG Maskable 0FFE0h 48
+(TA1IV) (1) (3)
+P1IFG.0 to P1IFG.7I/O Port P1 Maskable 0FFDEh 47(P1IV) (1) (3)
+TB1 TB1CCR0 CCIFG0 (3) Maskable 0FFDCh 46
+TB1CCR1 CCIFG1 to TB1CCR2 CCIFG2,
+TB1 TB1IFG Maskable 0FFDAh 45
+(TB1IV) (1) (3)
+P2IFG.0 to P2IFG.7I/O Port P2 Maskable 0FFD8h 44(P2IV) (1) (3)
+TB2 TB2CCR0 CCIFG0 (3) Maskable 0FFD6h 43
+TB2CCR1 CCIFG1 to TB2CCR2 CCIFG2,
+TB2 TB2IFG Maskable 0FFD4h 42
+(TB2IV) (1) (3)
+P3IFG.0 to P3IFG.7I/O Port P3 Maskable 0FFD2h 41(P3IV) (1) (3)
+P4IFG.0 to P4IFG.2I/O Port P4 Maskable 0FFD0h 40(P4IV) (1) (3)
+RTCRDYIFG, RTCTEVIFG, RTCAIFG,
+RTC_B RT0PSIFG, RT1PSIFG, RTCOFIFG Maskable 0FFCEh 39
+(RTCIV) (1) (3)
+0FFCCh 38
+Reserved Reserved (5) ⋮ ⋮
+0FF80h 0, lowest
+(5) Reserved interrupt vectors at addresses are not used in this device and can be used for regular program code if necessary. To maintain
+compatibility with other devices, it is recommended to reserve these locations.
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 37
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+5.5 Memory Organization
+Table 5-2 describes the memory organization.
+Table 5-2. Memory Organization(1)(2)
+MSP430FR5739-EP
+Memory (FRAM) Total Size 15.5 KB
+Main: interrupt vectors 00FFFFh–00FF80h
+Main: code memory 00FF7Fh–00C200h
+1 KBRAM 001FFFh–001C00h
+Device Descriptor Info (TLV) 128 B
+(FRAM) 001A7Fh–001A00h
+N/A 0019FFh–001980h
+Address space mirrored to Info A
+N/A 00197Fh–001900h
+Address space mirrored to Info B
+Information memory (FRAM)
+Info A 128 B
+0018FFh–001880h
+Info B 128 B
+00187Fh–001800h
+BSL 3 512 B
+0017FFh–001600h
+BSL 2 512 B
+0015FFh–001400hBootstrap loader (BSL) memory
+(ROM) BSL 1 512 B
+0013FFh–001200h
+BSL 0 512 B
+0011FFh–001000h
+Size 4 KBPeripherals 000FFFh–0h
+(1) N/A = Not available
+(2) All address space not listed in this table is considered vacant memory.
+38 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+5.6 Bootstrap Loader (BSL)
+The BSL enables users to program the FRAM or RAM using a UART serial interface. Access to the device
+memory by the BSL is protected by an user-defined password. Use of the BSL requires four pins (see
+Table 5-3). BSL entry requires a specific entry sequence on the RST/NMI/SBWTDIO and TEST/SBWTCK
+pins. For complete description of the features of the BSL and its implementation, see the MSP430
+Programming Via the Bootstrap Loader User's Guide (SLAU319).
+Table 5-3. BSL Pin Requirements and Functions
+DEVICE SIGNAL BSL FUNCTION
+RST/NMI/SBWTDIO Entry sequence signal
+TEST/SBWTCK Entry sequence signal
+P2.0 Data transmit
+P2.1 Data receive
+VCC Power supply
+VSS Ground supply
+5.7 JTAG Operation
+5.7.1 JTAG Standard Interface
+The MSP430 family supports the standard JTAG interface, which requires four signals for sending and
+receiving data. The JTAG signals are shared with general-purpose I/O. The TEST/SBWTCK pin is used to
+enable the JTAG signals. In addition to these signals, the RST/NMI/SBWTDIO is required to interface with
+MSP430 development tools and device programmers. The JTAG pin requirements are summarized in
+Table 5-4. For further details on interfacing to development tools and device programmers, see the
+MSP430 Hardware Tools User's Guide (SLAU278). For a complete description of the features of the JTAG
+interface and its implementation, see MSP430 Programming Via the JTAG Interface (SLAU320).
+Table 5-4. JTAG Pin Requirements and Functions
+DEVICE SIGNAL DIRECTION FUNCTION
+PJ.3/TCK IN JTAG clock input
+PJ.2/TMS IN JTAG state control
+PJ.1/TDI/TCLK IN JTAG data input, TCLK input
+PJ.0/TDO OUT JTAG data output
+TEST/SBWTCK IN Enable JTAG pins
+RST/NMI/SBWTDIO IN External reset
+VCC Power supply
+VSS Ground supply
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 39
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+5.7.2 Spy-Bi-Wire Interface
+In addition to the standard JTAG interface, the MSP430 family supports the two-wire Spy-Bi-Wire
+interface. Spy-Bi-Wire can be used to interface with MSP430 development tools and device programmers.
+The Spy-Bi-Wire interface pin requirements are summarized in Table 5-5. For further details on interfacing
+to development tools and device programmers, see the MSP430 Hardware Tools User's Guide
+(SLAU278). For a complete description of the features of the JTAG interface and its implementation, see
+MSP430 Programming Via the JTAG Interface (SLAU320).
+Table 5-5. Spy-Bi-Wire Pin Requirements and Functions
+DEVICE SIGNAL DIRECTION FUNCTION
+TEST/SBWTCK IN Spy-Bi-Wire clock input
+RST/NMI/SBWTDIO IN, OUT Spy-Bi-Wire data input and output
+VCC Power supply
+VSS Ground supply
+5.8 FRAM
+The FRAM can be programmed through the JTAG port, Spy-Bi-Wire (SBW), the BSL, or in-system by the
+CPU. Features of the FRAM include:
+• Low-power ultra-fast write nonvolatile memory
+• Byte and word access capability
+• Programmable and automated wait state generation
+• Error Correction Coding (ECC) with single bit detection and correction, double bit detection
+For important software design information regarding FRAM including but not limited to partitioning the
+memory layout according to application-specific code, constant, and data space requirements, the use of
+FRAM to optimize application energy consumption, and the use of the Memory Protection Unit (MPU) to
+maximize application robustness by protecting the program code against unintended write accesses, see
+the application report MSP430™ FRAM Technology – How To and Best Practices (SLAA628).
+5.9 Memory Protection Unit (MPU)
+The FRAM can be protected from inadvertent CPU execution or write access by the MPU. Features of the
+MPU include:
+• Main memory partitioning programmable up to three segments
+• Each segment's (main and information memory) access rights can be individually selected
+• Access violation flags with interrupt capability for easy servicing of access violations
+5.10 Peripherals
+Peripherals are connected to the CPU through data, address, and control buses and can be handled using
+all instructions. For complete module descriptions, see the MSP430FR57xx Family User's Guide
+(SLAU272).
+5.10.1 Digital I/O
+There are up to four 8-bit I/O ports implemented:
+• All individual I/O bits are independently programmable.
+• Any combination of input, output, and interrupt conditions is possible.
+• Programmable pullup or pulldown on all ports.
+• Edge-selectable interrupt and LPM3.5 and LPM4.5 wake-up input capability is available for all ports.
+• Read and write access to port-control registers is supported by all instructions.
+• Ports can be accessed byte-wise or word-wise in pairs.
+40 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+5.10.2 Oscillator and Clock System (CS)
+The clock system includes support for a 32-kHz watch crystal oscillator XT1 (LF mode), an internal very-
+low-power low-frequency oscillator (VLO), an integrated internal digitally controlled oscillator (DCO), and a
+high-frequency crystal oscillator XT1 (HF mode). The clock system module is designed to meet the
+requirements of both low system cost and low power consumption. A fail-safe mechanism exists for all
+crystal sources. The clock system module provides the following clock signals:
+• Auxiliary clock (ACLK), sourced from a 32-kHz watch crystal (XT1 LF mode), a high-frequency crystal
+(XT1 HF mode), the internal VLO, or the internal DCO.
+• Main clock (MCLK), the system clock used by the CPU. MCLK can be sourced by the same sources
+made available to ACLK.
+• Sub-Main clock (SMCLK), the subsystem clock used by the peripheral modules. SMCLK can be
+sourced by the same sources made available to ACLK.
+5.10.3 Power Management Module (PMM)
+The PMM includes an integrated voltage regulator that supplies the core voltage to the device. The PMM
+also includes supply voltage supervisor (SVS) and brownout protection. The brownout circuit is
+implemented to provide the proper internal reset signal to the device during power-on and power-off. The
+SVS circuitry detects if the supply voltage drops below a user-selectable safe level. SVS circuitry is
+available on the primary and core supplies.
+5.10.4 Hardware Multiplier (MPY)
+The multiplication operation is supported by a dedicated peripheral module. The module performs
+operations with 32-bit, 24-bit, 16-bit, and 8-bit operands. The module supports signed and unsigned
+multiplication as well as signed and unsigned multiply-and-accumulate operations.
+5.10.5 Real-Time Clock (RTC_B)
+The RTC_B module contains an integrated real-time clock (RTC) (calendar mode). Calendar mode
+integrates an internal calendar which compensates for months with fewer than 31 days and includes leap
+year correction. The RTC_B also supports flexible alarm functions and offset-calibration hardware. RTC
+operation is available in LPM3.5 mode to minimize power consumption.
+5.10.6 Watchdog Timer (WDT_A)
+The primary function of the watchdog timer (WDT_A) module is to perform a controlled system restart
+after a software problem occurs. If the selected time interval expires, a system reset is generated. If the
+watchdog function is not needed in an application, the module can be configured as an interval timer and
+can generate interrupts at selected time intervals.
+5.10.7 System Module (SYS)
+The SYS module handles many of the system functions within the device. These include power-on reset
+(POR) and power-up clear (PUC) handling, NMI source selection and management, reset interrupt vector
+generators, bootstrap loader entry mechanisms, and configuration management (device descriptors). It
+also includes a data exchange mechanism using JTAG called a JTAG mailbox that can be used in the
+application.
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 41
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 5-6. System Module Interrupt Vector Registers
+INTERRUPT VECTOR ADDRESS INTERRUPT EVENT VALUE PRIORITYREGISTER
+SYSRSTIV, 019Eh No interrupt pending 00h
+System Reset Brownout (BOR) 02h Highest
+RSTIFG RST/NMI (BOR) 04h
+PMMSWBOR software BOR (BOR) 06h
+LPMx.5 wake up (BOR) 08h
+Security violation (BOR) 0Ah
+SVSLIFG SVSL event (BOR) 0Ch
+SVSHIFG SVSH event (BOR) 0Eh
+Reserved 10h
+Reserved 12h
+PMMSWPOR software POR (POR) 14h
+WDTIFG watchdog timeout (PUC) 16h
+WDTPW password violation (PUC) 18h
+FRCTLPW password violation (PUC) 1Ah
+DBDIFG FRAM double bit error (PUC) 1Ch
+Peripheral area fetch (PUC) 1Eh
+PMMPW PMM password violation (PUC) 20h
+MPUPW MPU password violation (PUC) 22h
+CSPW CS password violation (PUC) 24h
+MPUSEGIIFG information memory segment violation (PUC) 26h
+MPUSEG1IFG segment 1 memory violation (PUC) 28h
+MPUSEG2IFG segment 2 memory violation (PUC) 2Ah
+MPUSEG3IFG segment 3 memory violation (PUC) 2Ch
+Reserved 2Eh
+Reserved 30h to 3Eh Lowest
+SYSSNIV, System NMI 019Ch No interrupt pending 00h
+DBDIFG FRAM double bit error 02h Highest
+ACCTIMIFG access time error 04h
+Reserved 0Eh
+VMAIFG Vacant memory access 10h
+JMBINIFG JTAG mailbox input 12h
+JMBOUTIFG JTAG mailbox output 14h
+SBDIFG FRAM single bit error 16h
+Reserved 18h to 1Eh Lowest
+SYSUNIV, User NMI 019Ah No interrupt pending 00h
+NMIFG NMI pin 02h Highest
+OFIFG oscillator fault 04h
+Reserved 06h
+Reserved 08h
+Reserved 0Ah to 1Eh Lowest
+42 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+5.10.8 DMA Controller
+The DMA controller allows movement of data from one memory address to another without CPU
+intervention. For example, the DMA controller can be used to move data from the ADC10_B conversion
+memory to RAM. Using the DMA controller can increase the throughput of peripheral modules. The DMA
+controller reduces system power consumption by allowing the CPU to remain in sleep mode, without
+having to awaken to move data to or from a peripheral.
+Table 5-7. DMA Trigger Assignments (1)
+TRIGGER CHANNEL 0 CHANNEL 1 CHANNEL 2
+0 DMAREQ DMAREQ DMAREQ
+1 TA0CCR0 CCIFG TA0CCR0 CCIFG TA0CCR0 CCIFG
+2 TA0CCR2 CCIFG TA0CCR2 CCIFG TA0CCR2 CCIFG
+3 TA1CCR0 CCIFG TA1CCR0 CCIFG TA1CCR0 CCIFG
+4 TA1CCR2 CCIFG TA1CCR2 CCIFG TA1CCR2 CCIFG
+5 Reserved Reserved Reserved
+6 Reserved Reserved Reserved
+7 TB0CCR0 CCIFG TB0CCR0 CCIFG TB0CCR0 CCIFG
+8 TB0CCR2 CCIFG TB0CCR2 CCIFG TB0CCR2 CCIFG
+9 TB1CCR0 CCIFG (2) TB1CCR0 CCIFG (2) TB1CCR0 CCIFG (2)
+10 TB1CCR2 CCIFG (2) TB1CCR2 CCIFG (2) TB1CCR2 CCIFG (2)
+11 TB2CCR0 CCIFG (3) TB2CCR0 CCIFG (3) TB2CCR0 CCIFG (3)
+12 TB2CCR2 CCIFG (3) TB2CCR2 CCIFG (3) TB2CCR2 CCIFG (3)
+13 Reserved Reserved Reserved
+14 UCA0RXIFG UCA0RXIFG UCA0RXIFG
+15 UCA0TXIFG UCA0TXIFG UCA0TXIFG
+16 UCA1RXIFG (4) UCA1RXIFG (4) UCA1RXIFG (4)
+17 UCA1TXIFG (4) UCA1TXIFG (4) UCA1TXIFG (4)
+18 UCB0RXIFG0 UCB0RXIFG0 UCB0RXIFG0
+19 UCB0TXIFG0 UCB0TXIFG0 UCB0TXIFG0
+20 UCB0RXIFG1 UCB0RXIFG1 UCB0RXIFG1
+21 UCB0TXIFG1 UCB0TXIFG1 UCB0TXIFG1
+22 UCB0RXIFG2 UCB0RXIFG2 UCB0RXIFG2
+23 UCB0TXIFG2 UCB0TXIFG2 UCB0TXIFG2
+24 UCB0RXIFG3 UCB0RXIFG3 UCB0RXIFG3
+25 UCB0TXIFG3 UCB0TXIFG3 UCB0TXIFG3
+26 ADC10IFGx (5) ADC10IFGx (5) ADC10IFGx (5)
+27 Reserved Reserved Reserved
+28 Reserved Reserved Reserved
+29 MPY ready MPY ready MPY ready
+30 DMA2IFG DMA0IFG DMA1IFG
+31 DMAE0 DMAE0 DMAE0
+(1) If a reserved trigger source is selected, no trigger is generated.
+(2) Only on devices with TB1, otherwise reserved
+(3) Only on devices with TB2, otherwise reserved
+(4) Only on devices with eUSCI_A1, otherwise reserved
+(5) Only on devices with ADC, otherwise reserved
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 43
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+5.10.9 Enhanced Universal Serial Communication Interface (eUSCI)
+The eUSCI modules are used for serial data communication. The eUSCI module supports synchronous
+communication protocols such as SPI (3 or 4 pin) and I2C, and asynchronous communication protocols
+such as UART, enhanced UART with automatic baudrate detection, and IrDA. Each eUSCI module
+contains two portions, A and B.
+The eUSCI_An module provides support for SPI (3 pin or 4 pin), UART, enhanced UART, or IrDA.
+The eUSCI_Bn module provides support for SPI (3 pin or 4 pin) or I2C.
+The MSP430FR5739-EP series include one or two eUSCI_An modules (eUSCI_A0, eUSCI_A1) and one
+eUSCI_Bn module (eUSCI_B).
+5.10.10 TA0, TA1
+TA0 and TA1 are 16-bit timers/counters (Timer_A type) with three capture/compare registers each. Each
+can support multiple capture/compares, PWM outputs, and interval timing. Each has extensive interrupt
+capabilities. Interrupts may be generated from the counter on overflow conditions and from each of the
+capture/compare registers.
+Table 5-8. TA0 Signal Connections
+MODULE INPUT MODULE OUTPUT DEVICE OUTPUTINPUT PIN NUMBER DEVICE INPUT SIGNAL MODULE BLOCK OUTPUT PIN NUMBERSIGNAL SIGNAL SIGNAL
+3-P1.2 TA0CLK TACLK
+ACLK (internal) ACLK
+Timer N/A N/A
+SMCLK (internal) SMCLK
+3-P1.2 TA0CLK TACLK
+28-P1.6 TA0.0 CCI0A 28-P1.6
+34-P2.3 TA0.0 CCI0B 34-P2.3
+CCR0 TA0 TA0.0
+DVSS GND
+DVCC VCC
+1-P1.0 TA0.1 CCI1A 1-P1.0
+ADC10 (internal) (1)
+CDOUT (internal) CCI1B ADC10SHSx = {1}CCR1 TA1 TA0.1
+DVSS GND
+DVCC VCC
+2-P1.1 TA0.2 CCI2A 2-P1.1
+ACLK (internal) CCI2B
+CCR2 TA2 TA0.2
+DVSS GND
+DVCC VCC
+(1) Only on devices with ADC
+44 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-9. TA1 Signal Connections
+MODULE INPUT MODULE OUTPUT DEVICE OUTPUTINPUT PIN NUMBER DEVICE INPUT SIGNAL MODULE BLOCK OUTPUT PIN NUMBERSIGNAL SIGNAL SIGNAL
+2-P1.1 TA1CLK TACLK
+ACLK (internal) ACLK
+Timer N/A N/A
+SMCLK (internal) SMCLK
+2-P1.1 TA1CLK TACLK
+29-P1.7 TA1.0 CCI0A 29-P1.7
+35-P2.4 TA1.0 CCI0B 35-P2.4
+CCR0 TA0 TA1.0
+DVSS GND
+DVCC VCC
+3-P1.2 TA1.1 CCI1A 3-P1.2
+CDOUT (internal) CCI1B
+CCR1 TA1 TA1.1
+DVSS GND
+DVCC VCC
+8-P1.3 TA1.2 CCI2A 8-P1.3
+ACLK (internal) CCI2B
+CCR2 TA2 TA1.2
+DVSS GND
+DVCC VCC
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 45
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+5.10.11 TB0, TB1, TB2
+TB0, TB1, and TB2 are 16-bit timers/counters (Timer_B type) with three capture/compare registers each.
+Each can support multiple capture/compares, PWM outputs, and interval timing. Each has extensive
+interrupt capabilities. Interrupts may be generated from the counter on overflow conditions and from each
+of the capture/compare registers.
+Table 5-10. TB0 Signal Connections
+MODULE INPUT MODULE OUTPUT DEVICE OUTPUTINPUT PIN NUMBER DEVICE INPUT SIGNAL MODULE BLOCK OUTPUT PIN NUMBERSIGNAL SIGNAL SIGNAL
+21-P2.0 TB0CLK TBCLK
+ACLK (internal) ACLK
+Timer N/A N/A
+SMCLK (internal) SMCLK
+21-P2.0 TB0CLK TBCLK
+22-P2.1 TB0.0 CCI0A 22-P2.1
+17-P2.5 TB0.0 CCI0B 17-P2.5
+CCR0 TB0 TB0.0 ADC10 (internal) (1)
+DVSS GND ADC10SHSx = {2}
+DVCC VCC
+9-P1.4 TB0.1 CCI1A 9-P1.4
+ADC10 (internal) (1)
+CDOUT (internal) CCI1B ADC10SHSx = {3}CCR1 TB1 TB0.1
+DVSS GND
+DVCC VCC
+10-P1.5 TB0.2 CCI2A 10-P1.5
+ACLK (internal) CCI2B
+CCR2 TB2 TB0.2
+DVSS GND
+DVCC VCC
+(1) Only on devices with ADC
+46 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-11. TB1 Signal Connections (1)
+MODULE INPUT MODULE OUTPUT DEVICE OUTPUTINPUT PIN NUMBER DEVICE INPUT SIGNAL MODULE BLOCK OUTPUT PIN NUMBERSIGNAL SIGNAL SIGNAL
+26-P3.6 TB1CLK TBCLK
+ACLK (internal) ACLK
+Timer N/A N/A
+SMCLK (internal) SMCLK
+26-P3.6 TB1CLK TBCLK
+23-P2.2 TB1.0 CCI0A 23-P2.2
+18-P2.6 TB1.0 CCI0B 18-P2.6
+CCR0 TB0 TB1.0
+DVSS GND
+DVCC VCC
+28-P1.6 TB1.1 CCI1A 28-P1.6
+24-P3.4 TB1.1 CCI1B 24-P3.4
+CCR1 TB1 TB1.1
+DVSS GND
+DVCC VCC
+29-P1.7 TB1.2 CCI2A 29-P1.7
+25-P3.5 TB1.2 CCI2B 25-P3.5
+CCR2 TB2 TB1.2
+DVSS GND
+DVCC VCC
+(1) TB1 is not present on all device types.
+Table 5-12. TB2 Signal Connections (1)
+MODULE INPUT MODULE OUTPUT DEVICE OUTPUTINPUT PIN NUMBER DEVICE INPUT SIGNAL MODULE BLOCK OUTPUT PIN NUMBERSIGNAL SIGNAL SIGNAL
+24-P3.4 TB2CLK TBCLK
+ACLK (internal) ACLK
+Timer N/A N/A
+SMCLK (internal) SMCLK
+24-P3.4 TB2CLK TBCLK
+21-P2.0 TB2.0 CCI0A 21-P2.0
+15-P4.0 TB2.0 CCI0B 15-P4.0
+CCR0 TB0 TB2.0
+DVSS GND
+DVCC VCC
+22-P2.1 TB2.1 CCI1A 22-P2.1
+26-P3.6 TB2.1 CCI1B 26-P3.6
+CCR1 TB1 TB2.1
+DVSS GND
+DVCC VCC
+23-P2.2 TB2.2 CCI2A 23-P2.2
+27-P3.7 TB2.2 CCI2B 27-P3.7
+CCR2 TB2 TB2.2
+DVSS GND
+DVCC VCC
+(1) TB2 is not present on all device types.
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 47
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+5.10.12 ADC10_B
+The ADC10_B module supports fast 10-bit analog-to-digital conversions. The module implements a 10-bit
+SAR core, sample select control, reference generator, and a conversion result buffer. A window
+comparator with a lower limit and an upper limit allows CPU-independent result monitoring with three
+window comparator interrupt flags.
+5.10.13 Comparator_D
+The primary function of the Comparator_D module is to support precision slope analog-to-digital
+conversions, battery voltage supervision, and monitoring of external analog signals.
+5.10.14 CRC16
+The CRC16 module produces a signature based on a sequence of entered data values and can be used
+for data checking purposes. The CRC16 module signature is based on the CRC-CCITT standard.
+5.10.15 Shared Reference (REF)
+The reference module (REF) is responsible for generation of all critical reference voltages that can be
+used by the various analog peripherals in the device.
+5.10.16 Embedded Emulation Module (EEM)
+The EEM supports real-time in-system debugging. The S version of the EEM implemented on all devices
+has the following features:
+• Three hardware triggers or breakpoints on memory access
+• One hardware trigger or breakpoint on CPU register write access
+• Up to four hardware triggers can be combined to form complex triggers or breakpoints
+• One cycle counter
+• Clock control on module level
+48 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+5.10.17 Peripheral File Map
+Table 5-13 provides the base address and offset range of all available peripherals.
+Table 5-13. Peripherals
+OFFSET ADDRESSMODULE NAME BASE ADDRESS RANGE
+Special Functions (see Table 5-14) 0100h 000h-01Fh
+PMM (see Table 5-15) 0120h 000h-010h
+FRAM Control (see Table 5-16) 0140h 000h-00Fh
+CRC16 (see Table 5-17) 0150h 000h-007h
+Watchdog (see Table 5-18) 015Ch 000h-001h
+CS (see Table 5-19) 0160h 000h-00Fh
+SYS (see Table 5-20) 0180h 000h-01Fh
+Shared Reference (see Table 5-21) 01B0h 000h-001h
+Port P1, P2 (see Table 5-22) 0200h 000h-01Fh
+Port P3, P4 (see Table 5-23) 0220h 000h-01Fh
+Port PJ (see Table 5-24) 0320h 000h-01Fh
+TA0 (see Table 5-25) 0340h 000h-02Fh
+TA1 (see Table 5-26) 0380h 000h-02Fh
+TB0 (see Table 5-27) 03C0h 000h-02Fh
+TB1 (see Table 5-28) 0400h 000h-02Fh
+TB2 (see Table 5-29) 0440h 000h-02Fh
+Real-Time Clock (RTC_B) (see Table 5-30) 04A0h 000h-01Fh
+32-Bit Hardware Multiplier (see Table 5-31) 04C0h 000h-02Fh
+DMA General Control (see Table 5-32) 0500h 000h-00Fh
+DMA Channel 0 (see Table 5-32) 0510h 000h-00Ah
+DMA Channel 1 (see Table 5-32) 0520h 000h-00Ah
+DMA Channel 2 (see Table 5-32) 0530h 000h-00Ah
+MPU Control (see Table 5-33) 05A0h 000h-00Fh
+eUSCI_A0 (see Table 5-34) 05C0h 000h-01Fh
+eUSCI_A1 (see Table 5-35) 05E0h 000h-01Fh
+eUSCI_B0 (see Table 5-36) 0640h 000h-02Fh
+ADC10_B (see Table 5-37) 0700h 000h-03Fh
+Comparator_D (see Table 5-38) 08C0h 000h-00Fh
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 49
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 5-14. Special Function Registers (Base Address: 0100h)
+REGISTER DESCRIPTION REGISTER OFFSET
+SFR interrupt enable SFRIE1 00h
+SFR interrupt flag SFRIFG1 02h
+SFR reset pin control SFRRPCR 04h
+Table 5-15. PMM Registers (Base Address: 0120h)
+REGISTER DESCRIPTION REGISTER OFFSET
+PMM Control 0 PMMCTL0 00h
+PMM interrupt flags PMMIFG 0Ah
+PM5 Control 0 PM5CTL0 10h
+Table 5-16. FRAM Control Registers (Base Address: 0140h)
+REGISTER DESCRIPTION REGISTER OFFSET
+FRAM control 0 FRCTLCTL0 00h
+General control 0 GCCTL0 04h
+General control 1 GCCTL1 06h
+Table 5-17. CRC16 Registers (Base Address: 0150h)
+REGISTER DESCRIPTION REGISTER OFFSET
+CRC data input CRC16DI 00h
+CRC data input reverse byte CRCDIRB 02h
+CRC initialization and result CRCINIRES 04h
+CRC result reverse byte CRCRESR 06h
+Table 5-18. Watchdog Registers (Base Address: 015Ch)
+REGISTER DESCRIPTION REGISTER OFFSET
+Watchdog timer control WDTCTL 00h
+Table 5-19. CS Registers (Base Address: 0160h)
+REGISTER DESCRIPTION REGISTER OFFSET
+CS control 0 CSCTL0 00h
+CS control 1 CSCTL1 02h
+CS control 2 CSCTL2 04h
+CS control 3 CSCTL3 06h
+CS control 4 CSCTL4 08h
+CS control 5 CSCTL5 0Ah
+CS control 6 CSCTL6 0Ch
+50 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-20. SYS Registers (Base Address: 0180h)
+REGISTER DESCRIPTION REGISTER OFFSET
+System control SYSCTL 00h
+JTAG mailbox control SYSJMBC 06h
+JTAG mailbox input 0 SYSJMBI0 08h
+JTAG mailbox input 1 SYSJMBI1 0Ah
+JTAG mailbox output 0 SYSJMBO0 0Ch
+JTAG mailbox output 1 SYSJMBO1 0Eh
+Bus Error vector generator SYSBERRIV 18h
+User NMI vector generator SYSUNIV 1Ah
+System NMI vector generator SYSSNIV 1Ch
+Reset vector generator SYSRSTIV 1Eh
+Table 5-21. Shared Reference Registers (Base Address: 01B0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+Shared reference control REFCTL 00h
+Table 5-22. Port P1, P2 Registers (Base Address: 0200h)
+REGISTER DESCRIPTION REGISTER OFFSET
+Port P1 input P1IN 00h
+Port P1 output P1OUT 02h
+Port P1 direction P1DIR 04h
+Port P1 pullup/pulldown enable P1REN 06h
+Port P1 selection 0 P1SEL0 0Ah
+Port P1 selection 1 P1SEL1 0Ch
+Port P1 interrupt vector word P1IV 0Eh
+Port P1 complement selection P1SELC 16h
+Port P1 interrupt edge select P1IES 18h
+Port P1 interrupt enable P1IE 1Ah
+Port P1 interrupt flag P1IFG 1Ch
+Port P2 input P2IN 01h
+Port P2 output P2OUT 03h
+Port P2 direction P2DIR 05h
+Port P2 pullup/pulldown enable P2REN 07h
+Port P2 selection 0 P2SEL0 0Bh
+Port P2 selection 1 P2SEL1 0Dh
+Port P2 complement selection P2SELC 17h
+Port P2 interrupt vector word P2IV 1Eh
+Port P2 interrupt edge select P2IES 19h
+Port P2 interrupt enable P2IE 1Bh
+Port P2 interrupt flag P2IFG 1Dh
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 51
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 5-23. Port P3, P4 Registers (Base Address: 0220h)
+REGISTER DESCRIPTION REGISTER OFFSET
+Port P3 input P3IN 00h
+Port P3 output P3OUT 02h
+Port P3 direction P3DIR 04h
+Port P3 pullup/pulldown enable P3REN 06h
+Port P3 selection 0 P3SEL0 0Ah
+Port P3 selection 1 P3SEL1 0Ch
+Port P3 interrupt vector word P3IV 0Eh
+Port P3 complement selection P3SELC 16h
+Port P3 interrupt edge select P3IES 18h
+Port P3 interrupt enable P3IE 1Ah
+Port P3 interrupt flag P3IFG 1Ch
+Port P4 input P4IN 01h
+Port P4 output P4OUT 03h
+Port P4 direction P4DIR 05h
+Port P4 pullup/pulldown enable P4REN 07h
+Port P4 selection 0 P4SEL0 0Bh
+Port P4 selection 1 P4SEL1 0Dh
+Port P4 complement selection P4SELC 17h
+Port P4 interrupt vector word P4IV 1Eh
+Port P4 interrupt edge select P4IES 19h
+Port P4 interrupt enable P4IE 1Bh
+Port P4 interrupt flag P4IFG 1Dh
+Table 5-24. Port J Registers (Base Address: 0320h)
+REGISTER DESCRIPTION REGISTER OFFSET
+Port PJ input PJIN 00h
+Port PJ output PJOUT 02h
+Port PJ direction PJDIR 04h
+Port PJ pullup/pulldown enable PJREN 06h
+Port PJ selection 0 PJSEL0 0Ah
+Port PJ selection 1 PJSEL1 0Ch
+Port PJ complement selection PJSELC 16h
+52 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-25. TA0 Registers (Base Address: 0340h)
+REGISTER DESCRIPTION REGISTER OFFSET
+TA0 control TA0CTL 00h
+Capture/compare control 0 TA0CCTL0 02h
+Capture/compare control 1 TA0CCTL1 04h
+Capture/compare control 2 TA0CCTL2 06h
+TA0 counter register TA0R 10h
+Capture/compare register 0 TA0CCR0 12h
+Capture/compare register 1 TA0CCR1 14h
+Capture/compare register 2 TA0CCR2 16h
+TA0 expansion register 0 TA0EX0 20h
+TA0 interrupt vector TA0IV 2Eh
+Table 5-26. TA1 Registers (Base Address: 0380h)
+REGISTER DESCRIPTION REGISTER OFFSET
+TA1 control TA1CTL 00h
+Capture/compare control 0 TA1CCTL0 02h
+Capture/compare control 1 TA1CCTL1 04h
+Capture/compare control 2 TA1CCTL2 06h
+TA1 counter register TA1R 10h
+Capture/compare register 0 TA1CCR0 12h
+Capture/compare register 1 TA1CCR1 14h
+Capture/compare register 2 TA1CCR2 16h
+TA1 expansion register 0 TA1EX0 20h
+TA1 interrupt vector TA1IV 2Eh
+Table 5-27. TB0 Registers (Base Address: 03C0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+TB0 control TB0CTL 00h
+Capture/compare control 0 TB0CCTL0 02h
+Capture/compare control 1 TB0CCTL1 04h
+Capture/compare control 2 TB0CCTL2 06h
+TB0 register TB0R 10h
+Capture/compare register 0 TB0CCR0 12h
+Capture/compare register 1 TB0CCR1 14h
+Capture/compare register 2 TB0CCR2 16h
+TB0 expansion register 0 TB0EX0 20h
+TB0 interrupt vector TB0IV 2Eh
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 53
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 5-28. TB1 Registers (Base Address: 0400h)
+REGISTER DESCRIPTION REGISTER OFFSET
+TB1 control TB1CTL 00h
+Capture/compare control 0 TB1CCTL0 02h
+Capture/compare control 1 TB1CCTL1 04h
+Capture/compare control 2 TB1CCTL2 06h
+TB1 register TB1R 10h
+Capture/compare register 0 TB1CCR0 12h
+Capture/compare register 1 TB1CCR1 14h
+Capture/compare register 2 TB1CCR2 16h
+TB1 expansion register 0 TB1EX0 20h
+TB1 interrupt vector TB1IV 2Eh
+Table 5-29. TB2 Registers (Base Address: 0440h)
+REGISTER DESCRIPTION REGISTER OFFSET
+TB2 control TB2CTL 00h
+Capture/compare control 0 TB2CCTL0 02h
+Capture/compare control 1 TB2CCTL1 04h
+Capture/compare control 2 TB2CCTL2 06h
+TB2 register TB2R 10h
+Capture/compare register 0 TB2CCR0 12h
+Capture/compare register 1 TB2CCR1 14h
+Capture/compare register 2 TB2CCR2 16h
+TB2 expansion register 0 TB2EX0 20h
+TB2 interrupt vector TB2IV 2Eh
+54 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-30. Real-Time Clock Registers (Base Address: 04A0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+RTC control 0 RTCCTL0 00h
+RTC control 1 RTCCTL1 01h
+RTC control 2 RTCCTL2 02h
+RTC control 3 RTCCTL3 03h
+RTC prescaler 0 control RTCPS0CTL 08h
+RTC prescaler 1 control RTCPS1CTL 0Ah
+RTC prescaler 0 RTCPS0 0Ch
+RTC prescaler 1 RTCPS1 0Dh
+RTC interrupt vector word RTCIV 0Eh
+RTC seconds, RTC counter register 1 RTCSEC, RTCNT1 10h
+RTC minutes, RTC counter register 2 RTCMIN, RTCNT2 11h
+RTC hours, RTC counter register 3 RTCHOUR, RTCNT3 12h
+RTC day of week, RTC counter register 4 RTCDOW, RTCNT4 13h
+RTC days RTCDAY 14h
+RTC month RTCMON 15h
+RTC year low RTCYEARL 16h
+RTC year high RTCYEARH 17h
+RTC alarm minutes RTCAMIN 18h
+RTC alarm hours RTCAHOUR 19h
+RTC alarm day of week RTCADOW 1Ah
+RTC alarm days RTCADAY 1Bh
+Binary-to-BCD conversion register BIN2BCD 1Ch
+BCD-to-binary conversion register BCD2BIN 1Eh
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 55
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 5-31. 32-Bit Hardware Multiplier Registers (Base Address: 04C0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+16-bit operand 1 – multiply MPY 00h
+16-bit operand 1 – signed multiply MPYS 02h
+16-bit operand 1 – multiply accumulate MAC 04h
+16-bit operand 1 – signed multiply accumulate MACS 06h
+16-bit operand 2 OP2 08h
+16 × 16 result low word RESLO 0Ah
+16 × 16 result high word RESHI 0Ch
+16 × 16 sum extension register SUMEXT 0Eh
+32-bit operand 1 – multiply low word MPY32L 10h
+32-bit operand 1 – multiply high word MPY32H 12h
+32-bit operand 1 – signed multiply low word MPYS32L 14h
+32-bit operand 1 – signed multiply high word MPYS32H 16h
+32-bit operand 1 – multiply accumulate low word MAC32L 18h
+32-bit operand 1 – multiply accumulate high word MAC32H 1Ah
+32-bit operand 1 – signed multiply accumulate low word MACS32L 1Ch
+32-bit operand 1 – signed multiply accumulate high word MACS32H 1Eh
+32-bit operand 2 – low word OP2L 20h
+32-bit operand 2 – high word OP2H 22h
+32 × 32 result 0 – least significant word RES0 24h
+32 × 32 result 1 RES1 26h
+32 × 32 result 2 RES2 28h
+32 × 32 result 3 – most significant word RES3 2Ah
+MPY32 control register 0 MPY32CTL0 2Ch
+56 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-32. DMA Registers (Base Address DMA General Control: 0500h,
+DMA Channel 0: 0510h, DMA Channel 1: 0520h, DMA Channel 2: 0530h)
+REGISTER DESCRIPTION REGISTER OFFSET
+DMA channel 0 control DMA0CTL 00h
+DMA channel 0 source address low DMA0SAL 02h
+DMA channel 0 source address high DMA0SAH 04h
+DMA channel 0 destination address low DMA0DAL 06h
+DMA channel 0 destination address high DMA0DAH 08h
+DMA channel 0 transfer size DMA0SZ 0Ah
+DMA channel 1 control DMA1CTL 00h
+DMA channel 1 source address low DMA1SAL 02h
+DMA channel 1 source address high DMA1SAH 04h
+DMA channel 1 destination address low DMA1DAL 06h
+DMA channel 1 destination address high DMA1DAH 08h
+DMA channel 1 transfer size DMA1SZ 0Ah
+DMA channel 2 control DMA2CTL 00h
+DMA channel 2 source address low DMA2SAL 02h
+DMA channel 2 source address high DMA2SAH 04h
+DMA channel 2 destination address low DMA2DAL 06h
+DMA channel 2 destination address high DMA2DAH 08h
+DMA channel 2 transfer size DMA2SZ 0Ah
+DMA module control 0 DMACTL0 00h
+DMA module control 1 DMACTL1 02h
+DMA module control 2 DMACTL2 04h
+DMA module control 3 DMACTL3 06h
+DMA module control 4 DMACTL4 08h
+DMA interrupt vector DMAIV 0Ah
+Table 5-33. MPU Control Registers (Base Address: 05A0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+MPU control 0 MPUCTL0 00h
+MPU control 1 MPUCTL1 02h
+MPU Segmentation Register MPUSEG 04h
+MPU access management MPUSAM 06h
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 57
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 5-34. eUSCI_A0 Registers (Base Address: 05C0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+eUSCI_A control word 0 UCA0CTLW0 00h
+eUSCI _A control word 1 UCA0CTLW1 02h
+eUSCI_A baud rate 0 UCA0BR0 06h
+eUSCI_A baud rate 1 UCA0BR1 07h
+eUSCI_A modulation control UCA0MCTLW 08h
+eUSCI_A status UCA0STAT 0Ah
+eUSCI_A receive buffer UCA0RXBUF 0Ch
+eUSCI_A transmit buffer UCA0TXBUF 0Eh
+eUSCI_A LIN control UCA0ABCTL 10h
+eUSCI_A IrDA transmit control UCA0IRTCTL 12h
+eUSCI_A IrDA receive control UCA0IRRCTL 13h
+eUSCI_A interrupt enable UCA0IE 1Ah
+eUSCI_A interrupt flags UCA0IFG 1Ch
+eUSCI_A interrupt vector word UCA0IV 1Eh
+Table 5-35. eUSCI_A1 Registers (Base Address: 05E0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+eUSCI_A control word 0 UCA1CTLW0 00h
+eUSCI _A control word 1 UCA1CTLW1 02h
+eUSCI_A baud rate 0 UCA1BR0 06h
+eUSCI_A baud rate 1 UCA1BR1 07h
+eUSCI_A modulation control UCA1MCTLW 08h
+eUSCI_A status UCA1STAT 0Ah
+eUSCI_A receive buffer UCA1RXBUF 0Ch
+eUSCI_A transmit buffer UCA1TXBUF 0Eh
+eUSCI_A LIN control UCA1ABCTL 10h
+eUSCI_A IrDA transmit control UCA1IRTCTL 12h
+eUSCI_A IrDA receive control UCA1IRRCTL 13h
+eUSCI_A interrupt enable UCA1IE 1Ah
+eUSCI_A interrupt flags UCA1IFG 1Ch
+eUSCI_A interrupt vector word UCA1IV 1Eh
+58 Detailed Description Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 5-36. eUSCI_B0 Registers (Base Address: 0640h)
+REGISTER DESCRIPTION REGISTER OFFSET
+eUSCI_B control word 0 UCB0CTLW0 00h
+eUSCI_B control word 1 UCB0CTLW1 02h
+eUSCI_B bit rate 0 UCB0BR0 06h
+eUSCI_B bit rate 1 UCB0BR1 07h
+eUSCI_B status word UCB0STATW 08h
+eUSCI_B byte counter threshold UCB0TBCNT 0Ah
+eUSCI_B receive buffer UCB0RXBUF 0Ch
+eUSCI_B transmit buffer UCB0TXBUF 0Eh
+eUSCI_B I2C own address 0 UCB0I2COA0 14h
+eUSCI_B I2C own address 1 UCB0I2COA1 16h
+eUSCI_B I2C own address 2 UCB0I2COA2 18h
+eUSCI_B I2C own address 3 UCB0I2COA3 1Ah
+eUSCI_B received address UCB0ADDRX 1Ch
+eUSCI_B address mask UCB0ADDMASK 1Eh
+eUSCI I2C slave address UCB0I2CSA 20h
+eUSCI interrupt enable UCB0IE 2Ah
+eUSCI interrupt flags UCB0IFG 2Ch
+eUSCI interrupt vector word UCB0IV 2Eh
+Table 5-37. ADC10_B Registers (Base Address: 0700h)
+REGISTER DESCRIPTION REGISTER OFFSET
+ADC10_B Control register 0 ADC10CTL0 00h
+ADC10_B Control register 1 ADC10CTL1 02h
+ADC10_B Control register 2 ADC10CTL2 04h
+ADC10_B Window Comparator Low Threshold ADC10LO 06h
+ADC10_B Window Comparator High Threshold ADC10HI 08h
+ADC10_B Memory Control Register 0 ADC10MCTL0 0Ah
+ADC10_B Conversion Memory Register ADC10MEM0 12h
+ADC10_B Interrupt Enable ADC10IE 1Ah
+ADC10_B Interrupt Flags ADC10IGH 1Ch
+ADC10_B Interrupt Vector Word ADC10IV 1Eh
+Table 5-38. Comparator_D Registers (Base Address: 08C0h)
+REGISTER DESCRIPTION REGISTER OFFSET
+Comparator_D control register 0 CDCTL0 00h
+Comparator_D control register 1 CDCTL1 02h
+Comparator_D control register 2 CDCTL2 04h
+Comparator_D control register 3 CDCTL3 06h
+Comparator_D interrupt register CDINT 0Ch
+Comparator_D interrupt vector word CDIV 0Eh
+Copyright © 2014, Texas Instruments Incorporated Detailed Description 59
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P1.0/TA0.1/DMAE0/RTCCLK/A0/CD0/VeREF-
+P1.1/TA0.2/TA1CLK/CDOUT/A1/CD1/VeREF+
+P1.2/TA1.1/TA0CLK/CDOUT/A2/CD2P1SEL0.x
+P1DIR.x
+P1IN.x
+EN
+To modules
+From module 1
+P1OUT.x
+1
+0DVSS
+DVCC 1
+D
+To Comparator
+From Comparator
+Pad Logic
+To ADC
+From ADC
+Bus
+Keeper
+Direction
+0: Input
+1: Output
+CDPD.x
+P1REN.x
+0 1
+0 0
+1 0
+1 1
+P1SEL1.x
+0 1
+0 0
+1 0
+1 1
+From module 2
+External ADC reference
+(P1.0, P1.1)
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6 Input/Output Schematics
+6.1 Port P1, P1.0 to P1.2, Input/Output With Schmitt Trigger
+60 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 6-1. Port P1 (P1.0 to P1.2) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P1.x) x FUNCTION
+P1DIR.x P1SEL1.x P1SEL0.x
+P1.0/TA0.1/DMAE0/RTCCLK/A0/CD0/VeREF- 0 P1.0 (I/O) I: 0; O: 1 0 0
+TA0.CCI1A 0
+0 1
+TA0.1 1
+DMAE0 0
+1 0
+RTCCLK 1
+A0 (1) (2)
+CD0 (1) (3) X 1 1
+VeREF- (1) (2)
+P1.1/TA0.2/TA1CLK/CDOUT/A1/CD1/VeREF+ 1 P1.1 (I/O) I: 0; O: 1 0 0
+TA0.CCI2A 0
+0 1
+TA0.2 1
+TA1CLK 0
+1 0
+CDOUT 1
+A1 (1) (2)
+CD1 (1) (3) X 1 1
+VeREF+ (1) (2)
+P1.2/TA1.1/TA0CLK/CDOUT/A2/CD2 2 P1.2 (I/O) I: 0; O: 1 0 0
+TA1.CCI1A 0
+0 1
+TA1.1 1
+TA0CLK 0
+1 0
+CDOUT 1
+A2 (1) (2)
+X 1 1CD2 (1) (3)
+(1) Setting P1SEL1.x and P1SEL0.x disables the output driver as well as the input Schmitt trigger to prevent parasitic cross currents when
+applying analog signals.
+(2) Not available on all devices and package types.
+(3) Setting the CDPD.x bit of the comparator disables the output driver as well as the input Schmitt trigger to prevent parasitic cross
+currents when applying analog signals. Selecting the CDx input pin to the comparator multiplexer with the CDx bits automatically
+disables output driver and input buffer for that pin, regardless of the state of the associated CDPD.x bit.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 61
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P1.3/TA1.2/UCB0STE/A3/CD3
+P1.4/TB0.1/UCA0STE/A4/CD4
+P1.5/TB0.2/UCA0CLK/A5/CD5P1SEL0.x
+P1DIR.x
+P1IN.x
+EN
+To□modules
+From□module□1
+P1OUT.x
+1
+0DVSS
+DVCC 1
+D
+To□Comparator
+From□Comparator
+Pad□Logic
+To ADC
+From ADC
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+CDPD.x
+P1REN.x
+0□1
+0□0
+1□0
+1□1
+P1SEL1.x
+0□1
+0□0
+1□0
+1□1
+From□module□2
+From□module□2
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.2 Port P1, P1.3 to P1.5, Input/Output With Schmitt Trigger
+62 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 6-2. Port P1 (P1.3 to P1.5) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P1.x) x FUNCTION
+P1DIR.x P1SEL1.x P1SEL0.x
+P1.3/TA1.2/UCB0STE/A3/CD3 3 P1.3 (I/O) I: 0; O: 1 0 0
+TA1.CCI2A 0
+0 1
+TA1.2 1
+UCB0STE X (1) 1 0
+A3 (2) (3)
+X 1 1CD3 (2) (4)
+P1.4/TB0.1/UCA0STE/A4/CD4 4 P1.4 (I/O) I: 0; O: 1 0 0
+TB0.CCI1A 0
+0 1
+TB0.1 1
+UCA0STE X (5) 1 0
+A4 (2) (3)
+X 1 1CD4 (2) (4)
+P1.5/TB0.2/UCA0CLK/A5/CD5 5 P1.5(I/O) I: 0; O: 1 0 0
+TB0.CCI2A 0
+0 1
+TB0.2 1
+UCA0CLK X (5) 1 0
+A5 (2) (3)
+X 1 1CD5 (2) (4)
+(1) Direction controlled by eUSCI_B0 module.
+(2) Setting P1SEL1.x and P1SEL0.x disables the output driver and the input Schmitt trigger to prevent parasitic cross currents when
+applying analog signals.
+(3) Not available on all devices and package types.
+(4) Setting the CDPD.x bit of the comparator disables the output driver and the input Schmitt trigger to prevent parasitic cross currents
+when applying analog signals. Selecting the CDx input pin to the comparator multiplexer with the CDx bits automatically disables output
+driver and input buffer for that pin, regardless of the state of the associated CDPD.x bit
+(5) Direction controlled by eUSCI_A0 module.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 63
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P1.6/TB1.1/UCB0SIMO/UCB0SDA/TA0.0
+P1.7/TB1.2/UCB0SOMI/UCB0SCL/TA1.0
+P1SEL0.x
+P1DIR.x
+P1IN.x
+EN
+To modules
+From module 1
+P1OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad Logic
+Bus
+Keeper
+Direction
+0: Input
+1: Output
+P1REN.x
+0 1
+0 0
+1 0
+1 1
+P1SEL1.x
+0 1
+0 0
+1 0
+1 1
+From module 2
+From module 2
+From module 3
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.3 Port P1, P1.6 to P1.7, Input/Output With Schmitt Trigger
+Table 6-3. Port P1 (P1.6 to P1.7) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P1.x) x FUNCTION
+P1DIR.x P1SEL1.x P1SEL0.x
+P1.6/TB1.1/UCB0SIMO/UCB0SDA/TA0.0 6 P1.6 (I/O) I: 0; O: 1 0 0
+TB1.CCI1A (1) 0
+0 1
+TB1.1 (1) 1
+UCB0SIMO/UCB0SDA X (2) 1 0
+TA0.CCI0A 0
+1 1
+TA0.0 1
+P1.7/TB1.2/UCB0SOMI/UCB0SCL/TA1.0 7 P1.7 (I/O) I: 0; O: 1 0 0
+TB1.CCI2A (1) 0
+0 1
+TB1.2 (1) 1
+UCB0SOMI/UCB0SCL X(2) 1 0
+TA1.CCI0A 0
+1 1
+TA1.0 1
+(1) Not available on all devices and package types.
+(2) Direction controlled by eUSCI_B0 module.
+64 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P2.0/TB2.0/UCA0TXD/UCA0SIMO/TB0CLK/ACLK
+P2.1/TB2.1/UCA0RXD/UCA0SOMI/TB0.0
+P2.2/TB2.2/UCB0CLK/TB1.0P2SEL0.x
+P2DIR.x
+P2IN.x
+EN
+To modules
+From module 1
+P2OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad Logic
+Bus
+Keeper
+Direction
+0: Input
+1: Output
+P2REN.x
+0 1
+0 0
+1 0
+1 1
+P2SEL1.x
+0 1
+0 0
+1 0
+1 1
+From module 2
+From module 2
+From module 3
+DVSS
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+6.4 Port P2, P2.0 to P2.2, Input/Output With Schmitt Trigger
+Table 6-4. Port P2 (P2.0 to P2.2) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P2.x) x FUNCTION
+P2DIR.x P2SEL1.x P2SEL0.x
+P2.0/TB2.0/UCA0TXD/UCA0SIMO/TB0CLK/ACLK 0 P2.0 (I/O) I: 0; O: 1 0 0
+TB2.CCI0A (1) 0
+0 1
+TB2.0 (1) 1
+UCA0TXD/UCA0SIMO X (2) 1 0
+TB0CLK 0
+1 1
+ACLK 1
+P2.1/TB2.1/UCA0RXD/UCA0SOMI/TB0.0 1 P2.1 (I/O) I: 0; O: 1 0 0
+TB2.CCI1A (1) 0
+0 1
+TB2.1 (1) 1
+UCA0RXD/UCA0SOMI X (2) 1 0
+TB0.CCI0A 0
+1 1
+TB0.0 1
+P2.2/TB2.2/UCB0CLK/TB1.0 2 P2.2 (I/O) I: 0; O: 1 0 0
+TB2.CCI2A (1) 0
+0 1
+TB2.2 (1) 1
+UCB0CLK X (3) 1 0
+TB1.CCI0A (1) 0
+1 1
+TB1.0 (1) 1
+(1) Not available on all devices and package types.
+(2) Direction controlled by eUSCI_A0 module.
+(3) Direction controlled by eUSCI_B0 module.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 65
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P2.3/TA0.0/UCA1STE/A6/CD10
+P2.4/TA1.0/UCA1CLK/A7/CD11
+P2SEL0.x
+P2DIR.x
+P2IN.x
+EN
+To□modules
+From□module□1
+P2OUT.x
+1
+0DVSS
+DVCC 1
+D
+To□Comparator
+From□Comparator
+Pad□Logic
+To ADC
+From ADC
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+CDPD.x
+P2REN.x
+0□1
+0□0
+1□0
+1□1
+P2SEL1.x
+0□1
+0□0
+1□0
+1□1
+From□module□2
+From□module□2
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.5 Port P2, P2.3 to P2.4, Input/Output With Schmitt Trigger
+66 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 6-5. Port P2 (P2.3 to P2.4) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P2.x) x FUNCTION
+P2DIR.x P2SEL1.x P2SEL0.x
+P2.3/TA0.0/UCA1STE/A6/CD10 3 P2.3 (I/O) I: 0; O: 1 0 0
+TA0.CCI0B 0
+0 1
+TA0.0 1
+UCA1STE X (1) 1 0
+A6 (2) (3)
+X 1 1CD10 (2) (4)
+P2.4/TA1.0/UCA1CLK/A7/CD11 4 P2.4 (I/O) I: 0; O: 1 0 0
+TA1.CCI0B 0
+0 1
+TA1.0 1
+UCA1CLK X (1) 1 0
+A7 (2) (3)
+X 1 1CD11 (2) (4)
+(1) Direction controlled by eUSCI_A1 module.
+(2) Setting P2SEL1.x and P2SEL0.x disables the output driver and the input Schmitt trigger to prevent parasitic cross currents when
+applying analog signals.
+(3) Not available on all devices and package types.
+(4) Setting the CDPD.x bit of the comparator disables the output driver and the input Schmitt trigger to prevent parasitic cross currents
+when applying analog signals. Selecting the CDx input pin to the comparator multiplexer with the CDx bits automatically disables output
+driver and input buffer for that pin, regardless of the state of the associated CDPD.x bit.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 67
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P2.5/TB0.0/UCA1TXD/UCA1SIMO
+P2.6/TB1.0/UCA1RXD/UCA1SOMI
+P2SEL0.x
+P2DIR.x
+P2IN.x
+EN
+To modules
+From module 1
+P2OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad Logic
+Bus
+Keeper
+Direction
+0: Input
+1: Output
+P2REN.x
+0 1
+0 0
+1 0
+1 1
+P2SEL1.x
+0 1
+0 0
+1 0
+1 1
+From module 2
+From module 2
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.6 Port P2, P2.5 to P2.6, Input/Output With Schmitt Trigger
+Table 6-6. Port P2 (P2.5 to P2.6) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P2.x) x FUNCTION
+P2DIR.x P2SEL1.x P2SEL0.x
+P2.5/TB0.0/UCA1TXD/UCA1SIMO 5 P2.5(I/O) (1) I: 0; O: 1 0 0
+TB0.CCI0B (1) 0
+0 1
+TB0.0 (1) 1
+UCA1TXD/UCA1SIMO (1) X (2) 1 0
+P2.6/TB1.0/UCA1RXD/UCA1SOMI 6 P2.6(I/O) (1) I: 0; O: 1 0 0
+TB1.CCI0B (1) 0
+0 1
+TB1.0 (1) 1
+UCA1RXD/UCA1SOMI (1) X (2) 1 0
+(1) Not available on all devices and package types.
+(2) Direction controlled by eUSCI_A1 module.
+68 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P2.7
+P2SEL0.x
+P2DIR.x
+P2IN.x
+EN
+To□modules
+P2OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad□Logic
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+P2REN.x
+0□1
+0□0
+1□0
+1□1
+P2SEL1.x
+0□1
+0□0
+1□0
+1□1
+DVSS
+DVSS
+DVSS
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+6.7 Port P2, P2.7, Input/Output With Schmitt Trigger
+Table 6-7. Port P2 (P2.7) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P2.x) x FUNCTION
+P2DIR.x P2SEL1.x P2SEL0.x
+P2.7 7 P2.7(I/O) (1) I: 0; O: 1 0 0
+(1) Not available on all devices and package types.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 69
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P3.0/A12/CD12
+P3.1/A13/CD13
+P3.2/A14/CD14
+P3.3/A15/CD15
+P3SEL0.x
+P3DIR.x
+P3IN.x
+EN
+To□modules
+DVSS
+P3OUT.x
+1
+0DVSS
+DVCC 1
+D
+To□Comparator
+From□Comparator
+Pad□Logic
+To ADC
+From ADC
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+CDPD.x
+P3REN.x
+0□1
+0□0
+1□0
+1□1
+P3SEL1.x
+0□1
+0□0
+1□0
+1□1
+DVSS
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.8 Port P3, P3.0 to P3.3, Input/Output With Schmitt Trigger
+70 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 6-8. Port P3 (P3.0 to P3.3) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P3.x) x FUNCTION
+P3DIR.x P3SEL1.x P3SEL0.x
+P3.0/A12/CD12 0 P3.0 (I/O) I: 0; O: 1 0 0
+A12 (1) (2)
+X 1 1CD12 (1) (3)
+P3.1/A13/CD13 1 P3.1 (I/O) I: 0; O: 1 0 0
+A13 (1) (2)
+X 1 1CD13 (1) (3)
+P3.2/A14/CD14 2 P3.2 (I/O) I: 0; O: 1 0 0
+A14 (1) (2)
+X 1 1CD14 (1) (3)
+P3.3/A15/CD15 3 P3.3 (I/O) I: 0; O: 1 0 0
+A15 (1) (2)
+X 1 1CD15 (1) (3)
+(1) Setting P1SEL1.x and P1SEL0.x disables the output driver and the input Schmitt trigger to prevent parasitic cross currents when
+applying analog signals.
+(2) Not available on all devices and package types.
+(3) Setting the CDPD.x bit of the comparator disables the output driver and the input Schmitt trigger to prevent parasitic cross currents
+when applying analog signals. Selecting the CDx input pin to the comparator multiplexer with the CDx bits automatically disables output
+driver and input buffer for that pin, regardless of the state of the associated CDPD.x bit.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 71
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P3.4/TB1.1/TB2CLK/SMCLK
+P3.5/TB1.2/CDOUT
+P3.6/TB2.1/TB1CLKP3SEL0.x
+P3DIR.x
+P3IN.x
+EN
+To modules
+From module 1
+P3OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad Logic
+Bus
+Keeper
+Direction
+0: Input
+1: Output
+P3REN.x
+0 1
+0 0
+1 0
+1 1
+P3SEL1.x
+0 1
+0 0
+1 0
+1 1
+From module 2
+DVSS
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.9 Port P3, P3.4 to P3.6, Input/Output With Schmitt Trigger
+Table 6-9. Port P3 (P3.4 to P3.6) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P3.x) x FUNCTION
+P3DIR.x P3SEL1.x P3SEL0.x
+P3.4/TB1.1/TB2CLK/SMCLK 4 P3.4 (I/O) (1) I: 0; O: 1 0 0
+TB1.CCI1B (1) 0
+0 1
+TB1.1 (1) 1
+TB2CLK (1) 0
+1 1
+SMCLK (1) 1
+P3.5/TB1.2/CDOUT 5 P3.5 (I/O) (1) I: 0; O: 1 0 0
+TB1.CCI2B (1) 0
+0 1
+TB1.2 (1) 1
+CDOUT (1) 1 1 1
+P3.6/TB2.1/TB1CLK 6 P3.6 (I/O) (1) I: 0; O: 1 0 0
+TB2.CCI1B (1) 0
+0 1
+TB2.1 (1) 1
+TB1CLK (1) 0 1 1
+(1) Not available on all devices and package types.
+72 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P3.7/TB2.2
+P3SEL0.x
+P3DIR.x
+P3IN.x
+EN
+To□modules
+From□module□1
+P3OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad□Logic
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+P3REN.x
+0□1
+0□0
+1□0
+1□1
+P3SEL1.x
+0□1
+0□0
+1□0
+1□1
+DVSS
+DVSS
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+6.10 Port P3, P3.7, Input/Output With Schmitt Trigger
+Table 6-10. Port P3 (P3.7) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P3.x) x FUNCTION
+P3DIR.x P3SEL1.x P3SEL0.x
+P3.7/TB2.2 7 P3.7 (I/O) (1) I: 0; O: 1 0 0
+TB2.CCI2B (1) 0
+0 1
+TB2.2 (1) 1
+(1) Not available on all devices and package types.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 73
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P4.0/TB2.0
+P4SEL0.x
+P4DIR.x
+P4IN.x
+EN
+To□modules
+From□module□1
+P4OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad□Logic
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+P4REN.x
+0□1
+0□0
+1□0
+1□1
+P4SEL1.x
+0□1
+0□0
+1□0
+1□1
+DVSS
+DVSS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.11 Port P4, P4.0, Input/Output With Schmitt Trigger
+Table 6-11. Port P4 (P4.0) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P4.x) x FUNCTION
+P4DIR.x P4SEL1.x P4SEL0.x
+P4.0/TB2.0 0 P4.0 (I/O) (1) I: 0; O: 1 0 0
+TB2.CCI0B (1) 0
+0 1
+TB2.0 (1) 1
+(1) Not available on all devices and package types.
+74 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+P4.1
+P4SEL0.x
+P4DIR.x
+P4IN.x
+EN
+To□modules
+P4OUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad□Logic
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+P4REN.x
+0□1
+0□0
+1□0
+1□1
+P4SEL1.x
+0□1
+0□0
+1□0
+1□1
+DVSS
+DVSS
+DVSS
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+6.12 Port P4, P4.1, Input/Output With Schmitt Trigger
+Table 6-12. Port P4 (P4.1) Pin Functions
+CONTROL BITS/SIGNALS
+PIN NAME (P4.x) x FUNCTION
+P4DIR.x P4SEL1.x P4SEL0.x
+P4.1 1 P4.1 (I/O) (1) I: 0; O: 1 0 0
+(1) Not available on all devices and package types.
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 75
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+PJSEL0.x
+PJDIR.x
+PJIN.x
+EN
+To modules
+and JTAG
+PJOUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad Logic
+Bus
+Keeper
+Direction
+0: Input
+1: Output
+PJREN.x
+0 1
+0 0
+1 0
+1 1
+PJSEL1.x
+0 1
+0 0
+1 0
+1 1
+DVSS
+DVSS
+0
+1
+0
+1
+JTAG enable
+From JTAG
+From JTAG
+To Comparator
+From Comparator
+CDPD.x
+0
+1From JTAG
+From module 1
+PJ.0/TDO/TB0OUTH/SMCLK/CD6
+PJ.1/TDI/TCLK/TB1OUTH/MCLK/CD7
+PJ.2/TMS/TB2OUTH/ACLK/CD8
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+6.13 Port J, J.0 to J.3 JTAG pins TDO, TMS, TCK, TDI/TCLK, Input/Output With Schmitt
+Trigger or Output
+76 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+PJ.3/TCK/CD9
+PJSEL0.x
+PJDIR.x
+PJIN.x
+EN
+To modules
+and JTAG
+PJOUT.x
+1
+0DVSS
+DVCC 1
+D
+Pad Logic
+Bus
+Keeper
+Direction
+0: Input
+1: Output
+PJREN.x
+0 1
+0 0
+1 0
+1 1
+PJSEL1.x
+0 1
+0 0
+1 0
+1 1
+DVSS
+DVSS
+0
+1
+0
+1
+JTAG enable
+From JTAG
+From JTAG
+To Comparator
+From Comparator
+CDPD.x
+0
+1From JTAG
+DVSS
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 77
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 6-13. Port PJ (PJ.0 to PJ.3) Pin Functions
+CONTROL BITS/ SIGNALS (1)
+PIN NAME (PJ.x) x FUNCTION
+PJDIR.x PJSEL1.x PJSEL0.x
+PJ.0/TDO/TB0OUTH/SMCLK/CD6 0 PJ.0 (I/O) (2) I: 0; O: 1 0 0
+TDO (3) X X X
+TB0OUTH 0
+0 1
+SMCLK 1
+CD6 X 1 1
+PJ.1/TDI/TCLK/TB1OUTH/MCLK/CD7 1 PJ.1 (I/O) (2) I: 0; O: 1 0 0
+TDI/TCLK (3) (4) X X X
+TB1OUTH 0
+0 1
+MCLK 1
+CD7 X 1 1
+PJ.2/TMS/TB2OUTH/ACLK/CD8 2 PJ.2 (I/O) (2) I: 0; O: 1 0 0
+TMS (3) (4) X X X
+TB2OUTH 0
+0 1
+ACLK 1
+CD8 X 1 1
+PJ.3/TCK/CD9 3 PJ.3 (I/O) (2) I: 0; O: 1 0 0
+TCK (3) (4) X X X
+CD9 X 1 1
+(1) X = Don't care
+(2) Default condition
+(3) The pin direction is controlled by the JTAG module. JTAG mode selection is made by the SYS module or by the Spy-Bi-Wire four-wire
+entry sequence. PJSEL1.x and PJSEL0.x have no effect in these cases.
+(4) In JTAG mode, pullups are activated automatically on TMS, TCK, and TDI/TCLK. PJREN.x are do not care.
+78 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+PJ.4/XIN
+PJSEL0.4
+PJDIR.4
+PJIN.4
+EN
+To□modules
+DVSS
+PJOUT.4
+1
+0DVSS
+DVCC 1
+D
+To□XT1□XIN
+Pad□Logic
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+PJREN.4
+0□1
+0□0
+1□0
+1□1
+PJSEL1.4
+0□1
+0□0
+1□0
+1□1
+DVSS
+DVSS
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+6.14 Port PJ, PJ.4 and PJ.5 Input/Output With Schmitt Trigger
+Copyright © 2014, Texas Instruments Incorporated Input/Output Schematics 79
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+PJ.5/XOUT
+PJSEL0.5
+PJDIR.5
+PJIN.5
+EN
+To□modules
+DVSS
+PJOUT.5
+1
+0DVSS
+DVCC 1
+D
+To□XT1□XOUT
+Pad□Logic
+Bus
+Keeper
+Direction
+0:□Input
+1:□Output
+PJREN.5
+0□1
+0□0
+1□0
+1□1
+PJSEL1.5
+0□1
+0□0
+1□0
+1□1
+DVSS
+DVSS
+PJSEL0.4
+XT1BYPASS
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 6-14. Port PJ (PJ.4 and PJ.5) Pin Functions
+CONTROL BITS/SIGNALS (1)
+PIN NAME (P7.x) x FUNCTION XT1PJDIR.x PJSEL1.5 PJSEL0.5 PJSEL1.4 PJSEL0.4 BYPASS
+PJ.4/XIN 4 PJ.4 (I/O) I: 0; O: 1 X X 0 0 X
+XIN crystal mode (2) X X X 0 1 0
+XIN bypass mode (2) X X X 0 1 1
+PJ.5/XOUT 5 PJ.5 (I/O) I: 0; O: 1 0 0 0 0 X
+XOUT crystal mode X X X 0 1 0(2)
+PJ.5 (I/O) (3) I: 0; O: 1 X X 0 1 1
+(1) X = Don't care
+(2) Setting PJSEL1.4 = 0 and PJSEL0.4 = 1 causes the general-purpose I/O to be disabled. When XT1BYPASS = 0, PJ.4 and PJ.5 are
+configured for crystal operation and PJSEL1.5 and PJSEL0.5 are do not care. When XT1BYPASS = 1, PJ.4 is configured for bypass
+operation and PJ.5 is configured as general-purpose I/O.
+(3) When PJ.4 is configured in bypass mode, PJ.5 is configured as general-purpose I/O.
+80 Input/Output Schematics Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+7 Device Descriptors (TLV)
+Table 7-1 and Table 7-2 list the complete contents of the device descriptor tag-length-value (TLV)
+structure for each device type.
+Table 7-1. Device Descriptor Table (1)
+FR5739 FR5738 FR5737 FR5736 FR5735
+Description Address
+Value Value Value Value Value
+Info Block Info length 01A00h 05h 05h 05h 05h 05h
+CRC length 01A01h 05h 05h 05h 05h 05h
+01A02h per unit per unit per unit per unit per unit
+CRC value
+01A03h per unit per unit per unit per unit per unit
+Device ID 01A04h 03h 02h 01h 77h 76h
+Device ID 01A05h 81h 81h 81h 81h 81h
+Hardware revision 01A06h per unit per unit per unit per unit per unit
+Firmware revision 01A07h per unit per unit per unit per unit per unit
+Die Record Die Record Tag 01A08h 08h 08h 08h 08h 08h
+Die Record length 01A09h 0Ah 0Ah 0Ah 0Ah 0Ah
+01A0Ah per unit per unit per unit per unit per unit
+01A0Bh per unit per unit per unit per unit per unit
+Lot/Wafer ID
+01A0Ch per unit per unit per unit per unit per unit
+01A0Dh per unit per unit per unit per unit per unit
+01A0Eh per unit per unit per unit per unit per unit
+Die X position
+01A0Fh per unit per unit per unit per unit per unit
+01A10h per unit per unit per unit per unit per unit
+Die Y position
+01A11h per unit per unit per unit per unit per unit
+01A12h per unit per unit per unit per unit per unit
+Test results
+01A13h per unit per unit per unit per unit per unit
+ADC10 ADC10 Calibration 01A14h 13h 13h 13h 05h 13hCalibration Tag
+ADC10 Calibration 01A15h 10h 10h 10h 10h 10hlength
+01A16h per unit per unit NA NA per unit
+ADC Gain Factor
+01A17h per unit per unit NA NA per unit
+01A18h per unit per unit NA NA per unit
+ADC Offset
+01A19h per unit per unit NA NA per unit
+ADC 1.5-V 01A1Ah per unit per unit NA NA per unit
+Reference
+01A1Bh per unit per unit NA NA per unitTemp. Sensor 30°C
+ADC 1.5-V 01A1Ch per unit per unit NA NA per unit
+Reference
+01A1Dh per unit per unit NA NA per unitTemp. Sensor 85°C
+ADC 2.0-V 01A1Eh per unit per unit NA NA per unit
+Reference
+01A1Fh per unit per unit NA NA per unitTemp. Sensor 30°C
+ADC 2.0-V 01A20h per unit per unit NA NA per unit
+Reference
+01A21h per unit per unit NA NA per unitTemp. Sensor 85°C
+ADC 2.5-V 01A22h per unit per unit NA NA per unit
+Reference
+01A23h per unit per unit NA NA per unitTemp. Sensor 30°C
+(1) NA = Not applicable
+Copyright © 2014, Texas Instruments Incorporated Device Descriptors (TLV) 81
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Table 7-1. Device Descriptor Table (1) (continued)
+FR5739 FR5738 FR5737 FR5736 FR5735
+Description Address
+Value Value Value Value Value
+ADC 2.5-V 01A24h per unit per unit NA NA per unit
+Reference
+01A25h per unit per unit NA NA per unitTemp. Sensor 85°C
+REF REF Calibration Tag 01A26h 12h 12h 12h 12h 12hCalibration
+REF Calibration 01A27h 06h 06h 06h 06h 06hlength
+01A28h per unit per unit per unit per unit per unitREF 1.5-V
+Reference 01A29h per unit per unit per unit per unit per unit
+01A2Ah per unit per unit per unit per unit per unitREF 2.0-V
+Reference 01A2Bh per unit per unit per unit per unit per unit
+01A2Ch per unit per unit per unit per unit per unitREF 2.5-V
+Reference 01A2Dh per unit per unit per unit per unit per unit
+Table 7-2. Device Descriptor Table (1)
+FR5734 FR5733 FR5732 FR5731 FR5730
+Description Address
+Value Value Value Value Value
+Info Block Info length 01A00h 05h 05h 05h 05h 05h
+CRC length 01A01h 05h 05h 05h 05h 05h
+01A02h per unit per unit per unit per unit per unit
+CRC value
+01A03h per unit per unit per unit per unit per unit
+Device ID 01A04h 00h 7Fh 75h 7Eh 7Ch
+Device ID 01A05h 81h 80h 81h 80h 80h
+Hardware revision 01A06h per unit per unit per unit per unit per unit
+Firmware revision 01A07h per unit per unit per unit per unit per unit
+Die Record Die Record Tag 01A08h 08h 08h 08h 08h 08h
+Die Record length 01A09h 0Ah 0Ah 0Ah 0Ah 0Ah
+01A0Ah per unit per unit per unit per unit per unit
+01A0Bh per unit per unit per unit per unit per unit
+Lot/Wafer ID
+01A0Ch per unit per unit per unit per unit per unit
+01A0Dh per unit per unit per unit per unit per unit
+01A0Eh per unit per unit per unit per unit per unit
+Die X position
+01A0Fh per unit per unit per unit per unit per unit
+01A10h per unit per unit per unit per unit per unit
+Die Y position
+01A11h per unit per unit per unit per unit per unit
+01A12h per unit per unit per unit per unit per unit
+Test results
+01A13h per unit per unit per unit per unit per unit
+ADC10 ADC10 Calibration 01A14h 13h 13h 13h 05h 13hCalibration Tag
+ADC10 Calibration 01A15h 10h 10h 10h 10h 10hlength
+01A16h per unit NA NA per unit per unit
+ADC Gain Factor
+01A17h per unit NA NA per unit per unit
+01A18h per unit NA NA per unit per unit
+ADC Offset
+01A19h per unit NA NA per unit per unit
+ADC 1.5-V 01A1Ah per unit NA NA per unit per unit
+Reference
+01A1Bh per unit NA NA per unit per unitTemp. Sensor 30°C
+(1) NA = Not applicable
+82 Device Descriptors (TLV) Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+Table 7-2. Device Descriptor Table (1) (continued)
+FR5734 FR5733 FR5732 FR5731 FR5730
+Description Address
+Value Value Value Value Value
+ADC 1.5-V 01A1Ch per unit NA NA per unit per unit
+Reference
+01A1Dh per unit NA NA per unit per unitTemp. Sensor 85°C
+ADC 2.0-V 01A1Eh per unit NA NA per unit per unit
+Reference
+01A1Fh per unit NA NA per unit per unitTemp. Sensor 30°C
+ADC 2.0-V 01A20h per unit NA NA per unit per unit
+Reference
+01A21h per unit NA NA per unit per unitTemp. Sensor 85°C
+ADC 2.5-V 01A22h per unit NA NA per unit per unit
+Reference
+01A23h per unit NA NA per unit per unitTemp. Sensor 30°C
+ADC 2.5-V 01A24h per unit NA NA per unit per unit
+Reference
+01A25h per unit NA NA per unit per unitTemp. Sensor 85°C
+REF REF Calibration Tag 01A26h 12h 12h 12h 12h 12hCalibration
+REF Calibration 01A27h 06h 06h 06h 06h 06hlength
+01A28h per unit per unit per unit per unit per unitREF 1.5-V
+Reference 01A29h per unit per unit per unit per unit per unit
+01A2Ah per unit per unit per unit per unit per unitREF 2.0-V
+Reference 01A2Bh per unit per unit per unit per unit per unit
+01A2Ch per unit per unit per unit per unit per unitREF 2.5-V
+Reference 01A2Dh per unit per unit per unit per unit per unit
+Copyright © 2014, Texas Instruments Incorporated Device Descriptors (TLV) 83
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+8 Device and Documentation Support
+8.1 Device Support
+8.1.1 Getting Started
+TI provides all of the hardware platforms and software components and tooling you need to get started
+today! Not only that, TI has many complementary components to meet your needs. For an overview of the
+MSP430™ MCU product line, the available development tools and evaluation kits, and advanced
+development resources, visit the MSP430 Getting Started page.
+8.1.2 Development Tools Support
+All MSP430™ microcontrollers are supported by a wide variety of software and hardware development
+tools. Tools are available from TI and various third parties. See them all at www.ti.com/msp430tools.
+8.1.2.1 Hardware Features
+See the Code Composer Studio for MSP430 User's Guide (SLAU157) for details on the available features.
+Break- Range LPMx.5MSP430 4-Wire 2-Wire Clock State Tracepoints Break- DebuggingArchitecture JTAG JTAG Control Sequencer Buffer(N) points Support
+MSP430Xv2 Yes Yes 3 Yes Yes No No Yes
+8.1.2.2 Recommended Hardware Options
+8.1.2.2.1 Target Socket Boards
+The target socket boards allow easy programming and debugging of the device using JTAG. They also
+feature header pin outs for prototyping. Target socket boards are orderable individually or as a kit with the
+JTAG programmer and debugger included. The following table shows the compatible target boards and
+the supported packages.
+Package Target Board and Programmer Bundle Target Board Only
+40-pin VQFN (RHA) MSP-FET430U40A MSP-TS430RHA40A
+8.1.2.2.2 Experimenter Boards
+Experimenter Boards and Evaluation kits are available for some MSP430 devices. These kits feature
+additional hardware components and connectivity for full system evaluation and prototyping. See
+www.ti.com/msp430tools for details.
+8.1.2.2.3 Debugging and Programming Tools
+Hardware programming and debugging tools are available from TI and from its third party suppliers. See
+the full list of available tools at www.ti.com/msp430tools.
+8.1.2.2.4 Production Programmers
+The production programmers expedite loading firmware to devices by programming several devices
+simultaneously.
+Part Number PC Port Features Provider
+MSP-GANG Serial and USB Program up to eight devices at a time. Works with PC or standalone. Texas Instruments
+8.1.2.3 Recommended Software Options
+8.1.2.3.1 Integrated Development Environments
+Software development tools are available from TI or from third parties. Open source solutions are also
+available.
+84 Device and Documentation Support Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+This device is supported by Code Composer Studio™ IDE (CCS).
+8.1.2.3.2 MSP430Ware
+MSP430Ware is a collection of code examples, data sheets, and other design resources for all MSP430
+devices delivered in a convenient package. In addition to providing a complete collection of existing
+MSP430 design resources, MSP430Ware also includes a high-level API called MSP430 Driver Library.
+This library makes it easy to program MSP430 hardware. MSP430Ware is available as a component of
+CCS or as a standalone package.
+8.1.2.3.3 Command-Line Programmer
+MSP430 Flasher is an open-source, shell-based interface for programming MSP430 microcontrollers
+through a FET programmer or eZ430 using JTAG or Spy-Bi-Wire (SBW) communication. MSP430 Flasher
+can be used to download binary files (.txt or .hex) files directly to the MSP430 microcontroller without the
+need for an IDE.
+8.1.3 Device and Development Tool Nomenclature
+To designate the stages in the product development cycle, TI assigns prefixes to the part numbers of all
+MSP430 MCU devices and support tools. Each MSP430 MCU commercial family member has one of
+three prefixes: MSP, PMS, or XMS (for example, MSP430F5259). Texas Instruments recommends two of
+three possible prefix designators for its support tools: MSP and MSPX. These prefixes represent
+evolutionary stages of product development from engineering prototypes (with XMS for devices and MSPX
+for tools) through fully qualified production devices and tools (with MSP for devices and MSP for tools).
+Device development evolutionary flow:
+XMS – Experimental device that is not necessarily representative of the final device's electrical
+specifications
+PMS – Final silicon die that conforms to the device's electrical specifications but has not completed quality
+and reliability verification
+MSP – Fully qualified production device
+Support tool development evolutionary flow:
+MSPX – Development-support product that has not yet completed Texas Instruments internal qualification
+testing.
+MSP – Fully-qualified development-support product
+XMS and PMS devices and MSPX development-support tools are shipped against the following
+disclaimer:
+"Developmental product is intended for internal evaluation purposes."
+MSP devices and MSP development-support tools have been characterized fully, and the quality and
+reliability of the device have been demonstrated fully. TI's standard warranty applies.
+Predictions show that prototype devices (XMS and PMS) have a greater failure rate than the standard
+production devices. Texas Instruments recommends that these devices not be used in any production
+system because their expected end-use failure rate still is undefined. Only qualified production devices are
+to be used.
+TI device nomenclature also includes a suffix with the device family name. This suffix indicates the
+package type (for example, PZP) and temperature range (for example, T). Figure 8-1 provides a legend
+for reading the complete device name for any family member.
+Copyright © 2014, Texas Instruments Incorporated Device and Documentation Support 85
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+Processor Family CC = Embedded RF Radio
+MSP = Mixed Signal Processor
+XMS = Experimental Silicon
+PMS = Prototype Device
+430 MCU Platform TI’s Low Power Microcontroller Platform
+Device Type Memory Type
+C = ROM
+F = Flash
+FR = FRAM
+G = Flash or FRAM (Value Line)
+L = No Nonvolatile Memory
+Specialized Application
+AFE = Analog Front End
+BT = Preprogrammed with
+BQ = Contactless Power
+CG = ROM Medical
+FE = Flash Energy Meter
+FG = Flash Medical
+FW = Flash Electronic Flow Meter
+Bluetooth
+Series 1 Series = Up to 8 MHz
+2 Series = Up to 16 MHz
+3 Series = Legacy
+4 Series = Up to 16 MHz w/ LCD
+5 Series = Up to 25 MHz
+6 Series = Up to 25 MHz w/ LCD
+0 = Low Voltage Series
+Feature Set Various Levels of Integration Within a Series
+Optional: A = Revision N/A
+Optional: Temperature Range S = 0°C to 50 C
+C to 70 C
+I = -40 C to 85 C
+T = -40 C to 105 C
+°
+C = 0° °
+° °
+° °
+Packaging www.ti.com/packaging
+Optional: Tape and Reel T = Small Reel
+R = Large Reel
+No Markings = Tube or Tray
+Optional: Additional Features -EP = Enhanced Product (-40°C to 105°C)
+-HT = Extreme Temperature Parts (-55°C to 150°C)
+-Q1 = Automotive Q100 Qualified
+MSP 430 F 5 438 A I ZQW T XX
+Processor Family
+Series Optional: Temperature Range
+430 MCU Platform
+PackagingDevice Type
+Optional: A = Revision
+Optional: Tape and Reel
+Feature Set
+Optional: Additional Features
+MSP430FR5739-EP
+SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014 www.ti.com
+Figure 8-1. Device Nomenclature
+8.2 Documentation Support
+The following documents describe the MSP430FR5739-EP MCU. Copies of these documents are
+available on www.ti.com.
+SLAU272 MSP430FR57xx Family User's Guide. Detailed description of all modules and peripherals
+available in this device family.
+SLAZ392 MSP430FR5739 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ391 MSP430FR5738 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ390 MSP430FR5737 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ389 MSP430FR5736 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ388 MSP430FR5735 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ387 MSP430FR5734 Device Erratasheet. Describes the known exceptions to the functional
+86 Device and Documentation Support Copyright © 2014, Texas Instruments Incorporated
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+MSP430FR5739-EP
+www.ti.com SLVSCN6A –NOVEMBER 2014–REVISED DECEMBER 2014
+specifications for each silicon revision of this device.
+SLAZ386 MSP430FR5733 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ385 MSP430FR5732 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ384 MSP430FR5731 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+SLAZ383 MSP430FR5730 Device Erratasheet. Describes the known exceptions to the functional
+specifications for each silicon revision of this device.
+8.3 Community Resources
+The following links connect to TI community resources. Linked contents are provided "AS IS" by the
+respective contributors. They do not constitute TI specifications and do not necessarily reflect TI's views;
+see TI's Terms of Use.
+TI E2E™ Community
+TI's Engineer-to-Engineer (E2E) Community. Created to foster collaboration among engineers. At
+e2e.ti.com, you can ask questions, share knowledge, explore ideas, and help solve problems with fellow
+engineers.
+TI Embedded Processors Wiki
+Texas Instruments Embedded Processors Wiki. Established to help developers get started with embedded
+processors from Texas Instruments and to foster innovation and growth of general knowledge about the
+hardware and software surrounding these devices.
+8.4 Trademarks
+Code Composer Studio, MSP430, E2E are trademarks of Texas Instruments.
+All other trademarks are the property of their respective owners.
+8.5 Electrostatic Discharge Caution
+This integrated circuit can be damaged by ESD. Texas Instruments recommends that all integrated circuits be handled with
+appropriate precautions. Failure to observe proper handling and installation procedures can cause damage.
+ESD damage can range from subtle performance degradation to complete device failure. Precision integrated circuits may be more
+susceptible to damage because very small parametric changes could cause the device not to meet its published specifications.
+8.6 Glossary
+SLYZ022 — TI Glossary.
+This glossary lists and explains terms, acronyms, and definitions.
+9 Mechanical Packaging and Orderable Information
+9.1 Packaging Information
+The following pages include mechanical, packaging, and orderable information. This information is the
+most current data available for the designated devices. This data is subject to change without notice and
+revision of this document. For browser-based versions of this data sheet, refer to the left-hand navigation.
+Copyright © 2014, Texas Instruments Incorporated Mechanical Packaging and Orderable Information 87
+Submit Documentation Feedback
+Product Folder Links: MSP430FR5739-EP
+PACKAGE OPTION ADDENDUM
+www.ti.com 23-May-2025
+PACKAGING INFORMATION
+Orderable part number Status
+(1)
+Material type
+(2)
+Package | Pins Package qty | Carrier RoHS
+(3)
+Lead finish/
+Ball material
+(4)
+MSL rating/
+Peak reflow
+(5)
+Op temp (°C) Part marking
+(6)
+M430FR5739SRHATEP Active Production VQFN (RHA) | 40 250 | SMALL T&R Yes NIPDAU Level-3-260C-168 HR -55 to 85 M430
+FR5739EP
+M430FR5739SRHATEP.A Active Production VQFN (RHA) | 40 250 | SMALL T&R Yes NIPDAU Level-3-260C-168 HR -55 to 85 M430
+FR5739EP
+V62/14644-01XE Active Production VQFN (RHA) | 40 250 | SMALL T&R Yes NIPDAU Level-3-260C-168 HR -55 to 85 M430
+FR5739EP
+ 
+(1) Status:  For more details on status, see our product life cycle.
+ 
+(2) Material type:  When designated, preproduction parts are prototypes/experimental devices, and are not yet approved or released for full production. Testing and final process, including without limitation quality assurance,
+reliability performance testing, and/or process qualification, may not yet be complete, and this item is subject to further changes or possible discontinuation. If available for ordering, purchases will be subject to an additional
+waiver at checkout, and are intended for early internal evaluation purposes only. These items are sold without warranties of any kind.
+ 
+(3) RoHS values:  Yes, No, RoHS Exempt. See the TI RoHS Statement for additional information and value definition.
+ 
+(4) Lead finish/Ball material:  Parts may have multiple material finish options. Finish options are separated by a vertical ruled line. Lead finish/Ball material values may wrap to two lines if the finish value exceeds the maximum
+column width.
+ 
+(5) MSL rating/Peak reflow:  The moisture sensitivity level ratings and peak solder (reflow) temperatures. In the event that a part has multiple moisture sensitivity ratings, only the lowest level per JEDEC standards is shown.
+Refer to the shipping label for the actual reflow temperature that will be used to mount the part to the printed circuit board.
+ 
+(6) Part marking:  There may be an additional marking, which relates to the logo, the lot trace code information, or the environmental category of the part.
+ 
+Multiple part markings will be inside parentheses. Only one part marking contained in parentheses and separated by a "~" will appear on a part. If a line is indented then it is a continuation of the previous line and the two
+combined represent the entire part marking for that device.
+ 
+Important Information and Disclaimer:The information provided on this page represents TI's knowledge and belief as of the date that it is provided. TI bases its knowledge and belief on information provided by third parties, and
+makes no representation or warranty as to the accuracy of such information. Efforts are underway to better integrate information from third parties. TI has taken and continues to take reasonable steps to provide representative
+and accurate information but may not have conducted destructive testing or chemical analysis on incoming materials and chemicals. TI and TI suppliers consider certain information to be proprietary, and thus CAS numbers
+and other limited information may not be available for release.
+ 
+In no event shall TI's liability arising out of such information exceed the total purchase price of the TI part(s) at issue in this document sold by TI to Customer on an annual basis.
+ 
+Addendum-Page 1
+PACKAGE OPTION ADDENDUM
+www.ti.com 23-May-2025
+ OTHER QUALIFIED VERSIONS OF MSP430FR5739-EP :
+•Catalog : MSP430FR5739
+ NOTE: Qualified Version Definitions:
+•Catalog - TI's standard catalog product
+Addendum-Page 2
+TAPE AND REEL INFORMATION
+*All dimensions are nominal
+Device Package
+Type
+Package
+Drawing
+Pins SPQ Reel
+Diameter
+(mm)
+Reel
+Width
+W1 (mm)
+A0
+(mm)
+B0
+(mm)
+K0
+(mm)
+P1
+(mm)
+W
+(mm)
+Pin1
+Quadrant
+M430FR5739SRHATEP VQFN RHA 40 250 180.0 16.4 6.3 6.3 1.1 12.0 16.0 Q2
+PACKAGE MATERIALS INFORMATION
+www.ti.com 6-Feb-2015
+Pack Materials-Page 1
+*All dimensions are nominal
+Device Package Type Package Drawing Pins SPQ Length (mm) Width (mm) Height (mm)
+M430FR5739SRHATEP VQFN RHA 40 250 210.0 185.0 35.0
+PACKAGE MATERIALS INFORMATION
+www.ti.com 6-Feb-2015
+Pack Materials-Page 2
+www.ti.com
+GENERIC PACKAGE VIEW
+This image is a representation of the package family, actual package may vary.
+Refer to the product data sheet for package details.
+VQFN - 1 mm max heightRHA 40
+PLASTIC QUAD FLATPACK - NO LEAD6 x 6, 0.5 mm pitch
+4225870/A
+www.ti.com
+PACKAGE OUTLINE
+C
+SEE TERMINAL
+DETAIL 40X 0.3
+0.2
+2.9 0.1
+40X 0.5
+0.3
+1 MAX
+0.05
+0.00
+36X 0.5
+2X
+4.5
+2X 4.5
+(0.1) TYP
+A 6.1
+5.9
+B
+6.1
+5.9
+0.3
+0.2
+0.5
+0.3
+VQFN - 1 mm max heightRHA0040D
+PLASTIC QUAD FLATPACK - NO LEAD
+4225822/A   03/2020
+PIN 1 INDEX AREA
+0.08 C
+SEATING PLANE
+1
+10 21
+30
+11 20
+40 31
+(OPTIONAL)
+PIN 1 ID 0.1 C A B
+0.05
+EXPOSED
+THERMAL PAD
+41 SYMM
+SYMM
+NOTES:
+ 
+1. All linear dimensions are in millimeters. Any dimensions in parenthesis are for reference only. Dimensioning and tolerancing
+    per ASME Y14.5M. 
+2. This drawing is subject to change without notice. 
+3. The package thermal pad must be soldered to the printed circuit board for thermal and mechanical performance.
+SCALE  2.200
+DETAIL
+OPTIONAL TERMINAL
+TYPICAL
+www.ti.com
+EXAMPLE BOARD LAYOUT
+0.07 MIN
+ALL AROUND
+0.07 MAX
+ALL AROUND
+40X (0.25)
+40X (0.6)
+( 0.2) TYP
+VIA
+36X (0.5)
+(5.8)
+(5.8)
+(1.2)
+TYP
+( 2.9)
+(R0.05)
+TYP
+VQFN - 1 mm max heightRHA0040D
+PLASTIC QUAD FLATPACK - NO LEAD
+4225822/A   03/2020
+SYMM
+1
+10
+11 20
+21
+30
+3140
+SYMM
+LAND PATTERN EXAMPLE
+SCALE:15X
+NOTES: (continued)
+ 
+4. This package is designed to be soldered to a thermal pad on the board. For more information, see Texas Instruments literature
+    number SLUA271 (www.ti.com/lit/slua271).
+5. Vias are optional depending on application, refer to device data sheet. If any vias are implemented, refer to their locations shown
+    on this view.
+41
+SOLDER MASK
+OPENING
+METAL UNDER
+SOLDER MASK
+SOLDER MASK
+DEFINED
+METAL
+SOLDER MASK
+OPENINGSOLDER MASK DETAILS
+NON SOLDER MASK
+DEFINED
+(PREFERRED)
+www.ti.com
+EXAMPLE STENCIL DESIGN
+40X (0.6)
+40X (0.25)
+36X (0.5)
+(5.8)
+(5.8)
+4X ( 1.27)
+(0.735)
+TYP
+(0.735) TYP
+(R0.05) TYP
+VQFN - 1 mm max heightRHA0040D
+PLASTIC QUAD FLATPACK - NO LEAD
+4225822/A   03/2020
+NOTES: (continued)
+ 
+6. Laser cutting apertures with trapezoidal walls and rounded corners may offer better paste release. IPC-7525 may have alternate
+   design recommendations. 
+ 
+41
+SYMM
+METAL
+TYP
+SOLDER PASTE EXAMPLE
+BASED ON 0.125 mm THICK STENCIL
+ 
+EXPOSED PAD 41:
+76.46% PRINTED SOLDER COVERAGE BY AREA UNDER PACKAGE
+SCALE:15X
+SYMM
+1
+10
+11 20
+21
+30
+3140
+IMPORTANT NOTICE AND DISCLAIMER
+TI PROVIDES TECHNICAL AND RELIABILITY DATA (INCLUDING DATA SHEETS), DESIGN RESOURCES (INCLUDING REFERENCE 
+DESIGNS), APPLICATION OR OTHER DESIGN ADVICE, WEB TOOLS, SAFETY INFORMATION, AND OTHER RESOURCES “AS IS” 
+AND WITH ALL FAULTS, AND DISCLAIMS ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING WITHOUT LIMITATION ANY 
+IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT OF THIRD 
+PARTY INTELLECTUAL PROPERTY RIGHTS.
+These resources are intended for skilled developers designing with TI products. You are solely responsible for (1) selecting the appropriate 
+TI products for your application, (2) designing, validating and testing your application, and (3) ensuring your application meets applicable 
+standards, and any other safety, security, regulatory or other requirements.
+These resources are subject to change without notice. TI grants you permission to use these resources only for development of an 
+application that uses the TI products described in the resource. Other reproduction and display of these resources is prohibited. No license 
+is granted to any other TI intellectual property right or to any third party intellectual property right. TI disclaims responsibility for, and you 
+will fully indemnify TI and its representatives against, any claims, damages, costs, losses, and liabilities arising out of your use of these 
+resources.
+TI’s products are provided subject to TI’s Terms of Sale or other applicable terms available either on ti.com or provided in conjunction with 
+such TI products. TI’s provision of these resources does not expand or otherwise alter TI’s applicable warranties or warranty disclaimers for 
+TI products.
+TI objects to and rejects any additional or different terms you may have proposed. IMPORTANT NOTICE
+Mailing Address: Texas Instruments, Post Office Box 655303, Dallas, Texas 75265
+Copyright © 2025, Texas Instruments Incorporated

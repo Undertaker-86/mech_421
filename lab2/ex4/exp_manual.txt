@@ -1,0 +1,3201 @@
+User's Guide
+SLAU386A –January2012–RevisedMarch 2012
+TLV320AIC3262EVM-U EvaluationModule
+Thisuser’s guidedescribestheoperation,use,features,and characteristicsoftheTLV320AIC3262EVM-
+U. Thissmallformfactorevaluationmodule (EVM) isa programmableUSB audiodevicethatfeaturesthe
+TLV320AIC3262 AudioCodec withminiDSP.
+Contents
+1 EVM Overview...............................................................................................................2
+1.1 Features.............................................................................................................2
+1.2 Introduction.........................................................................................................2
+2 EVM Descriptionand GettingStarted....................................................................................3
+2.1 TLV320AIC3262EVM-U Hardware Description................................................................3
+2.2 GettingStarted.....................................................................................................4
+3 AIC3262 ControlSoftware.................................................................................................6
+3.1 AIC3262EVM CS Setup ...........................................................................................6
+3.2 UsingtheAIC3262EVM-U CS ...................................................................................7
+4 PC Board Drawings .......................................................................................................12
+5 TLV320AIC3262EVM-U Schematic.....................................................................................15
+6 TLV320AIC3262EVM-U BillofMaterials...............................................................................23
+7 DefaultJumper Positions.................................................................................................28
+8 WritingScripts..............................................................................................................30
+9 Example Scripts...........................................................................................................32
+9.1 Headphone playbackscript.....................................................................................32
+9.2 Microphonerecordingscript.....................................................................................33
+10 RelatedDocumentation...................................................................................................35
+ListofFigures
+1 Top viewofTLV320AIC3262EVM-U board.............................................................................2
+2 USB Connection............................................................................................................4
+3 UsingExample ConfigurationsinControlSoftware....................................................................5
+4 Main PanelWindow ........................................................................................................7
+5 Example ConfigurationsWindow .........................................................................................8
+6 TLV320AIC3262 ControlSoftwareCommand-Line Window ..........................................................9
+7 Decode Window ...........................................................................................................10
+8 RegisterInspectorWindow ...............................................................................................11
+9 TLV320AIC3262EVM PCB Top .........................................................................................12
+10 TLV320AIC3262EVM PCB Layer2 .....................................................................................12
+11 TLV320AIC3262EVM PCB Layer3 .....................................................................................13
+12 TLV320AIC3262EVM PCB BottomCopper,Reversed...............................................................13
+13 TLV320AIC3262EVM PCB Bottom .....................................................................................14
+14 TLV320AIC3262EVM PCB DrillPattern................................................................................14
+15 Schematic,Sheet1 of8 ..................................................................................................15
+16 Schematic,Sheet2 of8 ..................................................................................................16
+17 Schematic,Sheet3 of8 ..................................................................................................17
+18 Schematic,Sheet4 of8 ..................................................................................................18
+Windows isa trademarkofMicrosoftCorporation.
+1SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+EVM Overview www.ti.com
+19 Schematic,Sheet5 of8 ..................................................................................................19
+20 Schematic,Sheet6 of8 ..................................................................................................20
+21 Schematic,Sheet7 of8 ..................................................................................................21
+22 Schematic,Sheet8 of8 ..................................................................................................22
+23 DefaultJumper SettingsLayout.........................................................................................29
+ListofTables
+1 AudioJacksAvailabletoConnectAnalogInputsand Outputs.......................................................3
+2 BillofMaterialsforTLV320AIC3262_YZF_USB_EVM_REV2 ......................................................23
+3 TLV320AIC3262EVM-U DefaultJumper Positions...................................................................28
+1 EVM Overview
+1.1 Features
+• Full-featured,smallform-factorEVM fortheTLV320AIC3262 AudioCodec
+• USB connectiontothePC providespower,control,and streamingaudioforquickand easy evaluation.
+• Easy-to-useAIC3262 ControlSoftware(CS)providesa graphicaluserinterfacetoconfigureand
+controltheTLV320AIC3262.
+The TLV320AIC3262EVM-U iscompatiblewithWindows ™ XP-based personalcomputers.
+1.2 Introduction
+The TLV320AIC3262EVM-U isa USB audiodevicewithprogrammableinputsand outputs,effects,and
+extensiveroutingcapabilities.Itisa simpleplatformtoevaluatetheTLV320AIC3262 miniDSP Audio
+Codec.
+Figure1.Top view ofTLV320AIC3262EVM-U board
+2 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com EVM Descriptionand GettingStarted
+2 EVM Descriptionand GettingStarted
+2.1 TLV320AIC3262EVM-U Hardware Description
+Table1 summarizestheaudiojacksavailabletoconnectanaloginputsand outputstothe
+TLV320AIC3262 and theswitches.
+Table1.Audio Jacks AvailabletoConnect Analog Inputsand Outputs
+Designator Label Associatedpin Description
+J1 N/A N/A USB Mini-Bjack
+J2 MIC IN IN2L/IN2R Lineinputorelectret-condensermicrophoneinput.ForLineoutput,W11 and W12
+jumpersshouldbe removed.To use electret-condensermicrophones,install
+jumperson W11 and W12; thisconnects2.2kΩ pullupresistorstoMICBIAS at
+boththetipand thering.
+J3 SPEAKER SPKLP/SPKLM/ StereoClass-DSpeakerOutputs
+OUTPUTS SPKRP/SPKRM
+J4 HP OUT HPL/HPR Headphone Output
+J5 REC OUT RECP/RECM ReceiverOutput
+J6 SAR REF VREF_SAR ExternalvoltagesupplyforSAR
+VOLTAGE
+J7 SAR IN IN1L/IN1R SAR ADC Inputs
+J11 CLASS D SLVDD/SRVDD/ ConnectorforExternalSpeakerSupply.To use externalsupply,setJP3 to1-2
+PWR INPUT SPK_V ("EXT ")and JP2 to1-2("EXT ").
+J19 LINE OUT LOL/LOR Lineoutput.Connectonlyhigh-impedanceloadstothisoutput(e.g.,external
+Class-Damplifier).
+SW1 RESET N/A RESET switch
+SW2 APP N/A CyclesthroughtheapplicationsloadedintheonboardEEPROM.
+SW3 PATCH N/A CyclesthroughthepatchesloadedintheonboardEEPROM.
+SW4 USB_RESET N/A USB_RESET
+3SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+EVM Descriptionand GettingStarted www.ti.com
+2.2 GettingStarted
+Evaluationcan startrightoutofthebox:
+1. InstalljumpersforTLV320AIC3262EVM-U (seeSection7 fordefaultjumpersettings)
+2. Download and installtheTLV320AIC3262EVM-U ControlSoftwarefromtheEVM productfolder.The
+passwordforinstallationis"CC".
+3. ConnecttheTLV320AIC3262EVM toan availableUSB port.LED lightsD1 and D2 shouldilluminate
+once theEVM isdetectedby PC. AlsointheWindows devicemanager,theEVM shouldbe recognized
+as “USB CompositeDevice”.
+Figure2.USB Connection
+4. Connectstereoheadphones attheheadphone output(J4)
+4 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com EVM Descriptionand GettingStarted
+5. Open AIC3262 ControlSoftwareand selecta typicalheadphone playbackscript,as shown in
+Figure3.
+Figure3.Using Example ConfigurationsinControlSoftware
+5SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+AIC3262 ControlSoftware www.ti.com
+6. Playaudiothroughany media playbacktoolon yourPC. Make suretheplaybacksetupon thePC is
+through‘”USB-miniEVM ”.
+To adjustplaybackvolume,open “Sounds and AudioDevicesProperties”inthecontrolpanel,and click
+theVolume buttonoftheSound playbacksectionoftheAudiotab.Ensurethat“USB-miniEVM ”isselected
+as thedefaultplaybackand recordingdevices.
+The followingsectionexplainsthesoftwareinstallationprocedurewhichallowsprogrammingoftheaudio
+device.
+3 AIC3262 ControlSoftware
+The followingsectionsdescribetheoperationand installationoftheAIC3262 controlsoftware.
+3.1 AIC3262EVM CS Setup
+To installtheTLV320AIC3262 EVM-U software:
+1. Download thelatestversionoftheAIC3262EVM-U ControlSoftware(CS)locatedinthe
+TLV320AIC3262 ProductFolder.
+2. Open theself-extractinginstallationfile,and extracttoa known folder.
+3. Inthatfolder,installtheSoftwareby double-clickingthe“CC.exe”and followthedirections.The
+installationpasswordis“CC ”.
+4. ConnectTLV320AIC3262EVM-U toPC throughUSB cableand open up TLV320AIC3262 Control
+Software.The softwarewillthenpop up a window calledselectEVM toprompttheusertochoose the
+correctEVM name
+6 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com AIC3262 ControlSoftware
+3.2 Using theAIC3262EVM-U CS
+The followingsectionsdescribetheAIC3262EVM-U CS usage.
+3.2.1 Main Panel Window
+The Main Panelwindow,shown inFigure4,provideseasy accesstoallthefeaturesoftheAIC3262 CS.
+Figure4.Main Panel Window
+The main panelprovidesa high-levelblockdiagramoftheAIC3262.On themain panel,shown in
+Figure4,userscan configuretheanaloginputand outputroutingsby simplyclickingon theswitches.The
+analogsetup,digitalsetup,audioinputs,audiooutputs,DRC, AGC, SAR and headsetdetectionprovide
+additionalcontrolofmany otherfeaturesoftheAIC3262.These categoriesareintendedforadvanced
+usersand can be accessedby clicking“View”on themain panel.One can alsoclickon thecoloredblocks
+on themain paneltogainaccesstothesecategories.LeftADC and RightADC blocksprovidedetailed
+settingsforrecordingpath.LeftDAC and RightDAC blocksprovidedetailedsettingsforplaybackpath.
+Yellowblockinthemiddleprovidessettingsfordigitalinterface,whichincludesAudioSerialInterface
+configuration,clocksettings,etc.
+Clicking“Refresh”buttonon thetopwillreadback thecurrentstateoftheAIC3262 registersettingsand
+reflectittotheuserinterface.“EVM status”on thebottompartofthemain panelreflectsthehardware
+connectionoftheEVM. “USB Fs”indicatesthecurrentsample rateoftheEVM board.
+7SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+AIC3262 ControlSoftware www.ti.com
+3.2.2 TypicalConfiguration
+AIC3262 ControlSoftwareprovidesexample scriptstotypicalplaybackand recordapplication.These
+typicalrecordand playbackconfigurationscan be accessedby choosing“Example Configuration… ”under
+View.Once thetypicalconfigurationisselected,click“ProgramCodec”todownloadthescriptintoEVM.
+Figure5.Example ConfigurationsWindow
+8 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com AIC3262 ControlSoftware
+3.2.3 Command-Line InterfacePanel
+Figure6.TLV320AIC3262 ControlSoftwareCommand-Line Window
+The command-lineinterfaceprovidesa means tocommunicatewiththeTLV320AIC3262 usinga simple
+scriptinglanguage(describedintheSection8).The TAS1020B USB controllerhandlesallcommunication
+between thePC and thecodec.A scriptisloadedintothecommand buffer,eitherby loadinga scriptfile
+usingthe“open”buttonorby pastingtextfromtheclipboard.Click“Run ”toexecutethecommand buffer.
+Allcontrolsupdatetheirstatuswithrespecttotheregistercontentsinthefollowingconditions:
+• A panelisopen
+• The “Run ”buttoninthecommand-lineinterfaceispressed
+• The “Refresh”buttonon themain panelwindow ispressed
+9SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+AIC3262 ControlSoftware www.ti.com
+One featureinthecommand-lineinterfaceisthe“Decode”functionofthescript.Clickingthe“Decode”
+buttonon thecommand-lineinterfacewilldecode thescriptlineby line.Thisdecode featureprovidesan
+easy means tounderstandthemeaning ofthescriptwithoutreferringtotheregistermap. The decode
+contentcan be clearedby clicking“ClearDecode”.
+Figure7.Decode Window
+Anotherfeatureinthecommand-lineinterfaceisthe“Record”function.By checkingthe“Record”box,one
+can recordthecurrentvalueoftheregisterthatisbeingmodified.The recordedregistervaluesalongwith
+theirpage numbers aredisplayedinthecommand buffer.The recordedregistervaluescan alsobe
+decoded by clickingthe“Decode”tabon thecommand-lineinterfacewindow.The contentofthe
+command buffercan be clearedby clicking“Clear”button.
+10 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com AIC3262 ControlSoftware
+3.2.4 RegisterInspectorTable
+Figure8.RegisterInspectorWindow
+The contentsofTLV320AIC3262 registermap can be accessedthroughtheRegisterinspectortable.The
+“Page”number controlselectsthepage tobe displayedintheregistertable.The registertablecontains
+informationsuch as registername, currentregistervalueand thebitfieldofthecurrentregistervalue.
+Whileusingtheregisterinspecttable,usershouldfirstspecifythepage number.Once thepage is
+specified,usercan inspectorchange theregistervalueby eitherenteringthehex valueoftheregisteror
+changingthecorrespondingbitsforthatregister.
+11SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+PC Board Drawings www.ti.com
+4 PC Board Drawings
+The workingdimensionsofthePCB as shown beloware165mm × 91.4mm (6.5× 3.6inches).
+Figure9.TLV320AIC3262EVM PCB Top
+Figure10.TLV320AIC3262EVM PCB Layer 2
+12 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com PC Board Drawings
+Figure11.TLV320AIC3262EVM PCB Layer 3
+Figure12.TLV320AIC3262EVM PCB Bottom Copper, Reversed
+13SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+PC Board Drawings www.ti.com
+Figure13.TLV320AIC3262EVM PCB Bottom
+Figure14.TLV320AIC3262EVM PCB DrillPattern
+14 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+6 WIRE
+AUDIO I/F
+J
+H
+G
+F
+E
+D
+C
+B
+A
+1 2 3 4 5 6 7 8 9
+U2 - T AS1020B
+U15- SRC4392
+U16- SRC4392
+GPIO
+I2S#3
+I2S#2
+I2S#1
+I2C & SPI
+I2C
+I2C
+AUDIO C ONTROL
+I2C & SPI
+CONTROL INTERF ACE
+USB CONTROLLER
+ANALOG
+OUTPUTS
+ANALOG
+INPUTS
+I2S #4 (=I2S#1 routed thru GPIO)
+AUDIO INTERF ACE
+OPTICAL
+AUDIO INPUT
+SRC #2 OPTICAL
+AUDIO OUTPUT
+OPTICAL
+AUDIO INPUT
+SRC #1 OPTICAL
+AUDIO OUTPUT
+I2S #3
+AUDIO INTERF ACE
+I2S #2
+AUDIO INTERF ACE
+I2S #1
+AUDIO INTERF ACE
+BALL ASSIGNMENTS
+WCSP (YZF) Package, Bottom View
+TL V320AIC3262IYZF
+U17 - TL V320AIC3262YZFEVM-U
+BALL ASSIGNMENTS
+WCSP (YZF) Package, T op View
+TL V320AIC3262IYZF
+AV DD3_33
+MICDET
+DIN1
+BCLK1
+MCLK1
+IN2L
+IN3R
+VREF_AUDIO
+IN4L
+RECVSS
+AV DD1_18
+VREF_SAR
+IN3L
+WCLK1
+IN2R
+DOUT1
+RECP
+BCLK2
+RECVDD_33
+AVSS
+IN1L/AUX1
+DVDD
+DIN2
+IOVDD
+RECM
+AV DD_18
+MICBIAS_EXT
+IN1R/AUX2
+MICBIAS
+HPR
+SCL
+WCLK2
+IOVSS
+DVSS
+AVSS1
+HVDD_18 HPL
+VNEG
+AV DD2_18
+AVSS3
+IN4R
+GPI3
+WCLK3
+SDA
+GPI1
+LOL
+CPFCM
+HPVSS_SENSE
+CPVSS
+AVSS2
+DOUT2
+DIN3
+GPI2
+GPO1
+CPFCP
+LOR
+CPVDD_18
+AV DD4_18
+DVSS
+SPI_SELECT
+GPI4
+DOUT3
+BCLK3
+SLVDD
+AVSS4
+SPKLM
+SRVSS
+SPK_V
+GPIO2
+IOVSS
+GPIO1
+RESET
+SPKLP
+SLVSS
+SPKRM
+SRVDD
+SPKRP
+MCLK2
+VBAT
+IOVDD
+DVDD
+DVDD
+IOVDD
+VBAT
+MCLK2
+SPKRP
+SRVDD
+SPKRM
+SLVSS
+SPKLP
+RESET
+GPIO1
+IOVSS
+GPIO2
+SPK_V
+SRVSS
+SPKLM
+AVSS4
+SLVDD
+BCLK3
+DOUT3
+GPI4
+SPI_SELECT
+DVSS
+AV DD4_18
+CPVDD_18
+LOR
+CPFCP
+GPO1
+GPI2
+DIN3
+DOUT2
+AVSS2
+CPVSS
+HPVSS_SENSE
+CPFCM
+LOL
+GPI1
+SDA
+WCLK3
+GPI3
+IN4R
+AVSS3
+AV DD2_18
+VNEG
+HPL H VDD_18
+AVSS1
+DVSS
+IOVSS
+WCLK2
+SCL
+HPR
+MICBIAS
+IN1R/AUX2
+MICBIAS_EXT
+AV DD_18
+RECM
+IOVDD
+DIN2
+DVDD
+IN1L/AUX1
+AVSS
+RECVDD_33
+BCLK2
+RECP
+DOUT1
+IN2R
+WCLK1
+IN3L
+VREF_SAR
+AV DD1_18
+RECVSS
+IN4L
+VREF_AUDIO
+IN3R
+IN2L
+MCLK1
+BCLK1
+DIN1
+MICDET
+AV DD3_33
+9 8 7 6 5 4 3 2 1
+A
+B
+C
+D
+E
+F
+G
+H
+J
+B
+A
+A
+B
+www.ti.com TLV320AIC3262EVM-U Schematic
+5 TLV320AIC3262EVM-U Schematic
+The schematicdiagramand thetop-assemblydrawingfortheTLV320AIC3262EVM-U isprovidedas a reference.
+Figure15.Schematic,Sheet 1 of8
+15SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+U2
+22 20 19 18 17 15 14 13
+31
+30
+29
+27
+26
+25
+24 23
+32
+34
+35
+36
+37 38 3940
+21
+8
+4
+28
+16
+33
+42 41
+12
+11
+10
+9
+7
+6
+5
+43 44 45
+2
+1
+48
+3
+46 47
+1.5K
+R2
+0.001uF
+C1
+100K
+R5
+1uF
+C7
+D1
+100pF
+C2
+GND
+GND
+SDOUT1
+WCLK
+BCLK
+DIN
+MCLK
+GND
+GND
+GND
+GND GND GND GND GND
+GND
+GND
+GND
+GND
+GND
+GND
+Y1
+1
+2 3
+4
+SIT8002AI-13-33E-6.00000T
+Vcc
+OUT
+OE
+GNDGND
+SW2
+2 1
+GND
+0.1uF
+C10
+10K
+R9
+GND
+649
+R6
+30.9K
+R1
+27.4
+R3
+27.4
+R4
+2.7K
+R12
+2.7K
+R13U3
+1
+2
+3
+4 5
+6
+7
+8
+24FC512-I/SM
++5V
+SCLK
+MISO
+MOSI
+SS~
+RESET~
+SW1
+1 2
+GND
+0.1uF
+C9
+10K
+R8
+GND
+SW3
+1 2
+GND
+0.1uF
+C11
+10K
+R10
+GND
+D2
+649
+R7
+GND
+GND
+1
+2
+4
+5
+3
+U5
+SN74LVC1G126DBVR
+I2S_ENABLE
+10K
+R11
+GND
+SPI_SELECT
+0.1uF
+C3
+0.1uF
+C6
+0.1uF
+C8
+0.1uF
+C12
+0.1uF
+C16
+0.1uF
+C15
+0.1uF
+C14
+IOVD
+IOVD
+SCL_IOVD
+SDA_IOVD
+GND
+GND
+SN74LVC1G126DBVR
+U7
+3
+5
+4
+2
+1
+0.1uF
+C18
+IOVD
+GND
+GND
+1
+2
+4
+5
+3
+U6
+SN74LVC1G126DBVR
+0.1uF
+C17IOVD
+GND
+200KR14
+PCA9306DCTR
+U4
+8
+7
+6
+5 4
+3
+2
+1
+0.1uF
+C13
+2.7K
+R53
+2.7K
+R52
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
+SW4
+2
+1
+4.7K
+R82 21
+EE-PROGRA M
+GND
+47pF
+C4
+47pF
+C5
+6
+5
+4
+3
+2
+1
+J1
+SD-54819-026
+Data-
+5v
+ID_NC
+GND
+Data+
+Case
+GND
+31
+2
+JP4
+SRC1_DOUT_B(ADC Data)
+(ADC Data)
+(DAC Data)
+I2C EEPROM
+T AS1020B - USB CONTROLER
+I2C
+P ATCH#
+ACTIVE/
+APP#
+SPI
+RESET
+I2SUSB INPUT
+APP
+TA S1020BPFB
+RESET
+P ATCH
+MCLK
+I2S_ENABLE
+SPI_SELECT
+AIC3262YZFEVM-U
+USB RESET
+TO PROGRAM U3,
+INSTALL
+JUMPER J12
+TLV320AIC3262EVM-U Schematic www.ti.com
+Figure16.Schematic,Sheet 2 of8
+16 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+V_ENABLE
+VBAT_ext
+C30
+47uF
+C32
+47uF
+C40
+0.1uF
+C41
+0.1uF
+C42
+0.1uF
+C43
+0.1uF
+C46
+0.1uF
+C44
+0.1uF
+C39
+0.1uF
++5V
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+C47
+10uF
++1.8V
++1.8V
++1.8V
++1.8V
++3.3V
+GNDGND
+IOVDD
++1.8V
+GND GNDGNDGND
+C23
+0.1uF
+GNDGNDGND
+C20
+0.1uF
+GND
++5V
++5V
++5V
+R15
+10K
+TPS73618DBVT
+TPS73618DBVT
+U8
+5
+43
+2
+1
+V_ENABLE
+V_ENABLE
+GND GNDGNDGND
+C26
+0.1uF
++5V +3.3V
+1
+2
+3 4
+5
+TPS73633DBVT
+U10
+V_ENABLE
+C45
+10uF
++1.8V
+TPS73618DBVT
+1
+2
+3 4
+5
+U9
+TPS73618DBVT
+C29
+0.1uF
+C28
+10uF
++1.8V
++1.8V_CP
+C21
+47uF
+C24
+47uF
+C2747uF
+C19
+10uF
+C22
+10uF
+C25
+10uF
++1.8V_CP
+C35
+2.2uF
+GND
+GND
+C34
+10uF
+IOVD
+C37
+1uF
+C38
+1uF
+C31
+0.1uF
+C33
+0.1uF
+VARVD
+GND
+W5
+21
+W1
+21
+W2
+21
+W9
+21
+W8
+21
+W7
+21
+W10
+21
+1 2 3
+W6
+AGND1 DGND1AGND2 DGND2 DGND3
+TLV320AIC3262YZF
+U17
+F3
+E3
+C2
+E4
+C5
+E6
+B4
+A8
+A3
+A1
+A2
+E5
+C7
+F9
+TLV320AIC3262YZF
+U17
+E8
+D9
+D8
+B8
+B9
+A5
+A6
+B7
+B6
+A7
+TLV320AIC3262YZF
+U17
+H3
+F8
+J9
+E7
+J3
+F4
+H9
+J4
+GND GNDGNDGND
+C95
+0.1uF
++5V
+VR1
+TPS73633DBVT
+5
+43
+2
+1
+C98
+47uFC97
+10uF
+C96
+0.1uF
+C36
+2.2uF
++3.3VD
+W14
+321
++5V
+R17
+221
+C49
+0.1uF
+GND
+TP57
++3.3VD
+C48
+10uF
+JP2
+123
+JP3
+3 2 1
+1
+2
+J11
+GND
+R79
+2
+R18
+2
+R19
+2
+R20
+2
+R61
+2
+1 2 3
+W3
++1.8V
+R77
+0C109
+10uF
+C110
+10uF
+R78
+0
+321
+W4
++1.8V_CP
+321
+W57
++1.8V_CP
+SGND1 SGND2
++5V +1.8V_CP
++1.8V
++3.3V
++3.3VD
+VARVD
+EXTERNAL CLASS-D POWER SUPPLY
++5.0V   USB INPUT
++3.3V Analog_3V3
+SPEAKER VOLTAGE
+USB +5V
+AIC3262YZFEVM-U
+POWER SUPPLIES+5.0V   USB INPUT
++1.8V   OUTPUT
+CHARGE PUMP (ONLY)
++5.0V   USB INPUT
++1.8V   OUTPUT
++5.0V   USB INPUT
++3.3V   IOVDD
+AVDD_18
+CURRENT
+MEASUREMENT
+AVDD1_18
+CURRENT
+MEASUREMENT
+AVDD2_18
+CURRENT
+MEASUREMENT
+AVDD4_18
+CURRENT
+MEASUREMENT
+AVDD3_33
+CURRENT
+MEASUREMENT
+CHARGE PUMP &
+CLASS-D POWER
+DIGITAL POWER
+ANALOG POWER
+NO CONNECT
+DVDD
+CURRENT
+MEASUREMENT
+IOVDD
+CURRENT
+MEASUREMENT
+HVDD
+CURRENT
+MEASUREMENT
+AGND=GND=DGND
+GROUND
+www.ti.com TLV320AIC3262EVM-U Schematic
+Figure17.Schematic,Sheet 3 of8
+17SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+VBA T_ext
+Headset_MIC
+Headset_MIC
+J4
+5
+6
+3
+1
+4
+2
+Shield
+RIGHT
+LEFT
+220
+FB1
+21
+GND
+J5
+5
+6
+3
+1
+4
+2
+Shield
+RIGHT
+LEFT
+LOL
+LOR
+GND
+J2
+5
+6
+3
+1
+4
+2
+Shield
+RIGHT
+LEFT
+2.2K
+R21
+IN1R
+IN1L
+GND
+GND
+0
+R25
+C62C61C59
+0
+R26
+0
+R23 0
+R24
+C60
+4
+3
+2
+1
+J3
+GNDGNDGNDGND
+GND
+IN2L
+IN3R
+IN3L
+IN2R
+GNDGND
+100
+R27
+100
+R28
+IN2R
+IN1R
+IN3L_TP
+IN3R_TP
+IN2L
+MICBIAS
+LOL
+LOR
+1uF
+C63
+1uF
+C64
+IN4R
+IN4LIN4L_TP
+IN4R_TP
+1uF
+C50
+TP4
+IN1L
+MICDET
+47uF
+C67
+47uF
+C68
+0
+R29
+0
+R30
+W11
+2
+1
+0.47uF
+C108
+0.47uF
+C52
+0.47uF
+C53
+0.47uF
+C54
+0.47uF
+C55
+0.47uF
+C56
+0.47uF
+C57
+0.47uF
+C58
+U17
+TL V320AIC3262YZFD5
+C1
+D2
+D6
+A4
+B5
+E9
+C9
+A9
+C8
+B2
+B3
+C6
+D7
+E1
+E2
+F2
+F1
+C3
+B1
+D4
+D3
+D1
+C4
+W12
+2
+1
+PB C02SAAN
+2.2K
+R22
+2.2K
+R54
+10K
+R56
+GND
+GND
+SPKLP
+SPKLM
+SPKRM
+SPKRP
+1K
+R59
+1K
+R58
+1K
+R57
+0.0047uF
+C101
+1K
+R60
+0.0047uF
+C99
+0.0047uF
+C102
+0.0047uF
+C100
+GNDGNDGND GND
+FL T_RP
+FL T_RM
+FL T_LM
+FL T_LP
+16
+R63
+GND
+J19
+5
+6
+3
+1
+4
+2
+Shield
+RIGHT
+LEFT
+GND
+16
+R62
+GND
+2 1
+W18
+2 1
+W47
+GND
+221
+R68
+0.1uF
+C107
+10uF
+C106
+123
+W17
+3 2 1
+W16
+1234 J7
+GND
+10K
+R55
+221
+R66
+221
+R67
+0.1uF
+C104
+0.1uF
+C105
+GND
+GND
+100
+R64
+100
+R65
+TP56 TP55
+VREF_SAR
+RECP
+RECM
+1
+2
+J6
+MICDET
+MICBIA S_EXT
+MICBIA S
+W55
+123
+32.4
+R80
+GND
+W56
+3 2 1
+32.4
+R81
+GND
+VREF_A UDIO
+HPL
+HPR
+HPVSS_SENSE
+SPLP
+SPLM
+SPRM
+SPRP
+HPL
+HPR
+A VSS_SENSE
+RECL
+RECR
+0.047uF
+C66
+0.047uF
+C65
+0.047uF
+C51 0.047uF
+C103
+0
+R83
+0
+R84
+123
+W60 W61
+3 2 1
+R85
+DNP
+TL V320AIC3262IYZF
+REC OUT
+LINE OUT
+ANALOG I/O
+SAR VOL T AGE
+REFERENCE
+AIC3262YZFEVM-U
+MIC IN
+ANALOG REFERENCE
+FIL TER
+1-2 2 -3
+1-2
+W61
+HEADSET TYPE SELECTION
+2-3W60
+MIC_GND GND_MI C
+TLV320AIC3262EVM-U Schematic www.ti.com
+Figure18.Schematic,Sheet 4 of8
+18 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+SCLK_GPI1
+MOSI_SDA
+SSZ_SCL
+MISO_GPO1
+SRC1_RXCKO
+SRC2_RXCKO
+WCLK3
+BCLK3
+RESET~
+SCL_IOVD
+SDA_IOVD
+MOSI
+SS~
+SPI_SELECT
+SCLK
+MISO
+RESET~
+SCL_IOVD
+SDA_IOVD
+GND
+GND
+GND
+GND
+TP30TP28 TP29 TP31
+GND
+GND
+GND
+GND
+TP34TP32 TP33 TP35
+GND
+GND
+GND
+GND
+TP38TP36 TP37 TP39
+GND
+GND
+GND
+GND
+GND
+GND
+WCLK2
+BCLK2
+BCLK3
+WCLK3
+GPIO2_BCLK
+GPIO1_WCLK
+W23
+3 2 1
+123
+W25
+123
+W26
+123
+W27
+123
+W28
+1 2 3
+W24
+W29
+321
+W30
+321
+W31
+321
+W32
+321
+W33
+321
+W34
+321
+W35
+321
+W36
+321
+W37
+321
+W38
+321
+W39
+321
+W40
+321
+TP21
+TP20
+TP19
+TP18
+TP17
+TP15
+TP16
+BCLK1
+WCLK1
+TP24 TP25 TP26 TP27
+TP22
+TP23
+123
+W19
+123
+W20
+12
+W21
+W22
+2 1
+10K
+R31
+10K
+R32
+U17
+TLV 320AIC3262YZF
+H2
+G1
+J6
+G4
+G2
+J1
+J2
+H1
+G8
+H5
+H4
+J5
+G7
+G3
+G9
+H6
+J8
+H8
+F6
+J7
+G5
+H7
+G6
+F5
+F7
+W48
+1
+2
+3
+W49
+3
+2
+1
+W51
+3 2 1
+W52
+3 2 1
+GND
+IOVD
+W53
+123
+W54
+123
+GND
+IOVD
+W50
+123
+DIN
+SDOUT1
+BCLK
+WCLK
+DOUT1
+DIN1
+SRC2_MCLK
+DOUT2
+DIN2
+DOUT3
+DIN3
+GPO1_DOUT
+GPI2_DIN
+DOUT3
+SRC1_MCLK
+W58
+12
+W59
+12
+MCLK2
+MCLK1
+(ADC Data)
+(DAC Data)
+2-3
+USB CONTROLER
+T AS1020B
+I2C / SPI
+SELECTION
+AIC3262YZFEVM-U
+W19
+W20
+I2C SPI
+1-2
+2-3 1 -2
+OPEN 1 -2W21
+OPEN 1 -2W22
+I2S I2S_2
+I2S_3
+I2S_4
+SRC_2
+SIDE B
+&
+BREAKOUT
+CONNECTOR
+SRC_2
+SIDE A
+&
+BREAKOUT
+CONNECTOR
+SRC_1
+SIDE A
+&
+BREAKOUT
+CONNECTOR
+BREAKOUT
+CONNECTORI2S_1
+Install W25-W28 pins 2-3
+and use ASI1, for operating
+AIC3262 at USB Sampling
+Rate
+When USB is running at a
+different sample rate than
+AIC3262, then remove
+W27 pin 2-3 or disable the
+DOUT1 by writing to I2C
+Book 0, Page 4, Register
+67, D4-D1=0
+FROM BREAKOUT BOARD
+FROM BREAKOUT BOARD
+www.ti.com TLV320AIC3262EVM-U Schematic
+Figure19.Schematic,Sheet 5 of8
+19SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+U16 - 1 1
+U16 - 15
+U15 - 15
+U15 - 1 1
+R34
+2.2K
+C74
+0.1uF
+C73
+0.1uFSM7745HSV-22.5792M
+4
+32
+1
+Y2
+22.5792M
+Vcc
+OUT
+OE
+GND
+SM7745HSV-24.576M
+32
+1
+Y3
+24.576M
+Vcc
+OUT
+4OE
+GND
+C69
+0.01uFGND
+C71
+0.01uFGND
+GND
+GND
+GND
+R33
+10K
+R35
+10K
+SN74L VC1G125DBVR
+U13
+5
+43
+2
+1
+SN74LVC1G125DBVR
+1
+2
+3 4
+5
+U14
+TP40
+TP41
+GND
+GND
+IOVD
+IOVD
+GND
+GND
+C70
+0.1uF
+GND
+GND
+ICS542
+1
+2
+3
+4 5
+6
+7
+8
+U12
+C72
+0.01uF
+GND
+R37
+10K
+GND
+R38
+10K
+R36
+10K
+W41 2
+1
+W42 2
+1
+W43 2
+1
+W44
+2
+1
+1 2
+3 4
+5 6
+W45
+MCLK
+22.5792MHz/4
+ADJCLK
+1 2
+3 4
+5 6
+W46
+MCLK
+22.5792MHz/4
+ADJCLK
+SN74L VC74APWR
+U11
+1
+2
+3
+4
+5
+6
+7 8
+9
+10
+1 1
+12
+13
+14
++3.3VD
++3.3VD+3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD SN74L VC1G07DBVR
+1
+2
+3 4
+5
+U1
+NC
+GND Y
+VCC
+A
+SN74L VC1G07DBVR
+1
+2
+3 4
+5
+U18
+NC
+GND Y
+VCC
+A
+SN74L VC1G07DBVR
+1
+2
+3 4
+5
+U19
+NC
+GND Y
+VCC
+A
+SN74L VC1G07DBVR
+1
+2
+3 4
+5
+U20
+NC
+GND Y
+VCC
+A
+IOVD
+GND
+R70
+4.75K
+R69
+357LOCK_SRC2Green
++3.3VD
+R72
+4.75K
+R71
+357REA DY_SRC1Green
++3.3VD
+R76
+4.75K
+R75
+357REA DY_SRC2
+Green
++3.3VD
+R74
+4.75K
+R73
+357LOCK_SRC1Green
++3.3VD
+GND
+GND
+GND
+IOVD
+IOVD
+IOVD
+SRC2_MCLK
+SRC1_MCLK
+MCLK
+C1 12
+0.1uF
+C1 1 1
+0.1uF
+Install Jumper in W41 to
+disable Y2 Output Clock
+Install Jumper in W42 to
+disable Y3 Output Clock
+TO SRCs
+SRC2_MCLK
+SRC1_MCLK
+(USB)
+Input/12
+Input/16
+Input/4Input/2
+Input/8
+Input/6
+Installed
+Removed
+Removed
+Removed
+Removed
+Installed
+Power Down ALLInstalled Installed
+W43W44 CLK CLK/2
+TLV320AIC3262EVM-U Schematic www.ti.com
+Figure20.Schematic,Sheet 6 of8
+20 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+WCLK
+BCLK
+U15 - 11
+U15 - 15
+U16 - 11
+U16 - 15
+SRC2_MCLK
+SRC1_RXCKO
+SRC2_RXCKO
+SRC1_MCLK
+13
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+1 1
+12
+14 15 16 17 18 19 20 21 22 23 24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+373839404142434445464748
+U15
+SRC4392IPFBR
+C81
+0.1uF
+1
+2
+3
+J15
+TORX147PL(F ,T)
+OUT
+Vcc
+GND
+SHIELD
+C76
+0.1uF
+C77
+0.1uF
+C80
+0.1uF
+R43
+4.7K
+R39
+10
+C75
+10uF
+R40
+10
+C78
+10uF
+GND
+GND
+GND
+GND
+GND
+GND
+GND
++1.8V
+GND
+GND GND GND
+RESET~
+SCL_IOVD
+SDA_IOVD
+BCLK2
+WCLK2
+TOTX147PL
+J16
+3
+2
+1
+SHIELD
+GND
+INPUT
+VCC
+SRC4392IPFBR
+SRC4392IPFBR
+U16
+48 47 46 45 44 43 42 41 40 39 38 37
+36
+35
+34
+33
+32
+31
+30
+29
+28
+27
+26
+25
+2423222120191817161514
+12
+1 1
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+13
+C91
+0.1uF
+TORX147PL(F, T)TORX147PL(F, T)
+J17
+3
+2
+1OUT
+Vcc
+GND
+SHIELD
+C86
+0.1uF
+C87
+0.1uF
+C90
+0.1uF
+R50
+4.7K
+R45
+10
+C85
+10uF
+R46
+10
+C88
+10uF
+GND
+GND
+GND
+GND
+GND
+GND
+GND
++1.8V
+GND
+GND
+C92
+0.1uF
+TOTX147PL
+1
+2
+3
+J18
+SHIELD
+GND
+INPUT
+VCC
+R49
+10K
+C82
+0.1uF
+IOVD
+IOVD
+IOVD
+IOVD
+IOVD
+IOVD
+IOVD
+R44
+10
+C83
+10uF
+GND
+R51
+10
+C93
+10uF
+GND
+GND
+BCLK3
+WCLK3
+C84
+0.1uF
+C94
+0.1uF
+C79
+0.1uF
+C89
+0.1uF
+GPIO2_BCLK
+GPIO1_WCLK
++3.3VD+3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
++3.3VD
+SRC1_DOUT_B
+DOUT2
+DOUT3
+GPO1_DOUT
+GPI2_DIN
+DIN3
+DIN2
+DIN
+SRC1_MCLK SRC2_MCLK
+SRC #1 SRC #2
+SAMPLE RA TE CONVERTER SAMPLE RA TE CONVERTER
+(ADC Data)
+(DAC Data)
+www.ti.com TLV320AIC3262EVM-U Schematic
+Figure21.Schematic,Sheet 7 of8
+21SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+HW1
+0.5in
+HW2
+0.5in
+HW3
+0.5in
+HW4
+0.5in
+GND GND
+GND GND
+GND GND
+GND GND
+100P-JMDSS-G-1-TF(LF)(SN)
+mfg: JST
+p/n: 100P-JMDSS-G-1-TF(LF)(SN)
+71
+73
+75
+77
+79
+81
+83
+85
+87
+89
+91
+93
+95
+97
+99
+72
+74
+76
+78
+80
+82
+84
+86
+88
+90
+92
+94
+96
+98
+100
+P1
+70
+68
+66
+64
+62
+60
+58
+56
+54
+52
+69
+67
+65
+63
+61
+59
+57
+55
+53
+51
+30 29
+28
+26
+24
+22
+27
+25
+23
+21
+1
+3
+5
+7
+9
+1 1
+13
+15
+17
+19
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+40
+38
+36
+34
+32
+39
+37
+35
+33
+31
+41
+43
+45
+47
+42
+44
+46
+48
+49 50
+100P-JMDSS-G-1-TF(LF)(SN)Anchor
+P1
+GND
+100P-JMDSS-G-1-TF(LF)(SN)
+Anchor
+P2
+100P-JMDSS-G-1-TF(LF)(SN)
+mfg: JST
+p/n: 100P-JMDSS-G-1-TF(LF)(SN)
+75
+77
+79
+81
+78
+80
+82
+P2
+100 99
+98
+96
+94
+92
+97
+95
+93
+91
+83
+85
+87
+89
+84
+86
+88
+90
+70
+68
+66
+64
+62
+60
+58
+56
+54
+52
+69
+67
+65
+63
+61
+59
+57
+55
+53
+51
+71
+73
+72
+74
+76
+30 29
+28
+26
+24
+22
+27
+25
+23
+21
+1
+3
+5
+7
+9
+1 1
+13
+15
+17
+19
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+40
+38
+36
+34
+32
+39
+37
+35
+33
+31
+41
+43
+45
+47
+42
+44
+46
+48
+49 50
+GND
+GNDGND
+GND
+GND
+GND
+GND
+GND
+HPR
+HPL
+GND
+SPLP
+SPLM
+SPRP
+SPRM
+SPLP
+SPLM
+SPRP
+SPRM
+GNDGND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+IN1L
+IN2L
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+IN1R +5V +5V
+GND
+GND
+GND
+GND
+GND
+GND
+GND
+GND
++1.8V +1.8V
+V_ENABLE
+GND
+GND
+GND
+BCLK1
+MISO
+MOSI
+GND
+GND
+GND GND
+SDA_IOVD
+SCL_IOVDGND
+WCLK 1
+I2S_ENABLE
+GND
+GND
+GND
+GND
+RESET~
+GND
+GND
+SS~
+SCLK
+GNDGND
+BCLK2
+WCLK 2
+IN2R
+IN3RIN3L
+AVSS_SENSE
+RECL
+LOL
+RECR
+LOR
+IN4RIN4L
+BCLK3
+WCLK 3
+V ARVDV ARVD
+GPIO2_BCLK
+GPIO1_WCLK
+0.5in
+HW5
+0.5in
+HW6
+0.5in
+HW7
+0.5in
+HW8
++3.3VD +3.3VD
+DOUT1
+DIN1
+DOUT2
+DIN2
+DOUT3
+DIN3
+GPO1_DOUT
+GPI2_DIN
+MICDETMICBIAS
+MCLK2
+MCLK1MCLK1
+DGND
+I2S_ENABLE
+DGND
+I2S1
+DGND
+MCLK
+I2C
+RESERVED RESERVED
+DV_ENABLE
+V ARVD VA RVD
++1.8VD +1.8VD
++3.3VD +3.3VD
+DGND
+DGND
+DGND
+DGND
+DGND
+DGND
+DGND
+DGND
++5VD+5VD
+IN8-
+IN7-
+IN6-
+IN5-
+IN4-
+IN3-
+IN1-
+IN2-
+MICDET
+AGND
+AGND
+AGND
+AGND
+AGND
+AGND
+AGND
+AGND
+IN8+
+IN7+
+IN6+
+IN5+
+IN4+
+IN3+
+IN1+
+IN2+
+MICBIAS
+AGND
+AGND
+AGND
+AGND
+AGND
+AGND
+AGND
+AGND
+AGND AGND
+SPK1+
+SPK1-
+SPK2+
+SPK2-
+CLASS-D
+SPEAKER
+OUTPUT
+CLASS-D
+SPEAKER
+OUTPUTSPK2-
+SPK2+
+SPK1-
+SPK1+
+HEADSET
+GROUND
+HPGND
+HPGND
+HPGND
+HPGND
+LINE
+OUTPUTS
+OUT1GND
+OUT1+
+OUT2+
+OUT2GND
+OUT3+
+OUT3GND
+OUT4GND
+OUT4+
+AGND
+HP2L
+HP2R
+HP1R
+OUT4-
+OUT4GND
+HP1L
+HEADSET
+OUTPUTS
+AGND
+OUT3GND
+OUT3-
+OUT2GND
+OUT2-
+OUT1-
+OUT1GND
+LINE
+OUTPUTS
+AGND
+V ARV A
+BREAK-OUT CONNECTIONSBREAK-OUT CONNECTIONS
+ANALOG INTERFA CE CONNECTOR
+STA NDOFFS
++5VA
+AGND
++3.3VA
+AGND
++1.8VA
+AGND
+V ARV A
+AGND
+AGND
++1.8VA
+AGND
++3.3VA
+AGND
++5VA
+BREAK-OUT CONNECTIONSBREAK-OUT CONNECTIONS
+DIGITA L INTERFA CE CONNECTOR
+AV _ENABLE
+HPVDD
+HPGND
+RESERVED
+HPGND
+HPVDD
+SPKVDD SPKVDD
+SPKGND SPKGND
+RESERVED
+MCLK
+SPI
+RESET
+MCLK_2
+I2S_2
+RESERVED
+TLV320AIC3262EVM-U Schematic www.ti.com
+Figure22.Schematic,Sheet 8 of8
+Empty paratoforcethebillofmaterialstoa new landscapepage
+Empty paratoforcethebillofmaterialstoa new landscapepage
+Empty paratoforcethebillofmaterialstoa new landscapepage
+Empty paratoforcethebillofmaterialstoa new landscapepage
+22 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com TLV320AIC3262EVM-U BillofMaterials
+6 TLV320AIC3262EVM-U BillofMaterials
+Table2.BillofMaterialsforTLV320AIC3262_YZF_USB_EVM_REV2
+TI-SEMICONDUCTORS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+1 1 U17 POWER TUNED CODEC WCSP81-YZF ROHS TEXAS TLV320AIC3262 TEXAS INSTRUMENTS TLV320AIC3262YZF
+INSTRUMENTS YZF
+2 1 U2 USB STREAMING CONTROLLER TQFP48-PFB ROHS DIGI-KEY 296-13041-5 TEXAS INSTRUMENTS TAS1020BPFB
+3 3 U5, U6, U7 SINGLE BUS BUFFER GATE WITH 3-STATE OUTPUT DIGI-KEY 296-11605-1 TEXAS INSTRUMENTS SN74LVC1G126DBVR
+SOT23-DBV5 ROHS
+4 2 U8, U9 VOLT REG 1.8V400MA LDO CAP FREE NMOS SOT23- DIGI-KEY 296-15816-1 TEXAS INSTRUMENTS TPS73618DBVT
+DBV5 ROHS
+5 2 U10, VR1 VOLT REG 3.3V400MA LDO CAP FREE NMOS SOT23- DIGI-KEY 296-15819-1 TEXAS INSTRUMENTS TPS73633DBVT
+DBV5 ROHS
+6 2 U15, U16 2 CHAN,ASYNC,SAMPLE RATE CONV W/DIG AUDIO DIGI-KEY 296-19740-1 BURR-BROWN SRC4392IPFBR
+REC/XMTR ROHS
+7 2 U13, U14 SINGLE BUS BUFFER GATE WITH 3-STATE OUTPUT DIGI-KEY 296-11603-1 TEXAS INSTRUMENTS SN74LVC1G125DBVR
+SOT23-DBV5 ROHS
+8 1 U4 DUAL BIDIR I2C BUS AND SMBUS VOLT LEVEL TRANS DIGI-KEY 296-18509-1 TEXAS INSTRUMENTS PCA9306DCTR
+SSOP8-DCT ROHS
+9 1 U11 DUAL POS-EDGE-TRIG D-TYPE FLIP-FLOP W/CLR+PRE DIGI-KEY 296-1241-1-ND TEXAS INSTRUMENTS SN74LVC74APWR
+TSSOP8-PW ROHS
+10 4 U1, U18, U19, U20 SINGLE BUFFER/DRIVER GATE OPEN DRAIN OUTS DIGI-KEY 296-8485-1 TEXAS INSTRUMENTS SN74LVC1G07DBVR
+SOT23-DBV5 ROHS
+SEMICONDUCTORS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+11 1 U3 512K I2C SERIAL EEPROM SOIC8-SM ROHS DIGI-KEY 24FC512-I/SM MICROCHIP 24FC512-I/SM
+12 2 J15,J17 TOSLINK RECEIVER 3.3V15MB SHUTTER ROHS DIGI-KEY TORX147PLFT TOSHIBA TORX147PL(F,T)
+13 2 J16,J18 TOSLINK TRANSMITTER 3.3V15MB SHUTTER ROHS NEWARK 05M1615 TOSHIBA TOTX147PL
+14 1 U12 CLOCK DIVIDER,SOP8-D,ROHS DIGI-KEY 800-1803-1 IDT ICS542
+15 2 D1, D2 LED, YELLOW 2.0VSMD0805 ROHS DIGI-KEY 67-1554-1 LUMEX OPTO SML-LXT0805YW-TR
+16 4 LOCK_SRC1, LOCK_SRC2, LED, GREEN 2.0VSMD0805 ROHS DIGI-KEY 67-1553-1 LUMEX OPTO SML-LXT0805GW-TR
+READY_SRC1,
+READY_SRC2
+17 1 Y1 OSCILLATOR SMT 6MHz 3.3VOUT-ENABLE ROHS MOUSER 788-8002AI133E- SITIME SIT8002AI-13-33E-
+6.0T 6.00000T
+18 1 Y2 OSCILLATOR SMT 3.3VSM77H SERIES 22.5792MHz NU HORIZONS SM7745HSV- PLETRONICS SM7745HSV-22.5792M
+ROHS 22.5792M
+19 1 Y3 OSCILLATOR SMT 3.3VSM77H SERIES 24.576MHz NU HORIZONS SM7745HSV- PLETRONICS SM7745HSV-24.576M
+ROHS 24.576M
+23SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+TLV320AIC3262EVM-U BillofMaterials www.ti.com
+Table2.BillofMaterialsforTLV320AIC3262_YZF_USB_EVM_REV2 (continued)
+CAPACITORS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+20 1 C1 CAP SMD0603 CERM 1000PFD 50V 5% COG ROHS DIGI-KEY 445-1293-1 TDK CORP. C1608C0G1H102J
+21 3 C7, C63, C64 CAP SMD0603 CERM 1.0UFD 16V 10% X7R ROHS DIGI-KEY 445-1604-1 TDK C1608X7R1C105K
+22 1 C2 CAP SMD0805 CERM 100PFD 50V 5% C0G ROHS DIGI-KEY 490-1615-1 MURATA GRM2165C1H101JA01D
+23 29 C9, C10, C11, C13, C14, CAP SMD0603 CERM 0.1UFD 50V 10% X7R ROHS DIGI-KEY 445-1314-1 TDK C1608X7R1H104K
+C15, C20, C23, C26, C70,
+C73, C74, C76, C77, C79,
+C80, C81, C82, C84, C86,
+C87, C89, C90, C91, C92,
+C94, C95, C111, C112
+24 8 C21, C24, C27, C30, C32, CAP SMD0805 CERM 47UFD 6.3V20% X5R ROHS DIGI-KEY 587-1779-1 TAIYO YUDEN JMK212BJ476MG-T
+C67, C68, C98
+25 20 C3, C6, C8, C12, C16, C17, CAP SMD0402 CERM 0.1UFD 16V X7R 10% ROHS DIGI-KEY 490-3261-1-ND MURATA GRM155R71C104KA88D
+C18, C29, C39, C40, C41,
+C42, C43, C44, C46, C49,
+C96, C104, C105, C107
+26 4 C28, C45, C47, C106 CAP SMD0805 CERM 10UFD 10V10% X7R ROHS DIGI-KEY 490-3905-1 MURATA GRM21BR71A106KE51L
+27 4 C19, C22, C25, C97 CAP SMD0603 CERM 10UFD 10V 20% X5R ROHS DIGI-KEY PCC2479CT PANASONIC ECJ-1VB1A106M
+28 2 C35, C36 CAP SMD0603 CERM 2.2UFD 10V 10% X7R ROHS DIGI-KEY 490-4520-1 MURATA GRM188R71A225KE15D
+29 10 C34, C48, C75, C78, C83, CAP SMD0603 CERM 10UFD 6.3V20% X5R ROHS DIGI-KEY PCC2395CT PANASONIC ECJ-1VB0J106M
+C85, C88, C93, C109, C110
+30 3 C69, C71, C72 CAP SMD0603 CERM 0.01UFD 25V 5% X7R ROHS DIGI-KEY 478-3700-1 AVX 06031C103JAT2A
+31 2 C37, C38 CAP SMD0402 CERM 1.0UFD 6.3VX5R 10% ROHS DIGI-KEY 490-1320-1 MURATA GRM155R60J105KE19D
+32 2 C31, C33 CAP SMD0603 CERM 0.1UFD 50V 10% X7R ROHS DIGI-KEY 490-1519-1 MURATA GRM188R71H104KA93D
+33 1 C50 CAP SMD0805 CERM 1.0UFD 16V 10% X7R ROHS DIGI-KEY 445-1358-1 TDK C2012X7R1C105K
+34 8 C52, C53, C54, C55, C56, CAP SMD0603 CERM 0.47UFD 16V 10% X5R ROHS DIGI-KEY 478-1248-1 AVX 0603YD474KAT2A
+C57, C58, C108
+35 4 C99, C100, C101, C102 CAP SMD0603 CERM 4700PFD 25V 5% COG ROHS DIGI-KEY 445-2712-1-ND TDK CORP. C1608C0G1E472J
+36 4 C51, C65, C66, C103 CAP SMD1206 CERM 0.047ufd50V COG 5% ROHS DIGI-KEY 490-1764-1-ND MURATA GRM31M5C1H473JA01L
+37 2 C4, C5 CAP SMD0603 CERM 47PFD 50V 5% COG ROHS DIGI-KEY 490-1419-1 MURATA GRM1885C1H470JA01D
+24 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com TLV320AIC3262EVM-U BillofMaterials
+Table2.BillofMaterialsforTLV320AIC3262_YZF_USB_EVM_REV2 (continued)
+RESISTORS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+38 1 R2 RESISTOR SMD0603 1.50KOHM 1% THICK FILM 1/10W DIGI-KEY P1.50KHCT PANASONIC ERJ-3EKF1501V
+ROHS
+39 1 R5 RESISTOR SMD0603 100K OHM 1% THICK FILM 1/10W DIGI-KEY P100KHCT PANASONIC ERJ-3EKF1003V
+ROHS
+40 13 R8, R9, R10, R11, R15, RESISTOR SMD0603 10K 5% 1/10W ROHS DIGI-KEY P10KGCT PANASONIC ERJ-3GEYJ103V
+R31, R32, R33, R35, R36,
+R37, R38, R49
+41 2 R6, R7 RESISTOR SMD0603 THICK FILM 649 OHMS 1% 1/10W DIGI-KEY 311-649HRCT YAGEO RC0603FR-07649RL
+ROHS
+42 1 R1 RESISTOR SMD0603 30.9KOHMS 1% 1/10W ROHS DIGI-KEY 541-30.9KHCT VISHAY CRCW060330K9FKEA
+43 2 R3, R4 RESISTOR SMD0603 27.4OHMS 1% 1/10W ROHS DIGI-KEY P27.4HCT PANASONIC ERJ-3EKF27R4V
+44 4 R12, R13, R52, R53 RESISTOR SMD0603 2.7KOHMS 5% 1/10W ROHS DIGI-KEY P2.7KGCT PANASONIC ERJ-3GEYJ272V
+45 4 R21, R22, R34, R54 RESISTOR SMD0603 2.20KOHMS 1% THICK FILM DIGI-KEY P2.20KHCT PANASONIC ERJ-3EKF2201V
+1/10W ROHS
+46 4 R23, R24, R25, R26 RESISTOR SMD1206 0.0OHM 5% 1/4W ROHS DIGI-KEY P0.0ECT PANASONIC ERJ-8GEY0R00V
+47 4 R27, R28, R64, R65 RESISTOR SMD0603 100 OHM 1/10W 1% ROHS DIGI-KEY 541-100HCT VISHAY CRCW0603100RFKEA
+48 3 R43, R50, R82 RESISTOR SMD0603 4.7KOHMS 5% 1/10W ROHS DIGI-KEY P4.7KGCT PANASONIC ERJ-3GEYJ472V
+49 6 R39, R40, R44, R45, R46, RESISTOR SMT1206 10.0OHM 1% 1/4W ROHS DIGI-KEY P10.0FCT PANASONIC ERJ-8ENF10R0
+R51
+50 1 R14 RESISTOR SMD0603 200K OHMS 5% 1/10W ROHS DIGI-KEY P200KGCT PANASONIC ERJ-3GEYJ204V
+51 4 R29, R30, R77, R78 RESISTOR SMD0603 0.0OHM 5% THICK FILM 1/10W DIGI-KEY P0.0GCT PANASONIC ERJ-3GEY0R00V
+ROHS
+52 2 R55, R56 RESISTOR SMD0603 10.0KOHMS 0.1% 25 PPM 1/10W DIGI-KEY P10KYCT PANASONIC ERA-3YEB103V
+ROHS
+53 4 R57, R58, R59, R60 RESISTOR SMD0603 THICK FILM 1.00KOHM 1% 1/10W DIGI-KEY 311-1.00KHRCT YAGEO RC0603FR-071KL
+ROHS
+54 2 R62, R63 RESISTOR,SMT,1206,16.0 OHM,5%,1/4W,ROHS DIGI-KEY 541-16ECT VISHAY CRCW120616R0JNEA
+55 4 R17, R66, R67, R68 RESISTOR SMD0603 221 OHMS 1% 1/10W ROHS DIGI-KEY 541-221HCT VISHAY CRCW0603221RFKEA
+56 5 R18, R19, R20, R61, R79 RESISTOR,SMT,1206,2.0 OHM,5%,1/4W,ROHS DIGI-KEY 541-2.0ECT-ND VISHAY CRCW12062R00JNEA
+57 2 R80, R81 RESISTOR SMD1206 32.4OHMS 1% 1/4W ROHS DIGI-KEY 311-32.4FRCT- YAGEO RC1206FR-0732R4L
+ND
+58 4 R70, R72, R74, R76 RESISTOR SMD0603 4.75KOHMS 1% 1/10W ROHS DIGI-KEY 541-4.75KHCT VISHAY CRCW06034K75FKEA
+59 4 R69, R71, R73, R75 RESISTOR SMD0603 357 OHM 1% THICK FILM 1/10W DIGI-KEY P357HCT PANASONIC ERJ-3EKF3570V
+ROHS
+60 2 R83, R84 RESISTOR,SMT,0603,0603,1/10W,0OHM,ZERO OHM DIGI-KEY RMCF0603ZT0R STACKPOLE CRCW0603000Z
+00CT-ND ELECTRONICS
+FERRITES, INDUCTORS, CHOKES, COILS AND TRANSFORMERS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+61 1 FB1 FERRITE CHIP, 220 OHMS 2A 100MHZ SMD 0603 ROHS DIGI-KEY 445-1565-1 TDK MPZ1608S221A
+25SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+TLV320AIC3262EVM-U BillofMaterials www.ti.com
+Table2.BillofMaterialsforTLV320AIC3262_YZF_USB_EVM_REV2 (continued)
+HEADERS AND JACKS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+62 41 W3, W4, W6, W14, W16, HEADER THRU MALE 3 PIN 100LS GOLD ROHS DIGI-KEY S1011E-03-ND SULLINS PBC03SAAN
+W17, W19, W20, W23,
+W24, W25, W26, W27,
+W28, W29, W30, W31,
+W32, W33, W34, W35,
+W36, W37, W38, W39,
+W40, W48, W49, W50,
+W51, W52, W53, W54,
+W55, W56, W57, W60,
+W61, JP2,JP3,JP4
+63 20 W1, W2, W5, W7, W8, W9, HEADER THRU MALE 2 PIN 100LS GOLD ROHS DIGI-KEY S1011E-02 SULLINS PBC02SAAN
+W10, W11, W12, W18,
+W21, W22, W41, W42,
+W43, W44, W47, W58,
+W59, EE-PROGRAM
+64 2 W45, W46 HEADER THRU MALE 2X3 PIN 100LS GOLD ROHS DIGI-KEY S2011E-03 SULLINS PBC03DAAN
+65 2 P1,P2 PLUG SMD 2x50 FEMALE JMDSERIES 0.5MM LS GOLD DIGI-KEY 455-1880-1 JST 100P-JMDSS-G-1-
+ROHS TF(LF)(SN)
+66 4 J2,J4,J5,J19 JACK AUDIO-STEREO MINI(3.5MM ,4-COND SMT-RA DIGI-KEY CP-43516SJCT CUI STACK SJ-43516-SMT
+ROHS
+67 1 J1 JACK USB MINIB RA 5PIN ROHS DIGI-KEY WM2072 MOLEX SD-54819-026
+SOCKETS, SOCKET PINS AND TERMINAL BLOCKS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+68 2 J3,J7 TERMINAL BLOCK 4PIN 6A/125V GRAY 3.5mm PITCH DIGI-KEY ED1516 ON SHORE TECHNOLOGY ED555/4DS
+16-28AWG ROHS
+69 2 J6,J11 TERMINAL BLOCK 2PIN 6A/125V GRAY 3.5mm PITCH DIGI-KEY ED1514 ON SHORE TECHNOLOGY ED555/2DS
+16-28AWG ROHS
+26 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com TLV320AIC3262EVM-U BillofMaterials
+Table2.BillofMaterialsforTLV320AIC3262_YZF_USB_EVM_REV2 (continued)
+TESTPOINTS AND SWITCHES
+ITEM QTY REF DESIGNATORS DESCRIPTION VENDOR VENDOR PART MANU MANU PART NUM
+NUM
+70 59 HPL, HPR, LOL, LOR, TP4, PC TESTPOINT, WHITE, ROHS DIGI-KEY 5002K KEYSTONE 5002
+IN1L,IN1R,IN2L,IN2R, ELECTRONICS
+RECM, RECP, TP15, TP16,
+TP17, TP18, TP19, TP20,
+TP21, TP22, TP23, TP24,
+TP25, TP26, TP27, TP28,
+TP29, TP30, TP31, TP32,
+TP33, TP34, TP35, TP36,
+TP37, TP38, TP39, TP40,
+TP41, TP55, TP56, TP57,
+SPKLM, SPKLP, SPKRM,
+SPKRP, FLT_LM, FLT_LP,
+FLT_RM, FLT_RP,
+MICDET, IN3L_TP,
+IN3R_TP, IN4L_TP,
+IN4R_TP, MICBIAS,
+VREF_SAR, VREF_AUDIO,
+HPVSS_SENSE,
+MICBIAS_EXT VREF_SAR
+71 7 AGND1, AGND2, DGND1, PC TESTPOINT BLACK 063 HOLE ROHS DIGI-KEY 5011K KEYSTONE 5011
+DGND2, DGND3, SGND1, ELECTRONICS
+SGND2
+72 6 +1.8V,+1.8V_CP, +3.3V, PC TESTPOINT, RED, ROHS DIGI-KEY 5000K KEYSTONE 5000
++3.3VD,+5V, VARVD ELECTRONICS
+73 4 SW1, SW2, SW3, SW4 SWITCH, MOM, 160G SMT 4X3MM ROHS DIGI-KEY EG4344CT E-SWITCH TL1015AF160QG
+STANDOFFS AND HARDWARE
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+74 8 HW1, HW2, HW3, HW4, STANDOFF,4-40,0.5INx3/16IN,ALUMRND F-F KEYSTONE 2027K KEYSTONE 2027
+HW5, HW6, HW7, HW8 ELECTRONICS ELECTRONICS
+COMPONENTS NOT ASSEMBLED
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+75 4 C59, C60, C61, C62 C1206_DNP N/A N/A N/A C1206_DNP
+76 1 R85 R1206_DNP N/A N/A N/A R1206_DNP
+SHUNTS
+Item QTY REF DES Description Vendor Vendor PartNO. MANU MANU PartNO.
+1001 AS NEEDED SHUNT STANDARD 2POS .200TIN DIGI-KEY A31698-ND TE CONNECTIVITY 531230-4
+27SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+DefaultJumper Positions www.ti.com
+7 DefaultJumper Positions
+Table3.TLV320AIC3262EVM-U DefaultJumper Positions
+Reference DefaultPosition DescriptionDesignator
+JP2 2-3 SupplyforSRVDD
+JP3 2-3 SupplyforSLVDD
+JP4 1-2 Selectionbetween Record toUSB and SRC Record
+W1 Installed AVDD3_33 CurrentMeasurement
+W2 Installed HVDD CurrentMeasurement
+W3 2-3 SupplySelectionforCPVDD_18
+W4 2-3 SupplySelectionforDVDD
+W5 Installed IOVDD CurrentMeasurement
+W6 2-3 SupplySelectionforIOVDD
+W7 Installed AVDD_18 CurrentMeasurement
+W8 Installed AVDD1_18 CurrentMeasurement
+W9 Installed AVDD2_18 CurrentMeasurement
+W10 Installed AVDD4_18 CurrentMeasurement
+W11 Installed InternalMICBIAS
+W12 Installed InternalMICBIAS
+W14 Open SupplySelectionforVBAT
+W16 2-3 InputConfigurationforIN1R
+W17 2-3 InputConfigurationforIN1L
+W18 Installed Jumper forMICDET
+W19 2-3 I2C/SPI-Selectionbetween SCL and /SS lines
+W20 2-3 I2C/SPI-Selectionbetween SDA and MOSI lines
+W21 Open I2C/SPI-ConnectionofMISO toGPO1 pin
+W22 Open I2C/SPI-ConeectionofSCLK toGPI1 pin
+W23 2-3 SelectionforExternalMCLK1
+W24 1-2 SelectionforExternalMCLK2
+W25 2-3 ConfigurationforAudioSerialInterface#1 DIN1
+W26 2-3 ConfigurationforAudioSerialInterface#1 BCLK1
+W27 2-3 ConfigurationforAudioSerialInterface#1 DOUT1
+W28 2-3 ConfigurationforAudioSerialInterface#1 WCLK1
+W29 2-3 ConfigurationforAudioSerialInterface#2 DIN2
+W30 2-3 ConfigurationforAudioSerialInterface#2 BCLK2
+W31 2-3 ConfigurationforAudioSerialInterface#2 DOUT2
+W32 2-3 ConfigurationforAudioSerialInterface#2 WCLK2
+W33 2-3 ConfigurationforAudioSerialInterface#3 DIN3
+W34 2-3 ConfigurationforAudioSerialInterface#3 BCLK3
+W35 2-3 ConfigurationforAudioSerialInterface#3 DOUT3
+W36 2-3 ConfigurationforAudioSerialInterface#3 WCLK3
+W37 2-3 ConfigurationforAudioSerialInterface#4 DIN3
+W38 2-3 ConfigurationforAudioSerialInterface#4 BCLK3
+W39 2-3 ConfigurationforAudioSerialInterface#4 DOUT3
+W40 2-3 ConfigurationforAudioSerialInterface#4 WCLK3
+W41 Installed Jumper toenable/disableY2 OutputClock
+W42 Installed Jumper toenable/disableY3 OutputClock
+W43 Installed Jumper toconfiguredividerratioofU12
+W44 Installed Jumper toconfiguredividerratioofU12
+28 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com DefaultJumper Positions
+Table3.TLV320AIC3262EVM-U DefaultJumper Positions(continued)
+Reference DefaultPosition DescriptionDesignator
+W45 1-2 ClockselectionforSRC1_MCLK
+W46 1-2 ClockselectionforSRC2_MCLK
+W47 Installed Jumper forMICBIAS_EXT
+W48 1-2 SelectionforMCLK1
+W49 Open SelectionforMCLK2
+W51 2-3 6 wireI2S enableon GPI3
+W52 1-2 Pull-uporPull-downSelectionforGPI3
+W53 2-3 6 wireI2Senableon GPI4
+W54 1-2 Pull-uporPull-downSelectionforGPI4
+W55 1-2 Load SelectionforHeadphone HPL Output
+W56 1-2 Load SelectionforHeadphone HPR Output
+W57 1-2 SupplySelectionforIOVDD
+W60 Open HeadsetType Selection1
+W61 Open HeadsetType Selection2
+For16-Ohm Load measurement,SetW55=1-2 and W56=1-2 (asshown above)
+For32-Ohm Load measurement,SetW55=2-3 and W56=2-3
+Figure23.DefaultJumper SettingsLayout
+29SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+WritingScripts www.ti.com
+8 WritingScripts
+A scriptissimplya textfilethatcontainsdatatosend totheserialcontrolbuses.
+Each lineina scriptfileisone command. No provisionismade forextendinglinesbeyond one line,except
+forthe> command. A lineisterminatedby a carriagereturn.
+The firstcharacterofa lineisthecommand. Commands are:
+I Setinterfacebus touse
+r Read fromtheserialcontrolbus
+w Writetotheserialcontrolbus
+> Extendrepeatedwritecommands tolinesbelowa w
+# Comment
+b Break
+d Delay
+f WaitforFlag
+The firstcommand, I,setstheinterfacetouse forthecommands tofollow.Thiscommand must be
+followedby one ofthefollowingparameters:
+i2cstd Standardmode I2C bus
+i2cfast Fastmode I2C bus
+spi8 SPI bus with8-bitregisteraddressing
+spi16 SPI bus with16-bitregisteraddressing
+Forexample,ifa fastmode I2C bus istobe used,thescriptbeginswith:
+Ii2cfast
+A double-quotedstringofcharactersfollowingtheb command can be added toprovideinformationtothe
+userabouteach breakpoint.When thescriptisexecuted,thesoftware'scommand handlerhaltsas soon
+as a breakpointisdetectedand displaysthestringofcharacterswithinthedoublequotes.
+The WaitforFlagcommand, f,readsa specifiedregisterand verifiesifthebitmapprovidedwiththe
+command matches thedatabeingread.Ifthedatadoes notmatch,thecommand handlerretriesforup to
+200 times.Thisfeatureisusefulwhen switchingbuffersinpartsthatsupporttheadaptivefilteringmode.
+The command fsyntaxfollows:
+f[i2caddress][register][D7][D6][D5][D4][D3][D2][D1][D0]
+where'i2caddress'and'register'areinhexadecimalformat
+and'D7'through'D0'areinbinaryformatwithvaluesof0,
+1orXfordon'tcare.8
+Anythingfollowinga comment command # isignoredby theparser,providedthatitison thesame line.
+The delaycommand d allowstheusertospecifya time,inmilliseconds,thatthescriptpauses before
+proceeding.Note:The delaytimeisenteredindecimalformat.
+A seriesofbytevaluesfollowseithera readorwritecommand. Each bytevalueisexpressedin
+hexadecimal,and each bytemust be separatedby a space.Commands areinterpretedand senttothe
+TAS1020B by theprogram.
+The firstbytefollowingan r(read)orw (write)command istheI2C slaveaddressofthedevice(ifI2C is
+used)orthefirstdatabytetowrite.(IfSPI isused,notethatSPI interfacesarenotstandardizedon
+protocols,so themeaning ofthisbytevarieswiththedevicebeingaddressedon theSPI bus.)The
+second byteisthestartingregisteraddressthatdatawillbe writtento(again,withI2C; SPI varies.
+Followingthesetwo bytesaredata,ifwriting;ifreading,thethirdbytevalueisthenumber ofbytesto
+read,(expressedinhexadecimal).
+Forexample,towritethevalues0xAA 0x55 toan I2C devicewitha slaveaddressof0x30,startingata
+registeraddressof0x03,theuserwrites:
+30 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com WritingScripts
+#examplescript
+Ii2cfast
+w3003AA55
+r300302e
+Thisscriptbeginswitha comment, specifiesthata fastI2C bus isused,thenwrites0xAA 0x55 totheI2C
+slavedeviceataddress0x30,writingthevaluesintoregisters0x03 and 0x04.The scriptthenreadsback
+two bytesfromthesame devicestartingatregisteraddress0x03.Note thattheslavedevicevaluedoes
+notchange.ItisunnecessarytosettheR/W bitforI2C devicesinthescript;thereadorwritecommands
+does that.
+Ifextensiverepeatedwritecommands aresentand commenting isdesiredfora groupofbytes,the>
+command can be used toextendthebytestootherlinesthatfollow.A usage example forthe> command
+follows:
+#examplescriptfor'>'command
+Ii2cfast
+#WriteAAandBBtoregisters3and4,respectively
+w3003AABB
+#WriteCC,DD,EEandFFtoregisters5,6,7and8,respectively
+>CCDDEEFF
+#Placeacommentedbreakpoint
+b"AABBCCDDEEFFwaswritten,startingatregister3"
+#Readbackallsixregisters,startingatregister3
+r300306b
+The followingexample demonstratesusage oftheWaitforFlagcommand, f:
+#examplescriptfor'waitforflag'command
+Ii2cfast
+#SwitchtoPage44
+w30002C
+#Switchbuffer
+w300105
+#WaitforbitD0toclear.'x'denotesadon'tcare.
+f3001xxxxxxx0
+Any texteditorcan be used towritethesescripts;jEditisan editorthatishighlyrecommended forgeneral
+usage.Formore information,go to:www.jedit.org.
+Once thescriptiswritten,itcan be used inthecommand window by runningtheprogram,and then
+selectingOpen ScriptFile...fromtheFilemenu. Locatethescriptand open it.The scriptthenisdisplayed
+inthecommand buffer.The useralsocan editthescriptonce itisinthebufferand save itby selecting
+Save ScriptFile...fromtheFilemenu.
+Once thescriptisinthecommand buffer,itcan be executedby pressingtheExecuteCommand Buffer
+button.Ifbreakpointsareinthescript,thescriptexecutestothatpoint,and theuserispresentedwitha
+dialogbox witha buttontopresstocontinueexecutingthescript.When readytoproceed,theuser
+pushes thatbuttonand thescriptcontinues.
+31SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+Example Scripts www.ti.com
+9 Example Scripts
+9.1 Headphone playbackscript
+#############################################
+#Headphoneplayback
+#AVdd=1.8V,DVdd=1.8V,MCLK=12.288MHz
+#PLLDisabled,DOSR=128,PRB_P1
+#PrimaryI2SinterfaceusedwithWCLK&BCLKasinputstothedevice(slave)
+#############################################
+#####################################
+#SoftwareReset
+#####################################
+#
+w300000
+w307F00
+w300101
+#
+######################################
+######################################
+#Clockconfiguration
+######################################
+#
+#selectMCLKforCODECclockinput,bypassPLL
+w300400
+#
+#NDAC=1,MDAC=2
+w300B81
+w300C82
+#
+#DOSR=128
+w300D00
+w300E80
+#
+#######################################
+###################################
+#InitializetheCodec
+###################################
+#
+#selectpage1
+w300001
+#
+#DisableweakconnectionbetweenAVDDandDVDD
+w300100
+#
+#settheREFchargingtimeto40ms
+w307A01
+#
+##################################
+#######################################
+#ASI#1configuration
+#######################################
+#
+#selectpage4
+w300004
+#
+#setASI#116bits,I2Smode
+w300100
+w300A00
+#
+#########################################
+32 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com Example Scripts
+#########################################
+#Signalprocessing
+#########################################
+#
+#selectpage0
+w300000
+#
+#setDACPRBmodetoPRB_P1
+w303C01
+#
+################################
+#######################################################
+#DACconfiguration
+#######################################################
+#
+#selectpage1
+w300001
+#
+#SetDACPTMmodetoPTM_P3
+w300300
+w300400
+#
+#HeadphoneinGround-centeredMode,HPLgain=0dB
+w301F80
+#
+#HPRtohaveindependentgain,setto0dB
+w302000
+#
+#ChargepumprunsofOscillatorclockwithdivider=4
+w302128
+#
+#ChargepumptopowerupontheheadphonepowerupinGround-centeredMode
+w302310
+#
+#EnableDACtoHPL/HPRandpowerupHPL/HPR
+w301B33
+#
+#selectpage0
+w300000
+#
+#powerupDAC_LandDAC_R
+w303FC0
+#
+#UnmutetheDACdigitalvolumecontrol
+w304000
+#
+##################################################
+9.2 Microphone recordingscript
+###########################################
+# MicrophoneRecordthroughIN2L&IN2R
+# MakesuretoinsertjumperW11andW12forMic-bias
+# AVdd=1.8V,DVdd=1.8V,MCLK=12.288MHz
+# PLLDisabled,AOSR=128,PRB_R1
+# PrimaryI2SinterfaceusedwithWCLK&BCLKasinputstothedevice
+##############################################
+###########################################
+#SoftwareReset
+33SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+Example Scripts www.ti.com
+###########################################
+#
+w300000
+w307F00
+w300101
+#
+###########################################
+###########################################
+#ClockConfiguration,ADCside
+###########################################
+#
+#SetMCLKasADC_CLKIN
+w300400
+#
+#PowerupNADC,MADCandsetNADC=1,MADC=2
+w301281
+w301382
+#
+#SetAOSR=128
+w301480
+#
+###########################################
+#############################################
+#InitializetheCodec
+#############################################
+#
+#selectpage1
+w300001
+#
+#DisabletheweakconnectionbeweenAVDDandDVDD
+w300100
+#
+#settheREFchargingtimeto40ms
+w307A01
+#
+#Setthequickchargeofinputcouplingcapforanaloginputs
+w307933
+#
+################################################
+##############################################
+#ASI#1configuration
+##############################################
+#
+#selectpage4
+w300004
+#
+#setASI#116bits,I2Smode
+w300100
+w300A00
+#
+################################################
+###########################################
+#Signalprocessing
+###########################################
+#
+#SelectPage0
+w300000
+#
+#SettheADCPRBModetoPRB_R1
+w303D01
+#
+###########################################
+34 TLV320AIC3262EVM-U EvaluationModule SLAU386A –January2012–RevisedMarch 2012
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+www.ti.com RelatedDocumentation
+#############################################
+#ADCconfiguration
+#############################################
+#
+#SelectPage1
+w300001
+#
+#MicBiasenabled,Source=Avdd,1.62V
+w303340
+#
+#RouteIN2LandCM1toLEFTADCPGAwith20Kinputimpedance
+w303420
+w303680
+#
+#RouteIN2RandCM1toRIGHTADCPGAwith20Kinputimpedance
+w303720
+w303980
+#
+#LeftChannelAnalogADCPGA=30dB
+w303B3C
+#
+#RightChannelAnalogADCPGA=30dB
+w303C3C
+#
+#ADCAnalogprogrammedforPTM_R4
+w303D00
+#
+#
+#selectpage0
+w300000
+#
+#Power-upADCChannel
+w3051C0
+#
+#UnmuteADCchannelandFineGain=0dB
+w305200
+#
+##################################################
+10 RelatedDocumentation
+1. TLV320AIC3262EVM-U Software
+35SLAU386A –January2012–RevisedMarch 2012 TLV320AIC3262EVM-U EvaluationModule
+SubmitDocumentationFeedback
+Copyright© 2012,Texas InstrumentsIncorporated
+EvaluationBoard/KitImportantNotice
+Texas Instruments(TI)providestheenclosedproduct(s)underthefollowingconditions:
+Thisevaluationboard/kitisintendedforuse forENGINEERING DEVELOPMENT, DEMONSTRATION, OR EVALUATION PURPOSES
+ONLY and isnotconsideredby TItobe a finishedend-productfitforgeneralconsumer use.Personshandlingtheproduct(s)must have
+electronicstrainingand observegood engineeringpracticestandards.As such,thegoods beingprovidedarenotintendedtobe complete
+intermsofrequireddesign-,marketing-,and/ormanufacturing-relatedprotectiveconsiderations,includingproductsafetyand environmental
+measures typicallyfoundinend productsthatincorporatesuch semiconductorcomponents orcircuitboards.Thisevaluationboard/kitdoes
+notfallwithinthescope oftheEuropean Uniondirectivesregardingelectromagneticcompatibility,restrictedsubstances(RoHS),recycling
+(WEEE), FCC, CE orUL, and thereforemay notmeet thetechnicalrequirementsofthesedirectivesorotherrelateddirectives.
+Shouldthisevaluationboard/kitnotmeet thespecificationsindicatedintheUser’s Guide,theboard/kitmay be returnedwithin30 days from
+thedateofdeliveryfora fullrefund.THE FOREGOING WARRANTY ISTHE EXCLUSIVE WARRANTY MADE BY SELLER TO BUYER
+AND ISIN LIEU OF ALL OTHER WARRANTIES, EXPRESSED, IMPLIED,OR STATUTORY, INCLUDING ANY WARRANTY OF
+MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE.
+The userassumes allresponsibilityand liabilityforproperand safehandlingofthegoods.Further,theuserindemnifiesTIfromallclaims
+arisingfromthehandlingoruse ofthegoods.Due totheopen constructionoftheproduct,itistheuser’s responsibilitytotakeany and all
+appropriateprecautionswithregardtoelectrostaticdischarge.
+EXCEPT TO THE EXTENT OF THE INDEMNITY SET FORTH ABOVE, NEITHER PARTY SHALL BE LIABLE TO THE OTHER FOR ANY
+INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES.
+TIcurrentlydealswitha varietyofcustomersforproducts,and thereforeourarrangementwiththeuserisnot exclusive.
+TIassumes no liabilityforapplicationsassistance,customer productdesign,softwareperformance,or infringementofpatentsor
+servicesdescribedherein.
+PleasereadtheUser’s Guide and,specifically,theWarningsand RestrictionsnoticeintheUser’s Guide priortohandlingtheproduct.This
+noticecontainsimportantsafetyinformationabouttemperaturesand voltages.Foradditionalinformationon TI’s environmentaland/or
+safetyprograms,pleasecontacttheTIapplicationengineerorvisitwww.ti.com/esh.
+No licenseisgrantedunderany patentrightorotherintellectualpropertyrightofTIcoveringorrelatingtoany machine,process,or
+combinationinwhichsuch TIproductsorservicesmightbe orareused.
+FCC Warning
+Thisevaluationboard/kitisintendedforuse forENGINEERING DEVELOPMENT, DEMONSTRATION, OR EVALUATION PURPOSES
+ONLY and isnotconsideredby TItobe a finishedend-productfitforgeneralconsumer use.Itgenerates,uses,and can radiateradio
+frequencyenergyand has notbeen testedforcompliancewiththelimitsofcomputingdevicespursuanttopart15 ofFCC rules,whichare
+designedtoprovidereasonableprotectionagainstradiofrequencyinterference.Operationofthisequipmentinotherenvironmentsmay
+cause interferencewithradiocommunications,inwhichcase theuserathisown expense willbe requiredtotakewhatevermeasures may
+be requiredtocorrectthisinterference.
+EVM Warnings and Restrictions
+ItisimportanttooperatethisEVM withintheinputvoltagerangeofand theoutputvoltagerangeof.
+Exceedingthespecifiedinputrangemay cause unexpectedoperationand/orirreversibledamage totheEVM. Iftherearequestions
+concerningtheinputrange,pleasecontacta TIfieldrepresentativepriortoconnectingtheinputpower.
+Applyingloadsoutsideofthespecifiedoutputrangemay resultinunintendedoperationand/orpossiblepermanentdamage totheEVM.
+PleaseconsulttheEVM User's Guide priortoconnectingany loadtotheEVM output.Ifthereisuncertaintyas totheloadspecification,
+pleasecontacta TIfieldrepresentative.
+Duringnormaloperation,some circuitcomponents may have case temperaturesgreaterthan.The EVM isdesignedtooperateproperly
+withcertaincomponents above as longas theinputand outputrangesaremaintained.These components includebutarenotlimitedto
+linearregulators,switchingtransistors,pass transistors,and currentsense resistors.These typesofdevicescan be identifiedusingthe
+EVM schematiclocatedintheEVM User's Guide.When placingmeasurement probesnearthesedevicesduringoperation,pleasebe
+aware thatthesedevicesmay be verywarm tothetouch.
+MailingAddress:Texas Instruments,PostOfficeBox 655303,Dallas,Texas 75265
+Copyright© 2012,Texas InstrumentsIncorporated
+IMPORTANT NOTICE
+Texas InstrumentsIncorporatedand itssubsidiaries(TI)reservetherighttomake corrections,modifications,enhancements,improvements,
+and otherchanges toitsproductsand servicesatany timeand todiscontinueany productorservicewithoutnotice.Customersshould
+obtainthelatestrelevantinformationbeforeplacingordersand shouldverifythatsuch informationiscurrentand complete.Allproductsare
+soldsubjecttoTI’s termsand conditionsofsalesuppliedatthetimeoforderacknowledgment.
+TIwarrantsperformanceofitshardwareproductstothespecificationsapplicableatthetimeofsaleinaccordancewithTI’s standard
+warranty.Testingand otherqualitycontroltechniquesareused totheextentTIdeems necessarytosupportthiswarranty.Exceptwhere
+mandated by governmentrequirements,testingofallparametersofeach productisnotnecessarilyperformed.
+TIassumes no liabilityforapplicationsassistanceorcustomerproductdesign.Customersareresponsiblefortheirproductsand
+applicationsusingTIcomponents.To minimizetherisksassociatedwithcustomerproductsand applications,customersshouldprovide
+adequatedesignand operatingsafeguards.
+TIdoes notwarrantorrepresentthatany license,eitherexpressorimplied,isgrantedunderany TIpatentright,copyright,mask work right,
+orotherTIintellectualpropertyrightrelatingtoany combination,machine,orprocessinwhichTIproductsorservicesareused.Information
+publishedby TIregardingthird-partyproductsorservicesdoes notconstitutea licensefromTItouse such productsorservicesora
+warrantyorendorsementthereof.Use ofsuch informationmay requirea licensefroma thirdpartyunderthepatentsorotherintellectual
+propertyofthethirdparty,ora licensefromTIunderthepatentsorotherintellectualpropertyofTI.
+ReproductionofTIinformationinTIdatabooks ordatasheetsispermissibleonlyifreproductioniswithoutalterationand isaccompanied
+by allassociatedwarranties,conditions,limitations,and notices.Reproductionofthisinformationwithalterationisan unfairand deceptive
+businesspractice.TIisnotresponsibleorliableforsuch altereddocumentation.Informationofthirdpartiesmay be subjecttoadditional
+restrictions.
+ResaleofTIproductsorserviceswithstatementsdifferentfromorbeyond theparametersstatedby TIforthatproductorservicevoidsall
+expressand any impliedwarrantiesfortheassociatedTIproductorserviceand isan unfairand deceptivebusinesspractice.TIisnot
+responsibleorliableforany such statements.
+TIproductsarenotauthorizedforuse insafety-criticalapplications(suchas lifesupport)where a failureoftheTIproductwouldreasonably
+be expectedtocause severepersonalinjuryordeath,unlessofficersofthepartieshave executedan agreementspecificallygoverning
+such use.Buyersrepresentthattheyhave allnecessaryexpertiseinthesafetyand regulatoryramificationsoftheirapplications,and
+acknowledgeand agreethattheyaresolelyresponsibleforalllegal,regulatoryand safety-relatedrequirementsconcerningtheirproducts
+and any use ofTIproductsinsuch safety-criticalapplications,notwithstandingany applications-relatedinformationorsupportthatmay be
+providedby TI.Further,Buyersmust fullyindemnifyTIand itsrepresentativesagainstany damages arisingoutoftheuse ofTIproductsin
+such safety-criticalapplications.
+TIproductsareneitherdesignednorintendedforuse inmilitary/aerospaceapplicationsorenvironmentsunlesstheTIproductsare
+specificallydesignatedby TIas military-gradeor"enhanced plastic." Onlyproductsdesignatedby TIas military-grademeet military
+specifications.Buyersacknowledgeand agreethatany such use ofTIproductswhichTIhas notdesignatedas military-gradeissolelyat
+theBuyer's risk,and thattheyaresolelyresponsibleforcompliancewithalllegaland regulatoryrequirementsinconnectionwithsuch use.
+TIproductsareneitherdesignednorintendedforuse inautomotiveapplicationsorenvironmentsunlessthespecificTIproductsare
+designatedby TIas compliantwithISO/TS 16949 requirements.Buyersacknowledgeand agreethat,iftheyuse any non-designated
+productsinautomotiveapplications,TIwillnotbe responsibleforany failuretomeet such requirements.
+FollowingareURLs where you can obtaininformationon otherTexas Instrumentsproductsand applicationsolutions:
+Products Applications
+Audio www.ti.com/audio Automotiveand Transportationwww.ti.com/automotive
+Amplifiers amplifier.ti.com Communicationsand Telecom www.ti.com/communications
+Data Converters dataconverter.ti.com Computers and Peripherals www.ti.com/computers
+DLP ® Products www.dlp.com Consumer Electronics www.ti.com/consumer-apps
+DSP dsp.ti.com Energyand Lighting www.ti.com/energy
+Clocksand Timers www.ti.com/clocks Industrial www.ti.com/industrial
+Interface interface.ti.com Medical www.ti.com/medical
+Logic logic.ti.com Security www.ti.com/security
+Power Mgmt power.ti.com Space,Avionicsand Defense www.ti.com/space-avionics-defense
+Microcontrollers microcontroller.ti.com Videoand Imaging www.ti.com/video
+RFID www.ti-rfid.com
+OMAP MobileProcessors www.ti.com/omap
+WirelessConnectivity www.ti.com/wirelessconnectivity
+TIE2E Community Home Page e2e.ti.com
+MailingAddress:Texas Instruments,PostOfficeBox 655303,Dallas,Texas 75265
+Copyright© 2012,Texas InstrumentsIncorporated
