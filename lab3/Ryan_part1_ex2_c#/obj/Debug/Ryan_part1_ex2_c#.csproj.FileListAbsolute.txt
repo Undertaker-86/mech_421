@@ -1,0 +1,11 @@
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\bin\Debug\Ryan_part1_ex2_c#.exe.config
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\bin\Debug\Ryan_part1_ex2_c#.exe
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\bin\Debug\Ryan_part1_ex2_c#.pdb
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c_.Form1.resources
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c_.Properties.Resources.resources
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c#.csproj.GenerateResource.cache
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c#.exe
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c#.pdb
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c#.csproj.AssemblyReference.cache
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c#.exe.config
+D:\repository\MECH_421\lab3\Ryan_part1_ex2_c#\obj\Debug\Ryan_part1_ex2_c#.csproj.CoreCompileInputs.cache

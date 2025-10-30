@@ -144,6 +144,51 @@
                 "name": "ex10",
                 "resourceId": "/ex10"
             }
+        },
+        {
+            "name": "exam1",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "exam1",
+                "resourceId": "/exam1"
+            }
+        },
+        {
+            "name": "exam2",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "exam2",
+                "resourceId": "/exam2"
+            }
+        },
+        {
+            "name": "exam3",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "exam3",
+                "resourceId": "/exam3"
+            }
+        },
+        {
+            "name": "exam4",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "exam4",
+                "resourceId": "/exam4"
+            }
+        },
+        {
+            "name": "exam5",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "exam5",
+                "resourceId": "/exam5"
+            }
         }
     ]
 }

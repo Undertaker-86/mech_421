@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ex1",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex1",
+                "resourceId": "/ex1"
+            }
+        },
+        {
+            "name": "ex2",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex2",
+                "resourceId": "/ex2"
+            }
+        },
+        {
+            "name": "ex3",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "ex3",
+                "resourceId": "/ex3"
+            }
+        }
+    ]
+}
