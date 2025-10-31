@@ -1,0 +1,7 @@
+D:\repository\MECH_421\lab3\LoadCellScale\obj\Debug\LoadCellScale.csproj.AssemblyReference.cache
+D:\repository\MECH_421\lab3\LoadCellScale\obj\Debug\LoadCellScale.csproj.CoreCompileInputs.cache
+D:\repository\MECH_421\lab3\LoadCellScale\bin\Debug\LoadCellScale.exe.config
+D:\repository\MECH_421\lab3\LoadCellScale\bin\Debug\LoadCellScale.exe
+D:\repository\MECH_421\lab3\LoadCellScale\bin\Debug\LoadCellScale.pdb
+D:\repository\MECH_421\lab3\LoadCellScale\obj\Debug\LoadCellScale.exe
+D:\repository\MECH_421\lab3\LoadCellScale\obj\Debug\LoadCellScale.pdb

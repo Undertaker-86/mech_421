@@ -1,16 +1,32 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Ryan_part1ex2",
-      "type": "ccs-debug",
-      "request": "launch",
-      "projectInfo": {
-        "name": "Ryan_part1ex2",
-        "resourceId": "/Ryan_part1ex2"
-      }
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Ryan_part1ex2",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Ryan_part1ex2",
+                "resourceId": "/Ryan_part1ex2"
+            }
+        },
+        {
+            "name": "load_cell_firmware",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "load_cell_firmware",
+                "resourceId": "/load_cell_firmware"
+            }
+        },
+        {
+            "name": "Lab3_load_cell_firmware",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "Lab3_load_cell_firmware",
+                "resourceId": "/Lab3_load_cell_firmware"
+            }
+        }
+    ]
 }
