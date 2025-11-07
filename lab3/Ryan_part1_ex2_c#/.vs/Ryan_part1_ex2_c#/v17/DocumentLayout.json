@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|d:\\repository\\mech_421\\lab3\\ryan_part1_ex2_c#\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{B3FBFA39-2572-41B4-B58F-3CB9F02DB46A}|Ryan_part1_ex2_c#.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,7 +30,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -42,27 +42,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form1.cs",
               "DocumentMoniker": "D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwB8AAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T02:10:43.012Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "D:\\repository\\MECH_421\\lab3\\Ryan_part1_ex2_c#\\Form1.cs [Design]",
               "RelativeToolTip": "Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-24T02:07:33.058Z"
+              "WhenOpened": "2025-10-24T02:07:33.058Z",
+              "EditorCaption": " [Design]"
             }
           ]
         }

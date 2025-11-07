@@ -25,8 +25,8 @@ namespace Ryan_part1_ex2_c_
 
         private const double Vref = 3.300;
         private const double RFixed = 10000.0;
-        private const double R0 = 10000.0;
-        private const double Beta = 3435.0;
+        private const double R0 = 8819.405;
+        private const double Beta = 3052.57;
         private const double T0K = 298.15;
 
         private double _a0 = 0.0;

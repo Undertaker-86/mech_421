@@ -1,0 +1,8 @@
+D:\repository\MECH_421\lab3\gyan_thermistor\bin\Debug\gyan_thermistor.exe.config
+D:\repository\MECH_421\lab3\gyan_thermistor\bin\Debug\gyan_thermistor.exe
+D:\repository\MECH_421\lab3\gyan_thermistor\bin\Debug\gyan_thermistor.pdb
+D:\repository\MECH_421\lab3\gyan_thermistor\obj\Debug\gyan_thermistor.csprojResolveAssemblyReference.cache
+D:\repository\MECH_421\lab3\gyan_thermistor\obj\Debug\GyanThermistor.Properties.Resources.resources
+D:\repository\MECH_421\lab3\gyan_thermistor\obj\Debug\gyan_thermistor.csproj.GenerateResource.Cache
+D:\repository\MECH_421\lab3\gyan_thermistor\obj\Debug\gyan_thermistor.exe
+D:\repository\MECH_421\lab3\gyan_thermistor\obj\Debug\gyan_thermistor.pdb

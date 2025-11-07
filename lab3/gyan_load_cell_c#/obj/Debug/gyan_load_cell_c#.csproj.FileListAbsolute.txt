@@ -1,0 +1,9 @@
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\obj\Debug\gyan_load_cell_c#.csproj.AssemblyReference.cache
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\bin\Debug\gyan_load_cell_c#.exe.config
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\bin\Debug\gyan_load_cell_c#.exe
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\bin\Debug\gyan_load_cell_c#.pdb
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\obj\Debug\gyan_load_cell_c_.Properties.Resources.resources
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\obj\Debug\gyan_load_cell_c#.csproj.GenerateResource.cache
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\obj\Debug\gyan_load_cell_c#.csproj.CoreCompileInputs.cache
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\obj\Debug\gyan_load_cell_c#.exe
+D:\repository\MECH_421\lab3\gyan_load_cell_c#\obj\Debug\gyan_load_cell_c#.pdb

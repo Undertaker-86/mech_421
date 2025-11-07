@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistanceMonitor", "DistanceMonitor.csproj", "{FD228E51-D78E-F844-083A-E8FF71A27076}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD228E51-D78E-F844-083A-E8FF71A27076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD228E51-D78E-F844-083A-E8FF71A27076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD228E51-D78E-F844-083A-E8FF71A27076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD228E51-D78E-F844-083A-E8FF71A27076}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {67A363A5-B5C6-4CD0-A5E8-024E8A492C1E}
+	EndGlobalSection
+EndGlobal
