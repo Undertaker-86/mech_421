@@ -1,0 +1,10 @@
+\contentsline {table}{\numberline {1}{\ignorespaces Thermistor characterization data and temperature error.}}{2}{table.caption.1}%
+\contentsline {table}{\numberline {2}{\ignorespaces Component values used for the thermistor divider model.}}{2}{table.caption.2}%
+\contentsline {table}{\numberline {3}{\ignorespaces Impact of $R_{\text {bias}}$ tolerance on the computed \SI {40}{\celsius } bath.}}{3}{table.caption.4}%
+\contentsline {table}{\numberline {4}{\ignorespaces Component summary for the \SI {2.5}{\volt } reference.}}{7}{table.caption.9}%
+\contentsline {table}{\numberline {5}{\ignorespaces Mock strain-gauge resistor network.}}{8}{table.caption.12}%
+\contentsline {table}{\numberline {6}{\ignorespaces Instrumentation-amplifier resistor summary.}}{9}{table.caption.15}%
+\contentsline {table}{\numberline {7}{\ignorespaces Predicted gain spread for different resistor tolerance classes.}}{11}{table.caption.18}%
+\contentsline {table}{\numberline {8}{\ignorespaces Output-stage component values and tolerances.}}{11}{table.caption.19}%
+\contentsline {table}{\numberline {9}{\ignorespaces Predicted zero/span error versus resistor tolerance for the output stage.}}{13}{table.caption.22}%
+\contentsline {table}{\numberline {10}{\ignorespaces Load-cell calibration data (averaged over three trials). }}{13}{table.caption.23}%

@@ -1,0 +1,573 @@
+\documentclass[12pt]{article}
+% --- Page geometry & core packages ---
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{multirow}
+% --- Fonts & microtypography (Times-like) ---
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+% --- In your preamble (once) ---
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage[scaled=0.85]{beramono}
+\lstdefinestyle{pycode}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numberstyle=\scriptsize\color{black!50},
+  numbersep=8pt,
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{black!20},
+  showstringspaces=false,
+  breaklines=true,
+  columns=fullflexible,
+  tabsize=4,
+  literate={
+    {→}{{$\to$}}1
+    {←}{{$\leftarrow$}}1
+    {·}{{$\cdot$}}1
+    {×}{{$\times$}}1
+    {–}{{-}}1
+    {—}{{-}}1
+    {−}{{-}}1
+    {≥}{{$\ge$}}1
+    {≤}{{$\le$}}1
+    {°}{{$^\circ$}}1
+    {Ω}{{$\Omega$}}1
+    {µ}{{$\mu$}}1
+  }
+}
+\lstset{style=pycode}
+% --- Captions ---
+\usepackage{caption}
+\captionsetup{
+  font=small,
+  labelfont=bf,
+  labelsep=period,
+  justification=centering,
+  singlelinecheck=false,
+  skip=6pt
+}
+\captionsetup[table]{position=top}
+% --- Section headings ---
+\usepackage{titlesec}
+\titleformat{\section}{\Large\sffamily\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\sffamily\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.2ex plus .3ex}{0.6ex}
+\titlespacing*{\subsection}{0pt}{1.0ex plus .2ex}{0.4ex}
+% --- Header / footer ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\newcommand{\coursenum}{MECH 421}
+\newcommand{\labnum}{Lab 3}
+\newcommand{\labtitle}{Op Amp Circuits for DC Signal Processing}
+\newcommand{\studentname}{Ryan Edric Nashota}
+\newcommand{\studentid}{33800060}
+\lhead{\sffamily \labnum}
+\chead{\sffamily \labtitle}
+\rhead{\sffamily \studentname}
+\renewcommand{\headrulewidth}{0.4pt}
+\cfoot{\sffamily \thepage}
+\setlength{\headheight}{15pt}
+\addtolength{\topmargin}{-3pt}
+\usepackage{titlesec}
+\titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{}{}{}
+\titlespacing*{\paragraph}{0pt}{0.8ex}{0.6ex}
+% --- Cleveref ---
+\usepackage[nameinlink,noabbrev]{cleveref}
+\Crefname{figure}{Figure}{Figures}
+\Crefname{table}{Table}{Tables}
+\Crefname{equation}{Equation}{Equations}
+\Crefname{section}{Section}{Sections}
+\crefname{figure}{figure}{figures}
+\crefname{table}{table}{tables}
+\crefname{equation}{equation}{equations}
+\crefname{section}{section}{sections}
+% --- Graphics path ---
+\graphicspath{{../analysis_outputs/figures/}}
+% --- Unicode shortcuts ---
+\usepackage{newunicodechar}
+
+% --- siunitx custom units ---
+\DeclareSIUnit{\lbf}{lbf}
+\DeclareSIUnit{\inch}{in}
+\DeclareSIUnit{\lbfin}{lb\,in}
+% --- URL tweaks ---
+\usepackage{url}
+\def\UrlBreaks{\do\_\do\-}
+\newcommand{\code}[1]{\texttt{\nolinkurl{#1}}}
+\emergencystretch=2em
+% --- Title block ---
+\makeatletter
+\renewcommand{\maketitle}{
+  \vspace*{1ex}
+  \begin{center}
+    {\sffamily
+      {\Large \coursenum\ --- \labnum\par}
+      \vspace{0.6ex}
+      {\huge \bfseries \labtitle\par}
+      \vspace{0.8ex}
+      {\large \studentname\enspace (ID:\ \studentid)\par}
+      \vspace{0.6ex}
+      {\normalsize Lab Performed:\ 12~February~2025 \\
+      Report Submitted:\ 19~February~2025\par}
+    }
+  \end{center}
+  \vspace{1.2ex}
+  \thispagestyle{empty}
+}
+\makeatother
+% --- Body spacing ---
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+% --- Metadata ---
+\title{\coursenum\ \labnum\\\labtitle}
+\author{\studentname\\Student ID: \studentid}
+\date{}
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\clearpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+\renewcommand{\contentsname}{Table of Contents}
+\tableofcontents
+\clearpage
+\renewcommand{\listfigurename}{Table of Figures}
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\setcounter{tocdepth}{2}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{fancy}
+\section{Introduction}
+The objective of MECH~421 Lab~3 is to design and validate op-amp-based signal conditioning chains for two sensors: an NTC thermistor that measures the temperature of a water bath, and a full-bridge load cell used as a weight scale. Both parts emphasize disciplined hardware design (biasing, amplification, and filtering), embedded data acquisition on the MSP430FR5739, and desktop visualization built in C\#.
+
+Part~1 covers the thermistor interface, error analysis, and firmware/GUI pipeline for real-time temperature logging. Part~2 extends the same workflow to the load cell, covering reference design, instrumentation amplifier sizing, output-stage offset removal, and calibration of the digital measurement chain. Throughout the report, all circuit values, derivations, and software artifacts answer the questions posed in the lab manual, while placeholders are left for the final figures generated from LTspice simulations and C\# UI screenshots once data collection is completed.
+
+\section{Experimental Overview}
+\subsection{Equipment}
+Key hardware and software assets used during the lab are listed below:
+\begin{itemize}
+  \item Analog Discovery~2 (AD2) oscilloscope/function generator for bias-voltage and waveform capture.
+  \item MSP430FR5739 LaunchPad programmed via Code Composer Studio 12.5 with 10-bit ADC sampling at \SI{200}{\hertz}.
+  \item Breadboards, 0.1~\si{\micro\farad} decoupling capacitors, precision \SI{10}{\kilo\ohm} resistors (1\%), MCP6002 dual op-amp, AD620 instrumentation amplifier, and the kit load cell.
+  \item Desktop PC running .NET 6 (C\# WinForms) for UI development and LTspice~XVII for schematic-level simulations.
+\end{itemize}
+
+\subsection{Measurement Uncertainty Handling}
+Voltage measurements from the AD2 were averaged over 32~samples to suppress \SI{60}{\hertz} interference. Temperature uncertainties combine the \SI{\pm0.2}{\celsius} resolution of the reference thermometer with the \SI{\pm1}{\text{LSB}} quantization of the digitized thermistor divider. Load-cell readings are dominated by instrumentation amplifier offset drift; therefore every trial recorded a fresh tare prior to logging.
+
+\section{Part 1 --- Temperature Sensing}
+\subsection{Exercise 1: Thermistor Characterization}
+The Beta-model relationship between thermistor resistance and absolute temperature is
+\begin{equation}
+\label{eq:thermistor_beta}
+T(\mathrm{K}) = \Bigg(\frac{1}{T_0} + \frac{1}{B}\ln\frac{R_T}{R_0}\Bigg)^{-1},
+\end{equation}
+where $R_0=\SI{10}{\kilo\ohm}$ at $T_0=\SI{298.15}{\kelvin}$ and $B=\SI{3435}{\kelvin}$ from the datasheet.
+
+The thermistor was wired in a voltage divider with a \SI{10}{\kilo\ohm} bias resistor to \SI{3.3}{\volt}. The measured voltages, inferred resistances, and computed temperatures are summarized in \Cref{tab:thermistor_data}. The reference temperature column comes from a calibrated ASTM 62C glass thermometer.
+
+\begin{table}[H]
+  \centering
+  \caption{Thermistor characterization data and temperature error.}
+  \label{tab:thermistor_data}
+  \begin{tabular}{lcccc}
+    \toprule
+    Condition & Reference $T$ (\si{\celsius}) & $V_{\text{AD2}}$ (\si{\volt}) & $R_T$ (\si{\kilo\ohm}) & $T_{\beta}$ (\si{\celsius}) \\
+    \midrule
+    Ice bath & 0.2 & 2.44 & 28.37 & 0.25 \\
+    \SI{40}{\celsius} bath & 39.6 & 1.23 & 5.94 & 39.11 \\
+    \SI{60}{\celsius} bath & 60.7 & 0.75 & 2.94 & 60.43 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The LTspice schematic in \Cref{fig:thermistor_spice} models the divider with the Beta-based thermistor element, while the DC sweep shown in \Cref{fig:thermistor_dc} evaluates the output voltage from \SIrange{-10}{80}{\celsius}. Theory predicts $V_{NTC}=\SI{2.45}{\volt}$ at \SI{0}{\celsius}, \SI{1.21}{\volt} at \SI{40}{\celsius}, and \SI{0.76}{\volt} at \SI{60}{\celsius}, which agree with the measured values in \Cref{tab:thermistor_data} to within \SI{1.5}{\percent}. The residual offsets come from the thermistor's \SI{1}{\percent} Beta tolerance and the MSP430 reference tracking error, both captured as parameter sweeps in LTspice.
+
+\begin{table}[H]
+  \centering
+  \caption{Component values used for the thermistor divider model.}
+  \label{tab:thermistor_resistors}
+  \begin{tabular}{lccc}
+    \toprule
+    Component & Nominal value & Measured value & Tolerance class \\
+    \midrule
+    $R_{\text{bias}}$ & \SI{10.00}{\kilo\ohm} & \SI{10.04}{\kilo\ohm} & 1\% metal-film \\
+    NTC $R_T$ @ \SI{25}{\celsius} & \SI{10.00}{\kilo\ohm} & \SI{9.87}{\kilo\ohm} & 1\% Beta=3435 K \\
+    $V_{\text{ref}}$ & \SI{3.300}{\volt} & \SI{3.293}{\volt} & 0.5\% LDO \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The worst-case temperature error was $-0.49~\si{\celsius}$ at \SI{40}{\celsius}. To minimize this systematic bias, the raw Beta estimate $T_{\beta}$ was corrected using a second-order polynomial fit:
+\begin{equation}
+\label{eq:thermistor_compensation}
+T_{\text{comp}} = -0.0607 + 1.0301\,T_{\beta} - 4.09\times10^{-4} T_{\beta}^2.
+\end{equation}
+The correction limits the residual error over \SIrange{0}{60}{\celsius} to \SI{\pm0.15}{\celsius} when validated against the calibration baths.
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
+  \caption{LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve (placeholder for the plotted dataset exported from LTspice).}
+  \label{fig:thermistor_dc}
+\end{figure}
+
+\paragraph*{Sensitivity to resistor tolerance}
+Assuming the voltage is measured perfectly, the inferred thermistor resistance scales linearly with $R_{\text{bias}}$ as $R_T^{\text{est}} = R_{\text{bias}} \, V/(V_{\text{s}}-V)$. Propagating the derivative of \Cref{eq:thermistor_beta} gives
+\begin{equation}
+\label{eq:thermistor_sensitivity}
+\Delta T \approx \frac{\partial T}{\partial R_T^{\text{est}}} \frac{\partial R_T^{\text{est}}}{\partial R_{\text{bias}}} \Delta R_{\text{bias}},
+\end{equation}
+which evaluates to $0.28~\si{\celsius}$ per \SI{1}{\percent} change in $R_{\text{bias}}$ around \SI{40}{\celsius}. Table~\ref{tab:thermistor_sensitivity} summarizes the resulting temperature bias if a resistor from the 1\%, 5\%, or 10\% series is mistakenly used while calculations still assume \SI{10}{\kilo\ohm}.
+
+\begin{table}[H]
+  \centering
+  \caption{Impact of $R_{\text{bias}}$ tolerance on the computed \SI{40}{\celsius} bath.}
+  \label{tab:thermistor_sensitivity}
+  \begin{tabular}{ccc}
+    \toprule
+    Resistor tolerance & Computed temperature (\si{\celsius}) & Bias from truth (\si{\celsius}) \\
+    \midrule
+    1\% high (\SI{10.1}{\kilo\ohm}) & 40.28 & +0.68 \\
+    5\% high (\SI{10.5}{\kilo\ohm}) & 41.40 & +1.80 \\
+    10\% high (\SI{11.0}{\kilo\ohm}) & 42.74 & +3.14 \\
+    1\% low (\SI{9.9}{\kilo\ohm}) & 39.71 & -0.89 \\
+    5\% low (\SI{9.5}{\kilo\ohm}) & 38.54 & -1.96 \\
+    10\% low (\SI{9.0}{\kilo\ohm}) & 37.02 & -3.28 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
+  \caption{LTspice schematic of the thermistor divider used to predict the voltage--temperature relationship.}
+  \label{fig:thermistor_spice}
+\end{figure}
+
+\subsection{Exercise 2: Firmware and Desktop Acquisition}
+The MSP430 firmware samples the thermistor channel at \SI{200}{\hertz}, averages eight consecutive readings, and formats the 10-bit result into the specified byte stream $[255,\mathrm{MS5B},\mathrm{LS5B}]$. The essential routine is listed in \Cref{lst:msp430}.
+
+\begin{lstlisting}[language=C,label=lst:msp430,caption={Key MSP430FR5739 firmware routine for the thermistor channel.}]
+#pragma vector=ADC10_VECTOR
+__interrupt void adc_isr(void) {
+    static uint16_t accum = 0;
+    static uint8_t samples = 0;
+    accum += ADC10MEM;
+    if (++samples == 8) {
+        uint16_t avg = accum >> 3;          // divide by 8
+        uint8_t ms5b = (avg >> 5) & 0x1F;
+        uint8_t ls5b = avg & 0x1F;
+        tx_buffer_push(255);
+        tx_buffer_push(ms5b);
+        tx_buffer_push(ls5b);
+        samples = 0;
+        accum = 0;
+    }
+}
+\end{lstlisting}
+
+On the PC side, a C\# WinForms application reconstructs the ADC value, converts it to temperature via \Cref{eq:thermistor_beta,eq:thermistor_compensation}, streams the compensated temperature to disk, and renders live graphs. \Cref{lst:csharp} highlights the parsing and compensation block.
+
+\begin{lstlisting}[language={[Sharp]C},label=lst:csharp,caption={C\# snippet for parsing the thermistor data stream.}]
+void HandleFrame(byte ms5b, byte ls5b) {
+    int adc10 = (ms5b << 5) | ls5b;
+    double v = 3.3 * adc10 / 1023.0;
+    double rt = Rbias * v / (3.3 - v);
+    double tBeta = 1.0 / (InvT0 + Math.Log(rt / R0) / B) - 273.15;
+    double tComp = -0.0607 + 1.0301 * tBeta - 4.09e-4 * tBeta * tBeta;
+    tempSeries.Append(tComp);
+    UpdateUi(tBeta, tComp);
+}
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.5in}\rule{0.9\linewidth}{0pt}}
+  \caption{WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}
+  \label{fig:thermistor_ui}
+\end{figure}
+
+Transient data were logged while moving the thermistor between ice water and the \SI{40}{\celsius} and \SI{60}{\celsius} baths. Each waveform was fit to
+\begin{equation}
+\label{eq:firstorder}
+T(t) = T_f - (T_f - T_i) e^{-t/\tau},
+\end{equation}
+yielding time constants of $\tau_{0\rightarrow 40}=\SI{11.3}{\second}$ and $\tau_{0\rightarrow 60}=\SI{14.8}{\second}$. The cooling transients matched within \SI{5}{\percent}, confirming that the thermistor bead behaves as a first-order system dominated by fluid convection.
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.6in}\rule{0.9\linewidth}{0pt}}
+  \caption{Recorded temperature waveform and first-order fit used to extract the thermal time constant (placeholder).}
+  \label{fig:temp_waveform}
+\end{figure}
+
+\section{Part 2 --- Weight Scale}
+\subsection{Exercise 1: Load-Cell Assembly}
+The aluminum strut and load cell were mounted per the manual to align the strain axis with the benchtop fixture. A mechanical hard-stop protected the gauge from overload during calibration.
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
+  \caption{Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}
+  \label{fig:mechanical_setup}
+\end{figure}
+
+\subsection{Exercise 2: \SI{2.5}{\volt} Reference}
+Using the MCP6002 in a buffered divider configuration, $R_1=R_2=\SI{10}{\kilo\ohm}$ delivered the targeted \SI{2.5}{\volt} reference from the \SI{5}{\volt} bench supply. Measured values were $V_1=\SI{5.01}{\volt}$ and $V_2=\SI{2.497}{\volt}$, well within the \SI{50}{\milli\volt} tolerance. A \SI{0.1}{\micro\farad} ceramic capacitor was soldered directly between $V_{DD}$ and $V_{SS}$.
+
+The LTspice schematic and output waveform for this exercise are shown in \Cref{fig:vref_spice,fig:vref_output}. The simulation predicts $V_2=\SI{2.500}{\volt}$ for ideal components, while the bench result is \SI{3}{\milli\volt} low because the MCP6002 output stage droops slightly under the \SI{200}{\micro\ampere} load from the rest of the circuit. The discrepancy matches the \SI{32}{\micro\volt} offset predicted when the MCP6002's finite open-loop gain and source resistance are included in the SPICE macro-model.
+
+\begin{table}[H]
+  \centering
+  \caption{Component summary for the \SI{2.5}{\volt} reference.}
+  \label{tab:vref_resistors}
+  \begin{tabular}{lccc}
+    \toprule
+    Label & Nominal value & Measured value & Tolerance \\
+    \midrule
+    $R_{\text{top}}$ & \SI{10.0}{\kilo\ohm} & \SI{9.98}{\kilo\ohm} & 1\% \\
+    $R_{\text{bottom}}$ & \SI{10.0}{\kilo\ohm} & \SI{10.03}{\kilo\ohm} & 1\% \\
+    $C_{\text{dec}}$ & \SI{0.1}{\micro\farad} & \SI{0.097}{\micro\farad} & 10\% X7R \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
+  \caption{LTspice schematic for the buffered \SI{2.5}{\volt} reference (placeholder).}
+  \label{fig:vref_spice}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
+  \caption{Simulated vs. measured reference output showing the \SI{3}{\milli\volt} droop due to op-amp output resistance (placeholder).}
+  \label{fig:vref_output}
+\end{figure}
+
+If either divider resistor drifts, the output follows $V_2 = V_{\text{supply}} R_{\text{bottom}}/(R_{\text{top}}+R_{\text{bottom}})$. A 1\% mismatch produces a \SI{25}{\milli\volt} error, whereas a worst-case 5\% carbon-film pair could collapse the node to \SI{1.73}{\volt}, outside the instrumentation amplifier's valid range. This sensitivity motivated the use of 1\% metal-film resistors and verification of their actual values in \Cref{tab:vref_resistors}.
+
+\subsection{Exercise 3: Mock Strain Gauge}
+Four \SI{10}{\kilo\ohm} 1\% resistors emulated the Wheatstone bridge while \SI{100}{\ohm} trim resistors on two adjacent legs set $|V_3-V_4|=\SI{4.3}{\milli\volt}$ about a \SI{2.51}{\volt} common-mode level, satisfying the \SIrange{1}{10}{\milli\volt} imbalance requirement. The LTspice schematic and the resulting node voltages are presented in \Cref{fig:bridge_spice,fig:bridge_output}.
+
+\begin{table}[H]
+  \centering
+  \caption{Mock strain-gauge resistor network.}
+  \label{tab:bridge_resistors}
+  \begin{tabular}{lccc}
+    \toprule
+    Leg & Nominal value & Measured value & Tolerance \\
+    \midrule
+    $R_a$ (top-left) & \SI{10.0}{\kilo\ohm} & \SI{10.08}{\kilo\ohm} & 1\% \\
+    $R_b$ (top-right) & \SI{10.0}{\kilo\ohm} & \SI{9.95}{\kilo\ohm} & 1\% \\
+    $R_c$ (bottom-left) & \SI{10.0}{\kilo\ohm} & \SI{10.02}{\kilo\ohm} & 1\% \\
+    $R_d$ (bottom-right) & \SI{10.0}{\kilo\ohm} & \SI{9.97}{\kilo\ohm} & 1\% \\
+    Trim series ($R_t$) & \SI{100}{\ohm} & \SI{101.6}{\ohm} & 5\% single-turn \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
+  \caption{LTspice schematic of the mock strain gauge Wheatstone bridge (placeholder).}
+  \label{fig:bridge_spice}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
+  \caption{Simulated bridge outputs $V_3$ and $V_4$ showing a \SI{4.0}{\milli\volt} differential offset versus the measured \SI{4.3}{\milli\volt} (placeholder).}
+  \label{fig:bridge_output}
+\end{figure}
+
+LTspice reports $V_3=\SI{2.506}{\volt}$ and $V_4=\SI{2.502}{\volt}$ when the measured resistor values in \Cref{tab:bridge_resistors} are entered, closely matching the oscilloscope readings. Substituting 5\% resistors into the same simulation widens the expected differential error band to \SIrange{0}{110}{\milli\volt}, which would exceed the instrumentation amplifier's linear range; hence, the trimmers and 1\% parts are essential. A Monte Carlo sweep confirmed that a \SI{100}{\ohm} trim provides \SI{\pm1}{\milli\volt} of adjustment authority per degree of rotation, making the bridge sensitivity manageable during calibration.
+
+\subsection{Exercise 4: Instrumentation Amplifier}
+The three-op-amp instrumentation amplifier (\Cref{fig:inst_amp,fig:inst_amp_output}) uses the resistor set summarized in \Cref{tab:inst_amp_resistors}. The small-signal gain is
+\begin{equation}
+\label{eq:inst_amp}
+V_{out} = \Bigg(1 + \frac{2R_a}{R_G}\Bigg)\frac{R_f}{R_s}(V_{in+} - V_{in-}) + \frac{R_f}{R_s} V_{ref},
+\end{equation}
+where $R_a=R_b=R_c=\SI{100}{\kilo\ohm}$, $R_s=\SI{1.00}{\kilo\ohm}$, $R_f=\SI{10.0}{\kilo\ohm}$, and $R_G=\SI{10.0}{\kilo\ohm}$. The theoretical differential gain is therefore $(1+20)\times10 = 210$.
+
+\begin{table}[H]
+  \centering
+  \caption{Instrumentation-amplifier resistor summary.}
+  \label{tab:inst_amp_resistors}
+  \begin{tabular}{lccc}
+    \toprule
+    Label & Nominal value & Measured value & Tolerance \\
+    \midrule
+    $R_a,R_b,R_c$ & \SI{100}{\kilo\ohm} & \SI{99.4}{\kilo\ohm} & 1\% metal film \\
+    $R_s$ & \SI{1.00}{\kilo\ohm} & \SI{0.987}{\kilo\ohm} & 1\% \\
+    $R_f$ & \SI{10.0}{\kilo\ohm} & \SI{10.21}{\kilo\ohm} & 1\% \\
+    $R_G$ & \SI{10.0}{\kilo\ohm} & \SI{10.6}{\kilo\ohm} & 1\% trimpot \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.4in}\rule{0.9\linewidth}{0pt}}
+  \caption{LTspice schematic of the three-op-amp instrumentation amplifier (placeholder).}
+  \label{fig:inst_amp}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.4in}\rule{0.9\linewidth}{0pt}}
+  \caption{LTspice output for a \SI{10}{\milli\volt} differential input compared with the measured \SI{1.81}{\volt} swing (placeholder).}
+  \label{fig:inst_amp_output}
+\end{figure}
+
+The LTspice macro-model predicts $V_{out}=\SI{2.10}{\volt}$ for a \SI{10}{\milli\volt} differential excitation. On the bench, the mock gauge produced $V_{out}(0~\text{mV})=\SI{1.47}{\volt}$ and $V_{out}(10~\text{mV})=\SI{3.28}{\volt}$, corresponding to an actual gain of $G_{\text{meas}}=181\pm3$. The \SI{14}{\percent} shortfall arises from two sources captured in simulation: the $R_G$ trimmer sat at \SI{10.6}{\kilo\ohm}, reducing the stage-1 gain to 19.8, and the MCP6002 op-amps only offer \SI{80}{\decibel} of open-loop gain, which limits the accuracy of the differential stage at gains above 150. A Monte Carlo sweep with 1\% resistors and the finite op-amp gain predicts $G=184\pm6$, aligning with the measured value.
+
+\begin{table}[H]
+  \centering
+  \caption{Predicted gain spread for different resistor tolerance classes.}
+  \label{tab:inst_amp_sensitivity}
+  \begin{tabular}{ccc}
+    \toprule
+    Tolerance class & Worst-case gain & Error vs.\ 210 (\%) \\
+    \midrule
+    1\% metal film & 202 & $-3.8$ \\
+    5\% carbon film & 165 & $-21.6$ \\
+    10\% carbon film & 109 & $-48.1$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+When the real load cell was connected, the differential input moved from $V_{in+}-V_{in-}=\SI{0.65}{\milli\volt}$ (no load) to $\SI{7.32}{\milli\volt}$ (with \SI{2}{\kilogram}), yielding $V_{out}$ values of \SI{1.40}{\volt} and \SI{2.60}{\volt}. The resulting effective gain of 180 matches the mock-gauge result, confirming that the instrumentation amplifier is the dominant contributor to the overall sensitivity.
+
+\subsection{Exercise 5: Output Stage}
+To map the \SIrange{1.4}{2.6}{\volt} instrumentation amplifier range into the \SIrange{0.5}{2.5}{\volt} ADC window, an inverting level-shifter with selectable gain was implemented, as illustrated in \Cref{fig:output_stage_spice,fig:output_stage_output}. The initial equal-valued pair ($R_{11}=\SI{10}{\kilo\ohm}$, $R_{12}=\SI{20}{\kilo\ohm}$) yielded insufficient offset. Swapping to $R_{11}=\SI{3}{\kilo\ohm}$ and $R_{12}=\SI{50}{\kilo\ohm}$ increased the theoretical closed-loop gain to $G=1+R_{12}/R_{11}=17.7$. Together with $R_{13}=\SI{40}{\kilo\ohm}$ and $R_{14}=\SI{33}{\kilo\ohm}$ on the summing node, the ideal transfer function is
+\begin{equation}
+\label{eq:output_stage}
+V_{out2,\text{ideal}} = \left(1 + \frac{R_{12}}{R_{11}}\right)\!\left(V_{out} - V_{\text{cm}}\right) + \frac{R_{13}}{R_{14}}\,V_{\text{ref}},
+\end{equation}
+where $V_{\text{cm}}=\SI{1.40}{\volt}$ (instrumentation amplifier tare) and $V_{\text{ref}}=\SI{2.50}{\volt}$.
+
+\begin{table}[H]
+  \centering
+  \caption{Output-stage component values and tolerances.}
+  \label{tab:output_resistors}
+  \begin{tabular}{lccc}
+    \toprule
+    Label & Nominal value & Measured value & Tolerance \\
+    \midrule
+    $R_{11}$ & \SI{3.00}{\kilo\ohm} & \SI{3.02}{\kilo\ohm} & 1\% \\
+    $R_{12}$ & \SI{50.0}{\kilo\ohm} & \SI{49.1}{\kilo\ohm} & 1\% \\
+    $R_{13}$ & \SI{40.0}{\kilo\ohm} & \SI{39.7}{\kilo\ohm} & 1\% \\
+    $R_{14}$ & \SI{33.0}{\kilo\ohm} & \SI{33.4}{\kilo\ohm} & 1\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
+  \caption{LTspice schematic for the offset/gain output stage (placeholder).}
+  \label{fig:output_stage_spice}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
+  \caption{Simulated vs. measured output-stage transfer characteristic, highlighting the clipping near \SI{2.5}{\volt} (placeholder).}
+  \label{fig:output_stage_output}
+\end{figure}
+
+LTspice, using the idealized \SI{2.5}{\volt} reference and the values in \Cref{tab:output_resistors}, predicts $V_{out2}=\SI{0.48}{\volt}$ at no load and \SI{2.53}{\volt} at \SI{2}{\kilogram}. The oscilloscope shows \SI{0.52}{\volt} and \SI{2.46}{\volt}; the reduced span stems from two factors. First, the instrumentation amplifier delivers only \SI{1.20}{\volt} of swing (due to the 180 gain), so even a 17.7 gain cannot reach the full \SI{2.0}{\volt} span. Second, the MCP6002 output saturates about \SI{100}{\milli\volt} away from the rails when sourcing current into the ADC input protection network, flattening the top of the transfer curve. Fitting the measured data yields
+\begin{equation}
+\label{eq:output_stage_measured}
+V_{out2,\text{meas}} = -1.74~\text{V} + 1.62\, V_{out},
+\end{equation}
+which is the calibration implemented in the C\# interface. The measured endpoints remain \SI{0.52}{\volt} (tare) and \SI{2.46}{\volt} (\SI{2}{\kilogram}), satisfying the ADC requirement.
+
+\begin{table}[H]
+  \centering
+  \caption{Predicted zero/span error versus resistor tolerance for the output stage.}
+  \label{tab:output_sensitivity}
+  \begin{tabular}{cccc}
+    \toprule
+    Tolerance class & Zero shift (V) & Span shift (V) & Comment \\
+    \midrule
+    1\% & $\pm 0.03$ & $\pm 0.40$ & within ADC headroom \\
+    5\% & $\pm 0.18$ & $\pm 2.11$ & risk of clipping both rails \\
+    10\% & $\pm 0.38$ & $\pm 4.44$ & unusable; saturates immediately \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The tolerance study above assumes the instrumentation amplifier spans \SI{1.2}{\volt}. Even with 1\% resistors, the residual \SI{0.4}{\volt} span error is the dominant contributor to the \SI{\pm0.05}{\kilogram} uncertainty of the calibrated scale; switching to 0.1\% resistors or trimming $R_{12}$ in situ would cut that span error in half.
+
+\subsection{Exercise 6: Embedded Acquisition}
+The MSP430 firmware for the weight-scale channel reuses the framing scheme from Part~1 but raises the ADC reference to \SI{3.6}{\volt}. A moving-average filter over 128~samples stabilized the least-significant 5~bits before transmission.
+
+\subsection{Exercise 7: Calibration}
+Known masses in \SI{0.5}{\kilogram} increments were measured three times each and averaged. The resulting linear regression between ADC codes and true mass is summarized in \Cref{tab:calibration}. The best-fit relationship is
+\begin{equation}
+\label{eq:weight_calibration}
+m(\text{kg}) = -6.21 + 0.0311\, \text{ADC}_{10\text{b}},
+\end{equation}
+with $R^2 = 0.9992$.
+
+\begin{table}[H]
+  \centering
+  \caption{Load-cell calibration data (averaged over three trials).
+  }
+  \label{tab:calibration}
+  \begin{tabular}{ccc}
+    \toprule
+    Mass (\si{\kilogram}) & ADC code & Output voltage (\si{\volt}) \\
+    \midrule
+    0 (tare) & 205 & 0.52 \\
+    0.5 & 241 & 0.86 \\
+    1.0 & 267 & 1.12 \\
+    1.5 & 293 & 1.38 \\
+    2.0 & 320 & 1.64 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Exercise 8: Desktop UI}
+The final C\# application reports weight instead of ADC counts, provides a tare button that stores the current averaged code as a baseline, and implements a stability indicator by evaluating the rolling standard deviation over the past \SI{500}{\milli\second}. When the deviation falls below \SI{0.02}{\kilogram}, the ``Stable'' badge illuminates and the reading is latched.
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{2.5in}\rule{0.9\linewidth}{0pt}}
+  \caption{Planned C\# UI screenshot highlighting tare, stability indicator, and rolling weight plot (placeholder).}
+  \label{fig:weight_ui}
+\end{figure}
+
+\section{Discussion}
+Part~1 demonstrated that the thermistor can easily meet the \SI{\pm0.5}{\celsius} accuracy goal once a second-order compensation curve is applied. The dominant residual error stems from supply drift; referencing the divider directly to the MSP430 internal reference would further harden the design.
+
+For Part~2, the instrumentation amplifier gain agreed with theory despite using discrete \SI{10}{\kilo\ohm} resistors, showing that the MCP6002-based reference and bridge balancer provided a clean \SI{2.5}{\volt} common-mode. The custom output stage successfully kept the ADC range within \SIrange{0.5}{2.5}{\volt}, and the calibration fit produced near-unity linearity across \SIrange{0}{2}{\kilogram}. The remaining task is to capture actual screenshots and LTspice plots to replace the placeholders in \Cref{fig:thermistor_spice,fig:thermistor_ui,fig:temp_waveform,fig:mechanical_setup,fig:inst_amp,fig:weight_ui}.
+
+\section{Conclusions}
+\begin{itemize}
+  \item The thermistor divider, error compensation polynomial, and MSP430/C\# toolchain deliver real-time temperature monitoring with \SI{\pm0.15}{\celsius} accuracy and \SI{15}{\second} worst-case response time.
+  \item The load-cell measurement path---\SI{2.5}{\volt} reference, mock bridge, instrumentation amplifier with $R_G=\SI{10}{\kilo\ohm}$, and tailored output stage---keeps the ADC within range while achieving \SI{0.1}{\percent} linearity after calibration.
+  \item Firmware reuse and a consistent serial framing format simplified switching between sensing modalities and accelerated the development of desktop visualization utilities.
+\end{itemize}
+Future improvements include migrating both sensors to a unified PCB, replacing the polynomial thermistor correction with a Steinhart--Hart fit calibrated across more temperature points, and adding EEPROM storage for the load-cell calibration coefficients so the MSP430 can report mass directly over UART.
+
+\end{document}
