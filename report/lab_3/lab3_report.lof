@@ -1,14 +1,17 @@
-\contentsline {figure}{\numberline {1}{\ignorespaces LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve (placeholder for the plotted dataset exported from LTspice).}}{3}{figure.caption.3}%
-\contentsline {figure}{\numberline {2}{\ignorespaces LTspice schematic of the thermistor divider used to predict the voltage--temperature relationship.}}{4}{figure.caption.5}%
-\contentsline {figure}{\numberline {3}{\ignorespaces WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}}{5}{figure.caption.6}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Recorded temperature waveform and first-order fit used to extract the thermal time constant (placeholder).}}{6}{figure.caption.7}%
-\contentsline {figure}{\numberline {5}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{6}{figure.caption.8}%
-\contentsline {figure}{\numberline {6}{\ignorespaces LTspice schematic for the buffered \SI {2.5}{\volt } reference (placeholder).}}{7}{figure.caption.10}%
-\contentsline {figure}{\numberline {7}{\ignorespaces Simulated vs. measured reference output showing the \SI {3}{\milli \volt } droop due to op-amp output resistance (placeholder).}}{7}{figure.caption.11}%
-\contentsline {figure}{\numberline {8}{\ignorespaces LTspice schematic of the mock strain gauge Wheatstone bridge (placeholder).}}{8}{figure.caption.13}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Simulated bridge outputs $V_3$ and $V_4$ showing a \SI {4.0}{\milli \volt } differential offset versus the measured \SI {4.3}{\milli \volt } (placeholder).}}{9}{figure.caption.14}%
-\contentsline {figure}{\numberline {10}{\ignorespaces LTspice schematic of the three-op-amp instrumentation amplifier (placeholder).}}{10}{figure.caption.16}%
-\contentsline {figure}{\numberline {11}{\ignorespaces LTspice output for a \SI {10}{\milli \volt } differential input compared with the measured \SI {1.81}{\volt } swing (placeholder).}}{10}{figure.caption.17}%
-\contentsline {figure}{\numberline {12}{\ignorespaces LTspice schematic for the offset/gain output stage (placeholder).}}{12}{figure.caption.20}%
-\contentsline {figure}{\numberline {13}{\ignorespaces Simulated vs. measured output-stage transfer characteristic, highlighting the clipping near \SI {2.5}{\volt } (placeholder).}}{12}{figure.caption.21}%
-\contentsline {figure}{\numberline {14}{\ignorespaces Planned C\# UI screenshot highlighting tare, stability indicator, and rolling weight plot (placeholder).}}{14}{figure.caption.24}%
+\contentsline {figure}{\numberline {1}{\ignorespaces Measured \SI {0}{\celsius }\,$\rightarrow $\,\SI {60}{\celsius } heating transition with first-order fit and $t_{63\%}$ marker produced by \texttt {\nolinkurl {process\_ntc.py}}.}}{3}{figure.caption.2}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Summary of fitted time constants across all transitions; error bars show run-to-run standard deviation.}}{3}{figure.caption.3}%
+\contentsline {figure}{\numberline {3}{\ignorespaces LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve (placeholder for the plotted dataset exported from LTspice).}}{5}{figure.caption.7}%
+\contentsline {figure}{\numberline {4}{\ignorespaces LTspice schematic of the thermistor divider used to predict the voltage--temperature relationship.}}{6}{figure.caption.9}%
+\contentsline {figure}{\numberline {5}{\ignorespaces WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}}{7}{figure.caption.10}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Recorded temperature waveform and first-order fit used to extract the thermal time constant (placeholder).}}{8}{figure.caption.11}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{8}{figure.caption.12}%
+\contentsline {figure}{\numberline {8}{\ignorespaces LTspice schematic for the buffered \SI {2.5}{\volt } reference (placeholder).}}{9}{figure.caption.14}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Simulated vs. measured reference output showing the \SI {3}{\milli \volt } droop due to op-amp output resistance (placeholder).}}{9}{figure.caption.15}%
+\contentsline {figure}{\numberline {10}{\ignorespaces LTspice schematic of the mock strain gauge Wheatstone bridge (placeholder).}}{10}{figure.caption.17}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Simulated bridge outputs $V_3$ and $V_4$ showing a \SI {4.0}{\milli \volt } differential offset versus the measured \SI {4.3}{\milli \volt } (placeholder).}}{11}{figure.caption.18}%
+\contentsline {figure}{\numberline {12}{\ignorespaces LTspice schematic of the three-op-amp instrumentation amplifier (placeholder).}}{12}{figure.caption.21}%
+\contentsline {figure}{\numberline {13}{\ignorespaces LTspice output for a \SI {10}{\milli \volt } differential input compared with the measured \SI {1.81}{\volt } swing (placeholder).}}{13}{figure.caption.22}%
+\contentsline {figure}{\numberline {14}{\ignorespaces LTspice schematic for the offset/gain output stage (placeholder).}}{14}{figure.caption.25}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Simulated vs. measured output-stage transfer characteristic, highlighting the clipping near \SI {2.5}{\volt } (placeholder).}}{15}{figure.caption.26}%
+\contentsline {figure}{\numberline {16}{\ignorespaces LTspice comparison of the discrete output stage and a difference amplifier that uses a monolithic resistor network (placeholder for the simulated transfer curves).}}{16}{figure.caption.28}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Planned C\# UI screenshot highlighting tare, stability indicator, and rolling weight plot (placeholder).}}{17}{figure.caption.30}%
