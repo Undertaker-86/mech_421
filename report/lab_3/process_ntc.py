@@ -1,3 +1,4 @@
+﻿# -*- coding: utf-8 -*-
 import csv
 import json
 import math
@@ -15,6 +16,8 @@ FIG_DIR = SCRIPT_DIR / 'figures' / 'ntc'
 FIG_DIR.mkdir(parents=True, exist_ok=True)
 SUMMARY_PATH = SCRIPT_DIR / 'ntc_summary.json'
 GROUP_PATH = SCRIPT_DIR / 'ntc_summary_groups.json'
+EXCLUDE_KEYWORDS = {'175344', '183107', '183630'}  # problematic captures, skip stats
+MANUAL_WINDOWS: Dict[str, Tuple[float, float]] = {}
 
 
 def clean_name(stem: str) -> str:
@@ -86,21 +89,29 @@ def first_order_fit(time_arr: np.ndarray, t_initial: float,
     return t_final - (t_final - t_initial) * np.exp(-(time_arr - t0) / tau)
 
 
-def plot_run(times: List[float], temps: List[float], tau: float,
-             t63: float, file: Path, t_initial: float, t_final: float,
+def plot_run(time_raw: List[float], temp_raw: List[float],
+             time_trimmed_actual: List[float], temps: List[float], tau: float,
+             t63_display: float, file: Path, t_initial: float, t_final: float,
              figure_dir: Path) -> str:
-    time_arr = np.array(times)
+    time_arr = np.array(time_trimmed_actual)
     temp_arr = np.array(temps)
-    fit = first_order_fit(time_arr, t_initial, t_final, tau, times[0])
+    time_raw_arr = np.array(time_raw)
+    temp_raw_arr = np.array(temp_raw)
+    if len(time_trimmed_actual) > 0:
+        time_zero = np.array(time_trimmed_actual) - time_trimmed_actual[0]
+        fit = first_order_fit(time_zero, t_initial, t_final, tau, 0.0)
+    else:
+        fit = None
 
     fig, ax = plt.subplots(figsize=(6.2, 3.4))
-    ax.plot(time_arr, temp_arr, label='Measured', color='#1f77b4', linewidth=1.4)
+    ax.plot(time_raw_arr, temp_raw_arr, label='Original', color='#7f7f7f', linewidth=1.0, alpha=0.6)
+    ax.plot(time_arr, temp_arr, label='Trimmed for fit', color='#1f77b4', linewidth=1.4)
     if fit is not None:
         ax.plot(time_arr, fit, '--', color='#d62728',
                 label=f'First-order fit ($\\tau={tau:0.1f}$ s)')
-    if t63 is not None:
-        ax.axvline(t63, color='#2ca02c', linestyle=':', linewidth=1.2,
-                   label=f'$t_{{63\\%}}={t63:0.1f}$ s')
+    if t63_display is not None:
+        ax.axvline(t63_display, color='#2ca02c', linestyle=':', linewidth=1.2,
+                   label=f'$t_{{63\\%}}={t63_display:0.1f}$ s')
     ax.set_xlabel('Time [s]')
     ax.set_ylabel('Temperature [°C]')
     ax.set_title(file.stem.replace('_', ' '))
@@ -154,7 +165,7 @@ def plot_tau_summary(summary_rows: List[Dict], figure_dir: Path) -> str:
     fig, ax = plt.subplots(figsize=(6, 3.4))
     positions = np.arange(len(labels))
     ax.barh(positions, means, xerr=errs, color='#8da0cb', ecolor='#4d4d4d', capsize=5)
-    ax.set_xlabel('Time constant τ [s]')
+    ax.set_xlabel('Time constant Ï„ [s]')
     ax.set_yticks(positions)
     ax.set_yticklabels(labels)
     ax.grid(axis='x', alpha=0.3)
@@ -164,6 +175,36 @@ def plot_tau_summary(summary_rows: List[Dict], figure_dir: Path) -> str:
     fig.savefig(fig_path, dpi=300)
     plt.close(fig)
     return fig_path.name
+
+
+def apply_manual_window(time_arr: np.ndarray, temp_arr: np.ndarray, filename: str) -> Tuple[np.ndarray, np.ndarray]:
+    for key, window in MANUAL_WINDOWS.items():
+        if key in filename:
+            start_t, end_t = window
+            mask = (time_arr >= start_t) & (time_arr <= end_t)
+            if mask.any():
+                return time_arr[mask], temp_arr[mask]
+    return time_arr, temp_arr
+
+
+def auto_trim(time_arr: np.ndarray, temp_arr: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    if len(time_arr) < 10:
+        return time_arr, temp_arr
+    baseline_samples = max(5, len(temp_arr) // 40)
+    baseline = float(temp_arr[:baseline_samples].mean())
+    window = max(3, len(temp_arr) // 200)
+    kernel = np.ones(window) / window
+    smooth = np.convolve(temp_arr, kernel, mode='same')
+    delta_threshold = 0.4  # degrees C deviation from baseline
+    slope_threshold = 0.02  # degrees C per sample
+    start_idx = 0
+    for idx in range(baseline_samples, len(temp_arr)):
+        delta = abs(smooth[idx] - baseline)
+        slope = abs(smooth[idx] - smooth[idx - 1]) if idx > 0 else 0.0
+        if delta > delta_threshold and slope > slope_threshold:
+            start_idx = max(0, idx - 3)
+            break
+    return time_arr[start_idx:], temp_arr[start_idx:]
 
 
 def main():
@@ -176,6 +217,7 @@ def main():
     for file in sorted(DATA_DIR.glob('*.csv')):
         times: List[float] = []
         temps: List[float] = []
+        skip_analysis = any(token in file.name for token in EXCLUDE_KEYWORDS)
         with file.open(encoding='utf-8-sig') as fh:
             reader = csv.reader(fh)
             try:
@@ -200,17 +242,35 @@ def main():
         if not times:
             continue
 
-        n = len(times)
+        time_arr = np.array(times)
+        temp_arr = np.array(temps)
+        time_manual, temp_manual = apply_manual_window(time_arr, temp_arr, file.name)
+        time_trimmed, temp_trimmed = auto_trim(time_manual, temp_manual)
+        if len(time_trimmed) < 10:
+            continue
+
+        if skip_analysis:
+            continue
+
+        time_trimmed_actual = time_trimmed
+        time_zero = time_trimmed_actual - time_trimmed_actual[0]
+
+        n = len(time_zero)
         start_n = max(5, n // 40)
         end_n = max(5, n // 40)
-        t_initial = sum(temps[:start_n]) / start_n
-        t_final = sum(temps[-end_n:]) / end_n
-        tau, log_ts, ratios = compute_tau(times, temps, times[0], t_initial, t_final)
-        t63 = estimate_t63(times, temps, t_initial, t_final)
-        last_samples = temps[-min(50, n):]
+        t_initial = float(temp_trimmed[:start_n].mean())
+        t_final = float(temp_trimmed[-end_n:].mean())
+        times_trimmed_zero = time_zero.tolist()
+        temps_trimmed = temp_trimmed.tolist()
+        tau, log_ts, ratios = compute_tau(times_trimmed_zero, temps_trimmed, 0.0, t_initial, t_final)
+        t63_zero = estimate_t63(times_trimmed_zero, temps_trimmed, t_initial, t_final)
+        t63_display = (t63_zero + time_trimmed_actual[0]) if t63_zero is not None else None
+        last_samples = temps_trimmed[-min(50, n):]
         noise = statistics.pstdev(last_samples) if len(last_samples) > 1 else 0.0
 
-        figure_name = plot_run(times, temps, tau, t63, file, t_initial, t_final, FIG_DIR)
+        figure_name = plot_run(time_arr.tolist(), temp_arr.tolist(),
+                               time_trimmed_actual.tolist(), temps_trimmed, tau, t63_display,
+                               file, t_initial, t_final, FIG_DIR)
         figure_manifest.append({'file': file.name, 'figure': figure_name})
 
         results.append({
@@ -219,9 +279,9 @@ def main():
             'start_temp': t_initial,
             'end_temp': t_final,
             'tau': tau,
-            't63': t63,
+            't63': t63_zero,
             'noise': noise,
-            'duration': times[-1] - times[0],
+            'duration': times_trimmed_zero[-1] if times_trimmed_zero else 0.0,
             'samples': n,
         })
 
@@ -246,3 +306,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

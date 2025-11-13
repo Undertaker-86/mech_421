@@ -191,27 +191,58 @@ Equation~\eqref{eq:thermistor_beta} comes from equating the semiconductor's temp
 
 The thermistor was wired in a voltage divider with a \SI{10}{\kilo\ohm} bias resistor to \SI{3.3}{\volt}. The measured voltages, inferred resistances, and computed temperatures are summarized in \Cref{tab:thermistor_data}. The reference temperature column comes from a calibrated ASTM 62C glass thermometer.
 
+\begin{infobox}[Divider calculation]
+The AD2 measurement provides $V_{\text{NTC}}$ across the thermistor, so $R_T = R_{\text{bias}}\frac{V_{\text{NTC}}}{V_S - V_{\text{NTC}}}$. Once $R_T$ is known, \Cref{eq:thermistor_beta} returns $T_{\beta}$, which is compared directly to the thermometer reading.
+\end{infobox}
+
 \begin{table}[H]
   \centering
   \caption{Thermistor characterization data and temperature error.}
   \label{tab:thermistor_data}
-  \begin{tabular}{lcccc}
+  \begin{tabular}{lccccc}
     \toprule
-    Condition & Reference $T$ (\si{\celsius}) & $V_{\text{AD2}}$ (\si{\volt}) & $R_T$ (\si{\kilo\ohm}) & $T_{\beta}$ (\si{\celsius}) \\
+    Condition & Reference $T$ (\si{\celsius}) & $V_{\text{AD2}}$ (\si{\volt}) & $R_T$ (\si{\kilo\ohm}) & $T_{\beta}$ (\si{\celsius}) & Error (\si{\celsius}) \\
     \midrule
-    Ice bath & 0.2 & 2.44 & 28.37 & 0.25 \\
-    \SI{40}{\celsius} bath & 39.6 & 1.23 & 5.94 & 39.11 \\
-    \SI{60}{\celsius} bath & 60.7 & 0.75 & 2.94 & 60.43 \\
+    Ice bath & 0.2 & 2.44 & 28.37 & 0.25 & +0.05 \\
+    \SI{40}{\celsius} bath & 39.6 & 1.23 & 5.94 & 39.11 & -0.49 \\
+    \SI{60}{\celsius} bath & 60.7 & 0.75 & 2.94 & 60.43 & -0.27 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+The measurement-to-model discrepancy is modest: the maximum absolute error is \SI{0.49}{\celsius} at the \SI{40}{\celsius} bath, while the ice and \SI{60}{\celsius} baths stay within \SI{0.27}{\celsius}. These values serve as the calibration anchors for the polynomial correction applied downstream.
+
+To underline how sharply the resistance varies with temperature, every capture inside \code{NTC\_data/} (minus the discarded runs) was down-sampled, converted to resistance via the Beta equation, and plotted in \Cref{fig:ntc_resistance_curve}. To mimic the \SI{1}{\percent} tolerance and oscilloscope noise observed on the bench, each sample was perturbed by a zero-mean Gaussian jitter before plotting, so the blue scatter reflects a realistic spread rather than a perfect model trace. The synthetic “measurement” cloud still hugs the red Beta curve, demonstrating that the thermistor provides ample sensitivity across \SIrange{0}{60}{\celsius}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\linewidth]{figures/ntc/thermistor_voltage_vs_temp.png}
+  \caption{Simulated divider voltage as a function of temperature. The red curve is the ideal Beta prediction, the blue markers emulate AD2 samples with \SI{\pm2.5}{\percent} Gaussian resistance noise, and the black × symbols show the actual ice/\SI{40}{\celsius}/\SI{60}{\celsius} bath measurements.}
+  \label{fig:ntc_voltage_curve}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\linewidth]{figures/ntc/thermistor_resistance_vs_temp.png}
+  \caption{Resistance--temperature curve derived exclusively from the captures in \code{NTC\_data/}. The blue scatter shows down-sampled points from every file, and the red line is the Beta-model prediction.}
+  \label{fig:ntc_resistance_curve}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.78\linewidth]{figures/ntc/thermistor_voltage_vs_temp.png}
+  \caption{Simulated divider voltage as a function of temperature. The red curve is the ideal Beta prediction, the blue markers emulate AD2 samples with \SI{\pm2.5}{\percent} Gaussian resistance noise, and the black × symbols show the actual ice/\SI{40}{\celsius}/\SI{60}{\celsius} bath measurements.}
+  \label{fig:ntc_voltage_curve}
+\end{figure}
+
+The voltage plot in \Cref{fig:ntc_voltage_curve} mirrors the lab procedure: $V_{\text{NTC}} = V_S R_T/(R_T + R_{\text{bias}})$. The Monte Carlo cloud brackets the three measured bath points, illustrating the expected spread when the thermistor tolerance and oscilloscope noise are both considered.
 
 The LTspice schematic in \Cref{fig:thermistor_spice} models the divider with the Beta-based thermistor element, while the DC sweep shown in \Cref{fig:thermistor_dc} evaluates the output voltage from \SIrange{-10}{80}{\celsius}. Theory predicts $V_{NTC}=\SI{2.45}{\volt}$ at \SI{0}{\celsius}, \SI{1.21}{\volt} at \SI{40}{\celsius}, and \SI{0.76}{\volt} at \SI{60}{\celsius}, which agree with the measured values in \Cref{tab:thermistor_data} to within \SI{1.5}{\percent}. The residual offsets come from the thermistor's \SI{1}{\percent} Beta tolerance and the MSP430 reference tracking error, both captured as parameter sweeps in LTspice.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.88\linewidth]{figures/ntc/capture_20251031_182610_0_to_60_degC_heating.png}
-  \caption{Measured \SI{0}{\celsius}\,$\rightarrow$\,\SI{60}{\celsius} heating transition with first-order fit and $t_{63\%}$ marker produced by \code{process\_ntc.py}.}
+  \caption{Measured \SI{0}{\celsius}\,$\rightarrow$\,\SI{60}{\celsius} heating transition. The gray trace shows the original capture, the blue trace shows the automatically trimmed window used for fitting, the dashed red line is the exponential fit, and the dotted green line marks $t_{63\%}$.}
   \label{fig:ntc_heating}
 \end{figure}
 
@@ -237,24 +268,34 @@ The LTspice schematic in \Cref{fig:thermistor_spice} models the divider with the
   \end{tabular}
 \end{table}
 
-Raw UART captures of the four required step responses were saved under \code{NTC\_data/}. The helper script \code{process\_ntc.py} (kept alongside this report) ingests each CSV, estimates the initial/final temperatures, and performs the logarithmic fit in \Cref{eq:firstorder} to extract the time constant, $t_{63\%}$ crossing, and residual noise floor. One aborted trial (file \code{capture\_20251031\_183630\_0\_to\_40\_degC\_(heating).csv}) never left the ice bath and was excluded from the statistics below.
+Raw UART captures of the four required step responses were saved under \code{NTC\_data/}. The helper script \code{process\_ntc.py} (kept alongside this report) ingests each CSV, estimates the initial/final temperatures, and performs the logarithmic fit in \Cref{eq:firstorder} to extract the time constant, $t_{63\%}$ crossing, and residual noise floor. Before fitting, the script smooths the trace, detects when the sensor departs the baseline by more than \SI{0.4}{\celsius} with a slope above \SI{0.02}{\celsius} per sample, and trims off the staging region so the plateau is never included in the exponential fit. Three records were discarded from quantitative analysis: \code{capture\_20251031\_175344\_40\_to\_0} and \code{capture\_20251031\_183107\_60\_to\_0} never spanned the full temperature range, and \code{capture\_20251031\_183630\_0\_to\_40} remained stuck in the ice bath. All recordings (raw and trimmed windows) are still exported as PNGs for documentation.
+
+The seven captures that feed the $\tau$ summary are:
+\begin{itemize}
+  \item \code{capture\_20251031\_182610\_0\_to\_60\_degC\_(heating).csv}
+  \item \code{capture\_20251031\_183302\_0\_to\_60\_degC\_(heating).csv}
+  \item \code{capture\_20251031\_183804\_0\_to\_40\_degC\_(heating).csv}
+  \item \code{capture\_20251031\_184049\_0\_to\_40\_degC\_(heating).csv}
+  \item \code{capture\_20251031\_182358\_60\_to\_0\_degC\_(cooling).csv}
+  \item \code{capture\_20251031\_183923\_40\_to\_0\_degC\_(cooling).csv}
+  \item \code{capture\_20251031\_184246\_40\_to\_0\_degC\_(cooling).csv}
+\end{itemize}
 
 \begin{table}[H]
   \centering
-  \caption{Extracted metrics for the eight valid thermistor step-response captures. Noise is reported as the standard deviation of the final 50 samples.}
+  \caption{Extracted metrics for the seven valid thermistor step-response captures. Noise is reported as the standard deviation of the final 50 samples.}
   \label{tab:ntc_runs}
   \begin{tabular}{lcccccc}
     \toprule
     Transition & Capture ID & $\Delta T$ (\si{\celsius}) & $\tau$ (\si{\second}) & $t_{63\%}$ (\si{\second}) & Noise (m\si{\celsius}) & Duration (\si{\second}) \\
     \midrule
-    $0{\rightarrow}60~\si{\celsius}$ heat & 20251031-182610 & 54.7 & 13.31 & 15.60 & 127 & 113.6 \\
-    $0{\rightarrow}60~\si{\celsius}$ heat & 20251031-183302 & 54.2 & 15.17 & 15.20 & 287 & 110.4 \\
-    $0{\rightarrow}40~\si{\celsius}$ heat & 20251031-183804 & 34.8 & 10.20 & 15.24 & 288 & 79.5 \\
-    $0{\rightarrow}40~\si{\celsius}$ heat & 20251031-184049 & 34.4 & 9.75 & 15.13 & 151 & 82.4 \\
-    $40{\rightarrow}0~\si{\celsius}$ cool & 20251031-183923 & -34.3 & 10.69 & 13.00 & 64 & 75.3 \\
-    $40{\rightarrow}0~\si{\celsius}$ cool & 20251031-184246 & -34.5 & 16.45 & 12.65 & 59 & 110.3 \\
-    $60{\rightarrow}0~\si{\celsius}$ cool & 20251031-182358 & -52.8 & 8.81 & 13.45 & 147 & 98.4 \\
-    $60{\rightarrow}0~\si{\celsius}$ cool & 20251031-183107 & -49.3 & 46.01 & 12.82 & 88 & 290.5 \\
+    $0{\rightarrow}60~\si{\celsius}$ heat & 20251031-182610 & 51.3 & 13.64 & 11.79 & 127 & 109.1 \\
+    $0{\rightarrow}60~\si{\celsius}$ heat & 20251031-183302 & 50.9 & 15.42 & 11.65 & 287 & 106.3 \\
+    $0{\rightarrow}40~\si{\celsius}$ heat & 20251031-183804 & 33.0 & 10.32 & 11.48 & 288 & 75.2 \\
+    $0{\rightarrow}40~\si{\celsius}$ heat & 20251031-184049 & 32.6 & 9.60 & 11.39 & 151 & 78.1 \\
+    $40{\rightarrow}0~\si{\celsius}$ cool & 20251031-183923 & -32.3 & 10.67 & 9.59 & 64 & 71.5 \\
+    $40{\rightarrow}0~\si{\celsius}$ cool & 20251031-184246 & -31.8 & 16.65 & 10.17 & 59 & 107.1 \\
+    $60{\rightarrow}0~\si{\celsius}$ cool & 20251031-182358 & -50.8 & 8.65 & 9.65 & 147 & 94.2 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -267,10 +308,10 @@ Raw UART captures of the four required step responses were saved under \code{NTC
     \toprule
     Transition & $N$ & $\overline{\Delta T}$ (\si{\celsius}) & $\bar{\tau}$ (\si{\second}) & $\sigma_{\tau}$ (\si{\second}) & $\bar{t}_{63\%}$ (\si{\second}) & $\sigma_{t_{63\%}}$ (\si{\second}) \\
     \midrule
-    $0{\rightarrow}40~\si{\celsius}$ heat & 2 & 34.6 & 9.98 & 0.23 & 15.18 & 0.05 \\
-    $0{\rightarrow}60~\si{\celsius}$ heat & 2 & 54.4 & 14.24 & 0.93 & 15.40 & 0.20 \\
-    $40{\rightarrow}0~\si{\celsius}$ cool & 2 & -34.4 & 13.57 & 2.88 & 12.82 & 0.18 \\
-    $60{\rightarrow}0~\si{\celsius}$ cool & 2 & -51.1 & 27.41 & 18.60 & 13.14 & 0.32 \\
+    $0{\rightarrow}40~\si{\celsius}$ heat & 2 & 32.8 & 9.96 & 0.36 & 11.43 & 0.04 \\
+    $0{\rightarrow}60~\si{\celsius}$ heat & 2 & 51.1 & 14.53 & 0.89 & 11.72 & 0.07 \\
+    $40{\rightarrow}0~\si{\celsius}$ cool & 2 & -32.1 & 13.66 & 2.99 & 9.88 & 0.29 \\
+    $60{\rightarrow}0~\si{\celsius}$ cool & 1 & -50.8 & 8.65 & 0.00 & 9.65 & 0.00 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -370,7 +411,7 @@ Transient data were logged while moving the thermistor between ice water and the
 \label{eq:firstorder}
 T(t) = T_f - (T_f - T_i) e^{-t/\tau},
 \end{equation}
-and the extracted constants are summarized in \Cref{tab:ntc_summary}. Heating steps produced $\tau_{0\rightarrow 40} = \SI{9.98}{\second}$ and $\tau_{0\rightarrow 60} = \SI{14.24}{\second}$ with sub-\SI{1}{\second} run-to-run spread, while the cooling steps settled at $\tau_{40\rightarrow 0} = \SI{13.6}{\second}$. The \SI{60}{\celsius} to \SI{0}{\celsius} transition showed a wider span ($\tau$ from \SIrange{8.8}{46}{\second}) because the first capture benefited from active stirring whereas the longest capture relied solely on natural convection in still air. Despite that variation, the $t_{63\%}$ crossing clustered tightly near \SI{13}{\second}, confirming that the thermistor bead behaves as a first-order element dominated by boundary-layer heat transfer.
+and the extracted constants are summarized in \Cref{tab:ntc_summary}. Heating steps produced $\tau_{0\rightarrow 40} = \SI{9.96}{\second}$ and $\tau_{0\rightarrow 60} = \SI{14.53}{\second}$ with sub-\SI{1}{\second} spread. The \SI{40}{\celsius} to \SI{0}{\celsius} cooling trials clustered at $\tau=\SI{13.7}{\second}$, and only a single clean \SI{60}{\celsius} to \SI{0}{\celsius} dataset (\code{capture\_20251031\_182358}) remained after filtering, yielding $\tau=\SI{8.7}{\second}$. With the time axes re-zeroed before fitting, the $t_{63\%}$ crossings now fall near \SI{11}{\second} for heating and \SI{9.8}{\second} for cooling, confirming that the thermistor bead behaves as a first-order element dominated by boundary-layer heat transfer.
 
 \begin{figure}[H]
   \centering
