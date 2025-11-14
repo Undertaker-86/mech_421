@@ -4,15 +4,15 @@
 \contentsline {subsection}{\numberline {2.2}Measurement Uncertainty Handling}{1}{subsection.2.2}%
 \contentsline {section}{\numberline {3}Part 1 --- Temperature Sensing}{2}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Exercise 1: Thermistor Characterization}{2}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Exercise 2: Firmware and Desktop Acquisition}{4}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Part 2 --- Weight Scale}{6}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Exercise 1: Load-Cell Assembly}{6}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Exercise 2: \SI {2.5}{\volt } Reference}{6}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Exercise 3: Mock Strain Gauge}{8}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Exercise 4: Instrumentation Amplifier}{9}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Exercise 5: Output Stage}{11}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Exercise 6: Embedded Acquisition}{13}{subsection.4.6}%
-\contentsline {subsection}{\numberline {4.7}Exercise 7: Calibration}{13}{subsection.4.7}%
-\contentsline {subsection}{\numberline {4.8}Exercise 8: Desktop UI}{13}{subsection.4.8}%
-\contentsline {section}{\numberline {5}Discussion}{14}{section.5}%
-\contentsline {section}{\numberline {6}Conclusions}{14}{section.6}%
+\contentsline {subsection}{\numberline {3.2}Exercise 2: Firmware and Desktop Acquisition}{7}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Part 2 --- Weight Scale}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Exercise 1: Load-Cell Assembly}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Exercise 2: \SI {2.5}{\volt } Reference}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Exercise 3: Mock Strain Gauge}{11}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Exercise 4: Instrumentation Amplifier}{12}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Exercise 5: Output Stage}{14}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Exercise 6: Embedded Acquisition}{17}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Exercise 7: Calibration}{17}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Exercise 8: Desktop UI}{18}{subsection.4.8}%
+\contentsline {section}{\numberline {5}Discussion}{18}{section.5}%
+\contentsline {section}{\numberline {6}Conclusions}{19}{section.6}%

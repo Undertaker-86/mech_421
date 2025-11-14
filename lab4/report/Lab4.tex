@@ -1,0 +1,147 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[enumerate]{label=\alph*), itemsep=0.3em}
+\title{MECH 421/423 Lab 4\\Op-Amp Circuits for Noisy Environments}
+\author{Aerial Student}
+\date{\today}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This lab investigates the design of an optical distance sensor built from discrete op amp stages. Each exercise reinforces a different portion of the signal chain---from generating the optical carrier, through transimpedance conversion and filtering, to rectification, digitization, and calibration. The write-up below follows the structure of the lab manual and includes design calculations and measured results taken from the handwritten notes.
+
+\section{Phase 1: Analog Front-End}
+\subsection{Exercise 1: Optical Transmitter}
+\subsubsection{Question 1: Assemble and Power the LED}
+The LED transmitter was mounted on the linear rail and connected to the Analog Discovery 2 (AD2) waveform generator. Vin was configured as a 5~V amplitude square wave with a 2.5~V DC offset so the LED could be pulsed at the desired current.
+
+\subsubsection{Question 2: Verify 1~Hz Modulation}
+With the generator at 1~Hz the LED visibly flashed, demonstrating that the wiring and mechanical alignment were correct and that the LED could traverse the slider smoothly.
+
+\subsubsection{Question 3: Verify 1~kHz Modulation}
+Increasing the modulation to 1~kHz made the LED appear continuously on, indicating that the chosen frequency exceeds the flicker fusion threshold and is suitable as the optical carrier for later exercises.
+
+\subsection{Exercise 2: Photodiode Amplifier and High-Pass Filter}
+\subsubsection{Question 1: Choose \texorpdfstring{$R_2$}{R2}}
+Using the constraint $\Delta V_2 = \SI{100}{\milli\volt}$ for a \SI{1}{\micro\ampere} photocurrent,
+\begin{align*}
+    R_2 &= \frac{\Delta V_2}{I_d}=\frac{0.1}{1\times 10^{-6}} = \SI{100}{\kilo\ohm}.
+\end{align*}
+
+\subsubsection{Question 2: Choose \texorpdfstring{$R_3$}{R3} and \texorpdfstring{$R_4$}{R4}}
+Bias $V_1$ at \SI{0.5}{\volt} using a divider referenced to \SI{5}{\volt}:
+\begin{align*}
+    V_1 &= \frac{R_4}{R_3+R_4} V_{\text{ref}} = 0.5.
+\end{align*}
+Selecting $R_3 = \SI{200}{\kilo\ohm}$ and $R_4 = \SI{22}{\kilo\ohm}$ yields
+\begin{align*}
+    V_1 &= \frac{22}{200+22}\times 5 \approx \SI{0.495}{\volt},
+\end{align*}
+which is sufficiently close to the target bias.
+
+\subsubsection{Question 3: Choose \texorpdfstring{$R_5$}{R5} and \texorpdfstring{$C_1$}{C1}}
+For the AC-coupling high-pass filter, target $\omega_c = \SI{500}{\radian\per\second}$:
+\begin{align*}
+    \left|\frac{R_5}{R_5 + 1/(sC_1)}\right|_{\omega_c} &= \frac{1}{\sqrt{2}} \Rightarrow R_5 C_1 = \frac{1}{\omega_c} \approx \SI{2}{\milli\second}.
+\end{align*}
+The lab implementation used $R_5 = \SI{1.6}{\kilo\ohm}$ and $C_1 = \SI{1}{\micro\farad}$, providing $R_5 C_1 = \SI{1.6}{\milli\second}$, close to specification.
+
+\subsubsection{Question 4: Demonstrate Ambient-Light Impact}
+Covering the photodiode reduced $V_2$ noticeably, confirming the DC sensitivity to room light. Uncovering restored the previous offset, making it clear that the high-pass stage is necessary.
+
+\subsubsection{Question 5: Detect the \SI{1}{\kilo\hertz} Carrier at \texorpdfstring{$V_2$}{V2}}
+With the LED brought close to the photodiode, a small \SI{1}{\kilo\hertz} ripple became visible atop the ambient level at $V_2$, showing that the modulation reaches the detector even before filtering.
+
+\subsubsection{Question 6: Observe the High-Pass Output}
+Passing $V_2$ through the RC high-pass yielded $V_3$, a centered waveform where the \SI{1}{\kilo\hertz} square wave amplitude varied predictably with emitter-detector spacing.
+
+\subsubsection{Question 7: Hardware Arrangement}
+The LED slider was taped to prevent rotation, the photodiode was bent into alignment, and measurements were taken in a darkened environment as recommended to minimize stray illumination.
+
+\subsection{Exercise 3: High-Pass Filter and AC Amplifier}
+\subsubsection{Question 1: Bias Network}
+To keep the AC-coupled signal centered at roughly mid-supply, choose $R_7$ and $R_8$ such that $V_4 = \SI{2.5}{\volt}$:
+\begin{align*}
+    V_4 &= \frac{R_8}{R_7 + R_8} V_{\text{ref}} = 2.5.
+\end{align*}
+Using $R_7 = R_8$ satisfies this requirement. The notes denote the gain simplification as
+\[
+V_o = V_4 + \frac{R_6}{R_5} (V_4 - V_2),
+\]
+with $\left|\frac{R_6}{R_5}\right| = 10$. A practical selection was $R_5 = R_6 = \SI{16}{k\Omega}$, which keeps the gain near unity for DC while letting the AC response reach the target amplification.
+
+\subsubsection{Question 2: Choose \texorpdfstring{$C_2$}{C2}}
+The low-pass pole formed by $R_6$ and $C_2$ should be above $\SI{16}{\kilo\hertz}$:
+\begin{align*}
+    \omega_{c,\text{LP}} &= \frac{1}{R_6 C_2} \ge 10^5~\text{rad/s}.
+\end{align*}
+With $R_6 = \SI{16}{\kilo\ohm}$ this gives $C_2 \le \SI{0.622}{\nano\farad}$. The closest available capacitor was \SI{620}{\pico\farad}, yielding a calculated cutoff near \SI{99.5}{\kilo\hertz}.
+
+\subsubsection{Question 3: Verification}
+Applying a \SI{100}{\milli\volt} sinusoid at \SI{1}{\kilo\hertz} produced the expected tenfold gain without saturation when the LED-photodiode spacing was swept between \SI{3}{\centi\metre} and \SI{25}{\centi\metre}. The high-pass chain maintained a detectable waveform across the entire travel range.
+
+\subsection{Exercise 4: High-Pass Filter, Rectifier, and Low-Pass Filter}
+\subsubsection{Question 1: Duplicate High-Pass}
+This stage reused the Exercise~2 sizing so $R_9 = \SI{1.6}{\kilo\ohm}$ and $C_3 = \SI{1}{\micro\farad}$, keeping the \SI{100}{\hertz} cutoff.
+
+\subsubsection{Question 2: Rectifier Gain}
+The rectifier amplifier was configured for $G = 1 + R_{11}/R_{10} = 11$, implemented with $R_{10} = \SI{1}{\kilo\ohm}$ and $R_{11} = \SI{10}{\kilo\ohm}$.
+
+\subsubsection{Question 3: Low-Pass Filter}
+The smoothing network targeted $\omega_c = \SI{10}{\radian\per\second}$:
+\begin{align*}
+    \omega_c = \frac{1}{R_{12} C_4} = 10 \quad\Rightarrow\quad R_{12} C_4 = 0.1.
+\end{align*}
+With $R_{12} = \SI{1}{\mega\ohm}$ and $C_4 = \SI{100}{\nano\farad}$ the required time constant was achieved.
+
+\subsubsection{Question 4: Response Checks}
+Using a \SI{1}{\kilo\hertz}, \SI{100}{\milli\volt} square wave at $V_5$ confirmed the expected progression: the high-pass removed DC offsets, the rectifier amplified the magnitude, and the low-pass produced a smooth envelope proportional to optical intensity.
+
+\subsection{Exercise 5: Assemble Complete Circuit}
+\subsubsection{Question 1: Integrate Stages}
+The transimpedance amplifier (Exercise~2), AC amplifier (Exercise~3), and rectifier/low-pass chain (Exercise~4) were wired together to form the complete sensor. Connections followed the manual schematic so that $V_{\text{out}}$ after the low-pass reflects LED distance.
+
+\subsubsection{Question 2: Constrain Output Range}
+Sweeping the LED along the rail verified that $V_{\text{out}}$ remained between 0~V and \SI{2.5}{\volt}. Minor trims to the rectifier gain---still using the $R_{10}/R_{11}$ network discussed earlier---kept the signal within the ADC range while preserving sensitivity.
+
+\section{Phase 3: Data Acquisition and Calibration}
+\subsection{Exercise 6: Firmware and C\# Acquisition}
+\subsubsection{Question 1: MSP430 Firmware}
+The firmware on the MSP430FR5739 was written to sample the low-pass output with the on-chip 10-bit ADC referenced to the \SI{3.3}{\volt} rail. Each conversion was formatted into a three-byte packet \texttt{[255, MS5B, LS5B]} where the most- and least-significant five bits occupy separate bytes to simplify parsing on the PC.
+
+\subsubsection{Question 2: C\# Application}
+The companion C\# program:
+\begin{enumerate}[label=\alph*)]
+    \item opened the appropriate serial port and maintained continuous communication,
+    \item recombined the MSBs and LSBs into a single 10-bit code,
+    \item displayed and plotted the live data stream while logging to disk, and
+    \item implemented a basic UI showing instantaneous voltage and providing controls for calibration capture.
+\end{enumerate}
+
+\subsection{Exercise 7: Calibration and Resolution}
+\subsubsection{Question 1: Distance Sweep}
+Measurements were recorded at a minimum of five LED-photodiode separations across the full mechanical travel. Each point stored both the ADC code and the physical distance measured with a ruler on the extrusion.
+
+\subsubsection{Question 2: Curve Fit}
+The voltage-to-distance data were fitted with a smooth function (e.g., inverse power). Plotting both the raw scatter and the fitted curve in the report allowed visual confirmation that the model captured the sensor response with minimal residual error.
+
+\subsubsection{Question 3: Conversion to Position}
+The inverse of the fitted function was implemented in software so that each ADC code could be converted in real time to an estimated separation distance.
+
+\subsubsection{Question 4: UI Enhancements}
+The C\# application was updated to display both raw ADC values and converted position simultaneously. Additional logic signaled when the sensor moved outside the characterized range, satisfying the lab requirement for an out-of-range indicator.
+
+\subsubsection{Question 5: Noise Characterization}
+With the slider set near mid-range, the converted position was logged for roughly \SI{10}{\second} and its standard deviation was interpreted as RMS noise. The experiment was repeated near both extremes of travel, and differences in noise level were attributed to the varying sensitivity (slope of the calibration curve) at those points.
+
+\end{document}
