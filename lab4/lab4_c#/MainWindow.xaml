@@ -225,7 +225,11 @@
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0" />
                             <TextBox Width="96"
-                                     Text="{Binding CalibrationMeasuredDistance, UpdateSourceTrigger=PropertyChanged}" />
+                                     Text="{Binding CalibrationMeasuredDistance,
+                                                    UpdateSourceTrigger=PropertyChanged,
+                                                    ConverterCulture=en-US,
+                                                    ValidatesOnDataErrors=False,
+                                                    ValidatesOnExceptions=False}" />
                             <Button Content="Capture"
                                     Command="{Binding CaptureCalibrationPointCommand}"
                                     Margin="12,0,0,0" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows;
@@ -41,7 +42,6 @@ public partial class MainViewModel : ObservableObject
     private readonly LineSeries<double> _distanceSeries;
     private readonly LineSeries<double> _adcSeries;
     private readonly LineSeries<double> _scopeDistanceSeries;
-
     private readonly ObservableCollection<ISeries> _series;
     private readonly ObservableCollection<ISeries> _scopeSeries;
 
@@ -63,6 +63,7 @@ public partial class MainViewModel : ObservableObject
             "DistanceMonitor");
 
         AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames().OrderBy(p => p));
+        CalibrationPoints.CollectionChanged += CalibrationPointsOnCollectionChanged;
 
         TimeWindowOptions = new ObservableCollection<TimeWindowOption>
         {
@@ -413,6 +414,11 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private CalibrationPoint? selectedCalibrationPoint;
 
+    partial void OnSelectedCalibrationPointChanged(CalibrationPoint? value)
+    {
+        RemoveCalibrationPointCommand.NotifyCanExecuteChanged();
+    }
+
     [ObservableProperty]
     private double? calibrationMeasuredDistance;
 
@@ -429,6 +435,8 @@ public partial class MainViewModel : ObservableObject
         {
             CalibrationOrder = 5;
         }
+
+        FitCalibrationCommand.NotifyCanExecuteChanged();
     }
 
     [ObservableProperty]
@@ -583,6 +591,7 @@ public partial class MainViewModel : ObservableObject
         CalibrationApplied = false;
         _calibrationCoefficients = Array.Empty<double>();
         RecalculateDerivedValues();
+        FitCalibrationCommand.NotifyCanExecuteChanged();
     }
 
     [RelayCommand(CanExecute = nameof(CanFitCalibration))]
@@ -796,6 +805,12 @@ public partial class MainViewModel : ObservableObject
         OutOfRangeMessage = "Within range.";
         NoiseSummary = "Noise not measured yet.";
         RecalculateDerivedValues();
+    }
+
+    private void CalibrationPointsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        FitCalibrationCommand.NotifyCanExecuteChanged();
+        RemoveCalibrationPointCommand.NotifyCanExecuteChanged();
     }
 
     private void SetStatus(string message)

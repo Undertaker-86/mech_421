@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DistanceMonitor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d9af18c68870410ded109250e26a1b033066d7c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60087b40b730d418f7344e6ceb7abed16ba2cea7")]
 [assembly: System.Reflection.AssemblyProductAttribute("DistanceMonitor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DistanceMonitor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
