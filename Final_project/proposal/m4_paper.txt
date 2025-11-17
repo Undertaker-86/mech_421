@@ -1,0 +1,1100 @@
+                                    Article                                                                                                   https://doi.org/10.1038/s41467-023-39018-y
+
+
+                                    Multi-Modal Mobility Morphobot (M4) with
+                                    appendage repurposing for locomotion
+                                    plasticity enhancement
+                                    Received: 4 January 2023                            Eric Sihite1, Arash Kalantari2, Reza Nemovi1, Alireza Ramezani                   3
+                                                                                                                                                                              &
+                                                                                        Morteza Gharib1
+                                    Accepted: 22 May 2023
+
+                                    Published online: 27 June 2023
+                                                                                        Robot designs can take many inspirations from nature, where there are many
+                                        Check for updates                               examples of highly resilient and fault-tolerant locomotion strategies to navi-
+                  1234567890():,;
+1234567890():,;
+
+
+
+
+                                                                                        gate complex terrains by recruiting multi-functional appendages. For example,
+                                                                                        birds such as Chukars and Hoatzins can repurpose wings for quadrupedal
+                                                                                        walking and wing-assisted incline running. These animals showcase impressive
+                                                                                        dexterity in employing the same appendages in different ways and generating
+                                                                                        multiple modes of locomotion, resulting in highly plastic locomotion traits
+                                                                                        which enable them to interact and navigate various environments and expand
+                                                                                        their habitat range. The robotic biomimicry of animals’ appendage repurpos-
+                                                                                        ing can yield mobile robots with unparalleled capabilities. Taking inspiration
+                                                                                        from animals, we have designed a robot capable of negotiating unstructured,
+                                                                                        multi-substrate environments, including land and air, by employing its com-
+                                                                                        ponents in different ways as wheels, thrusters, and legs. This robot is called the
+                                                                                        Multi-Modal Mobility Morphobot, or M4 in short. M4 can employ its multi-
+                                                                                        functional components composed of several actuator types to (1) ﬂy, (2) roll,
+                                                                                        (3) crawl, (4) crouch, (5) balance, (6) tumble, (7) scout, and (8) loco-
+                                                                                        manipulate. M4 can traverse steep slopes of up to 45 deg. and rough terrains
+                                                                                        with large obstacles when in balancing mode. M4 possesses onboard com-
+                                                                                        puters and sensors and can autonomously employ its modes to negotiate an
+                                                                                        unstructured environment. We present the design of M4 and several experi-
+                                                                                        ments showcasing its multi-modal capabilities.
+
+
+                                    This work aims to design a robot capable of negotiating unstruc-                    Envision search and rescue after natural disasters such as earth-
+                                    tured, multi-substrate environments with extensive locomotion                  quakes, ﬂooding, or windstorm (Fig. 2). In the aftermath of unique
+                                    plasticity by transforming its multi-purpose appendages to achieve             incidents such as ﬂooding, one event may accompany another that
+                                    different functions, including wheel, leg, and thruster. We call this          destroys the landscape differently. A hurricane may produce ﬂooding
+                                    robot M4, which stands for Multi-Modal Mobility Morphobot (Fig. 1).            and wind damage to roads and buildings. Or, a landslide may cause the
+                                    This morphobot could be used in a broad number of applications,                movement of a large rock mass down a slope, dam a river, and create a
+                                    including search and rescue operations, space exploration, auto-               ﬂood. In these scenarios, M4 can leverage its versatility to achieve
+                                    mated package handling in residential spaces, and digital agriculture,         mobility that ﬁts diverse mission requirements in search and rescue.
+                                    to name a few.                                                                 For instance, when ground locomotion is not feasible, M4 delivers
+
+
+                                    1
+                                    Aerospace Engineering Department, California Institute of Technology, 1200 E California Blvd, Pasadena, CA, USA. 2Jet Propulsion Laboratory (JPL), 4800 Oak
+                                    Grove Drive, M/S 82-105 Pasadena, CA, USA. 3Electrical and Computer Engineering Department, Northeastern University, 360 Huntington Ave, Boston, MA,
+                                    USA.   e-mail: a.ramezani@northeastern.edu
+
+
+                                    Nature Communications | (2023)14:3323                                                                                                                    1
+Article                                                                                                                                    https://doi.org/10.1038/s41467-023-39018-y
+
+
+                                a
+
+
+
+
+                                 b                                             thrust force
+                                                                                                                           leg frontal motion
+
+
+
+                                                                  ion
+                                                            mat
+                                                     sfor
+                                              tran
+                                                             Crouching      tr                         Tumbling
+                                                                              an
+                                                                                   sf                                                     MIP
+                                                                                        or
+                                                                                             m
+                                                                                                 at
+                                     UGV                                                              io                                        wheel rolling
+                                                                                                           n
+
+
+
+
+                                                                               leg frontal motion
+                                           leg swing motion                                                                  UAS
+                                                         Walking
+
+Fig. 1 | Multi-Modal Mobility Morphobot (M4). a Shows M4 in wheeled mode. b Illustrates cartoon depictions of M4’s transformation to other modes.
+
+
+
+
+                                                                                                                                                   Closeup view
+                                      c          Critically injured victim                                                         b                of landing
+
+
+
+
+                                                                        Goal
+                                  Unintrusive wheeled
+                                 mobility inside building                                                                                 Landing location
+                                                                                                                                       autonomously selected
+                                      a
+
+                                                                                                                       Robot snapshots during SAR operation
+
+
+
+                                                              Rescue Team
+                                                                                                                     Start
+
+                                         Multi-Modal
+                                  Mobility Morphobot (M4)
+
+
+Fig. 2 | Envisioned search and rescue example. a An illustration showing the                                   inaccessible locations. c Other modes, such as wheeled mobility, are employed
+deployment of M4 outside a collapsed multi-story building in the aftermath of an                               when a ﬂight is impossible.
+earthquake. b M4 employs its aerial mobility to reach quickly and land on
+
+
+
+critical strategic situational awareness by employing aerial surveying                                         are larger than the wheels’ and legs’ size. Instead, M4 tumbles over
+and reconnaissance through multi-purpose scans of the area with a                                              them, i.e., it leverages the ability to upright using its thrusters to
+suite of sensors integrated into its design. Aerial mobility inside con-                                       achieve the height advantage needed to fall over large obstacles.
+ﬁned and collapsed buildings is not practical. Imagine mobility inside                                              This work presents the design and control of a versatile multi-
+tight, collapsed stairways and corridors on top ﬂoors needed. In that                                          modal robot called M4 shown in Fig. 1. The contributions of this work
+case, M4 utilizes diverse forms of ground locomotion, including four-                                          are multi-fold. First, we show a signiﬁcant modal diversity not reported
+wheel rolling and crouching, two-wheel rolling and standing (with or                                           in the literature. Inspired by animals with considerable locomotion
+without thrusters), quadrupedal walking, or tumbling to negotiate                                              plasticity, such as birds, the M4 robot can perform various modes of
+inside collapsed ﬂoors. For instance, wheeled and legged mobilities                                            locomotion by redundancy manipulation through appendage repur-
+have limitations as they cannot handle rough terrains when obstacles                                           posing. M4 repurposes its appendages with its transforming body and
+
+
+Nature Communications | (2023)14:3323                                                                                                                                                          2
+Article                                                                                             https://doi.org/10.1038/s41467-023-39018-y
+
+
+switchable shrouded propellers to switch to an unmanned ground                   invertebrates, these engineered elements cannot match their
+vehicle (UGV), mobile inverted pendulum (MIP), unmanned aerial                   biological counterparts in terms of generated force-motion
+system (UAS), thruster-assisted MIP, legged locomotion, and loco-                proﬁle per unit mass18,20,22. State-of-the-art soft robots cannot
+manipulation in MIP mode. Second, by repurposing the mobility                    scale up to large, self-contained systems with notable locomo-
+components in M4, we achieve a scalable design that supports fully               tion plasticity since they depend on large accessories such as
+autonomous and self-contained operations. We show the robot pos-                 pneumatic systems or high-voltage power supplies.
+sesses the payload capacity to carry computers and exteroceptive             •   View 2: Redundancy- In this view, multi-functionality is achieved
+sensors for fully autonomous multi-modal operations. Third, we                   by brute-force approaches based on the plurality of appendages
+combine locomotion diversity and autonomy in M4 to perform novel                 that can deliver one function only. Hence, the appendages are
+maneuvers such as tumbling over large obstacles and traveling over               not shared among different modes and are ﬁxated on non-
+steep ramps. This paper presents the mechanical design and the                   morphing bodies. Note that by redundancy we refer to the
+algorithms that enable M4 to perform these modes. These algorithms               number of appendages involved in a locomotion mode. We label
+are explained in the Method Section and entail an optimization-based             it redundant if more appendages are required than the minimum
+control (collocation method) and path planning algorithm (multi-                 number needed for that mode. Therefore, redundancy in
+modal probabilistic road map [MM-PRM] and A* algorithms). We report              actuated joints does not render a system redundant. Consider
+the experimental results that substantiate the claimed capabilities.             human bipedal locomotion that consists of two legs each
+     The overarching objective of the M4 design is to achieve a scalable         comprising a plural of muscles (analog to robot actuators) that
+solution with extensive locomotion plasticity to substantiate the sce-           would allow the leg to deliver different functions. In our view,
+narios explained above. We call a mobile robot design scalable if its            this example is not redundant.
+payload capacity can be increased such that its mobility is not severely         There is a plethora of celebrated works28–35 that successfully
+affected. While there are various ways to measure scalability, one               have utilized redundancy in their designs to achieve multi-modal
+fundamental approach is to evaluate it based on the maximum                      locomotion. These redundant designs present less complexity,
+allowable payload that the system can carry before it becomes com-               which is a beneﬁt, by carrying additional actuators and robotic
+pletely immobilized in any mode. Obviously, scalability depends on               mechanisms to substantiate legged-aerial32–34, wheeled-
+several factors, including actuators and mechanisms’ performance,                aerial29,30,35, and amphibious locomotion28. For example, the
+locomotion modes, and substrate characteristics. Since multi-modal               robot designed by ref. 29 is a quad-rotor with wheels and motors
+locomotion involves different actuators, mechanisms, modes, and                  afﬁxed at the base of the robot to enable ground mobility for the
+substrates, the scalability problem can be very confounding. For                 initially aerial-only robot. Another notable example is HyTAQ by
+instance, it is generally tough to accommodate the conﬂicting                    ref. 36 which comprises a multi-rotor aerial system encapsulated
+requirements dictated by ground and aerial locomotion in a single                by a barrel-shaped guard that allows safe wheeled mobility.
+platform. On the one hand, powerful actuators and rugged structures              However, in these designs, there is a strict limit on the number of
+are needed to generate and maintain traction forces or joint torques to          modes that can be integrated and these robots quickly face
+successfully realize wheeled or legged locomotion. The plurality of              added mass issues.
+actuators in these systems is very high to substantiate posture control.     •   View 3: Manipulation of Redundancy by Morphing- So far, both
+On the other hand, these actuators and structures are often very bulky,          Views 1–2 with various levels of complexity have been adopted in
+negatively affecting aerial mobility, which depends on light structures.         robotics. In some concepts, morpho-functionality is the main
+     Here, the question to ask is: Which design views yield scalable             design theme and, in many examples, redundancy. However, in
+robots with large locomotion plasticity? We list three views, including          nature, animals showcase a behavior that combines both views;
+two mainstream views (1–2) that cover the multi-modal designs                    animals utilize their morpho-functional structures to repurpose
+introduced in literature and one view (3) that has been explored to a            the appendages to create (or to eliminate) redundancy when
+very limited extent:                                                             needed and gain mobility advantage. For instance, aquatic
+   • View 1: Morpho-Functionality- In this view, multi-modal locomo-             animals such as turtles and sea lions use their front ﬂippers for
+       tion is achieved through body and appendage morphing. These               swimming. They repurpose the same ﬂippers (Fig. 3a) to support
+       designs comprise manifold rigid (or soft) links and actuated              their heavy body weight and to walk on the ground like a
+       joints that form articulated bodies and appendages. Morphing              quadruped37. Or, Meerkats, as shown in Fig. 3b, can eliminate the
+       or shape-shifting is considered the primary mechanism for                 redundancy in their locomotion apparatuses by standing on their
+       changing appendage function. The appendages can be, e.g.,                 hindlimbs to scout their surroundings. These animals cannot
+       legs, wings, ﬂippers, wheels, slithering structures, etc., simulta-       walk well on two legs, but they can use them to elevate their ﬁeld
+       neously by changing their shapes and motions. The transform-              of view to monitor their surroundings to avoid predators38.
+       ing body recruits these multi-functional appendages and shares            Birds such as Hoatzins and Chukars manipulate redundancy in
+       them among different mobility modes.                                      their locomotion apparatuses as well. Juvenile Hoatzins show-
+       Many morpho-functional machines with promising morphing                   case wing-assisted walking39 to move up vertical or steep slopes
+       designs based on rigid1–16 and soft bodies17–23 have been                 to refuge and dodge danger (Fig. 3c). They repurpose the wings
+       introduced so far. A large number of these designs are legged7–16,        and shape-shift the articulated body to extract leg functions
+       slithering24, and amphibious6,25,26 robot. Other unconventional           from their wings and achieve quadrupedal locomotion. Young
+       designs such as quadruped with reconﬁgurable joints1, trans-              Hoatzin nestlings retain functional claws in their wings which
+       forming robot that can use its wings as legs27, multi-rotor with          helps them to manifest quadrupedal locomotion and even climb
+       morphing body2, shape-shifting wheeled robot3,5,9, and adaptive           in the vegetation.
+       wheel-and-track4 have been introduced as well. However, these             On a similar note, Chukar birds adopt a similar wing repurposing
+       multi-modal robots showcase limited locomotion plasticity                 to increase redundancy to support legged locomotion over
+       (two-three modes)2–4. Soft morpho-functional options have                 steep terrain through a phenomenon known as wing-assisted
+       been extensively studied too. However, they can accommodate               incline running (WAIR)40 (Fig. 3d). To walk over steep surfaces,
+       a limited number of modes and have faced scalability challenges.          they leverage their wings’ contributions differently to walk on
+       For instance, while soft structures share strong similarities with        steep inclinations. Chukar chicks walk and run up steep slopes
+       shape-shifting biological mechanisms in vertebrates and                   by beating their developing wings and generating aerodynamic
+
+
+Nature Communications | (2023)14:3323                                                                                                             3
+Article                                                                                                             https://doi.org/10.1038/s41467-023-39018-y
+
+
+
+
+Fig. 3 | Cartoon depiction of appendage repurposing in different species. a Sea        nestlings wing-assisted quadrupedal locomotion (Image inspired and modiﬁed
+lions ﬂipper-assisted walking37. b Meerkats' hindlimb-assisted scouting38. c Hoatzin   with permission from39 authors). d Chukar birds' wing-assisted incline walking40.
+
+
+
+        lift force which increases the ground contact force at their legs41.
+        With the WAIR strategy, mature Chukar birds can negotiate                      Results
+        nearly vertical and overhanging slopes as if walking on ﬂat                    Design rationale
+        ground.                                                                        By inspecting the state-of-the-art multi-modal robots, we notice that,
+        The robotic biomimicry of these redundancy manipulations                       besides many redundant designs, a large number of soft- and rigid-
+        through appendage morphing has remained unexplored. The                        bodied morphing systems have been introduced so far. By using
+        celebrated multi-modal robots presented by refs. 42, 43 possess                redundancy and novel adaptive structures, the robotic community has
+        interesting designs that permit ﬂipper-leg and wheel-leg                       tirelessly worked on democratizing multi-modal robots that can
+        repurposing to achieve aquatic-legged and wheeled-legged                       showcase animals’ locomotion resiliency and fault tolerance. However,
+        modalities. However, M4 differs from refs. 42, 43, 44 work                     the total number of modes achieved in these examples has remained
+        because M4 exhaust appendage redundancy manipulation                           limited to small numbers. In addition, today’s multi-modal robots that
+        through morphing to maximize locomotion plasticity. For                        face conﬂicting design requirements are not scalable, i.e., they do not
+        instance42, repurposes four ﬂippers into four legs for walking.                have the payload capacity needed to carry large items to render their
+        Instead, M4 repurposes four legs into:                                         multi-modality useful. In these designs, in addition to the added mass
+                                                                                       from each mode, there is another form of added mass that must be
+    •     Four legs for quadrupedal locomotion (Supplementary                          considered to avoid the risk of immobilization. As the mass from other
+          Video 1),                                                                    modes adds up, some modes (e.g., UAS and legged modes) require the
+    •     Four thrusters for ﬂight (Supplementary Video 2),                            addition of large actuators, power electronics, and batteries to prevent
+    •     Two thrusters + two wheels for WAIR over 45-deg slopes                       the risk of immobilization. In other words, in these modes, component
+          (Supplementary Video 3),                                                     size rapidly grows as the total mass increases. Other modes may be less
+    •     Two thrusters + two wheels for tumble over large obstacles                   sensitive to mass increase. For instance, the manipulation mode can-
+          (Supplementary Video 4),                                                     not be affected by an increase in the total mass since it depends solely
+    •     Two wheels + two hands for loco-manipulation (Supplemen-                     on the object’s mass, not the robot’s mass. On the contrary, the legged
+          tary Video 1),                                                               mode is very sensitive to mass increase since joint actuators have to
+    •     Two wheels for MIP (Supplementary Video 5),                                  carry the robot’s weight.
+    •     Four wheels for UGV (Supplementary Video 1),                                       The main objective of M4 design is to achieve a scalable solution
+    •     Four wheels for crouching (Supplementary Video 1).                           with many mobility modes. Note that, in the design of M4, we are
+        It can be seen that the redundancy manipulation through                        focused on copying animals’ strategies to enhance locomotion plasti-
+        appendage morphing in M4 is not matched by refs. 42, 43. The                   city rather than mimicking the shape of animal appendages (ﬂapping
+        extent by which these repurposings are strategized to diversify                versus rotary wings). For this objective, we adopt the design approach
+        locomotion modes is very limited in these examples. In addition,               based on manipulating appendage redundancy through component
+        in these works, appendage repurposing is not considered as a                   repurposing for the following reason. This view multi-folds the force-
+        tool to achieve scalability and combat the conﬂicting require-                 to-weight ratio required for large payloads and demanding locomotion
+        ments posed by a plurality of locomotion modes. For instance,                  modes through three mechanisms. First, added mass from compo-
+        the MIP maneuver showcased in ref. 43 only works on ﬂat                        nents is shared by all modes, a key mechanism that motivates appen-
+        ground and cannot be scaled to steep slopes like M4.                           dage repurposing. Second, force ampliﬁcation becomes possible in a
+                                                                                       mode through heterogeneous mobility component recruitment. For
+
+
+Nature Communications | (2023)14:3323                                                                                                                                  4
+Article                                                                                                             https://doi.org/10.1038/s41467-023-39018-y
+
+
+       a                                         b
+                                                               Main controller          Hip Servos (x8)        swing motion
+                                                                  SAM3X8E               55 kg.cm torque
+                                                               ARM Cortex M3
+                     a1                                                                                                               Gear mesh
+                                            a2
+
+
+
+
+                     a3                     a4                                                                                                             rolling
+
+
+
+
+                                                                                                  Wheel motors
+                     a5                     a6                                                  25D, 9.7:1 gearbox
+                                                         Lithium polymer battery                                                       Propeller motors
+                                                            6S 40C 4000 mAh                                                             2514 1500KV
+                                                                                                              sideway motion
+
+                     a7                     a8
+       c
+                                                                                     7.4V step-down
+                                                                                    voltage regulator                                             24V
+
+                                            Motion capture                                     7.4V
+                                                                                                                12V step-down              Current and
+                   Data signal                computer                                                         voltage regulator          voltage sensor
+                                                                            Hip Servos (x8)
+                   Control signal                                           55 kg.cm torque
+                                                      Wi-Fi                                                             12V
+                   Power line                                                         PWM
+                                                                 Serial                                                            Lithium polymer battery
+                                         Wi-Fi module
+                            Wi-Fi       ESP-WROOM-32                                                                                  6S 40C 4000 mAh
+                                                                            Main controller
+           Ground station                                                      SAM3X8E
+             computer                                                       ARM Cortex M3                         Wheel motor
+                                                                                               PWM                                        Wheel motors
+                                                                 Serial                                           drivers (x4)          25D, 9.7:1 gearbox
+                                      Telemetry module                     Serial        5V                      TB67H420FTG
+                      Wireless        915 MHz TTL UART
+                                                                           Flight controller                  Propeller ESCs (x4)         Propeller motors
+                                                                             STM32H743AI     PWM                 APD 80F3[X]               2514 1500KV
+                                 Wireless        RC receiver
+            RC transmitter                                                  ARM Cortex M7
+                                                  R7008SB       PWM
+                                                                                                Serial
+
+                       Communication                                         Controller                               Power Electronics
+
+Fig. 4 | An overview of M4’s hardware design. a Illustrates an example appendage        c Shows M4’s electronics architecture, including the communication, controller,
+repurposing process in M4 to increase thrust-to-weight ratio fourfold. b Shows a        and power electronics components.
+closeup view of M4’s mechanical design, degrees of freedom, and components.
+
+
+
+instance, aerodynamic lift forces can manipulate contact friction and                   the wheel axis. If the motion of the propellers and shrouds is con-
+traction forces in wheeled mobility and allow steep slope locomotion,                   sidered, the robot possesses a total of 16 actuators and body degrees
+a behavior inspired by birds’ WAIR maneuvers. Third, force ampliﬁ-                      of freedom (DOF). As a result, the total number of DOFs in M4,
+cation becomes possible in a mode through homogeneous mobility                          including actuated coordinates, body positions, and orientations, is 22.
+component recruitment. For instance, for a ﬁxed mass, the thrust-to-                           The mechanical design and components overview of M4 can be
+weight ratio doubles and quadruples when switching from UGV to MIP                      seen in Fig. 4b. The robot weighs approximately 6.0 kg with all com-
+and UAS. To see other beneﬁts of appendage redundancy manipula-                         ponents, including the onboard computers for low-level control and
+tion that are not explored in M4’s design refer to a conceptual design                  data collection, sensors (encoders, inertial measurement unit, stereo
+depicted in Supplementary Fig. 1.                                                       cameras), communication devices for teleoperation, joint actuators,
+                                                                                        propulsion motors, power electronics, and battery. M4 measures 0.7 m
+System Overview                                                                         in length, and 0.35 m in both width and height when in UGV mode.
+The M4 robot, shown in Fig. 4, can switch its modes of mobility                         When in MIP mode and dynamically balancing on its two wheels, it is 1.0
+between UGV, UAS, MIP, quadrupedal, thruster-assisted MIP, legged                       m tall, which permits reaching a better vantage point for data collection
+locomotion, and manipulation. M4 possesses an articulated body with                     using its exteroceptive sensors. When in UAS conﬁguration, M4 is 0.3 m
+four legs where each leg has two actuated hip joints for frontal and                    tall, and propellers’ center points can reach a maximum distance of 0.45
+sagittal leg movements and a shrouded propeller that acts as a wheel                    m far apart from each other. Each propeller-motor combination can
+and thruster simultaneously. The frontal joints permit the legs to move                 generate a maximum thrust force of ~2.2 kg-force, therefore reaching
+in the sideway direction. On the other hand, the sagittal joints                        roughly 9 kg thrust force in total. Its legs including the wheels are 0.3 m
+accommodate forward and backward swing movements in each leg.                           long, and its wheels are 0.25 m in diameter, which allows for traversing
+This body articulation allows various transformations. For instance, as                 bumpy terrain. Table 1 lists the component weight distribution of the
+shown in Fig. 4a, to achieve a UAS conﬁguration with a four-fold thrust                 most recent M4 design without a stereo camera attached.
+force, ﬁrst, the legs swing forward and backward. Then, they turn                              The chassis structures and shrouded propeller components in M4
+sideways with the frontal actuators. In M4, the propeller’s shroud acts                 were primarily made of carbon ﬁber and 3D-printed parts. The 3D-
+as a wheel which is actuated by a motor that drives through the gears                   printed parts are fabricated using a ﬁber-inlay process based on Onyx
+attached to the shroud’s rim, as illustrated in Fig. 4b. The propulsion is              thermoplastic materials and carbon ﬁber. These materials were con-
+generated by the propeller and motor inside the shroud aligned with                     sidered due to their great strength-to-weight ratios. M4’s system
+
+
+Nature Communications | (2023)14:3323                                                                                                                                 5
+Article                                                                                                                    https://doi.org/10.1038/s41467-023-39018-y
+
+
+architecture is outlined in Fig. 4c showing the controller system, power                   MIP, crouching, object manipulation, quadrupedal-legged locomo-
+electronics, and communication protocol used in the robot. The robot                       tion, thruster-assisted MIP over steep slopes, and tumbling over large
+utilizes two microcontrollers for low-level locomotion control; one is                     obstacles. In addition, to show M4’s design is scalable and can achieve
+used for posture and wheel motion control, while the other is used to                      payload capacities that support self-contained operations, we tested
+regulate thrusters. In addition to the low-level locomotion controllers,                   fully autonomous multi-modal path-planning using onboard sensors
+there is a high-level decision-making computer for autonomous multi-                       and computers in M4. A summary of these experiments is shown in
+modal path planning. The details of M4’s dynamic modeling, low-level                       Figs. 5–8.
+locomotion controller design, and high-level, multi-modal path plan-                            Figure 5a shows snapshots of M4 navigating around and over a
+ning can be seen in the Methods Section.                                                   pond from Supplementary Video 2. M4 is teleoperated (not autono-
+                                                                                           mous) in this test. M4 employs its wheeled mobility to reach the pond’s
+Experimental results                                                                       edge, then it transforms into a UAS and ﬂies over the pond to the other
+To substantiate the claimed locomotion plasticity in M4, we per-                           side of it. The UGV-UAS transformations follow the steps shown
+formed several experiments, including, wheeled locomotion, ﬂight,                          in Fig. 4.
+                                                                                                Figure 5b shows the snapshots of the MIP maneuver from Sup-
+Table 1 | Detailed weight breakdown, total weight = 5.6kg                                  plementary Video 5. The MIP maneuver was performed in a closed-
+                                                                                           loop fashion based on the collocation method (see Methods Section).
+Name                            Weight        Name                        Weight           In this experiment, we performed controlled transitions from UGV to
+Battery (6S 4Ah)                590 g         Leg assembly (×4)           400 g            MIP and MIP to UGV. In the MIP maneuver, ﬁrst, the front appendages
+Chassis assembly                940 g         Hip servos (×8)             560 g            are repurposed from wheel to thruster by employing the sagittal and
+Microcontrollers                115 g         Propeller motors (×4)       270 g            frontal joints. Second, the thrusters’ force and wheels’ tractions are
+Communication                   120 g         Wheel motors (×4)           380 g            regulated using an optimization-based, nonlinear closed-loop feed-
+                                                                                           back controller in real-time. The body orientation and angular velocity
+Power electronics               80 g          Tire assembly (×4)          1600 g
+                                                                                           are sensed in real-time, then the control actions are generated to track
+Cables, fasteners, etc.         440 g         Motor drivers (×4)          107 g
+                                                                                           desired angular rates to achieve a stable MIP conﬁguration. The
+
+
+
+        a
+
+
+                                                                          a3
+                                                                                                                                         a2
+                    a4
+
+                                                                pond                                                                               a1
+
+
+
+        b          b1                    b2                        b3                 b4                  b5       d                                e        e1
+
+
+
+
+                                                                                                                                              d1
+                                                                                                                                                             e2
+                                                                                                                                hands open
+
+
+
+
+            b6              b7                  b8                      b9                          b10
+
+                                                                                                                                   object     d2              e3
+
+
+
+
+                                                                                                                                              d3             e4
+
+        c                  c1                                             c2
+                                                                                                                                    c3
+
+
+
+                                                                                                                                                             e5
+                                                                                                          low-ceiling pathway
+                                                                             crouching
+
+
+
+
+Fig. 5 | M4’s various locomotion modes. a Ground-aerial locomotion near a pond.            descends in MIP maneuver (b7-b9), and ﬁnally transforms back into the UGV mode
+M4 rolls to the edge of the pond (a1), transforms into UAS mode and takes off (a2),        (b9-b10). c M4’s crouching maneuver to pass under a low-clearance opening.
+ﬂies over the pond to the opposite side (a3), and ﬁnally lands before transforming         d Shows M4’s manipulation ability in MIP mode based on repurposing its free
+back into UGV mode (a4). b Illustrates the UGV to MIP and MIP to UGV maneuvers.            appendages. e M4 performs quadrupedal-legged locomotion on rough terrain by
+M4 repurposes its front appendages to thruster mode (b1-b2), performs MIP                  locking the wheels and translating the legs.
+maneuver to self-upright (b2-b4), dynamically balances in MIP mode (b5-b6),
+
+
+
+Nature Communications | (2023)14:3323                                                                                                                                  6
+Article                                                                                                          https://doi.org/10.1038/s41467-023-39018-y
+
+
+                                 a                                                       b                      X [m]
+                                                                                             -1        UGV to UAS
+                                                         4
+                                                                                             -2                     UAS to UGV
+                                                                                     UGV
+                                                                                             -3
+
+                                                              5                                                    UAS
+                                                                                             -4                             UGV
+                                                                                                    Estimation
+                                tower                                                               Waypoint
+                                                                                                      0 sec                30 sec
+                                                                6                                                Y [m]
+                              1.4 m                                                          1
+
+                                                                                           0.5
+
+                                                                                             0
+
+                                                                                         -0.5
+                                                     3
+                                                                                             -1
+
+                                                                                         -1.5       Estimation
+                                                                                                    Waypoint
+                                                                                             -2
+                                                                                                        0 sec              30 sec
+                                                                                                                 Z [m]
+                                                                                           0.5
+
+                                                                                             0
+                                                         2
+                                                                                         -0.5
+
+                                                                                             -1
+
+                                                                           1             -1.5
+                                                                                                    Estimation
+                                                                                             -2
+                                                                                                    Waypoint
+                                                                                          -2.5      MoCap
+                                                                                                        0 sec               30 sec
+
+
+
+Fig. 6 | Multi-modal probabilistic road map (MM-PRM) path planning with           algorithm to land on a 1.4 m tall platform. The robot started on the ground, drove to
+motion capture system. a Shows the multi-modal path planning experiment           the UAS morphing location (1), transformed into the UAS mode (2), ﬂew on top of
+performed inside a ﬂight arena with motion capture cameras. In this experiment,   the box (3 to 5), and transformed back into the UGV mode (6). b Illustrates the
+the robot followed the path planning trajectory generated by the MM-PRM and A*    desired and actual trajectories.
+
+
+
+desired angular rates of 10°/s and 5°/s were considered at the begin-             OptiTrack motion capture (mocap) system. Several reﬂective markers
+ning (sit-down conﬁguration) and near the end (stand-up conﬁgura-                 were attached to the robot and environment. The mocap system’s rigid
+tion) during the uprighting phase (UGV to MIP transition), respectively.          body position and orientation measurements were transmitted to M4’s
+Similarly, the descending maneuver (MIP to UGV transition) uses the               computer through wireless communication. Then, a path-planning
+same controller.                                                                  algorithm based on MM-PRM and A* algorithm steered the system
+     M4 can perform crouching, object manipulation, and                           towards the goal. The details and derivation of these algorithms can be
+quadrupedal-legged locomotion as well (see Supplementary Video 1).                seen in the Methods Section. Figure 6 shows one of the tests where M4
+As shown in Fig. 5c, the sagittal joints are employed to lower M4’s main          follows the calculated trajectory to land on top of a 1.4-m tall platform
+body to pass through low-ceiling pathways. Figure 5d shows that the               and transform back into UGV conﬁguration. Then, we implemented
+free appendages (upper wheels) in MIP mode can be utilized for object             this MM-PRM algorithm on the Jetson Nano computer on M4 to
+manipulation purposes; however, the dexterity of object manipulation              achieve fully autonomous and self-contained operation of M4 as
+remains limited to grasping. Figure 5-e shows the M4’s quadrupedal                shown in Fig. 7.
+walking capability using quadrupedal-legged locomotion on rocky                        In the MIP maneuver (Fig. 5b), we demonstrated that M4 could
+terrain. To perform quadrupedal locomotion, the wheels are locked.                repurpose its front and rear appendages to generate the external
+Then, the opposing legs are assigned swing and stance legs inter-                 forces required to stand up and sit down entirely independently
+changeably. However, the absence of the knee joints in M4 prevents                without external support. The maneuver provides two immediate
+more natural gaits seen in other quadrupedal robots with more                     mobility advantages: increased reach (or higher vantage point) and
+degrees of freedom in the legs.                                                   enhanced traction forces. The ﬁrst advantage can be leveraged to
+     We took two steps to show that M4 can operate in a fully self-               tumble over large obstacles that cannot be handled with legged and
+sustained fashion. First, we designed a multi-modal path-planning                 wheeled mobilities. The second advantage can be employed to travel
+algorithm and tested it using off-board sensing and computing (Fig. 6             on steep slopes, similar to how birds use their wings and legs colla-
+based on Supplementary Video 6). Second, we translated this multi-                boratively to travel over inclined surfaces (i.e., WAIR maneuver). On
+modal path planner to onboard computers and sensors in M4 (see                    these steep slopes, large traction forces are required. These forces
+Fig. 7 based on Supplementary Video 7). Unlike the teleoperated pond              cannot be substantiated by wheeled mobility.
+tests, our experiments in the lab environment entailed autonomous                      The cartoon depictions of these maneuvers are shown in Fig. 8a
+multi-modal path planning and execution. The lab environment has an               and b. To perform the maneuver shown in Fig. 8a, the robot transforms
+
+
+Nature Communications | (2023)14:3323                                                                                                                                7
+Article                                                                                                             https://doi.org/10.1038/s41467-023-39018-y
+
+
+                                a           t = 155s    b                   t = 190s   e                                      t = 245s
+
+                                        target
+                                                               path
+                                         path
+                                                              taken
+                                                 goal
+
+
+
+
+                               robot
+                                                                        unreachable
+                                               Ground path tracking     goal by UGV
+                                 obstacles
+                                c                            t = 196s   d   t = 205s
+
+                                                                                                                        landing
+                                 take-off
+
+
+
+
+                                f
+
+                                                                                                          Nvidia Jetson
+                                                                                                              Nano
+                                                                   Start                                             Intel RealSense
+                                                                                       Transform to                        D455
+                                                                                       Aerial Mode
+
+
+
+
+                                                            Transform to
+                                                            Ground Mode
+
+
+
+
+                                                                                                                 Goal
+
+
+Fig. 7 | Autonomous and self-contained MM-PRM path planning. a Shows the               transformation into UAS mode and ﬂight over the obstacle to reach a desired
+online ground waypoint generation using MM-PRM and A* algorithm and the                waypoint. d Once the robot lands on the other side of the obstacles, it transforms
+robot’s ground trajectory tracking. The point cloud data captured by the Intel         into UGV mode and navigates towards the ﬁnal waypoint. e Depicts the whole multi-
+RealSense camera ﬁxated in the front of M4 is processed in real-time by the Jetson     modal path taken by M4 from the start to goal point. f A composite image showing
+Nano computer for autonomous path planning and navigation. b Illustrates a             the path taken by the robot as it autonomously navigates the cluttered environ-
+waypoint that is unreachable by the UGV mode. c Shows M4’s autonomous                  ment and switches from UGV to UAS modes.
+
+
+
+into the MIP conﬁguration. The upper thruster pushes the robot up the                  (Fig. 8d1 to Fig. 8d4). Then, the same maneuver was performed to lift
+inclination while maintaining a certain pitch angle for stability. Then                the robot’s backside, then, ﬁnally, the robot transformed back into
+the robot changes back into UGV mode once the inclination has been                     UGV mode (Fig. 8d5 to Fig. 8d8).
+cleared. Figure 8b illustrates the tumbling maneuver, where the robot
+uses its front or rear thrusters to lift one side of its body upwards and              Discussions
+gain height advantage to clear a tall obstacle or vault over a large gap.              We have presented M4 and showcased the advantages of considering
+First, M4 positions the front thrusters pointing upwards to lift the front             morpho-functional appendages that can be repurposed to manipulate
+side. Then, the rear wheels drive forward so the front side vault over                 redundancy to enhance locomotion plasticity and achieve payload
+the obstacle. M4 performs the same sequence with the rear thrusters                    scalability. A few works that previously applied appendage repurposing
+and front wheels to fully clear the large obstacle.                                    in their designs achieved limited locomotion plasticity. Instead, in this
+      As shown in Fig. 8c and d based on Supplementary Videos 3 and 4,                 paper, we demonstrated that our robot can (1) ﬂy, (2) roll, (3) walk, (4)
+we performed the WAIR and tumbling maneuvers in experiments. The                       crouch, (5) balance, (6) tumble, (7) scout, and (8) loco-manipulate
+WAIR, shown in Fig. 8c, was performed on a 45° upwards slope, which                    objects by switching the functionality of appendages between wheels,
+the robot cannot climb with the UGV or legged modes. The robot was                     legs, hands, or thrusters. In addition, we demonstrated M4 can drive on
+initialized in the MIP conﬁguration, then the wheel motors and thrus-                  steep slopes and vault over large obstacles if other modes were not
+ters worked together to propel the robot up the incline. The upper                     applicable. We showed M4’s design is scalable and can substantiate fully
+thrusters stabilized the robot’s upper body tilt angle, and the wheel                  autonomous, self-contained, multi-modal operations. This modal
+motors set the robot’s forward speed on the slope. The tumbling                        diversity and level of autonomy have not been reported in multi-modal
+maneuver, shown in Fig. 8d, utilized the same MIP uprighting man-                      locomotion before and differentiates our robot from existing platforms.
+euver shown in Fig. 5b to lift the robot’s front side, drive forward, and                   The access to our wide array of actuators and locomotion modes
+vault over a large obstacle that the robot is unable to roll or walk over it           allows the robot to choose the most efﬁcient mode of locomotion
+
+
+Nature Communications | (2023)14:3323                                                                                                                                  8
+Article                                                                                                              https://doi.org/10.1038/s41467-023-39018-y
+
+
+               Shrouded propeller
+         a         (side view)                                                        c
+                                               Thruster
+                Normal                          force
+                 force
+
+                 Body
+
+
+        Appendage                                   Increased
+                                                  Traction force
+
+                                      Shrouded propeller
+                                          (front view)
+                           Traction force
+                                   Gained height advantage
+         b
+
+
+
+
+                                                                                                             45o slope
+
+
+                      Dynamic        Descended &                       Rolling
+                      balancing      prepared for         Standing
+        Standing                    standing again
+
+         d                                                             Transform                                          Lift up front
+                                                                     front thruster                                      side and land
+
+
+                                           Obstacle
+
+
+
+
+         1                                                   2                                     3                              4
+
+                                                                                           Lift up rear                                       Transform back
+                            Transform
+                                                                                          side and land                                          into rover
+                           rear thruster
+
+
+
+
+         5                                        6                                                    7                                  8
+
+Fig. 8 | Traversing over steep inclines and large obstacles. a Illustrates M4’s           achieved height advantage in the MIP mode is employed to overcome a large
+cartoon where the front appendages are repurposed to generate the external thrust         obstacle. c A composite image showing M4 uses MIP mode with thrusters to per-
+forces to increase the ground reaction forces on a steep slope, a maneuver inspired       form closed-loop WAIR on a 45° inclined surface. d Time-lapsed images of M4
+by bird wing-assisted incline running (WAIR). b Demonstrates the various steps that       performing a tumbling maneuver to vault over a large obstacle that cannot be
+are involved in M4’s tumbling maneuver by repurposing its appendages. The                 handled by UGV or legged modes.
+
+
+
+given the environment and obstacles. The energy cost of performing                        repurposed to the thruster since the payload remains ﬁxed. Remark-
+locomotion can be seen in Fig. 9, which lists the estimated electrical                    ably, biologists reported these observations before; however, the
+power consumed from the current load and reference voltages of all                        robotic demonstrations remained unexplored or were not explored to
+motors at a given environment and locomotion mode. Each wheel                             the level showcased in this paper.
+motor operates at 12V and draws 1–3A while each propeller motor                                Future work will involve expanding M4’s modes even further. For
+operates at 24V and draws 20–40A, depending on the load. Each joint                       instance, dynamic legged locomotion gaits are a potential addition to
+servo operates at 7.4V and draws 0.1–0.3A to transform or hold posi-                      existing capabilities. This goal can be achieved by increasing the num-
+tion, which consumes a relatively small power compared to the other                       ber of degrees of freedom in the legs to support natural gaits. Currently,
+motors. Therefore, it is signiﬁcantly more energy efﬁcient to use UGV                     object manipulations during the MIP mode are limited to grasping. An
+locomotion and avoid using thrusters to save energy. Several modes                        exciting research path constitutes extending current manipulation
+that partially use thrusters, such as tumbling and thruster-assisted MIP,                 capabilities to more complex scenarios such as holding tools. Also,
+can consume less energy than UAS mode.                                                    from an autonomy standpoint, a decision-making algorithm to auton-
+     Our results suggest that redundancy manipulation using morph-                        omously switch between all modes currently needs to be included.
+ing appendages can present a powerful design view that not only can                       Currently, we can autonomously switch between UAS and UGV modes.
+yield impressive locomotion plasticity within a single substrate but                      We have augmented the M4 platform with a multi-modal MM-PRM path
+also can support crossing the boundaries of multi-substrate locomo-                       planning algorithm, Jetson Nano, and stereo depth camera from Intel
+tion that involve conﬂicting requirements such as ground and air. We                      RealSense, which is very light, efﬁcient, and inexpensive, to create a
+found that appendage repurposing is an effective tool for creating                        point-cloud representation of the world in real-time; however, the
+scalable designs when conﬂicting requirements exist. For instance, the                    decision-making algorithm needs further developments to be applic-
+increased thrust-to-weigh ratio achieved by repurposing all appen-                        able in more complex scenarios. The addition of this level of autonomy
+dages to the thrusters in M4 can quadruple when all appendages are                        allows M4 to create an occupancy map to evaluate the traversability of
+
+
+Nature Communications | (2023)14:3323                                                                                                                                9
+Article                                                                                                              https://doi.org/10.1038/s41467-023-39018-y
+
+                                                                                             Thruster-                     Electric
+                                                                                              assisted                    Power (W)
+                                                     UGV        UAS    Legged         MIP*     MIP*    Tumbling Crouching
+                                                                                                                                    3000
+
+                                  Flat terrain       30        3000     40            50        50        1500        45
+
+                                                                                                                                    2500
+                                Rough terrain
+                                   d < Dw            100       3000     40            0          0        1500         0
+
+                                Rough terrain                                                                                       2000
+                                 Dw < d < DL         0         3000     40            0          0        1500         0
+
+
+                                Rough terrain
+                                   DL < d
+                                                     0         3000      0            0          0        1500         0            1500
+
+
+                                        Ramp
+                                        α < αw       100       3000      0            0        1000         0        115
+                                                                                                                                    1000
+
+
+                                        Ramp         0         3000      0            0        1500         0          0
+                                        αw < α                                                                                      500
+
+                                  Low-height         50            0     0            0          0          0         65
+                                    ceiling
+                                                                                                                                    0
+                                   *Transitioning to and from upward MIP position costs 1500W.                         Locomotion is
+                                                                                                                        not possible
+
+Fig. 9 | Locomotion modes versus electrical power consumption. The power                elevations. UAS mode offers the widest range of operation; however, it is the most
+consumption is estimated based on the average current and reference voltages            energy-inefﬁcient mode. The symbol d denotes the obstacle size. Dw, and DL are the
+during the locomotion. UGV is generally the most efﬁcient mode of locomotion but        maximum obstacle sizes that can be handled with wheeled and legged locomotion,
+is unable to traverse rough terrains, steep inclinations, or very large ground          respectively. αw denotes the maximum slope the UGV mode can handle.
+
+
+
+the world for autonomous switching between different modes of                           where the ﬁrst two terms are linear and angular kinetic energy, while
+locomotion. Notably, in this regard, the MIP conﬁguration reported in                   the last is potential energy. In Eq. (1), the symbol b: denotes the skew
+this paper can be leveraged for scouting and enhancing the quality of                   symmetric operator.
+created occupancy map. Finally, with the capabilities showcased in this                      Let q 2 Q (Q denotes the conﬁguration variable space) be the
+paper and securing the missing capabilities, M4 can be employed in                      generalized coordinates of the system, which consists of the body’s 6
+various applications, including search and rescue, space explorations,                  DOF (position and orientation), and the 2 DOF on each leg. Note that
+and package delivery to customers’ doorsteps.                                           the shroud and propellers’ angles are not part of the conﬁguration
+                                                                                        variable vector. The equation of motion can then be derived using the
+Methods                                                                                 Euler-Lagrangian formulation as follows:
+Brief overview of M4’s dynamical modeling                                                                 
+In this section, we derive the dynamic model of the robot for control,                                 d ∂L     ∂L        X                   
+                                                                                                                  = ug +    uj,k + uw,k + ut,k ,                     ð2Þ
+analysis, and simulation. While there are many 3D simulation tools                                     dt ∂q_   ∂q        k
+available (e.g., Gazebo, Simscape, MuJoCo), deriving the model sym-
+bolically to extract the inertia, Coriolis, and gravitational terms can be              where uj,k and uw,k are the generalized joint torques and wheel traction
+useful because it offers great ﬂexibility for model-based nonlinear                     forces from k-th leg, respectively. And, ut,k and ug denote the gen-
+control design by presenting model components that can be pro-                          eralized thruster and ground contact forces. The model given by Eq.
+grammed in M4 computer. Our modeling approach follows the Euler-                        (2) is highly generic. It can be considered for UGV, MIP, UAS, thruster-
+Lagrangian equation of motion, where we ﬁrst derive the conservative                    assisted MIP or WAIR, legged locomotion, and loco-manipulation in
+energy in the system of all massed components. Then, Lagrange                           MIP mode. However, since MIP and WAIR involve active stabilization of
+formalism is applied. Figure 10 illustrates the free body diagram of the                M4 through collaborative thrust and traction wheel force regulations
+robot that shows the DOF and the robot’s kinematics used throughout                     subject to contact force constraints, we decided to focus on these
+the modeling. M4 is composed of 13 rigid bodies (one main body, three                   maneuvers only as they pose more technical control challenges
+linkages per leg) in our derivations.                                                   compared to other maneuvers.
+     Consider a set of massed components. For each j-th massed body,                          The ground forces are applied to each leg and the landing gear.
+let mj denote the mass, Ij 2 R3 × 3 be the principal inertia matrix, pj 2               The ground reaction forces are modeled using the Stribeck friction
+R3 and vj 2 R3 be the inertial position and velocity vectors, respec-                   and compliant ground models from ref. 45. The compliant ground
+tively, and ωj 2 R3 be the angular velocity vector deﬁned in the body                   model uses springs and dampers with large stiffness and damping
+frame of the j-th massed component. Furthermore, let g 2 R3 be the                      coefﬁcients to calculate the normal forces. Then, (2) is written in the
+gravitational acceleration vector deﬁned in the inertial frame. Then,                   following state-space form:
+the Lagrangian L is derived as the sum of the total kinetic and potential
+energy in the system and is given by:                                                                                  x_ = f ðxÞ + gðxÞu,                            ð3Þ
+
+                      X1                                                              where x 2 Rn and u 2 Rm denote the state and input vectors. The
+                 L=                 >     b>
+                               mj vj vj + ω     b
+                                           j Ij ωj
+                                                               >
+                                                          mj pj g,             ð1Þ     nonlinear terms f(x), g(x) embody all model terms, including gravity,
+                       j
+                           2
+                                                                                        inertial, and Coriolis matrices, shown in (2). The input vector u
+
+
+Nature Communications | (2023)14:3323                                                                                                                                  10
+Article                                                                                                              https://doi.org/10.1038/s41467-023-39018-y
+
+
+
+
+Fig. 10 | Incline locomotion modeling and controls. a The free-body diagram            c Composite time-lapse illustration of the simulation, showing the transformation
+(FBD) of the robot in either UGV or UAS modes. Only one leg is shown for clarity.      from UGV to MIP conﬁguration, thruster-assisted self-uprighting, and WAIR on an
+uj,F and uj,S are the frontal and sagittal joint torques, respectively. b FBD of the   inclined surface.
+robot in MIP conﬁguration as it climbs on a sloped surface and performs WAIR.
+
+
+
+embodies thruster and joint actions as given in (2). Now, we apply the                 where xi 2 Rn and ui 2 Rm are the discrete-time states and inputs at
+direct collocation method to resolve the MIP/WAIR problem.                             time ti, respectively, xref,i is the states reference, tN is the ﬁnal time step,
+                                                                                       Q and R are weighting matrices. The cost J is subject to a system of
+Direct collocation nonlinear dynamic programming                                       nonlinear equations given by (3) which is discretized with respect to
+The approach we consider in this paper is based on the collocation                     time to obtain the following discrete-time system of equations:
+technique. The main reason we consider the collocation technique for
+MIP control is the nature of the MIP problem. In MIP maneuver, M4
+                                                                                                                    xi + 1 = f d ðxi Þ + gd ðxi Þui ,                   ð6Þ
+interacts with its environment through the traction forces generated at
+the contact points on the wheels and the thrust forces generated in the
+thrusters. The thrust forces are employed to manipulate the traction                   where fd and gd are the discretized system model from (3). We con-
+forces. If a closed-loop regulation of the thrust forces is not involved,              sider 2N boundary conditions given by:
+then the required traction forces at the contact points cannot be
+achieved and slippage occurs. This problem can be formulated as an                                                     
+                                                                                                         r x0 , xN , t N = 0, r 2 R2N , 0 ≤ t ≤ t f ,                   ð7Þ
+optimization-based control problem. Among available tools, colloca-
+tion methods allow efﬁcient dynamics approximation and constraint
+inclusion through interpolation functions. This property enables fast                  which is derived from (6), in addition to nf inequality constraints
+computation of control actions in real-time, which is important for                    describing the maximum input values and feasibility of contact forces
+highly dynamic maneuvers such as MIP/WAIR.                                             based on friction-cone condition given by:
+     Consider N time intervals during a gait cycle of the dynamic
+morphing systems given by:
+                                                                                                 Cðx0 , . . . ,xN , u0 , . . . , uN , tÞ ≤ 0, C 2 Rnf , 0 ≤ t ≤ t f :   ð8Þ
+                              0 = t0 < t1 < . . . < tN = tf ,                   ð4Þ
+                                                                                            We stack all of the states and
+                                                                                                                             inputs from our system in the vec-
+                                                                                                              > >                      > >
+where ti denotes discrete times, i = 0, …, N, and tf denotes the ﬁnal                  tors X = x>0 , . . . ,xN   and U = u>
+                                                                                                                           0 , . . . ,uN   . To approximate the dis-
+discrete time. We consider the following cost function given by:                       cretized nonlinear dynamics from (3), we employ a method based on
+                                                                                       polynomial interpolation of states to simplify the computation of the
+                      X
+                      N                                                                cost function J.
+                 J=         ðxi  xref ,i Þ> Qðxi  xref ,i Þ + u>
+                                                                 i Rui ,        ð5Þ         Then, we stack X and U as the decision parameter vector Y for the
+                      i=0
+                                                                                       nonlinear programming problem. Also, we add tf as the last entry of Y,
+
+
+Nature Communications | (2023)14:3323                                                                                                                                   11
+Article                                                                                                           https://doi.org/10.1038/s41467-023-39018-y
+
+
+resulting in the following decision parameter vector:                                    et al. have developed an algorithm to select the locomotion mode of
+                                                                                         the HyFDR robot allowing to optimize the cost of transport during
+                     h                                                  i>
+                  Y = u 0 > , . . . , u N > , x 0 > , . . . , xN > , t f :         ð9Þ   outdoor navigation with only a 2D map of the environment.
+                                                                                               The objective of path planning is to minimize the total energy
+                                                                                         consumed by the robot and optimize the choice of locomotion mode
+    At every sample time, we take the input to be as the linear inter-                   (ground or aerial). To achieve this goal, the environment is ﬁrst dis-
+polation function between ui and ui+1 for ti ≤ t < ti+1:                                 cretized into a set of nodes where each node is associated with one of
+                                                                                         the locomotion modes. The nodes are then connected by edges and a
+                                             ðt  t i Þ                                cost for traveling between the nodes is computed. Finally, an A⋆
+                    uint ðtÞ = ui +                        u  ui :               ð10Þ
+                                           ðt i + 1  t i Þ i + 1                        algorithm is used to determine the optimal path deﬁned by a set of
+                                                                                         waypoints, each associated with a locomotion mode.
+    We interpolate the states x(ti) and x(ti+1) as well. However, we take                      The 3D environment was discretized into more sparsely dis-
+a nonlinear cubic interpolation which is continuously differentiable                     tributed points using the 3D MM-PRM algorithm. Like in ref. 48, this
+and satisﬁes:                                                                            adapted version of the Probabilistic Road Map (PRM) algorithm takes
+                                                                                         into account the Multi-Modal nature of the robot’s movements. The
+              x_ int ðsÞ := f ðxðsÞÞ + gðxðsÞÞuðsÞ = FðxðsÞ, uðsÞ, sÞ,            ð11Þ   classical PRM algorithm builds a graph in the deﬁned space by gen-
+                                                                                         erating a certain number of nodes, where the nodes are created with
+at s = ti and s = ti+1. To do this, we write the following system of equa-               random positions one by one. When a node is created, it will search for
+tions:                                                                                   the nearest nodes already present in the graph and then connect to
+                                                                                         them to form edges while checking that it does not cross any obstacles.
+                               X
+                               3                       k
+                                       i       t  ti                                    This method is adapted to generate a graph for unimodal robots by
+                  xint ðtÞ =          hk                     , ti ≤ t < ti + 1,          constraining the node generation to a single mode (i.e., create only
+                               k =0
+                                                Δt i
+                         i
+                                                                                         ground nodes for the UGV mode or create aerial nodes for the
+                       h0 = xi ,                                                         UAV mode).
+                         i
+                       h1 = Δt i Fi ,                                             ð12Þ         In this work, M4 can move both on the ground and in aerial space.
+                        i                                                                Therefore, it is necessary to create 2 sets of constraints when gen-
+                       h2    =  3xi  2Δt i Fi + 3xi + 1  Δt i Fi + 1 ,
+                                                                                         erating the nodes. The main difference with the classical PRM algo-
+                        i
+                        = 2xi + Δt i Fi  2xi + 1 + Δt i Fi + 1 ,
+                       h3                                                                rithm is that a constraint is added on a certain number of nodes to
+                                        
+             where Fi : = F xi , ui , t i , Δt i = t i + 1  t i :                       ensure a sufﬁcient number of nodes in each mode of locomotion. This
+                                                                                         extended version of the PRM algorithm requires the deﬁnition of 3
+       The interpolation function used for xint must satisfy the deriva-                 parameters: the number of ground surface nodes Nw, the number of
+tives at the discrete points ti and at the middle of sample times, that is,              nodes describing ﬂyable space Nf, and the maximum distance between
+ti+1. By inspecting Eq. (12), it can be seen that the derivative terms at the            neighboring nodes R.
+boundaries ti and ti+1 are satisﬁed. Therefore, the only remaining                             New ground nodes pnew are randomly assigned according to the
+constraints in the nonlinear programming constitute the collocation                      following constraint:
+constraints at the middle ti ≤ tc,i ≤ ti+1 time interval, the inequality
+constraints at ti, and the constraints at t1 and tf. These constraints are                                     pnew 2 fðx, y, zÞ : z = z g Þg,              ð14Þ
+given by:
+                                                                                 where zg is the ground elevation. Similarly, new nodes in the ﬂyable
+                   F xint t c,i , uint t c,i , t c,i  x_ int t c,i = 0                  task space are obtained as follows:
+                                               
+                          C x t i , uint t i , t i ≤ 0                            ð13Þ
+                           int                                                                         pnew 2 fðx, y, zÞ : z > 0,z ≠ z g g:           ð15Þ
+                         r xint t 0 , xint t N , t N = 0:
+
+      Simulations were performed in the Simscape environment where                       The search for neighboring nodes that will then be used to create the
+the robot transformed into the MIP conﬁguration and performed                            edges (E) is at the core of the PRM algorithm, and they are found using
+WAIR on an inclined surface. Supplementary Fig. 3 shows the com-                         the following condition:
+posite image and input-output plots of the simulation. Thrusters were
+utilized to stand up into the MIP conﬁguration and assist in driving on                                   pnearest = fp 2 N :k pnew  p k ≤ Rg,             ð16Þ
+an inclined surface with 15 degrees upwards slope. The simulation
+showed a stable transition to the MIP upright position and driving on                    where N is the set of nodes already created, R denotes the maximum
+the slope.                                                                               radius distance, and ∥⋅∥ is the Euclidean norm.
+                                                                                              The cost and time of calculation are very strongly linked to the
+Multi-Modal Probabilistic Road Map (MM-PRM) path planning                                choice of the values of the algorithm parameters (R, Nw, Nf). The
+To take full advantage of the multi-modal capacities of our robot, it is                 greater the total number of nodes or the greater the radius of
+necessary to develop path-planning optimization methods that work                        acceptance of the neighbors, the greater the computation time and
+well with multiple modes of locomotion. Several works have already                       cost will be. Therefore, it is necessary to study the convergence of
+been done on multi-modal path planning for robots that can roll and                      the result in the function of the parameters to optimize to compu-
+ﬂy such that the HyFDR46,47 and the Drivocopter35. Most of the methods                   tation cost. We identiﬁed the parameters that led to the best results.
+developed in these articles use a uniform discretization of the space,                   The parameters are R = 4 meters, Nw = 300 and Nf = 300. An example
+and then the optimal path is found with the Djikstra’s algorithm35, or                   of the graph built with the 3D MM-PRM algorithm is presented in
+with the A⋆29,46. Furthermore, in ref. 35, an optimization technique                     Supplementary Fig. 2b.
+based on a reduced model of the system is used to calculate the costs                         To calculate the locomotion cost for the path planner, it is
+of the edges and then to smoothen the ﬁnal trajectory. Araki et al.29                    necessary to not only determine the costs associated with each
+have coupled their path planning method to a prioritization algorithm                    mode but also the cost corresponding to the transition from one
+allowing swarm operation with 20 ﬂying cars. While in ref. 47, Sharif                    mode to another. As such, the cost of transport on a ground edge
+
+
+Nature Communications | (2023)14:3323                                                                                                                        12
+Article                                                                                                       https://doi.org/10.1038/s41467-023-39018-y
+
+
+denoted by Cw is calculated using the power consumption by the                     Environments A and C require the robot to transition between ground
+wheel motor, Pw. Then, Pw is integrated over the time of wheeled                   and aerial modes to reach the target position, showing that the algo-
+locomotion. The total power consumption is computed based on                       rithm works for multi-modal applications.
+the torque and the angular velocity of each motor which is obtained
+from the current draw and encoder measurements. The time of                        Data availability
+ground locomotion is calculated based on the distance d between                    Data will be provided upon request.
+the two nodes. As a result, Cw is given by:
+                                                                                   Code availability
+                                    Z     td                                       Simulation and path planning codes will be provided upon request.
+                             Cw =                P w ðτÞdτ:                 ð17Þ
+                                      0
+                                                                                   References
+    The energetic cost on a ﬂying edge Cf is computed using the                    1.    Sun, J. & Zhao, J. An adaptive walking robot with reconﬁgurable
+power consumption Pf in hovering, the robot forward velocity vf                          mechanisms using shape morphing joints. IEEE Robot. Autom. Lett.
+in ﬂying mode, and the altitude z of the two nodes. Hence, Cf is                         4, 724–731 (2019).
+given by:                                                                          2.    Riviere, V., Manecy, A. & Viollet, S. Agile robotic ﬂiers: a morphing-
+                                                                                         based approach. Soft Robot. 5, 541–553 (2018).
+                                   d                                               3.    Ryu, S., Lee, Y. & Seo, T. Shape-morphing wheel design and analysis
+                        Cf = Pf       + mgðz 2  z 1 Þ,                     ð18Þ         for step climbing in high speed locomotion. IEEE Robot. Autom.
+                                   vf
+                                                                                         Lett. 5, 1977–1982 (2020).
+                                                                                   4.    Michaud, F. et al. Azimut: a multimodal locomotion robotic plat-
+where z1 and z2 are respectively the altitudes of nodes 1 and 2, m is the
+                                                                                         form. In Unmanned Ground Vehicle Technology V Vol. 5083, 101–112
+mass of the robot, and g is the gravitational acceleration constant. Last,
+                                                                                         (SPIE, 2003).
+the transition cost Ct between the two modes is determined based on
+                                                                                   5.    Zhang, X. et al. Conﬁguration design and analysis of a multimodal
+the power consumption of the joints during the morphing process Pt.
+                                                                                         wheel with deformable rim. In 2019 IEEE/ASME International Con-
+Then, Pt is integrated over the time of transition tt which yields:
+                                                                                         ference on Advanced Intelligent Mechatronics (AIM) 772–777
+                                    Z       tt                                           (IEEE, 2019).
+                             Ct =                P t ðτÞdτ:                 ð19Þ   6.    Ijspeert, A. J., Crespi, A., Ryczko, D. & Cabelguen, J.-M. From
+                                        0
+                                                                                         swimming to walking with a salamander robot driven by a spinal
+                                                                                         cord model. science 315, 1416–1420 (2007).
+     These three energetic costs are employed to determine the opti-
+                                                                                   7.    Seok, S. et al. Design principles for highly efﬁcient quadrupeds
+mal path in the edge space generated by the MM-PRM algorithm using
+                                                                                         and implementation on the MIT cheetah robot. In 2013 IEEE
+the A⋆ algorithm.
+                                                                                         International Conference on Robotics and Automation. 3307–3312
+     To ﬁnd the optimal path in the graph, the A⋆ path search
+                                                                                         (IEEE, 2013).
+algorithm49 is used. The improved version of Dijkstra’s algorithm50 is
+                                                                                   8.    Kang, P., Guan, G. & Xu, W. A small morphing leg-wheel hybrid
+employed to ﬁnd the optimal path by using a heuristic function. The
+                                                                                         quadruped robot, In 2018 IEEE International Conference on Infor-
+algorithm computes the best path to each node to only visit the most
+                                                                                         mation and Automation (ICIA). 933–938 (IEEE, 2018).
+promising nodes. This avoids going through all possible paths and,
+                                                                                   9.    Zhou, F. et al. Implementation of a reconﬁgurable robot to achieve
+therefore, ﬁnding the ﬁrst-best optimal path with a low computational
+                                                                                         multimodal locomotion based on three rules of conﬁguration.
+cost. Thus, each time the algorithm explores the n-th node, it calcu-
+                                                                                         Robotica 38, 1478–1494 (2020).
+lates the minimum cost f(n) necessary to reach the goal by passing
+                                                                                   10.   Yu, J., Tang, Y., Zhang, X. & Liu, C. Design of a wheel-propeller-
+through it using the following formula:
+                                                                                         leg integrated amphibious robot. In 2010 11th International Con-
+                                                                                         ference on Control Automation Robotics & Vision. 1815–1819
+                             f ðnÞ = gðnÞ + hðnÞ,                           ð20Þ         (IEEE, 2010).
+                                                                                   11.   Paulson, L. D. Biomimetic robots. Computer 37, 48–53 (2004).
+where g(n) is the real cost from the start to the n-th node, computed              12.   Bjelonic, M. et al. Keep rollin’–whole-body motion control and
+based on (21), and h(n) denotes the heuristic cost to the goal. The                      planning for wheeled quadrupedal robots. IEEE Robot. Autom. Lett.
+heuristic cost h(n) is calculated by summing two conservative costs.                     4, 2116–2123 (2019).
+First, the cost of driving on ﬂat ground to the goal in a straight line is         13.   Schwarz, M., Rodehutskors, T., Schreiber, M. & Behnke, S. Hybrid
+calculated. Second, the cost of ﬂying vertically along the z-axis to                     driving-stepping locomotion with the wheeled-legged robot
+the goal is obtained. Since the cost of driving is much lower than                       Momaro. In 2016 IEEE International Conference on Robotics and
+ﬂying, this is the most optimal way to move between two points if                        Automation (ICRA) 5589–5595 (IEEE, 2016).
+there are no obstacles or impassable terrains. The following cost for              14.   Suzumura, A. & Fujimoto, Y. Real-time motion generation and
+g(n) is deﬁned:                                                                          control systems for high wheel-legged robot mobility. IEEE Trans.
+                                                                                         Ind. Electron. 61, 3648–3659 (2013).
+                             X
+                             Ew                  X
+                                                 Ef
+                                                                                   15.   Thomson, T., Sharf, I. & Beckman, B. Kinematic control and posture
+                    gðnÞ =         C w,i +             C f ,j + N t C t ,   ð21Þ         optimization of a redundantly actuated quadruped robot, In 2012
+                             i=0                 j=0
+                                                                                         IEEE International Conference on Robotics and Automation
+                                                                                         1895–1900 (IEEE, 2012).
+where Ew and Ef are respectively the number of ground and aerial edges             16.   Grand, C., Benamar, F., Plumet, F. & Bidaud, P. Stability and traction
+traveled by the robot, Cw,i is the cost on the ground edge i, Cf,j denotes               optimization of a reconﬁgurable wheel-legged robot. Int. J. Robot.
+the cost on the ﬂying edge j, and Nt represents the number of mode                       Res. 23, 1041–1058 (2004).
+transition made by the robot.                                                      17.   Ramezani, A., Chung, S.J. & Hutchinson, S. A biomimetic robotic
+     Supplementary Fig. 2c shows the generated trajectories using the                    platform to study ﬂight specializations of bats. Sci Robot. 2,
+MM-PRM and A* algorithm to navigate three different environments.                        eaal2505 (2017).
+
+
+
+Nature Communications | (2023)14:3323                                                                                                                       13
+Article                                                                                                     https://doi.org/10.1038/s41467-023-39018-y
+
+
+18. Ishida, M. et al. Morphing structure for changing hydrodynamic               38. Santema, P. & Clutton-Brock, T. Meerkat helpers increase sentinel
+    characteristics of a soft underwater walking robot. IEEE Robot.                  behaviour and bipedal vigilance in the presence of pups. Anim.
+    Autom. Lett. 4, 4163–4169 (2019).                                                Behav. 85, 655–661 (2013).
+19. Kotikian, A. et al. Untethered soft robotic matter with passive con-         39. Abourachid, A. et al. Hoatzin nestling locomotion: acquisition of
+    trol of shape morphing and propulsion. Sci. Robot. 4,                            quadrupedal limb coordination in birds. Sci. Adv. 5, eaat0787
+    eaax7044 (2019).                                                                 (2019).
+20. Zhai, F. et al. 4d-printed untethered self-propelling soft robot with        40. Dial, K. P. Wing-assisted incline running and the evolution of ﬂight.
+    tactile perception: rolling, racing, and exploring. Matter 4,                    Science 299, 402–404 (2003).
+    3313–3326 (2021).                                                            41. Tobalske, B. W. & Dial, K. P. Aerodynamics of wing-assisted incline
+21. Shah, D. S. et al. A soft robot that adapts to environments through              running in birds. J. Exp. Biol. 210, 1742–1751 (2007).
+    shape change. Nat. Mach. Intell. 3, 51–59 (2021).                            42. Baines, R. et al. Multi-environment robotic transitions through
+22. Joyee, E. B., Szmelter, A., Eddington, D. & Pan, Y. 3d printed bio-              adaptive morphogenesis. Nature 610, 283–289 (2022).
+    mimetic soft robot with multimodal locomotion and multi-                     43. Bjelonic, M., Sankar, P. K., Bellicoso, C. D., Vallery, H. & Hutter, M.
+    functionality. Soft Robot. 9, 1–13 (2022).                                       Rolling in the deep–hybrid locomotion for wheeled-legged robots
+23. Ren, Z. et al. Soft-bodied adaptive multimodal locomotion strate-                using online trajectory optimization. IEEE Robot. Autom. Lett. 5,
+    gies in ﬂuid-ﬁlled conﬁned spaces. Sci. Adv. 7, eabh2022                         3626–3633 (2020).
+    (2021).                                                                      44. Meiri, N. et. al. Flying STAR, a hybrid crawling and ﬂying sprawl
+24. Wright, C. et al. Design of a modular snake robot. In 2007 IEEE/RSJ              tuned robot. In 2019 IEEE International Conference on Robotics and
+    International Conference on Intelligent Robots and Systems                       Automation (ICRA) 5302–5308 (IEEEE, 2019).
+    2609–2614 (IEEE, 2007).                                                      45. Armstrong-Helouvry, B. Stick-slip arising from stribeck friction, In
+25. Crespi, A. & Ijspeert, A. J. Online optimization of swimming and                 Proc. IEEE International Conference on Robotics and Automation
+    crawling in an amphibious snake robot. IEEE Transactions on                      1377–1382 (IEEE, 1990).
+    robotics 24, 75–87 (2008).                                                   46. Sharif, A., Lahiru, H. M., Herath, S. & Roth, H. Energy efﬁcient path
+26. Crespi, A., Badertscher, A., Guignard, A. & Ijspeert, A. J. Amphibot i:          planning of hybrid ﬂy-drive robot (HyFDR) using a* algorithm. In
+    an amphibious snake-like robot. Robotics and Autonomous Systems                  Proc. 15th International Conference on Informatics in Control,
+    50, 163–175 (2005).                                                              Automation and Robotics, 201–210 (SCITEPRESS, 2018).
+27. Daler, L., Mintchev, S., Stefanini, C. & Floreano, D. A bioinspired multi-   47. Sharif, A., Choi, S. & Roth, H. A new algorithm for autonomous
+    modal ﬂying and walking robot. Bioinspir. Biomim. 10, 016005                     outdoor navigation of robots that can ﬂy and drive. In Proc. 5th
+    (2015).                                                                          International Conference on Mechatronics and Robotics Engineering
+28. Yu, J. et al. On a bio-inspired amphibious robot capable of multi-               141–145 (ACM, 2019).
+    modal motion. IEEE ASME Trans. Mechatron. 17, 847–856                        48. Kavraki, L., Svestka, P., Latombe, J.-C. & Overmars, M. Probabilistic
+    (2011).                                                                          roadmaps for path planning in high-dimensional conﬁguration
+29. Araki, B. et al. Multi-robot path planning for a swarm of robots that            spaces. IEEE Trans. Robot. Autom. 12, 566–580 (1996).
+    can both ﬂy and drive, In 2017 IEEE International Conference on              49. Hart, P. E., Nilsson, N. J. & Raphael, B. A formal basis for the heuristic
+    Robotics and Automation (ICRA) 5575–5582 (IEEE, 2017).                           determination of minimum cost paths. IEEE Trans. Syst. Sci. Cybern.
+30. Tagliabue, A., Schneider, S., Pavone, M. & Agha-mohammadi, A.-A.                 4, 100–107 (1968).
+    Shapeshifter: A multi-agent, multi-modal robotic platform for                50. Dijkstra, E. W. et al. A note on two problems in connexion with
+    exploration of titan. In 2020 IEEE Aerospace Conference 1–13                     graphs. Numer. Math. 1, 269–271 (1959).
+    (IEEE, 2020).
+31. Peterson, K. & Fearing, R. S. Experimental dynamics of wing                  Acknowledgements
+    assisted running for a bipedal ornithopter. In 2011 IEEE/RSJ                 This project is funded by Caltech’s Jet Propulsion Laboratory. A.R.
+    International Conference on Intelligent Robots and Systems                   efforts were partly funded by an NSF Foundational Research in
+    5080–5086 (IEEE, 2011).                                                      Robotics (FRR), Award # 2142519, and a JPL Faculty Research Program
+32. Peterson, K., Birkmeyer, P., Dudley, R. & Fearing, R. A wing-assisted        (JFRP) fund. We acknowledge the work of graduate students and
+    running robot and implications for avian ﬂight evolution. Bioinspir.         engineers at Caltech and Northeastern University for their help in
+    Biomim. 6, 046008 (2011).                                                    prototyping and testing M4. Speciﬁcally, we are thankful to Dr. Milad
+33. Bachmann, R. J., Boria, F. J., Vaidyanathan, R., Ifju, P. G. & Quinn, R.     Ramezani at Commonwealth Scientiﬁc and Industrial Research
+    D. A biologically inspired micro-vehicle capable of aerial and ter-          Organisation (CSIRO) and Filip Slezak from Swiss Federal Institute of
+    restrial locomotion. Mech. Mach. Theory 44, 513–526 (2009).                  Technology Lausanne (EPFL) for their help with autonomous multi-
+34. Kim, K., Spieler, P., Lupu, E.-S., Ramezani, A. & Chung, S.-J. A             modal UAS-UGV operations. Noel Esparza-Duran supported the pro-
+    bipedal walking robot that can ﬂy, slackline, and skateboard. Sci.           totyping of M4. Benjamin Mottis from EPFL helped with preliminary
+    Robot. 6, eabf8136 (2021).                                                   path planning simulations and experiments.
+35. Suh, H. T., Xiong, X., Singletary, A., Ames, A. D. & Burdick, J. W.
+    Energy-efﬁcient motion planning for multi-modal hybrid locomo-
+    tion, in 2020 IEEE/RSJ International Conference on Intelligent               Author contributions
+    Robots and Systems (IROS) 7027–7033 (IEEE, 2020).                            E.S. led the prototyping efforts, simulations, and experimentation. E.S.
+36. Kalantari, A. & Spenko, M. Design and experimental validation of             and A.R. collaboratively wrote the draft. A.K. evaluated the presented
+    HyTAQ, a hybrid terrestrial and aerial quadrotor, In 2013 IEEE               multi-modal models. R.N. supported prototyping efforts. A.K. and M.G.
+    International Conference on Robotics and Automation 4445–4450                helped with draft editing. A.R. and M.G. conceived the M4 idea and are
+    (IEEE, 2013).                                                                the principal investigators.
+37. Kerr, S. J. et al. Biomechanical energetics of terrestrial locomotion
+    in california sea lions (Zalophus californianus). J. Exp. Biol. 225,         Competing interests
+    jeb244163 (2022).                                                            The authors declare no competing interests.
+
+
+
+
+Nature Communications | (2023)14:3323                                                                                                                       14
+Article                                                                                               https://doi.org/10.1038/s41467-023-39018-y
+
+
+Additional information                                                      Open Access This article is licensed under a Creative Commons
+Supplementary information The online version contains                       Attribution 4.0 International License, which permits use, sharing,
+supplementary material available at                                         adaptation, distribution and reproduction in any medium or format, as
+https://doi.org/10.1038/s41467-023-39018-y.                                 long as you give appropriate credit to the original author(s) and the
+                                                                            source, provide a link to the Creative Commons license, and indicate if
+Correspondence and requests for materials should be addressed to            changes were made. The images or other third party material in this
+Alireza Ramezani.                                                           article are included in the article’s Creative Commons license, unless
+                                                                            indicated otherwise in a credit line to the material. If material is not
+Peer review information Nature Communications thanks the anon-              included in the article’s Creative Commons license and your intended
+ymous reviewers for their contribution to the peer review of this work. A   use is not permitted by statutory regulation or exceeds the permitted
+peer review ﬁle is available.                                               use, you will need to obtain permission directly from the copyright
+                                                                            holder. To view a copy of this license, visit http://creativecommons.org/
+Reprints and permissions information is available at                        licenses/by/4.0/.
+http://www.nature.com/reprints
+                                                                            © The Author(s) 2023, corrected publication 2023
+Publisher’s note Springer Nature remains neutral with regard to jur-
+isdictional claims in published maps and institutional afﬁliations.
+
+
+
+
+Nature Communications | (2023)14:3323                                                                                                             15
+

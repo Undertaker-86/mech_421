@@ -1,0 +1,312 @@
+                                UNIVERSITY OF BRITISH COLUMBIA
+                          MECH 421 – Mechatronic Systems Instrumentation
+                              MECH 423 – Mechatronic Product Design
+                                    Design Project – Handout #1
+                         Overview, Logistics, Proposal, and Potential Projects
+
+Overview
+The MECH 421-423 design project aims to motivate students through the process to design and build a
+mechatronic product of their own invention. Students work in teams of two to formulate a product idea; develop
+a work plan; and then design, manufacture, and test their product. Students are free to develop any product that
+appeals them, as long as the development of the product could be divided into a set of reasonable functional
+components (FCs). A major exception is that projects aimed to develop weapons, even benign weapons, are
+prohibited! Each project is required to have at least five FCs. Standards for what constitute a valid FC for MECH
+421-423 will be discussed in class. Students may choose to invent a new product or to develop their own version
+of an existing product. The major deliverables include a concept proposal, full proposal, interim demo, final demo,
+video, and final report.
+
+The MECH 421-423 design project can be sponsored by a UBC or external sponsor. However, the MECH 421-423
+student team must retain creative control. Specifically, the sponsor can present the problem, but the student
+team must, within reason, be allowed to explore the full solution space. Sponsored projects must be approved.
+
+Students are encouraged to be creative and ambitious in their project proposal, but they are also encouraged to
+be prudent in designing a project compatible with their technical ability, time availability, and resource
+constraints. Specifically, students should aim to find projects that maximize the impact for their efforts, which is
+to say that students should aim to use minimum engineering effort to achieve maximum effect. For example, a
+project to create a remote-controlled toy car is unlikely to have this property since it is very difficult for students
+to make something better or more interesting than a well-designed, mass-manufactured toy car. An important
+part of the exercise is for students to estimate the challenges associated with developing robust and reliable
+mechatronic products.
+
+Materials and Supplies
+MECH 421-423 will provide each student team with up to $200 in materials purchased from Digikey, McMaster,
+and Amazon. The TAs will make orders from these suppliers once a week. Student teams are expected to acquire
+some basic supplies from available sources, such as fasteners from the Mech shop and maker space, materials
+from surplus, and components from e-waste. Student teams planning to incorporate specialized components in
+their project are expected to provide these components themselves.
+
+A parts library is available for student teams to borrow components for their project. Student teams must obtain
+permission from the TAs to borrow components. Borrowed components must be returned at the end of the
+semester in usable condition.
+
+The final projects, with the exception of components from the lab kit and parts library, are for the students to
+keep after the completion of MECH 421-423.
+
+
+
+
+                                                                                                                     1
+UBC MECH 421-423 – H. Ma 2025W
+Schedule and Due Dates
+    Dates                  Activity / Deliverables                                            Grade
+    11/3 – 11/15           Project conception, discuss with prof and TAs
+    11/17                  Project concept proposal due                                       5% in 421
+    11/3 – 12/8            Develop data infrastructure & most critical module
+    12/8                   Interim project demo and presentation (concept, data               15% in 421
+                           infrastructure, & MCM)
+    12/20                  Full project proposal due                                          5% in 423
+                           Grading: FCs 50%, MCM 10%, Data infra 10%; Test plan 30%
+    11/3 – 2/27            Project work period
+    2/27                   Final project demo – graded by alumni, TAs, and prof.              40% in 423
+    3/9                    Project video due                                                  10% in 423
+    3/9                    Final report due                                                   10% in 423
+                           Grading: Concept 10%, FCs 40%, Testing 40%, Reflections 10%
+
+Concept Proposal
+Part I (50%): Use text and graphics to explain the overall concept of your design project. What is the overall goal
+and vision? What will the final product look like? What is conceptually interesting about your project? Why is it
+worth your time to do it? List the functional components of your product and give a brief description of each.
+
+Part II (50%): copy the following questions and answer each using one paragraph:
+    1. What is the value of your product to the end-user? Note 1: the end-user is not the developer (i.e. you).
+          Note 2: there may be many forms of value, including economical, utility, artistic, emotional, educational,
+          and others. Please pick the most relevant one to explain.
+    2. What is the closest alternative to your product? Discuss the similarities and differences between your
+          product and this alternative in terms like concept, mechanism, performance, cost, etc.
+    3. What is the metric of success for your product? How will you measure it?
+    4. Pick one aspect of your project that you will develop to a polished finish product? For example: mechanical
+          housing, motion mechanism, software interface, and user experience. Describe the meaning of a finished
+          product using both positive and negative attributes. For example: finished exterior; fast and smooth
+          motion control; no rattling; error-free U/I; repeatable performance.
+    5. Which aspect(s) of your project will you not develop to a finished product?
+    6. What is your most critical module and why? For example, most risky, most difficult, least understood.
+    7. What kind of data infrastructure will you need? How will you test this infrastructure? What kind of mock
+          data will you need to generate?
+
+T1 Development and Interim Project Demo
+In term 1, you will develop the data infrastructure and the most critical module (MCM) for your product. The data
+infrastructure enables the flow of information from the ADC to the user, or to an actuator control signal. A robust
+data infrastructure is typically required both for development and operation of your product. Start your project
+by developing the data infrastructure. Generate mock data and design experiments to test your data
+infrastructure at the maximum data rate.
+
+Next, start working on your MCM. Plan to make successive improvements over multiple versions.
+
+                                                                                                                  2
+UBC MECH 421-423 – H. Ma 2025W
+Each student team will give an interim project presentation to explain the concept of their project, demo the data
+infrastructure, and present progress on their MCM. The presentation will be on Dec. 8 1-4 pm CEME 1202. Each
+team will have 6 minutes for the presentation and demo, and 4 minutes for questions and feedback.
+
+Full Project Proposal
+The full project proposal expands on the Concept Proposal to provide a detailed work plan for each module. Use
+the following outline to write the full project proposal. Detailed descriptions of each proposal section are provided
+subsequently.
+
+        1.    Concept
+        2.    Answers to Questions in the Concept Proposal
+        3.    Overview of Functional Components
+        4.    Functional Component #1
+              4.1. Approach and Design
+              4.2. Inputs and Outputs
+              4.3. Parameters
+              4.4. Development Plan
+              4.5. Test Plan
+        5.    Functional Component #2
+                  …
+        6.    Functional Component #3
+                  …
+        7.    Functional Component #4
+                  …
+        8.    Functional Component #5
+                  …
+        9.    Data Infrastructure Development
+        10.   Most Critical Module Development
+        11.   System-level Test Plan
+
+Grading: Functional Components (section 3-8) 50%, Data infrastructure 10%, MCM 10%, Test plan 30%
+
+Detailed Description of Proposal
+
+1. Concept
+Revise from the concept proposal based on feedback
+
+2. Answers to questions from the concept proposal
+Revise from the concept proposal based on feedback
+
+3. Overview of Functional Requirements
+Briefly describe the purpose and scope of each FC. Use graphical illustrations as appropriate. List your FCs in a
+table. For each, assign a lead team member and estimate % effort.
+
+              Functional Requirements                                % Effort     Responsible Person
+              FC#1: Sensor interface circuit                         15           Calvin
+
+                                                                                                                   3
+UBC MECH 421-423 – H. Ma 2025W
+            FC#2: Mechanical stage design and manufacturing         30          Calvin
+            FC#3: MSP430 code for signal processing and motor       15          Hobbes
+            control
+            FC#4: Motor driver and interface electronics            20          Hobbes
+            FC#5: C# User interface program                         20          Calvin and Hobbes
+
+
+4. Most Critical Module
+Identify the most critical module (MCM) of your project and explain the challenges involved (e.g. difficulties,
+unknowns, risks). Describe the work done so far to develop the MCM. Describe any work remaining to complete
+development of the MCM (reference later sections if appropriate).
+
+5. Functional Component #1
+For each functional component in your system create subsections that address the following.
+
+5.1 Approach and Design
+Describe the objective of the FC. Describe the hardware and/or software that will be developed to address the FC.
+Present preliminary designs and work done to-date including circuit diagrams, algorithms and pseudo-code,
+mechanical sketches, solid models, block diagrams, and screen-shots from user-interface software.
+
+5.2 Inputs and Outputs
+Describe the inputs and outputs of the hardware and/or software module developed to address the FC. Examples
+include voltages representing physical parameters, serial data streams, and user-interface outputs. Present details
+such as the transfer function and range for analog signals, the format of serial message packets, and text and
+graphics presented to the user.
+
+5.3 Parameters
+Identify the parameters of this FC. (i.e. what are the knobs that can be adjusted on this module?) Examples include
+sensor bias voltage, values of key circuit components, motor operating speed, dimensions of mechanical
+elements. Describe how these parameters affect the operation of the module. Discuss how you will optimize
+these parameters.
+
+5.4 Development Plan
+Describe the development process as a series of incremental steps.
+
+5.5 Test Plan
+Describe tests that will be performed to evaluate the functionality of the FC, as well as key developmental steps.
+
+6-9. Functional Component #2-5
+
+10. System-level Testing
+Design system-level tests that will be used to evaluate the function and performance of your product. Describe
+specific metrics of success and what you hope to achieve. Describe tests you will perform to evaluate the one
+aspect of your product that you intend to bring to a polished finish. If appropriate, describe hardware or software
+that you’ll develop for testing.
+
+
+
+
+                                                                                                                 4
+UBC MECH 421-423 – H. Ma 2025W
+Project Ideas (very old)
+The projects listed below are designed to be starting points for students to develop a proposal. Feel free to modify
+any parts for your own proposal, or preferably, create a proposal from scratch.
+
+Motion and Light Activated Bicycle Light
+LED lights are a nice bike accessory in case you had to do some nighttime riding. However, they have to be turned
+on, which slows you down and can run down the battery if you forget to turn them off. Design a bicycle LED that
+only turns on while the bike is in motion and in low-light environments. Keep manufacturing costs to a minimum
+by using a low-cost microprocessor, light sensor, and devising your own low-cost motion sensor. Develop
+strategies to keep parasitic power consumption to a minimum. Estimate the battery life of your device. Student
+teams should produce a polished final product.
+
+Remote Weather Station
+Develop electronics and software for a remote weather station to measure the temperature and wind speed at
+the top of Whistler. Use the MCP9700-E/TO-ND sensor to measure temperature. Build a thermal anemometer
+using precision resistors as heating elements. Calibrate wind speed and direction in the wind tunnel. Report the
+temperature and speed to a C# user-interface. Use the C# program to send periodic emails or tweets of current
+weather conditions with time and date stamp.
+
+Building Ventilation Controller
+Ventilation is a major source of energy consumption in public buildings. Develop a building ventilation controller
+that changes the amount of ventilation depending on the level of activity in the building. Use a microphone to
+estimate the activity level in the building. Use the motor as your ventilation fan. Use the building activity level to
+control the motor speed. Create a user interface using C# or a LCD screen to show the building activity level and
+the fan speed. Allow the user to vary the relationship between activity level and fan speed.
+
+Home-made Pen Plotter
+Bubblejet printers are an incredibly cheap way to obtain a precision 2-axis stage. Find an old bubble jet printer.
+Open the printer and remove the cable to the stepper motors from the control board while keeping the stage
+intact. Build a motor controller for the two stepper motors. Use MSP430 to generate control sequences for moving
+the motors forwards and backwards. Use C# to send commands like “forward 100 steps” or “left 20 steps”. Replace
+the bubblejet cartridge with a pen or pencil. Demonstrate plotting simple figures on a sheet of paper. Other modes
+of artistic patterning include wood-burning and foam cutting.
+
+New Interfaces for Musical Expression
+An often heard complaint at electronic music concerts is that the artists are simply “playing” their laptop. Develop
+new interfaces for musical expression as a means to connect physical gestures with music and enable new ways
+to generate and improvise music. Develop a platform for generating music using physical gestures. Use Ableton
+Live to create electronica melodies and then use signals from the accelerometer, motor/encoder, and push
+buttons to trigger MIDI inputs on your computer. Use the LCD screen and soft-keys to add trigger dynamic content
+(changing with song content).
+
+Colour-changing kinetic sculpture (Heavy mechanical component)
+Kinetic sculptures are moving art displays. Create a kinetic sculpture using one or more motors. Change the
+sculpture depending on the ambient light-level, temperature, and noise level in the room picked up a microphone.
+Add LEDs to the sculpture and change their colour and brightness output depending on the state of the sculpture.
+                                                                                                               5
+UBC MECH 421-423 – H. Ma 2025W
+The sculpture could be a designed as a permanent system or perhaps as a flashing toy that is tossed around (i.e.
+at a party or a concert).
+
+Lie Detector
+Create a lie detector that monitors various physiological signals when a person is asked a series of questions.
+Potential measurement parameters include heart rate, motion (fidgeting), face and hand temperature, and skin
+response (sweating). Potential ways to measure heart rate include ECG sensor, pulse oximetry, and microphone.
+The ECG sensor is potentially a difficult circuit to build. A shortcut is to purchase an ECG sensor and extract the
+ECG waveform by hacking a wire to the amplified output. Motion could be measured using accelerometers. Skin
+response could be measured using galvanic skin response sensors or home-brew versions that measure skin
+conductivity.
+
+Simon Says (Heavy mechanical component)
+The game “Simon Says” game is a pattern matching game, where an increasingly difficult pattern is displayed and
+the player of the game must repeat that pattern in order to go to the next level (more elements are added to the
+end of the pattern each level). Create this game with a new twist: use visual indicators, sensors (buttons or touch
+sensors), and haptic feedback to enhance the player’s experience.
+
+Knock Pattern Door Lock
+Forgetting your keys and calling up a roommate to let you in is always frustrating, or trying to find a place to hide
+keys that’s not as obvious as under the door mat. Inspired by the “What’s the secret knock?” days of our childhood,
+develop a door lock that will activate when a specific knocking pattern is detected. Commercially available
+solenoid door locks can be used as a starting point. Use a contact microphone to pick up the knock pattern from
+a door. The knock pattern could have a temporal component (time between knocks), as well as a spatial
+component (location on door). Make sure this system cannot be easily fool by random knocking.
+
+Whack-A-Mole Game
+Re-make the classic game or the following new version: There are a number of tiles, any of which could be
+indicated (for example with a light). The player then has a certain amount of time to activate that tile using a
+sensor of your choice, and then another tile is activated. This repeats, with the time between tile activation
+decreasing until the player makes a mistake and the game is over. Create a version of this game, and optionally
+keep track of high scores through a Windows interface.
+
+Additional Project Ideas
+   ● Persistence of vision display
+   ● Hack an existing display device to display your own messages
+   ● Energy harvester
+   ● Run-away alarm clock
+   ● Animatronic dancing robot
+   ● Self-balancing machine
+   ● Ultrasonic wood stud finder
+   ● Capacitive metal stud finder
+   ● Home-away program
+   ● Office temperature controller controlled using an Internet calendar (i.e. gmail calendar)
+   ● Labyrinth-playing robot (start with a simple version!)
+
+                                                                                                                   6
+UBC MECH 421-423 – H. Ma 2025W
+   ●   Low-cost electrode-discharge machining tool
+   ●   Home-brew laser scanner display
+   ●   Automated pet food dispenser
+   ●   Location based games using a GPS chip
+   ●   Puzzle alarm clock (must solve the puzzle to disarm the alarm)
+   ●   Unuseless machine (electromechanical Rube Goldberg machine)
+   ●   Escape room
+   ●   Maze solving robot
+   ●   3D block builder (like a 3D printer)
+   ●   Smartphone app to control hardware via Bluetooth
+   ●   Part picker/sorter
+   ●   Sunlight finding planter
+   ●   AR video game with motion sensing control
+
+
+
+
+                                                                        7
+UBC MECH 421-423 – H. Ma 2025W
+
