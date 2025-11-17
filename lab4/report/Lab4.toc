@@ -1,0 +1,44 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {section}{\numberline {2}Methodology}{3}{section.2}%
+\contentsline {section}{\numberline {3}Phase 1: Analog Front-End}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Exercise 1: Optical Transmitter}{5}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Question 1: Assemble and Power the LED}{5}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Question 2: Verify 1~Hz Modulation}{5}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Question 3: Verify 1~kHz Modulation}{5}{subsubsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.2}Exercise 2: Photodiode Amplifier and High-Pass Filter}{5}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Question 1: Choose $R_2$}{5}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Question 2: Choose $R_3$ and $R_4$}{5}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Question 3: Choose $R_5$ and $C_1$}{6}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Question 4: Demonstrate Ambient-Light Impact}{6}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}Question 5: Detect the \SI {1}{\kilo \hertz } Carrier at $V_2$}{7}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}Question 6: Observe the High-Pass Output}{9}{subsubsection.3.2.6}%
+\contentsline {subsubsection}{\numberline {3.2.7}Question 7: Hardware Arrangement}{11}{subsubsection.3.2.7}%
+\contentsline {subsection}{\numberline {3.3}Exercise 3: High-Pass Filter and AC Amplifier}{11}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Question 1: Bias Network}{11}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Question 2: Choose $C_2$}{12}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Question 3: Verification}{12}{subsubsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.4}Exercise 4: High-Pass Filter, Rectifier, and Low-Pass Filter}{12}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Question 1: Duplicate High-Pass}{12}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Question 2: Rectifier Gain}{13}{subsubsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.3}Question 3: Low-Pass Filter}{15}{subsubsection.3.4.3}%
+\contentsline {subsubsection}{\numberline {3.4.4}Question 4: Response Checks}{17}{subsubsection.3.4.4}%
+\contentsline {subsection}{\numberline {3.5}Exercise 5: Assemble Complete Circuit}{20}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}Question 1: Integrate Stages}{20}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {3.5.2}Question 2: Constrain Output Range}{20}{subsubsection.3.5.2}%
+\contentsline {section}{\numberline {4}Phase 3: Data Acquisition and Calibration}{20}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Exercise 6: Firmware and C\# Acquisition}{20}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Question 1: MSP430 Firmware}{20}{subsubsection.4.1.1}%
+\contentsline {section}{\numberline {5}The Importance of Alignment with Photodiode and LED}{20}{section.5}%
+\contentsline {subsubsection}{\numberline {5.0.1}Question 2: C\# Application}{20}{subsubsection.5.0.1}%
+\contentsline {subsection}{\numberline {5.1}Exercise 7: Calibration and Resolution}{21}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Question 1: Distance Sweep}{21}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}Question 2: Curve Fit}{21}{subsubsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.3}Question 3: Conversion to Position}{21}{subsubsection.5.1.3}%
+\contentsline {subsubsection}{\numberline {5.1.4}Noise Characterization}{21}{subsubsection.5.1.4}%
+\contentsline {section}{\numberline {6}Appendix}{21}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Explanation for Firmware}{21}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}MSP430 Firmware for Distance Sensor Interface}{21}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Explanation for C\#}{25}{subsection.6.3}%
+\contentsline {paragraph}{Serial data acquisition and ADC reconstruction}{26}{section*.13}%
+\contentsline {paragraph}{Calibration, ADC-to-distance conversion, and range checking}{27}{section*.14}%
+\contentsline {paragraph}{Real-time display, logging, and out-of-range indicator}{28}{section*.15}%

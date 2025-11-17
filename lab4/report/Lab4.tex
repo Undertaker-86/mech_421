@@ -11,6 +11,25 @@
 \usepackage{cleveref}
 \usepackage{tikz}
 \usepackage{circuitikz}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\lstdefinestyle{csharp}{
+  language=[Sharp]C,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{teal},
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false
+}
+
+\lstset{style=csharp}
 \setlist[itemize]{noitemsep, topsep=0pt}
 \setlist[enumerate]{label=\alph*), itemsep=0.3em}
 \title{MECH 421/423 Lab 4\\Op-Amp Circuits for Noisy Environments}
@@ -25,6 +44,38 @@
 This lab investigates the design of an optical distance sensor built from discrete op amp stages. Each exercise reinforces a different portion of the signal chain---from generating the optical carrier, through transimpedance conversion and filtering, to rectification, digitization, and calibration. 
 
 \section{Methodology}
+The experimental procedure was organized into three phases that progressively built up a complete optical distance sensor, from the analog front-end to digital acquisition and calibration. Each phase was completed only after verifying correct operation of the previous one.
+
+\subsection*{Phase 1: Analog Front-End}
+\begin{enumerate}
+    \item Configure the Analog Discovery 2 (AD2) waveform generator to drive the red LED with a \SI{5}{\volt} amplitude square wave and \SI{2.5}{\volt} DC offset. Verify visible flashing at \SI{1}{\hertz} and continuous illumination at \SI{1}{\kilo\hertz}.
+    \item Mechanically mount the LED on the linear rail and align it with the photodiode on the breadboard, ensuring smooth motion and stable geometry over the full travel range.
+    \item Design and assemble the photodiode transimpedance amplifier by selecting $R_2$ to convert a \SI{1}{\micro\ampere} photocurrent into a \SI{100}{\milli\volt} deviation about a bias voltage $V_1$.
+    \item Design the bias network using $R_3$ and $R_4$ to set $V_1 \approx \SI{0.5}{\volt}$ from the \SI{5}{\volt} supply, then build and verify the bias node on the breadboard.
+    \item Choose and install $R_5$ and $C_1$ to implement the first high-pass filter with a cutoff near \SI{100}{\hertz}, and confirm the expected frequency response using the AD2.
+    \item Characterize the effect of ambient light by observing $V_2$ with the photodiode alternately exposed and covered, documenting the change in DC level and the small \SI{1}{\kilo\hertz} carrier component.
+    \item Connect the high-pass filter output to the AC gain stage and verify that the \SI{1}{\kilo\hertz} waveform amplitude changes predictably with LED--photodiode separation over the specified distance range.
+\end{enumerate}
+
+\subsection*{Phase 2: Signal Conditioning and Rectification}
+\begin{enumerate}
+    \item Design and build a second RC high-pass filter using $C_3$ and $R_9$ with the same cutoff frequency as the first stage to further suppress low-frequency ambient-light variations.
+    \item Design and construct a non-inverting rectifier stage by selecting $R_{10}$ and $R_{11}$ to achieve an overall gain of approximately $11$, ensuring that the rectified signal remains within the op-amp linear range.
+    \item Design and implement a low-pass RC filter using $C_4$ and $R_{12}$ with a cutoff near \SI{1.6}{\hertz} to extract a slowly varying DC voltage proportional to the \SI{1}{\kilo\hertz} carrier amplitude.
+    \item Validate the signal-conditioning chain by driving $V_5$ with a known \SI{1}{\kilo\hertz} square wave (about \SI{100}{\milli\volt} peak-to-peak) from the AD2, probing the signal after each stage (high-pass, rectifier, low-pass) and confirming the expected waveforms.
+    \item Connect the output of the Phase~1 amplifier chain to this rectifier/low-pass block and adjust $R_{10}$ and $R_{11}$ if necessary so that the final output $V_{\text{out}}$ remains within the target \SIrange{0}{2.5}{\volt} range over the full LED--photodiode separation.
+    \item Measure and document the steady-state output voltage versus separation distance, confirming that the circuit neither saturates at close spacing nor loses the signal at the maximum separation.
+\end{enumerate}
+
+\subsection*{Phase 3: Digitization, Software, and Calibration}
+\begin{enumerate}
+    \item Develop firmware for the MSP430FR5739 to sample $V_{\text{out}}$ using a 10-bit ADC over a \SIrange{0}{3.3}{\volt} input range, and format each sample into two bytes (MS5B and LS5B) preceded by a synchronization byte (255).
+    \item Implement a C\# application that opens the serial port, reassembles the MS5B and LS5B fields into a 10-bit digital value, and continuously displays and plots the incoming data stream.
+    \item Extend the C\# user interface to log acquired data to file and provide real-time visualization suitable for tuning the sensor and verifying the dynamic behavior.
+    \item Perform a calibration experiment by recording ADC output at several known separation distances across the usable range; fit an appropriate function relating ADC code to distance using numerical tools.
+    \item Incorporate the calibration function into the C\# program so that it converts each ADC reading into a distance estimate, displays both raw and converted values, and flags out-of-range conditions.
+    \item Quantify the sensor resolution by logging the converted distance at a fixed nominal position for an extended period, computing the standard deviation of the measured distance, and repeating near the ends of the operating range to compare noise performance.
+\end{enumerate}
 
 \section{Phase 1: Analog Front-End}
 \subsection{Exercise 1: Optical Transmitter}
@@ -35,7 +86,7 @@ The LED transmitter was mounted on the linear rail and connected to the Analog D
 With the generator at 1~Hz the LED visibly flashed, demonstrating that the wiring and mechanical alignment were correct and that the LED could traverse the slider smoothly.
 
 \subsubsection{Question 3: Verify 1~kHz Modulation}
-Increasing the modulation to 1~kHz made the LED appear continuously on, indicating that the chosen frequency exceeds the flicker fusion threshold and is suitable as the optical carrier for later exercises.
+if you choose 1~kHz waveform, the LED appear continuously on, indicating that the chosen frequency exceeds the flicker fusion threshold and is suitable as the optical carrier for later exercises.
 
 \subsection{Exercise 2: Photodiode Amplifier and High-Pass Filter}
 \subsubsection{Question 1: Choose \texorpdfstring{$R_2$}{R2}}
@@ -607,6 +658,9 @@ If everything is correct, you should be able to see the output voltage $V_{\text
 \subsubsection{Question 1: MSP430 Firmware}
 The firmware on the MSP430FR5739 was written to sample the low-pass output with the on-chip 10-bit ADC referenced to the \SI{3.3}{\volt} rail. Each conversion was formatted into a three-byte packet \texttt{[255, MS5B, LS5B]} where the most- and least-significant five bits occupy separate bytes to simplify parsing on the PC.
 
+\section{The Importance of Alignment with Photodiode and LED}
+I was struggling to get the full range of 2.5V output for a while, but thanks to our TA, he informed me that the alignment between the photodiode and LED is very crucial. To convince you, here is a simple math behind it:
+
 \subsubsection{Question 2: C\# Application}
 The companion C\# program:
 \begin{enumerate}[label=\alph*)]
@@ -626,10 +680,371 @@ The voltage-to-distance data were fitted with a smooth function (e.g., inverse p
 \subsubsection{Question 3: Conversion to Position}
 The inverse of the fitted function was implemented in software so that each ADC code could be converted in real time to an estimated separation distance.
 
-\subsubsection{Question 4: UI Enhancements}
-The C\# application was updated to display both raw ADC values and converted position simultaneously. Additional logic signaled when the sensor moved outside the characterized range, satisfying the lab requirement for an out-of-range indicator.
-
-\subsubsection{Question 5: Noise Characterization}
+\subsubsection{Noise Characterization}
 With the slider set near mid-range, the converted position was logged for roughly \SI{10}{\second} and its standard deviation was interpreted as RMS noise. The experiment was repeated near both extremes of travel, and differences in noise level were attributed to the varying sensitivity (slope of the calibration curve) at those points.
+
+\section{Appendix}
+
+\subsection{Explanation for Firmware}
+
+\subsection{MSP430 Firmware for Distance Sensor Interface}
+
+The goal of this firmware is to periodically sample the analog output of a distance
+sensor using the \texttt{ADC10\_B} on the MSP430FR5739, quantize it to a 10-bit value
+in the range \([0, 1023]\) corresponding to \([0, 3.3]\si{\volt}\), and transmit the
+result to a host PC over UART as a 3-byte frame consisting of: a start byte with
+value 255, a second byte holding the most significant five bits (MS5B) of the ADC
+code, and a third byte holding the least significant five bits (LS5B). This packing
+format is what the C\# program expects when reconstructing the original 10-bit value.
+A TimerA interrupt every \SI{10}{\milli\second} defines the sampling period; all
+measurement and communication work is done inside the timer ISR, while the main
+loop simply initializes hardware and then idles.
+
+\subsubsection*{Main Program Flow}
+
+The main function stops the watchdog, initializes all peripherals, enables global
+interrupts, and then leaves the CPU in an idle loop. All periodic sampling is driven
+by the TimerA interrupt.
+
+\begin{lstlisting}[style=mspstyle,caption={Main firmware entry point},label={lst:main}]
+#include <msp430.h>
+#include <stdint.h>
+
+#define START_BYTE 0xFF
+#define TICK_10MS  10000u     // 10 ms @ SMCLK = 1 MHz
+
+static void gpio_init(void);
+static void uart_init_9600_smclk1M(void);
+static void adc_init_A2_AVCC(void);
+static void timer_init_10ms(void);
+static inline void uart_tx(uint8_t b);
+static uint16_t adc_sample_blocking(void);
+
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;          // stop watchdog
+
+    gpio_init();
+    uart_init_9600_smclk1M();
+    adc_init_A2_AVCC();
+    timer_init_10ms();
+
+    PM5CTL0 &= ~LOCKLPM5;              // unlock I/Os on FRAM parts
+    __bis_SR_register(GIE);            // global IRQs on
+
+    while (1) { __no_operation(); }    // all work done in timer ISR
+}
+\end{lstlisting}
+
+The watchdog timer is disabled to prevent unwanted resets, and the helper functions
+\texttt{gpio\_init()}, \texttt{uart\_init\_9600\_smclk1M()}, \texttt{adc\_init\_A2\_AVCC()},
+and \texttt{timer\_init\_10ms()} configure the GPIO, UART, ADC, and TimerA respectively.
+The line \texttt{PM5CTL0 \&= \string~LOCKLPM5;} unlocks the FRAM device I/O pins, and
+\texttt{\_\_bis\_SR\_register(GIE);} enables global interrupts, allowing the TimerA ISR
+to execute every \SI{10}{\milli\second}. The \texttt{while(1)} loop does nothing; it simply
+keeps the CPU running while the interrupt-based acquisition proceeds in the background.
+
+\subsubsection*{GPIO Configuration}
+
+The GPIO configuration routes \texttt{P1.2} to the analog input channel \texttt{A2}
+for the distance sensor and maps \texttt{P2.0}/\texttt{P2.1} to the UART TX/RX pins
+for communication with the PC.
+
+\begin{lstlisting}[style=mspstyle,caption={GPIO setup for ADC input and UART pins},label={lst:gpio}]
+static void gpio_init(void)
+{
+    // P1.2 as analog input (A2)
+    P1DIR  &= ~BIT2;
+    P1SEL0 |=  BIT2;
+    P1SEL1 |=  BIT2;                   // selects analog function on FR57xx
+    P1REN  &= ~BIT2;                   // disable pull resistor
+
+    // P2.0=TXD, P2.1=RXD for eUSCI_A0
+    P2SEL1 |= (BIT0 | BIT1);
+    P2SEL0 &= ~(BIT0 | BIT1);
+}
+\end{lstlisting}
+
+On \texttt{P1.2}, the direction bit is cleared to make it an input, and the special
+function select bits \texttt{P1SEL0/P1SEL1} are set so that the pin is connected to
+the internal ADC input channel \texttt{A2}. Pull-up and pull-down resistors are
+disabled to avoid disturbing the analog signal. Pins \texttt{P2.0} and \texttt{P2.1}
+are switched from general-purpose I/O to the UART peripheral (\texttt{eUSCI\_A0})
+for serial transmission and reception.
+
+\subsubsection*{UART Configuration and Transmission}
+
+The UART is configured to run at \SI{9600}{baud} using \texttt{SMCLK} at approximately
+\SI{1}{\mega\hertz}. The code uses oversampling mode for better baud rate accuracy.
+A small helper function \texttt{uart\_tx()} blocks until the transmit buffer is ready
+and then writes a single byte, guaranteeing that the 3-byte frame is transmitted in
+order.
+
+\begin{lstlisting}[style=mspstyle,caption={UART configuration at 9600 baud},label={lst:uart}]
+static void uart_init_9600_smclk1M(void)
+{
+    UCA0CTLW0 = UCSWRST | UCSSEL__SMCLK;     // hold reset, select SMCLK
+    UCA0BRW   = 6;                           // 1 MHz / (16*9600) ≈ 6.51
+    UCA0MCTLW = 0x2081;                      // UCOS16 + BRF=8 + BRS≈0x20
+    UCA0CTLW0 &= ~UCSWRST;                   // release reset, enable UART
+}
+
+static inline void uart_tx(uint8_t b)
+{
+    while (!(UCA0IFG & UCTXIFG));            // wait until TX buffer empty
+    UCA0TXBUF = b;                           // send one byte
+}
+\end{lstlisting}
+
+In summary, this block ensures that the microcontroller can reliably send each
+sample as a sequence of bytes over the serial port to the C\# application.
+
+\subsubsection*{ADC Configuration and Sampling}
+
+The ADC is configured to perform single-channel, single-conversion measurements
+on input channel \texttt{A2} with reference voltage \texttt{AVCC} (3.3~V). The
+conversion result is 10 bits, which directly matches the exercise requirement.
+
+\begin{lstlisting}[style=mspstyle,caption={ADC setup on channel A2, 10-bit resolution},label={lst:adc_init}]
+static void adc_init_A2_AVCC(void)
+{
+    ADC10CTL0 &= ~ADC10ENC;                  // allow configuration
+    ADC10CTL0  = ADC10SHT_2 | ADC10ON;       // 16-cycle S/H, ADC on
+    ADC10CTL1  = ADC10SHP;                   // use sampling timer
+    ADC10CTL2  = ADC10RES;                   // 10-bit result
+    ADC10MCTL0 = ADC10SREF_0 | ADC10INCH_2;  // AVCC/AVSS, channel A2 (P1.2)
+    ADC10CTL0 |= ADC10ENC;                   // enable conversions
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=mspstyle,caption={Blocking ADC sampling routine},label={lst:adc_sample}]
+static uint16_t adc_sample_blocking(void)
+{
+    ADC10CTL0 |= ADC10SC;                    // start conversion
+    while (ADC10CTL1 & ADC10BUSY) ;          // wait until conversion complete
+    return ADC10MEM0 & 0x03FF;               // 10-bit value (0..1023)
+}
+\end{lstlisting}
+
+The function \texttt{adc\_sample\_blocking()} triggers a conversion by setting
+\texttt{ADC10SC}, then busy-waits until \texttt{ADC10BUSY} clears. Finally, it masks
+the 10-bit result with \texttt{0x03FF} to ensure that only the lower ten bits
+are returned, implementing exactly the \([0,1023]\) range required.
+
+\subsubsection*{Timer Configuration and 10~ms Period}
+
+To obtain a sampling period of approximately \SI{10}{\milli\second}, TimerA0
+is configured in up mode using \texttt{SMCLK} at \SI{1}{\mega\hertz}. The value
+\texttt{TICK\_10MS} is chosen such that the timer reaches the compare value every
+\SI{10}{\milli\second}.
+
+\begin{lstlisting}[style=mspstyle,caption={TimerA configuration for 10 ms period},label={lst:timer}]
+static void timer_init_10ms(void)
+{
+    TA0CCR0  = TICK_10MS - 1;                // period: 10000 ticks
+    TA0CCTL0 = CCIE;                         // enable CCR0 interrupt
+    TA0CTL   = TASSEL__SMCLK | MC__UP | TACLR;  // SMCLK, up mode, clear
+}
+\end{lstlisting}
+
+Every time TimerA0 reaches \texttt{TA0CCR0}, the \texttt{TIMER0\_A0\_VECTOR}
+interrupt is triggered. This interrupt defines the acquisition rate of
+approximately \SI{100}{\hertz}.
+
+\subsubsection*{Core Logic: Sampling, Packing, and Transmitting}
+
+The most important code block is the TimerA ISR. Every \SI{10}{\milli\second}, it
+performs an ADC conversion, splits the resulting 10-bit value into two 5-bit
+fields (MS5B and LS5B), and sends them to the PC, preceded by a fixed start byte
+\texttt{0xFF}.
+
+\begin{lstlisting}[style=mspstyle,caption={TimerA ISR: sample ADC and transmit 3-byte frame},label={lst:timer_isr}]
+/* ---- 10 ms ISR: sample, split to 5+5 bits, send 3 bytes ---- */
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR(void)
+{
+    uint16_t adc = adc_sample_blocking();     // 0..1023 for 0..3.3V (AVCC)
+    uint8_t  ms5 = (adc >> 5) & 0x1F;         // bits [9:5]  (MS5B)
+    uint8_t  ls5 =  adc       & 0x1F;         // bits [4:0]  (LS5B)
+
+    uart_tx(START_BYTE);                      // Out byte 1: start marker (255)
+    uart_tx(ms5);                             // Out byte 2: MS5B
+    uart_tx(ls5);                             // Out byte 3: LS5B
+}
+\end{lstlisting}
+
+The key operations inside the ISR are the bit manipulations
+\texttt{ms5 = (adc >> 5) \& 0x1F;} and \texttt{ls5 = adc \& 0x1F;}. The first line
+shifts the 10-bit ADC value \(D\) right by five positions and masks with \texttt{0x1F}
+to keep only bits \(b_9\) through \(b_5\) (the most significant five bits). The second
+line masks the original value with \texttt{0x1F} to keep bits \(b_4\) through \(b_0\)
+(the least significant five bits). On the PC side, the C\# application reconstructs the
+original 10-bit value using the inverse operation \(D = (D_{\text{MS}} \ll 5) +
+D_{\text{LS}}\).
+
+Together, the TimerA ISR and the UART transmission realize the required data format:
+out byte~1 is the fixed start marker (255), out byte~2 encodes MS5B, and out byte~3
+encodes LS5B. This 3-byte frame is sent every \SI{10}{\milli\second}, providing a continuous
+stream of distance measurements for the C\# application to decode, display,
+graph, and store.
+
+\subsection{Explanation for C\#}
+The C\# application was updated to display both raw ADC values and converted position simultaneously. Additional logic signaled when the sensor moved outside the characterized range, satisfying the lab requirement for an out-of-range indicator. The most important components of this program are:
+\begin{itemize}
+    \item a serial interface that reconstructs 10-bit ADC codes from the MSP430 data stream,
+    \item a calibration module that fits a curve and converts each ADC code to physical distance, and
+    \item a UI/update loop that shows distance, flags out-of-range conditions, and logs data for the noise analysis.
+\end{itemize}
+
+\paragraph{Serial data acquisition and ADC reconstruction}
+On the firmware side, the MSP430 sends a 3-byte packet composed of a start byte and two 5-bit fields containing the most and least significant bits of the 10-bit ADC result. On the PC side, the \texttt{SerialPortService} class implements a small state machine that watches the incoming serial stream, waits for the start byte \texttt{0xFF}, and then assembles the full ADC code. This behaviour is captured in \Cref{lst:serial_decode}.
+
+\begin{lstlisting}[caption={Reassembling 10-bit ADC samples from 3-byte serial packets in \texttt{SerialPortService}.},label={lst:serial_decode}]
+private void ProcessByte(byte data)
+{
+    if (_bufferIndex == 0)
+    {
+        // Look for start byte 0xFF
+        if (data == START_BYTE)
+        {
+            _buffer[0] = data;
+            _bufferIndex = 1;
+        }
+    }
+    else if (_bufferIndex == 1)
+    {
+        // MS5B (most significant 5 bits)
+        _buffer[1] = data;
+        _bufferIndex = 2;
+    }
+    else if (_bufferIndex == 2)
+    {
+        // LS5B (least significant 5 bits)
+        _buffer[2] = data;
+
+        int ms5b = _buffer[1] & 0x1F;   // bits 9..5
+        int ls5b = _buffer[2] & 0x1F;   // bits 4..0
+        int adcValue = (ms5b << 5) | ls5b;
+
+        AdcDataReceived?.Invoke(
+            this,
+            new AdcDataReceivedEventArgs(adcValue));
+
+        // Reset for next packet
+        _bufferIndex = 0;
+    }
+}
+\end{lstlisting}
+
+\Cref{lst:serial_decode} shows that every time a complete 3-byte packet is received, the code masks the two 5-bit fields, shifts the most significant portion, and ORs them together into a 10-bit integer. The resulting \texttt{adcValue} is wrapped in an \texttt{AdcDataReceivedEventArgs} object and broadcast via the \texttt{AdcDataReceived} event so that the rest of the application can treat ADC samples as a clean, time-stamped stream.
+
+\paragraph{Calibration, ADC-to-distance conversion, and range checking}
+The calibration step from Exercise~7 is implemented in the \texttt{CalibrationService} and \texttt{CalibrationData} classes. \texttt{CalibrationService} takes the user-entered distance--ADC pairs, calls the MathNet.Numerics fitting routines (linear, polynomial, power-law, or inverse), and stores the resulting coefficients and $R^2$ value. Once a calibration is available, the \texttt{CalibrationData} class applies the fitted function to convert every ADC sample into an estimated distance and also decides whether a reading lies inside the valid region of the calibration. The core logic is illustrated in \Cref{lst:adc_to_distance}.
+
+\begin{lstlisting}[caption={Using the fitted calibration curve to convert ADC codes to distance and check the valid range.},label={lst:adc_to_distance}]
+public double ConvertAdcToDistance(int adcValue)
+{
+    if (Coefficients == null || Coefficients.Length == 0)
+        return 0;
+
+    double x = adcValue;
+
+    switch (FitType)
+    {
+        case FitType.Linear:
+            // y = m x + b
+            return Coefficients[0] * x + Coefficients[1];
+
+        case FitType.Polynomial2:
+            // y = a x^2 + b x + c
+            return Coefficients[0] * x * x
+                 + Coefficients[1] * x
+                 + Coefficients[2];
+
+        case FitType.Power:
+            // y = a x^b
+            return (x > 0)
+                ? Coefficients[0] * Math.Pow(x, Coefficients[1])
+                : 0;
+
+        // Other fit types (polynomial3, inverse)
+        // are implemented analogously.
+    }
+
+    return 0;
+}
+
+public bool IsInRange(int adcValue)
+{
+    return adcValue >= MinAdcValue &&
+           adcValue <= MaxAdcValue;
+}
+\end{lstlisting}
+
+In \Cref{lst:adc_to_distance} the chosen model (for example a quadratic polynomial) and its coefficients are determined once during the calibration step. During normal operation the function \texttt{ConvertAdcToDistance} is then evaluated in real time for each incoming \texttt{adcValue} to produce a physical distance in centimetres, while \texttt{IsInRange} uses the user-selected minimum and maximum ADC thresholds to flag when the sensor is being operated outside the calibrated region.
+
+\paragraph{Real-time display, logging, and out-of-range indicator}
+The \texttt{MainForm} class subscribes to the \texttt{AdcDataReceived} event and uses the calibration object to keep the UI and data logger in sync with the incoming samples. The event handler shown in \Cref{lst:adc_handler} converts the ADC code, updates the numerical readouts, sets the in-range or out-of-range label, appends the data to the plotting buffers, and optionally logs the sample to disk and to the noise-analysis buffer.
+
+\begin{lstlisting}[caption={Event handler that updates the UI, plots, and logging structures for each new sample.},label={lst:adc_handler}]
+private void SerialPort_AdcDataReceived(
+    object? sender, AdcDataReceivedEventArgs e)
+{
+    int adcValue = e.AdcValue;
+    double distance = 0;
+    bool isInRange = true;
+
+    if (_currentCalibration != null &&
+        _currentCalibration.Coefficients.Length > 0)
+    {
+        distance = _currentCalibration
+            .ConvertAdcToDistance(adcValue);
+        isInRange = _currentCalibration
+            .IsInRange(adcValue);
+    }
+
+    // Update numeric readouts
+    lblAdcValue.Text =
+        $"ADC Value: {adcValue} / 1023";
+    lblDistance.Text =
+        $"Distance: {distance:F2} cm";
+
+    // Indicate whether the reading is inside
+    // the calibrated operating range
+    if (isInRange)
+    {
+        lblRangeStatus.Text = "In Range";
+        lblRangeStatus.ForeColor = Color.Green;
+    }
+    else
+    {
+        lblRangeStatus.Text = "Out of Range";
+        lblRangeStatus.ForeColor = Color.Red;
+    }
+
+    // Append to time-series buffers for plotting
+    double t = (DateTime.Now - _startTime).TotalSeconds;
+    _adcTimeData.Add(t);
+    _adcValueData.Add(adcValue);
+    _distanceTimeData.Add(t);
+    _distanceValueData.Add(distance);
+
+    // Log data if logging is active
+    if (_isLogging)
+    {
+        var reading = new SensorReading(
+            adcValue, distance, isInRange);
+        _dataLogger.AddReading(reading);
+        lblSampleCount.Text =
+            $"Samples: {_dataLogger.Count}";
+    }
+
+    // When noise recording is enabled, the same
+    // distance values are accumulated for later
+    // RMS noise and standard deviation analysis.
+}
+\end{lstlisting}
+
+
 
 \end{document}
