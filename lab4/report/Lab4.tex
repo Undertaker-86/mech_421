@@ -14,7 +14,7 @@
 \setlist[itemize]{noitemsep, topsep=0pt}
 \setlist[enumerate]{label=\alph*), itemsep=0.3em}
 \title{MECH 421/423 Lab 4\\Op-Amp Circuits for Noisy Environments}
-\author{Aerial Student}
+\author{Gyan Edbert Zesiro \\ Student ID: 38600060}
 \date{\today}
 \begin{document}
 \maketitle
@@ -22,7 +22,9 @@
 \newpage
 
 \section{Introduction}
-This lab investigates the design of an optical distance sensor built from discrete op amp stages. Each exercise reinforces a different portion of the signal chain---from generating the optical carrier, through transimpedance conversion and filtering, to rectification, digitization, and calibration. The write-up below follows the structure of the lab manual and includes design calculations and measured results taken from the handwritten notes.
+This lab investigates the design of an optical distance sensor built from discrete op amp stages. Each exercise reinforces a different portion of the signal chain---from generating the optical carrier, through transimpedance conversion and filtering, to rectification, digitization, and calibration. 
+
+\section{Methodology}
 
 \section{Phase 1: Analog Front-End}
 \subsection{Exercise 1: Optical Transmitter}
@@ -475,6 +477,123 @@ bandwidth and slew-rate limits of the real op-amp.
 \subsubsection{Question 4: Response Checks}
 The next step is to check if your circuit works for Exericse 3 number 4, 5, 6. This is the perfect time for you to test if your circuit
 has the full 2.5V range. If the range is bad, please first try aligning your photodiode, because that might be the number one cause of this issue.
+Below are my results for V6, V7, and V8:
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/4_4-v6.png}
+    \caption{Waveform at $V_6$.}
+    \label{fig:4_4_v6}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/4_4-v7.png}
+    \caption{Waveform at $V_7$.}
+    \label{fig:4_4_v7}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/4_4-v8.png}
+    \caption{Waveform at $V_8$.}
+    \label{fig:4_4_v8}
+\end{figure}
+
+Notice that V8 is a constant line, which is great for our data acquisition system. This is the outline on the output of V8:
+The last stage is a simple RC low–pass with input \(V_7\) and output \(V_8\):
+a resistor \(R_{12}\) in series, a capacitor \(C_4\) to ground at the output node.
+Its transfer function is
+\begin{align*}
+H(s) &= \frac{V_8(s)}{V_7(s)}
+     = \frac{1}{1 + s R_{12} C_4},
+\end{align*}
+so in the frequency domain
+\begin{align*}
+H(j\omega) &= \frac{1}{1 + j \omega R_{12} C_4}, \\
+\bigl|H(j\omega)\bigr|
+  &= \frac{1}{\sqrt{1 + (\omega R_{12} C_4)^2}}.
+\end{align*}
+
+The cut–off frequency is
+\begin{align*}
+\omega_c &= \frac{1}{R_{12} C_4} = 10~\text{rad/s}
+           \quad\Rightarrow\quad
+f_c = \frac{\omega_c}{2\pi} \approx 1.6~\text{Hz},
+\end{align*}
+so we can write
+\begin{align*}
+\bigl|H(j\omega)\bigr|
+= \frac{1}{\sqrt{1 + (\omega/\omega_c)^2}}
+= \boxed{\displaystyle
+\frac{1}{\sqrt{1 + (\omega/10)^2}}
+}.
+\end{align*}
+
+\subsection*{Effect on the rectified 1 kHz waveform}
+
+Let the rectifier output \(V_7(t)\) be decomposed into a DC component
+plus an AC component with fundamental frequency \(f_0 = 1~\text{kHz}\):
+\begin{align*}
+V_7(t) &= V_{\text{DC}} + v_{\text{AC}}(t), \\
+v_{\text{AC}}(t) &= \sum_{n=1}^{\infty}
+A_n \cos\!\bigl(n \omega_0 t + \phi_n\bigr),
+\qquad \omega_0 = 2\pi f_0 .
+\end{align*}
+(For a rectified square wave this is a Fourier series with harmonics of
+\(1~\text{kHz}\).)
+
+The DC term is at \(\omega = 0\), so
+\begin{align*}
+\bigl|H(j0)\bigr| &= 1,
+\end{align*}
+i.e.\ the DC level passes unchanged.
+
+For the AC harmonics, each component at frequency \(n\omega_0\)
+is multiplied by \(\bigl|H(jn\omega_0)\bigr|\):
+\begin{align*}
+v_{\text{AC,out}}(t)
+&= \sum_{n=1}^{\infty}
+A_n \bigl|H(j n \omega_0)\bigr|
+    \cos\!\bigl(n \omega_0 t + \phi_n + \angle H(jn\omega_0)\bigr).
+\end{align*}
+
+Now compute the attenuation for the fundamental at \(1~\text{kHz}\):
+\begin{align*}
+\omega_0 &= 2\pi \times 10^3 \approx 6.283\times 10^3~\text{rad/s},\\[4pt]
+\frac{\omega_0}{\omega_c} &= \frac{6.283\times 10^3}{10} \approx 628.3,\\[4pt]
+\bigl|H(j\omega_0)\bigr|
+&= \frac{1}{\sqrt{1 + (628.3)^2}}
+ \approx \boxed{1.6\times 10^{-3}}.
+\end{align*}
+So the 1 kHz ripple at the output is only about \(0.16\%\) of the ripple
+at \(V_7\).  
+Higher harmonics (\(n\ge2\)) are at even larger frequencies
+\(n\omega_0\), so
+\begin{align*}
+\bigl|H(j n\omega_0)\bigr|
+&= \frac{1}{\sqrt{1 + (n\omega_0/\omega_c)^2}}
+\ll 1.6\times 10^{-3}
+\qquad (n \ge 2),
+\end{align*}
+and are suppressed even more strongly.
+
+Therefore the output is
+\begin{align*}
+V_8(t)
+&= V_{\text{DC}}\cdot 1 \;+\; v_{\text{AC,out}}(t)\\
+&\approx V_{\text{DC}} \;+\; \text{(very small ripple)}.
+\end{align*}
+
+On the oscilloscope, this tiny residual ripple is far below the vertical
+scale and you see essentially only the DC term:
+\begin{align*}
+\boxed{V_8(t) \approx V_{\text{DC}} = \text{constant line}.}
+\end{align*}
+
+Intuitively, the time constant of the low–pass filter is
+\(\tau = R_{12}C_4 = 1/\omega_c = 0.1~\text{s}\), whereas the period of
+the 1 kHz waveform is \(T = 1~\text{ms} \ll \tau\).  
+The capacitor voltage cannot change much within one period of the
+waveform, so the filter effectively averages the rectified signal and
+outputs an almost constant DC value.
 
 \subsection{Exercise 5: Assemble Complete Circuit}
 \subsubsection{Question 1: Integrate Stages}
