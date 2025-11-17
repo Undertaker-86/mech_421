@@ -34,11 +34,23 @@ high-impact modes:
     \item \textbf{Ground Mode:} Agile wheeled driving indoors.
     \item \textbf{Flight Mode:} Short-hop quadrotor flight outdoors.
 \end{itemize}
+Our goal is to design and build a morphing robot that can switch between these two modes, and most importantly, learn from the challenges up ahead. We do want to learn as much as possible, so we will implement the following component from scratch:
+\begin{itemize}
+    \item Mechanical Design
+    \item Flight Controller
+    \item Control System
+    \item Power System 
+\end{itemize}
+We recognize the complexity of designing these components, for example building flight controller alone would require deep understanding of control theory, sensor fusion, and embedded systems. However, this is our final year and we would like to end it with a good note.
+
 The vision and purpose of the device is that by utilizing the same set of rotor-wheel appendages,
 we can create a more versatile locomotion device, allowing it to be used in multiple scenarios. 
 For example, the robot could drive efficiently through a building's corridors to survey damage, 
 then switch to flight mode to cross a collapsed stairwell or navigate between floors through 
 an open atrium, enabling a single device to navigate complex environments.
+
+Sometimes it will be hard for flying drone to cross tight spaces, as it might cause damage and ultimately break the robot.
+So in such cases it would be beneficial for the drone to change into wheeled mode to pass through narrow passages safely.
 
 \begin{figure}[H]
     \centering
@@ -95,11 +107,10 @@ in state estimation, control, and path planning. We think that this project will
 expose ourself on hese topics which we want to research in the future. 
 
 Finally, we think it's just cool. As Richard Feynman once said, ``Physics is like sex: sure, 
-it may give some practical results, but that's not why we do it.'' The same applies here—while 
+it may give some practical results, but that's not why we do it.'' The same applies here, while 
 this robot has practical applications in search-and-rescue, the real motivation is the challenge 
 and the learning experience. Even if the final prototype doesn't achieve full autonomous 
-flight-to-ground transitions, the process of designing the transformation mechanism, 
-integrating the control systems, and wrestling with the state estimation problems will teach us 
+flight-to-ground transitions, the process of designing the transformation mechanism, creating a working PCB, integrating the control systems, and wrestling with the state estimation problems will teach us 
 far more than building yet another standard quadcopter or RC car. We'd rather aim high and 
 learn from the inevitable obstacles than play it safe with a project we could finish in our sleep.
 Afterall a wrong answer isn’t a meaningless one.
@@ -113,21 +124,21 @@ Table~\ref{tab:functional_components} summarizes the six main subsystems that en
 \centering
 \caption{Functional Components of the Morphing Robot}
 \label{tab:functional_components}
-\begin{tabular}{p{0.3\textwidth} p{0.55\textwidth}}
+\begin{tabular}{p{0.3\textwidth} p{0.55\textwidth} p{0.1\textwidth}}
 \toprule
-\textbf{Component} & \textbf{Description} \\
+\textbf{Component} & \textbf{Description} & Responsibility\\
 \midrule
-\textbf{FC1: Morphing Airframe} & Carbon fiber chassis with motorized indexed hinges and Hall-effect sensors to lock pods at 0° (ground) and 45° (flight) positions. Target transition time under 10 seconds. \\
+\textbf{FC1: Morphing Airframe} & Lightweight PLA chassis with motorized indexed hinges and Hall-effect sensors to lock pods at 0° (ground) and 45° (flight) positions. Target transition time under 10 seconds. If budget permits we will use fancier material such as carbon fiber to reduce weight and improve durability.& Ryan \\
 \addlinespace
-\textbf{FC2: Rotor-Wheel Pods} & Four identical convertible modules, each containing a ducted rotor with tire bonded to the rim. Provides both ground traction and aerial thrust using the same hardware. \\
+\textbf{FC2: Rotor-Wheel Pods} & Four identical convertible modules, each containing a ducted rotor with tire bonded to the rim. Provides both ground traction and aerial thrust using the same hardware. & Ryan \\
 \addlinespace
-\textbf{FC3: Ground Drivetrain} & Brushless hub motors with gearboxes drive the tires for wheeled locomotion. Differential steering enables agile indoor navigation. \\
+\textbf{FC3: Ground Drivetrain} & Brushless hub motors with gearboxes drive the tires for wheeled locomotion. Differential steering enables agile indoor navigation. & Gyan\\
 \addlinespace
-\textbf{FC4: Flight Powertrain} & Same motors repurposed as quadcopter propulsion with appropriate propellers and ESCs, enabling short flight hops to clear obstacles. \\
+\textbf{FC4: Flight Powertrain} & Same motors repurposed as quadcopter propulsion with appropriate propellers and ESCs, enabling short flight hops to clear obstacles. & Gyan\\
 \addlinespace
-\textbf{FC5: Control System} & RC transmitter for manual mode switching and teleoperation. Flight controller (e.g., Pixhawk with PX4 firmware) for stabilization. Optional onboard computer for future autonomous navigation research. \\
+\textbf{FC5: Control System} & RC transmitter for manual mode switching and teleoperation. Flight controller (e.g., Pixhawk with PX4 firmware) for stabilization. Optional onboard computer for future autonomous navigation research. & Gyan\\
 \addlinespace
-\textbf{FC6: Power System} & Lithium-polymer battery with voltage regulation for motor and electronics power. Sized to support extended ground operation and multiple flight cycles per charge. \\
+\textbf{FC6: Power System} & Lithium-polymer battery with voltage regulation for motor and electronics power. Sized to support extended ground operation and multiple flight cycles per charge. & Ryan\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -146,7 +157,7 @@ Table~\ref{tab:functional_components} summarizes the six main subsystems that en
     The added flexibility from the multiple modes allow a single robot to handle multiple scenarios.
     For example, urban search and rescue teams gain a single robot that can roll quietly 
     through doorways and then quickly hop over collapsed stair segments to reach 
-    trapped occupants. The mission storyboard in Fig.~\ref{fig:sar} 
+    trapped occupants. The mission storyboard in \Cref{fig:sar} 
     illustrates how the operator stays at street level, teleoperates wheeled inspection, 
     and only flies when debris gaps appear, minimizing battery use yet preserving access 
     flexibility. This blend shortens mission timelines and reduces the number of specialized 
@@ -163,6 +174,8 @@ Table~\ref{tab:functional_components} summarizes the six main subsystems that en
     other fields such as space exploration (e,g, Mars rover), agriculture (e.g., inspecting crops on the ground and flying over
     obstacles), military reconnaissance (e.g., driving through urban environments and flying
     over barriers), and environmental monitoring (e.g., ground surveys and aerial mapping).
+    
+    For our demonstration purposes though, we will show that the robot can navigate through tight spaces that a usual drone cannot pass through, by switching to wheeled mode.
 
 
     \item \textbf{What is the closest alternative to your product?}\\
@@ -175,14 +188,14 @@ Table~\ref{tab:functional_components} summarizes the six main subsystems that en
     alloy actuators to rapidly switch between flying and driving configurations in under 50 milliseconds.  
     Both of these platforms focus specifically on the flight-to-ground transition problem we're addressing.
     
-    Outside of research prototypes, there isn't really a direct commercial equivalent. The practical alternative is simply using **two separate robots**: a standard quadcopter drone for aerial reconnaissance and an RC car or small ground rover for close-up inspection. This is what most hobbyists and even some professional applications currently do—switching between devices based on the terrain.
+    Outside of research prototypes, there isn't really a direct commercial equivalent. The practical alternative is simply using \textbf{two separate robots}: a standard quadcopter drone for aerial reconnaissance and an RC car or small ground rover for close-up inspection. This is what most hobbyists and even some professional applications currently do, switching between devices based on the terrain.
 
     \item \textbf{What is the metric of success for your product? How will you measure it?}\\
     We will declare success if the robot (i) completes a ground-to-flight-to-ground cycle in 
-    under 12~s, (ii) sustains 0.8~m/s average speed in drive mode for 15~m, and 
+    under 20~s, (ii) sustains 0.8~m/s average speed in drive mode for 15~m, and 
     (iii) performs a 5~m horizontal flight hop carrying its full chassis. 
-    Timing gates, encoder logs, and motion capture at the sandbox will provide 
-    objective data for each criterion.
+    We will use timing gates, encoder logs, and motion capture to quantify these metrics.
+    
     \item \textbf{Pick one aspect to polish to a finished product.}\\
     The mechanical morphing mechanism and locks will reach a polished standard: 
     smooth bearing-supported hinges, hidden wiring, 
@@ -190,11 +203,11 @@ Table~\ref{tab:functional_components} summarizes the six main subsystems that en
     A rough prototype (visible wobble, exposed wires, detents that need hand assistance) is explicitly 
     unacceptable and will be engineered out through iterative machining and cable routing.
     \item \textbf{Which aspect(s) will you not develop to a finished product?}\\
-    Full autonomy and onboard perception remain experimental. 
+    Full autonomy will be hard to achieve, but we will still do the work, to the level where the robot can't crash easily.
     We will run ROS~2 teleoperation and simple PX4 position hold, 
-    but we will not harden SLAM, obstacle avoidance, or AI-based victim detection. 
-    Those features require datasets and validation far beyond the term, 
-    so we treat them as scaffolding for operator-driven demos.
+    but we will not harden SLAM, obstacle avoidance, or object detection (most movement will be done with manual operation), we don't think this is necessary for this project, and is currently a nice to have feature. 
+    Additionally, features which require datasets and validation (e.g. machine learning model) will not be implemented because of time constraints, and our lack of knowledge in running a machine learning model in tiny embedded systems.
+    
     \item \textbf{What is your most critical module and why?}\\
     The convertible rotor-wheel pod (FC2) is most critical because it must 
     satisfy conflicting requirements: structural stiffness for fast driving, 
