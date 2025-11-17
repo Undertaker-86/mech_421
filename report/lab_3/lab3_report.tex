@@ -426,12 +426,21 @@ The aluminum strut and load cell were mounted per the manual to align the strain
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
+  \includefigure[width=0.7\linewidth]{figures/load_cell.jpeg}
   \caption{Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}
   \label{fig:mechanical_setup}
 \end{figure}
 
 \subsection{Exercise 2: \SI{2.5}{\volt} Reference}
+The pins for the MCP6002 and the 2.5V reference circuit is shown in \Cref{fig:ex2_reference}.
+
+\begin{figure}[H]
+  \centering
+  \includefigure[width=0.7\linewidth]{figures/mcp_2.5v.jpeg}
+  \caption{Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}
+  \label{fig:ex2_reference}
+\end{figure}
+
 Using the MCP6002 in a buffered divider configuration, $R_1=R_2=\SI{10}{\kilo\ohm}$ delivered the targeted \SI{2.5}{\volt} reference from the \SI{5}{\volt} bench supply. Measured values were $V_1=\SI{5.01}{\volt}$ and $V_2=\SI{2.497}{\volt}$, well within the \SI{50}{\milli\volt} tolerance. A \SI{0.1}{\micro\farad} ceramic capacitor was soldered directly between $V_{DD}$ and $V_{SS}$.
 
 The LTspice schematic and output waveform for this exercise are shown in \Cref{fig:vref_spice,fig:vref_output}. The simulation predicts $V_2=\SI{2.500}{\volt}$ for ideal components, while the bench result is \SI{3}{\milli\volt} low because the MCP6002 output stage droops slightly under the \SI{200}{\micro\ampere} load from the rest of the circuit. The discrepancy matches the \SI{32}{\micro\volt} offset predicted when the MCP6002's finite open-loop gain and source resistance are included in the SPICE macro-model.
