@@ -12,6 +12,8 @@
 \usepackage{multirow}
 \usepackage[table]{xcolor}
 \usepackage[most]{tcolorbox}
+\usepackage{subcaption}
+
 % --- Fonts & microtypography (Times-like) ---
 \usepackage{newtxtext,newtxmath}
 \usepackage{microtype}
@@ -325,7 +327,7 @@ The correction limits the residual error over \SIrange{0}{60}{\celsius} to \SI{\
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
+  \includegraphics[width=0.7\linewidth]{lt_spice/circ_1_ntc.png}
   \caption{LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve (placeholder for the plotted dataset exported from LTspice).}
   \label{fig:thermistor_dc}
 \end{figure}
@@ -426,7 +428,7 @@ The aluminum strut and load cell were mounted per the manual to align the strain
 
 \begin{figure}[H]
   \centering
-  \includefigure[width=0.7\linewidth]{figures/load_cell.jpeg}
+  \includegraphics[width=0.7\linewidth]{figures/load_cell.jpeg}
   \caption{Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}
   \label{fig:mechanical_setup}
 \end{figure}
@@ -436,7 +438,7 @@ The pins for the MCP6002 and the 2.5V reference circuit is shown in \Cref{fig:ex
 
 \begin{figure}[H]
   \centering
-  \includefigure[width=0.7\linewidth]{figures/mcp_2.5v.jpeg}
+  \includegraphics[width=0.7\linewidth]{figures/mcp_2.5v.jpeg}
   \caption{Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}
   \label{fig:ex2_reference}
 \end{figure}
@@ -462,22 +464,46 @@ The LTspice schematic and output waveform for this exercise are shown in \Cref{f
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
-  \caption{LTspice schematic for the buffered \SI{2.5}{\volt} reference (placeholder).}
+  \includegraphics[width=0.7\linewidth]{lt_spice/2.5ref.png}
+  \caption{LTspice schematic for \SI{2.5}{\volt} reference.}
   \label{fig:vref_spice}
 \end{figure}
 
-\begin{figure}[H]
-  \centering
-  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
-  \caption{Simulated vs. measured reference output showing the \SI{3}{\milli\volt} droop due to op-amp output resistance (placeholder).}
-  \label{fig:vref_output}
-\end{figure}
-
-If either divider resistor drifts, the output follows $V_2 = V_{\text{supply}} R_{\text{bottom}}/(R_{\text{top}}+R_{\text{bottom}})$. A 1\% mismatch produces a \SI{25}{\milli\volt} error, whereas a worst-case 5\% carbon-film pair could collapse the node to \SI{1.73}{\volt}, outside the instrumentation amplifier's valid range. This sensitivity motivated the use of 1\% metal-film resistors and verification of their actual values in \Cref{tab:vref_resistors}.
+If either divider resistor drifts, the output follows
+\begin{equation*}
+  V_2 = V_{\text{supply}} \frac{R_{\text{bottom}}}{R_{\text{top}} + R_{\text{bottom}}}.
+\end{equation*}
+Writing the resistors as $R_{\text{top}} = R(1+\varepsilon_t)$ and $R_{\text{bottom}} = R(1+\varepsilon_b)$ with small fractional errors $\varepsilon_t,\varepsilon_b$, a first–order Taylor expansion about the ideal case $R_{\text{top}} = R_{\text{bottom}} = R$ gives
+\begin{equation*}
+  V_2 \approx \frac{V_{\text{supply}}}{2}
+  \left[ 1 + \frac{1}{2}(\varepsilon_b - \varepsilon_t) \right].
+\end{equation*}
+The relative error in the reference is therefore
+\begin{equation*}
+  \frac{\Delta V_2}{V_2} \approx \frac{\varepsilon_b - \varepsilon_t}{2}.
+\end{equation*}
+For 1\% resistors, the worst–case mismatch occurs when one resistor is $+1\%$ high and the other is $-1\%$ low, so $\varepsilon_b - \varepsilon_t = 0.02$ and
+\begin{equation*}
+  \left| \Delta V_2 \right|_{\max}
+  \approx 0.01 \times \frac{V_{\text{supply}}}{2}
+  = 0.01 \times \SI{2.5}{\volt}
+  = \SI{25}{\milli\volt}.
+\end{equation*}
+Thus a 1\% pair can contribute at most about \SI{25}{\milli\volt} of error to the \SI{2.5}{\volt} reference.
+This is reflected in the small deviation in the measured output, hence the circuit should be applicable for further exercises.
 
 \subsection{Exercise 3: Mock Strain Gauge}
-Four \SI{10}{\kilo\ohm} 1\% resistors emulated the Wheatstone bridge while \SI{100}{\ohm} trim resistors on two adjacent legs set $|V_3-V_4|=\SI{4.3}{\milli\volt}$ about a \SI{2.51}{\volt} common-mode level, satisfying the \SIrange{1}{10}{\milli\volt} imbalance requirement. The LTspice schematic and the resulting node voltages are presented in \Cref{fig:bridge_spice,fig:bridge_output}.
+In this exercise, we are going to make 2 identical circuits which is powered by \SI{5}{\volt} and 2 \SI{10}{\kilo\ohm} resistors along with
+a capacitor. The circuit schematic is shown below as per the lab guidelines.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{ex3.png}
+  \caption{Mock Strain Gauge Schematic}
+  \label{fig:mock_strain}
+\end{figure}
+
+I then choose 1\% resistors as tabulated in \Cref{tab:bridge_resistors}
 
 \begin{table}[H]
   \centering
@@ -487,207 +513,405 @@ Four \SI{10}{\kilo\ohm} 1\% resistors emulated the Wheatstone bridge while \SI{1
     \toprule
     Leg & Nominal value & Measured value & Tolerance \\
     \midrule
-    $R_a$ (top-left) & \SI{10.0}{\kilo\ohm} & \SI{10.08}{\kilo\ohm} & 1\% \\
-    $R_b$ (top-right) & \SI{10.0}{\kilo\ohm} & \SI{9.95}{\kilo\ohm} & 1\% \\
-    $R_c$ (bottom-left) & \SI{10.0}{\kilo\ohm} & \SI{10.02}{\kilo\ohm} & 1\% \\
-    $R_d$ (bottom-right) & \SI{10.0}{\kilo\ohm} & \SI{9.97}{\kilo\ohm} & 1\% \\
-    Trim series ($R_t$) & \SI{100}{\ohm} & \SI{101.6}{\ohm} & 5\% single-turn \\
+    $R_a$ (top-left) & \SI{10.0}{\kilo\ohm} & \SI{9.9964}{\kilo\ohm} & 1\% \\
+    $R_b$ (top-right) & \SI{10.0}{\kilo\ohm} & \SI{9.9932}{\kilo\ohm} & 1\% \\
+    $R_c$ (bottom-left) & \SI{10.0}{\kilo\ohm} & \SI{9.9851}{\kilo\ohm} & 1\% \\
+    $R_d$ (bottom-right) & \SI{10.0}{\kilo\ohm} & \SI{9.9762}{\kilo\ohm} & 1\% \\
     \bottomrule
   \end{tabular}
 \end{table}
 
+I measured around 1.4 - 1.7 mV difference between the two outputs $V_3$ and $V_4$, well within the specified 1 - 10 mV range.
+The LTspice schematic and output waveform for this exercise are shown in \Cref{fig:bridge_spice,fig:bridge_output}.
+
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
-  \caption{LTspice schematic of the mock strain gauge Wheatstone bridge (placeholder).}
+  \includegraphics[width=0.7\linewidth]{lt_spice/circ_3_mock_strain.png}
+  \caption{LTspice schematic of the Mock Strain Gauge.}
   \label{fig:bridge_spice}
 \end{figure}
 
-\begin{figure}[H]
-  \centering
-  \fbox{\rule{0pt}{2.1in}\rule{0.9\linewidth}{0pt}}
-  \caption{Simulated bridge outputs $V_3$ and $V_4$ showing a \SI{4.0}{\milli\volt} differential offset versus the measured \SI{4.3}{\milli\volt} (placeholder).}
-  \label{fig:bridge_output}
-\end{figure}
+LTspice reports a difference voltage of $V_3=\SI{1.5}{\milli\volt}$. To understand how resistor tolerances affect this outcome, the node voltages obey
 
-LTspice reports $V_3=\SI{2.506}{\volt}$ and $V_4=\SI{2.502}{\volt}$ when the measured resistor values in \Cref{tab:bridge_resistors} are entered, closely matching the oscilloscope readings. Substituting 5\% resistors into the same simulation widens the expected differential error band to \SIrange{0}{110}{\milli\volt}, which would exceed the instrumentation amplifier's linear range; hence, the trimmers and 1\% parts are essential. A Monte Carlo sweep confirmed that a \SI{100}{\ohm} trim provides \SI{\pm1}{\milli\volt} of adjustment authority per degree of rotation, making the bridge sensitivity manageable during calibration.
+\begin{align*}
+  V_3 &= V_{\text{supply}} \frac{R_c}{R_a + R_c}, \\
+  V_4 &= V_{\text{supply}} \frac{R_d}{R_b + R_d}.
+\end{align*}
+Writing each leg as $R_x = R(1+\varepsilon_x)$ with small fractional errors
+$\varepsilon_a,\varepsilon_b,\varepsilon_c,\varepsilon_d$ and expanding to first order
+about the ideal case $R_a = R_b = R_c = R_d = R$ gives
+\begin{align*}
+  V_3 &\approx \frac{V_{\text{supply}}}{2}
+         \left[ 1 + \frac{1}{2}(\varepsilon_c - \varepsilon_a) \right], \\
+  V_4 &\approx \frac{V_{\text{supply}}}{2}
+         \left[ 1 + \frac{1}{2}(\varepsilon_d - \varepsilon_b) \right].
+\end{align*}
+The differential output is therefore
+\begin{equation*}
+  \Delta V \equiv V_4 - V_3
+  \approx \frac{V_{\text{supply}}}{4}
+           \bigl(\varepsilon_a - \varepsilon_b - \varepsilon_c + \varepsilon_d\bigr).
+\end{equation*}
+For 1\% resistors we have $|\varepsilon_x| \le 0.01$, and the worst--case mismatch occurs when
+$R_a$ and $R_d$ are high by 1\% while $R_b$ and $R_c$ are low by 1\%, giving
+$\varepsilon_a - \varepsilon_b - \varepsilon_c + \varepsilon_d = 0.04$ and
+\begin{equation*}
+  |\Delta V|_{\max} \approx \frac{V_{\text{supply}}}{4} \times 0.04
+  = 0.01\,V_{\text{supply}} \approx \SI{50}{\milli\volt}\quad\text{for }V_{\text{supply}}=\SI{5}{\volt}.
+\end{equation*}
+Substituting the much smaller fractional errors extracted from the measured values in
+\Cref{tab:bridge_resistors} yields a predicted differential on the order of \SI{1}{\milli\volt} to \SI{2}{\milli\volt},
+consistent with the LTspice result and the observed \SIrange{1.4}{1.7}{\milli\volt} between $V_4$ and $V_3$.
+
 
 \subsection{Exercise 4: Instrumentation Amplifier}
 The three-op-amp instrumentation amplifier (\Cref{fig:inst_amp,fig:inst_amp_output}) uses the resistor set summarized in \Cref{tab:inst_amp_resistors}. The small-signal gain is
 \begin{equation}
 \label{eq:inst_amp}
-V_{out} = \Bigg(1 + \frac{2R_a}{R_G}\Bigg)\frac{R_f}{R_s}(V_{in+} - V_{in-}) + \frac{R_f}{R_s} V_{ref},
+V_{\text{out}}
+= \underbrace{\Bigg(1 + \frac{2R_4}{R_G}\Bigg)\frac{R_6}{R_5}}_{\displaystyle G_{\text{diff}}}
+\bigl(V_{\text{in+}} - V_{\text{in-}}\bigr)
++ \underbrace{V_{\text{ref}}}_{\displaystyle \text{output offset}} ,
 \end{equation}
-where $R_a=R_b=R_c=\SI{100}{\kilo\ohm}$, $R_s=\SI{1.00}{\kilo\ohm}$, $R_f=\SI{10.0}{\kilo\ohm}$, and $R_G=\SI{10.0}{\kilo\ohm}$. The theoretical differential gain is therefore $(1+20)\times10 = 210$.
+so the overall differential gain is
+\[
+G_{\text{diff}} = \Bigg(1 + \frac{2R_4}{R_G}\Bigg)\frac{R_6}{R_5},
+\]
+and $V_{\text{ref}}$ appears purely as an output offset that shifts the entire transfer characteristic up or down without changing the gain.
 
-For quick re-analysis, the node voltages $v_1$ (output of the $V_{in+}$ buffer), $v_2$ (output of the $V_{in-}$ buffer), and $v_o$ (final output) obey the linear system
-\begin{equation}
-\label{eq:nodal_matrix}
-\begin{bmatrix}
-\frac{1}{R_a} + \frac{1}{R_G} & -\frac{1}{R_G} & 0 \\
--\frac{1}{R_G} & \frac{1}{R_a} + \frac{1}{R_G} + \frac{1}{R_f} & -\frac{1}{R_f} \\
-0 & -\frac{1}{R_f} & \frac{1}{R_s} + \frac{1}{R_f}
-\end{bmatrix}
-\begin{bmatrix}
-v_1 \\[2pt] v_2 \\[2pt] v_o
-\end{bmatrix}
-=
-\begin{bmatrix}
-\frac{V_{in+}}{R_a} \\[2pt] \frac{V_{in-}}{R_a} + \frac{V_{ref}}{R_s} \\[2pt] \frac{V_{ref}}{R_s}
-\end{bmatrix}\!,
-\end{equation}
-which can be pasted directly into MATLAB, Python/NumPy, or LTspice's .netlist parser to explore alternate $R_G$ or $R_f/R_s$ choices without re-deriving the symbolic expression.
-
-Small drifts in these resistors perturb the gain according to
-\begin{equation}
-\label{eq:gain_sensitivity}
-\frac{\Delta G}{G} \approx
-\frac{2R_G}{R_G+2R_a}\frac{\Delta R_a}{R_a}
-- \frac{2R_a}{R_G+2R_a}\frac{\Delta R_G}{R_G}
-+ \frac{\Delta R_f}{R_f}
-- \frac{\Delta R_s}{R_s},
-\end{equation}
-so the span is mostly controlled by $R_G$ and the $R_f/R_s$ ratio. Using the component values in \Cref{tab:inst_amp_resistors}, the relative sensitivities become $S_{R_a}=+0.095$, $S_{R_G}=-0.952$, $S_{R_f}=+1.00$, and $S_{R_s}=-1.00$. A single \SI{1}{\percent} error in $R_G$ therefore shifts the gain by \SI{0.95}{\percent}, whereas the same error in $R_a$ only changes the gain by \SI{0.10}{\percent}. This matches the lab observation that swapping the $R_G$ trimmer between \SI{9.7}{\kilo\ohm} and \SI{10.6}{\kilo\ohm} caused the gain to swing from 196 down to 180.
-
-\begin{table}[H]
-  \centering
-  \caption{Predicted gain contribution from a \SI{1}{\percent} perturbation on each instrumentation-amp resistor.}
-  \label{tab:gain_sensitivity}
-  \begin{tabular}{lcc}
-    \toprule
-    Resistor & Sensitivity coefficient $S_i$ & $|\Delta G/G|$ for 1\% change \\
-    \midrule
-    $R_a$ (per leg) & $+0.095$ & 0.10\% \\
-    $R_G$ & $-0.952$ & 0.95\% \\
-    $R_f$ & $+1.000$ & 1.00\% \\
-    $R_s$ & $-1.000$ & 1.00\% \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\begin{table}[H]
-  \centering
-  \caption{Instrumentation-amplifier resistor summary.}
-  \label{tab:inst_amp_resistors}
-  \begin{tabular}{lccc}
-    \toprule
-    Label & Nominal value & Measured value & Tolerance \\
-    \midrule
-    $R_a,R_b,R_c$ & \SI{100}{\kilo\ohm} & \SI{99.4}{\kilo\ohm} & 1\% metal film \\
-    $R_s$ & \SI{1.00}{\kilo\ohm} & \SI{0.987}{\kilo\ohm} & 1\% \\
-    $R_f$ & \SI{10.0}{\kilo\ohm} & \SI{10.21}{\kilo\ohm} & 1\% \\
-    $R_G$ & \SI{10.0}{\kilo\ohm} & \SI{10.6}{\kilo\ohm} & 1\% trimpot \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+With $R_4 = \SI{100}{\kilo\ohm}$, $R_5 = \SI{10}{\kilo\ohm}$, $R_6 = \SI{100}{\kilo\ohm}$, 
+and a target gain of $G_{\text{diff}} = 210$, the required gain-setting resistor is
+\begin{align*}
+210 &= \Bigg(1 + \frac{2R_4}{R_G}\Bigg)\frac{R_6}{R_5} ,\\
+R_G &= \frac{2R_4}{\dfrac{210\,R_5}{R_6} - 1}
+     = \SI{10.0}{\kilo\ohm}.
+\end{align*}
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.4in}\rule{0.9\linewidth}{0pt}}
-  \caption{LTspice schematic of the three-op-amp instrumentation amplifier (placeholder).}
+  \includegraphics[width=0.5\linewidth]{ex4.jpg}
+  \caption{Exercise 4 instrumentation amplifier schematic.}
   \label{fig:inst_amp}
 \end{figure}
 
+To derive the gain, we simply take the nodal equations for the circuit in \Cref{fig:inst_amp} and solve for $V_{\text{out}}$ using Python or MATLAB.
+They obey
+\begin{equation}
+\label{eq:nodal_matrix_correct}
+\begin{bmatrix}
+-\dfrac{1}{R_4} & 0                & 0 & 0                         & 0 \\
+0               & -\dfrac{1}{R_4}  & 0 & 0                         & 0 \\
+0               & 0                & 1 & -1                        & 0 \\
+-\dfrac{1}{R_5}               & 0  & \dfrac{1}{R_5}+\dfrac{1}{R_6} & 0 & -\dfrac{1}{R_6} \\
+0               & -\dfrac{1}{R_5}   & 0 & \dfrac{1}{R_5}+\dfrac{1}{R_6} & 0
+\end{bmatrix}
+\begin{bmatrix}
+v_{o1} \\[2pt] v_{o2} \\[2pt] v_a \\[2pt] v_b \\[2pt] v_{\text{out}}
+\end{bmatrix}
+=
+\begin{bmatrix}
+V_{\text{in-}}\!\Big(\dfrac{1}{R_G}+\dfrac{1}{R_4}\Big)
+ - V_{\text{in+}}\!\Big(\dfrac{1}{R_G}\Big) \\[6pt]
+V_{\text{in+}}\!\Big(\dfrac{1}{R_G}+\dfrac{1}{R_4}\Big)
+ - V_{\text{in-}}\!\Big(\dfrac{1}{R_G}\Big) \\[6pt]
+0 \\[2pt]
+0 \\[2pt]
+\dfrac{V_{\text{ref}}}{R_6}
+\end{bmatrix}\!.
+\end{equation}
+
+Solving \eqref{eq:nodal_matrix_correct} for $v_{\text{out}}$
+(e.g.\ by inverting the matrix in MATLAB or Python; see Appendix A)
+recovers the earlier result
+\[
+V_{\text{out}}
+= \Bigg(1 + \frac{2R_4}{R_G}\Bigg)\frac{R_6}{R_5}(V_{\text{in+}}-V_{\text{in-}}) + V_{\text{ref}},
+\]
+so the matrix formulation is consistent with the analytical gain expression.
+
+The LTspice schematic and output waveform for this exercise are shown in \Cref{fig:lt_spice_inst_amp,fig:inst_amp_output}. Since we know the value of the input
+the measured gain can be simply calculated by dividing the output voltage by the input voltage.
+\begin{align*}
+G_{\text{theoretical}}
+  &= \frac{V_{\text{out}} - V_{\text{ref}}}{V_{\text{in+}} - V_{\text{in-}}} \\
+  &= \frac{\SI{2.818}{\volt} - \SI{2.5}{\volt}}{\SI{1.5148}{\milli\volt}} \\
+  &= 210
+\end{align*}
+
+However, the measured gain is slightly lower than the theoretical gain calculated using \Cref{eq:inst_amp} due to the non-idealities in 
+the op-amps and resistor tolerances. I measured a gain of 179, which is about 15\% lower than the theoretical gain of 210. 
+When the mock strain gauge is connected, with a differential input of \SI{1.51}{\milli\volt}, the output is \SI{2.74}{\volt}.
+When the differential input is set to 0, the output is 2.47 V. The effective gain is then
+\begin{align*}
+G_{\text{measured}}
+  &= \frac{V_{out} - V_{ref}}{V_{in+} - V_{in-}} \\
+  &= \frac{2.74\,\text{V} - 2.47\,\text{V}}{1.51\,\text{mV}} \\
+  &= 179
+\end{align*}
+Since the gain is mostly controlled by $R_G$ and the $R_f/R_s$ ratio, I calculated the worst-case gain spread for different resistor tolerance classes 
+as tabulated in \Cref{tab:inst_amp_sensitivity}. The results show that using 1\% metal film resistors can keep the gain error within \SI{3.8}{\percent},
+while using 5\% resistors can lead to higher error margin which is observed in my measurements. This is likely the case since I used 5\% resistors found in my home during implementation, 
+which can explain the \SI{14}{\percent} gain error I observed in the lab.
+
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.4in}\rule{0.9\linewidth}{0pt}}
-  \caption{LTspice output for a \SI{10}{\milli\volt} differential input compared with the measured \SI{1.81}{\volt} swing (placeholder).}
-  \label{fig:inst_amp_output}
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{lt_spice/210_circ.png}
+    \caption{LTspice circuit for the instrumentation amplifier.}
+    \label{fig:lt_spice_inst_amp}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{lt_spice/circ_3_vout_210.png}
+    \caption{LTspice output for a \SI{1.5}{\milli\volt} differential input.}
+    \label{fig:inst_amp_output}
+  \end{subfigure}
+  \caption{Instrumentation amplifier LTspice schematic and simulated output.}
+  \label{fig:inst_amp_side_by_side}
 \end{figure}
 
-The LTspice macro-model predicts $V_{out}=\SI{2.10}{\volt}$ for a \SI{10}{\milli\volt} differential excitation. On the bench, the mock gauge produced $V_{out}(0~\text{mV})=\SI{1.47}{\volt}$ and $V_{out}(10~\text{mV})=\SI{3.28}{\volt}$, corresponding to an actual gain of $G_{\text{meas}}=181\pm3$. The \SI{14}{\percent} shortfall arises from two sources captured in simulation: the $R_G$ trimmer sat at \SI{10.6}{\kilo\ohm}, reducing the stage-1 gain to 19.8, and the MCP6002 op-amps only offer \SI{80}{\decibel} of open-loop gain, which limits the accuracy of the differential stage at gains above 150. A Monte Carlo sweep with 1\% resistors and the finite op-amp gain predicts $G=184\pm6$, aligning with the measured value. When the mock bridge imbalance was set to $\Delta V_{\text{bridge}}=\SI{1.5}{\milli\volt}$, the output shifted by \SI{0.28}{\volt}, confirming $G\approx186$ even for sub-\SI{2}{\milli\volt} excitations.
 
 \begin{table}[H]
   \centering
-  \caption{Predicted gain spread for different resistor tolerance classes.}
+  \caption{Predicted gain spread for different resistor tolerance classes, calculation in Appendix B}
   \label{tab:inst_amp_sensitivity}
   \begin{tabular}{ccc}
     \toprule
     Tolerance class & Worst-case gain & Error vs.\ 210 (\%) \\
     \midrule
-    1\% metal film & 202 & $-3.8$ \\
-    5\% carbon film & 165 & $-21.6$ \\
-    10\% carbon film & 109 & $-48.1$ \\
+    1\% metal film & 202 & $-3.9$ \\
+    5\% carbon film & 170 & $-19.5$ \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-When the real load cell was connected, the differential input moved from $V_{in+}-V_{in-}=\SI{0.65}{\milli\volt}$ (no load) to $\SI{7.32}{\milli\volt}$ (with \SI{2}{\kilogram}), yielding $V_{out}$ values of \SI{1.40}{\volt} and \SI{2.60}{\volt}. The resulting effective gain of 186 matches the mock-gauge result and implies a bridge sensitivity of $\SI{3.3}{\milli\volt\per\kilogram}$. The load-cell datasheet quotes \SIrange{1}{2}{\milli\volt\per\volt} full-scale sensitivity; with the \SI{5}{\volt} excitation used here, that corresponds to \SIrange{5}{10}{\milli\volt} for a \SI{2}{\kilogram} span. The measured \SI{6.7}{\milli\volt} swing lies squarely inside that band, confirming that the electrical measurements are consistent with the mechanical specification.
+When the real load cell was connected to no load and \SI{2}{\kilogram}, the values range from 
+\SI{1.40}{\volt} and \SI{2.60}{\volt}. 
+
 
 \subsection{Exercise 5: Output Stage}
-To map the \SIrange{1.4}{2.6}{\volt} instrumentation amplifier range into the \SIrange{0.5}{2.5}{\volt} ADC window, an inverting level-shifter with selectable gain was implemented, as illustrated in \Cref{fig:output_stage_spice,fig:output_stage_output}. The initial equal-valued pair ($R_{11}=\SI{10}{\kilo\ohm}$, $R_{12}=\SI{20}{\kilo\ohm}$) yielded insufficient offset. Swapping to $R_{11}=\SI{3}{\kilo\ohm}$ and $R_{12}=\SI{50}{\kilo\ohm}$ increased the theoretical closed-loop gain to $G=1+R_{12}/R_{11}=17.7$. Together with $R_{13}=\SI{40}{\kilo\ohm}$ and $R_{14}=\SI{33}{\kilo\ohm}$ on the summing node, the ideal transfer function is
+To map the \SIrange{1.4}{2.6}{\volt} instrumentation amplifier range into the \SIrange{0.5}{2.5}{\volt} ADC window, an inverting level-shifter with selectable gain was implemented, as 
+illustrated in \Cref{fig:output_stage_spice}. The initial equal-valued pair ($R_{11}=\SI{10}{\kilo\ohm}$, $R_{12}=\SI{20}{\kilo\ohm}$) yielded insufficient offset. Swapping to $R_{11}=\SI{3}{\kilo\ohm}$ and $R_{12}=\SI{50}{\kilo\ohm}$ increased the theoretical closed-loop gain to $G=1+R_{12}/R_{11}=17.7$. Together with $R_{13}=\SI{40}{\kilo\ohm}$ and $R_{14}=\SI{33}{\kilo\ohm}$ on the summing node, the ideal transfer function is
+
 \begin{equation}
 \label{eq:output_stage}
-V_{out2,\text{ideal}} = \left(1 + \frac{R_{12}}{R_{11}}\right)\!\left(V_{out} - V_{\text{cm}}\right) + \frac{R_{13}}{R_{14}}\,V_{\text{ref}},
+V_{out2,\text{ideal}}
+  = \underbrace{\left(1 + \frac{R_{12}}{R_{11}}\right)}_{\displaystyle G}
+    \bigl(V_{out} - V_{\text{cm}}\bigr)
+  + \underbrace{\frac{R_{13}}{R_{14}}}_{\displaystyle K} V_{\text{ref}},
 \end{equation}
-where $V_{\text{cm}}=\SI{1.40}{\volt}$ (instrumentation amplifier tare) and $V_{\text{ref}}=\SI{2.50}{\volt}$.
+where $G$ is the gain applied to the instrumentation-amp output relative to the
+tare voltage $V_{\text{cm}}=\SI{1.40}{\volt}$ and $K$ sets the output offset
+from the reference $V_{\text{ref}}=\SI{2.50}{\volt}$.
 
-\paragraph*{Gain sensitivity}
-The level-shifter gain is controlled by $G_{out}=1+R_{12}/R_{11}$, whose fractional error is
+To map the instrumentation-amplifier range
+$V_{\text{in}} \in [\SI{1.4}{\volt},\SI{2.6}{\volt}]$
+onto the ADC window
+$V_{\text{out2}} \in [\SI{0.5}{\volt},\SI{2.5}{\volt}]$,
+the offset amplifier in \Cref{fig:output_stage_spice} is used.  For
+the circuit in \Cref{fig:output_stage_spice}, superposition and the
+ideal-op-amp assumption give the DC transfer function
 \begin{equation}
-\label{eq:output_sensitivity}
-\frac{\Delta G_{out}}{G_{out}} \approx
--\frac{R_{12}/R_{11}}{1+R_{12}/R_{11}}\frac{\Delta R_{11}}{R_{11}}
-+\frac{R_{12}/R_{11}}{1+R_{12}/R_{11}}\frac{\Delta R_{12}}{R_{12}}.
+\label{eq:offset_tf}
+V_{\text{out2}}
+= -\frac{R_{12}}{R_{11}}\,V_{\text{in}}
++ \left(1+\frac{R_{12}}{R_{11}}\right)V_{\text{bias}},
+\qquad
+V_{\text{bias}} = 5\,\frac{R_{14}}{R_{13}+R_{14}}.
 \end{equation}
-With $R_{12}/R_{11}=16.7$, the sensitivities become $S_{R_{11}}=-0.94$ and $S_{R_{12}}=+0.94$. Thus a \SI{1}{\percent} drift on $R_{11}$ or $R_{12}$ nearly creates a \SI{1}{\percent} gain error, aligning with the bench experience that substituting a \SI{5}{\percent} $R_{11}$ caused the ADC span to fall short by \SI{0.2}{\volt}. The divider pair $R_{13}/R_{14}$ only affects the baseline offset and is much less critical.
+Imposing the endpoint constraints
+\[
+V_{\text{in}}=\SI{1.4}{\volt} \mapsto V_{\text{out2}}=\SI{2.5}{\volt},\qquad
+V_{\text{in}}=\SI{2.6}{\volt} \mapsto V_{\text{out2}}=\SI{0.5}{\volt}
+\]
+and using \eqref{eq:offset_tf} yields
+\begin{align*}
+2.5
+&= -\frac{R_{12}}{R_{11}}\cdot 1.4
+   + \left(1+\frac{R_{12}}{R_{11}}\right)
+     5\,\frac{R_{14}}{R_{13}+R_{14}},\\
+0.5
+&= -\frac{R_{12}}{R_{11}}\cdot 2.6
+   + \left(1+\frac{R_{12}}{R_{11}}\right)
+     5\,\frac{R_{14}}{R_{13}+R_{14}}.
+\end{align*}
+Subtracting the two equations eliminates the bias term and gives
+\[
+2.0 = -\frac{R_{12}}{R_{11}}(1.4-2.6)
+\quad\Rightarrow\quad
+\frac{R_{12}}{R_{11}} = \frac{5}{3} \approx 1.67.
+\]
+Substituting back into the first equation and writing
+\(
+x = \dfrac{R_{14}}{R_{13}+R_{14}}
+\)
+gives
+\[
+2.5 = -\frac{5}{3}\cdot 1.4 + \frac{8}{3}\cdot 5x
+\quad\Rightarrow\quad
+x = \frac{29}{80} \approx 0.3625.
+\]
+Converting $x$ to the simple ratio $R_{14}/R_{13}$,
+\[
+\frac{R_{14}}{R_{13}}
+= \frac{x}{1-x}
+= \frac{29/80}{51/80}
+= \frac{29}{51}
+\approx 0.569.
+\]
+
+The implemented values
+$R_{11}=\SI{30}{\kilo\ohm}$,
+$R_{12}=\SI{50}{\kilo\ohm}$,
+$R_{13}=\SI{20}{\kilo\ohm}$,
+and $R_{14}=\SI{11.3}{\kilo\ohm}$ realize
+\[
+\frac{R_{12}}{R_{11}} = \frac{50}{30} = \frac{5}{3}\ (\text{exact}),\qquad
+\frac{R_{14}}{R_{13}} = \frac{11.3}{20} \approx 0.565,
+\]
+so the gain ratio is ideal and the offset ratio is within about
+$0.6\%$ of the theoretical target.
 
 \begin{table}[H]
   \centering
-  \caption{Output-stage component values and tolerances.}
-  \label{tab:output_resistors}
+  \caption{Output-stage resistor ratios: ideal vs.\ implemented.}
+  \label{tab:output_stage_ratios}
   \begin{tabular}{lccc}
     \toprule
-    Label & Nominal value & Measured value & Tolerance \\
+    Quantity & Ideal value & Implemented & Relative error \\
     \midrule
-    $R_{11}$ & \SI{3.00}{\kilo\ohm} & \SI{3.02}{\kilo\ohm} & 1\% \\
-    $R_{12}$ & \SI{50.0}{\kilo\ohm} & \SI{49.1}{\kilo\ohm} & 1\% \\
-    $R_{13}$ & \SI{40.0}{\kilo\ohm} & \SI{39.7}{\kilo\ohm} & 1\% \\
-    $R_{14}$ & \SI{33.0}{\kilo\ohm} & \SI{33.4}{\kilo\ohm} & 1\% \\
+    $R_{12}/R_{11}$ & $5/3 \approx 1.67$ & $50/30 = 1.67$ & $0.0\%$ \\
+    $R_{14}/R_{13}$ & $29/51 \approx 0.569$ & $11.3/20 \approx 0.565$ & $-0.6\%$ \\
     \bottomrule
   \end{tabular}
 \end{table}
 
+
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
-  \caption{LTspice schematic for the offset/gain output stage (placeholder).}
+  \includegraphics[width=0.5\linewidth]{lt_spice/diff_amp.png}
+  \caption{LTspice schematic of the output stage.}
   \label{fig:output_stage_spice}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
-  \caption{Simulated vs. measured output-stage transfer characteristic, highlighting the clipping near \SI{2.5}{\volt} (placeholder).}
-  \label{fig:output_stage_output}
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{lt_spice/v_no_load.png}
+    \caption{Voltage output for no load.}
+    \label{fig:no_load_output}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{lt_spice/v_max_load.png}
+    \caption{Voltage output for max load.}
+    \label{fig:max_load_output}
+  \end{subfigure}
+  \caption{Voltage outputs for no load and maximum load.}
+  \label{fig:load_outputs}
 \end{figure}
 
-LTspice, using the idealized \SI{2.5}{\volt} reference and the values in \Cref{tab:output_resistors}, predicts $V_{out2}=\SI{0.48}{\volt}$ at no load and \SI{2.53}{\volt} at \SI{2}{\kilogram}. The oscilloscope shows \SI{0.52}{\volt} and \SI{2.46}{\volt}; the reduced span stems from two factors. First, the instrumentation amplifier delivers only \SI{1.20}{\volt} of swing (due to the 180 gain), so even a 17.7 gain cannot reach the full \SI{2.0}{\volt} span. Second, the MCP6002 output saturates about \SI{100}{\milli\volt} away from the rails when sourcing current into the ADC input protection network, flattening the top of the transfer curve. Fitting the measured data yields
-\begin{equation}
-\label{eq:output_stage_measured}
-V_{out2,\text{meas}} = -1.74~\text{V} + 1.62\, V_{out},
-\end{equation}
-which is the calibration implemented in the C\# interface. The measured endpoints remain \SI{0.52}{\volt} (tare) and \SI{2.46}{\volt} (\SI{2}{\kilogram}), satisfying the ADC requirement.
+
+LTspice, using the idealized \SI{2.5}{\volt} reference and the values in \Cref{tab:output_resistors}, 
+predicts $V_{out2}=\SI{0.48}{\volt}$ at no load and \SI{2.48}{\volt} at \SI{2}{\kilogram}. 
+
+When measuring the actual values, The oscilloscope shows \SI{0.52}{\volt} and \SI{2.46}{\volt} for 2 kg and no load respectively. Given that some
+resistors needed to be combined to achieve the desired values, the small deviation from simulation is likely due to resistor tolerances and op-amp non-idealities.
+Table~\ref{tab:output_sensitivity} summarizes the predicted zero and span errors for different resistor tolerance classes, calculated using \Cref{eq:output_sensitivity}.
+With 1\% resistors, the maximum span error is \SI{0.4}{\volt}, which is quite sensitive which explains the observed deviation when we measure the output voltage.
+
+\paragraph*{Endpoint sensitivity}
+
+With the offset amplifier of \Cref{fig:output_stage_spice}, superposition gives
+\begin{equation*}
+V_{\text{out2}}
+= V_{\text{inv}} + V_{\text{noninv}}
+= -\frac{R_{12}}{R_{11}} V_{\text{in}}
+  + \left(1+\frac{R_{12}}{R_{11}}\right)V_{\text{bias}},
+\qquad
+V_{\text{bias}} = 5\,\frac{R_{14}}{R_{13}+R_{14}}.
+\end{equation*}
+Defining
+\[
+a \equiv \frac{R_{12}}{R_{11}}, \qquad
+b \equiv \frac{R_{14}}{R_{13}+R_{14}},
+\]
+the no-load and full-scale outputs for
+$V_{\text{in}} \in \{1.4~\text{V},\,2.6~\text{V}\}$ become
+\begin{align*}
+V_0   &= -a\cdot 1.4 + (1+a)\,5b, \\
+V_{\text{FS}} &= -a\cdot 2.6 + (1+a)\,5b,
+\end{align*}
+so the ADC span and zero are
+\begin{align*}
+\text{span} &= V_0 - V_{\text{FS}} = a\,(2.6-1.4) = 1.2\,a, \\
+\text{zero} &= V_0.
+\end{align*}
+Thus the \emph{span} depends only on the ratio $a = R_{12}/R_{11}$, while the
+\emph{zero} depends on both $a$ and the divider ratio $b$.
+
+For small perturbations in $R_{11}$ and $R_{12}$,
+\begin{equation*}
+\frac{\Delta a}{a}
+= \frac{\Delta R_{12}}{R_{12}} - \frac{\Delta R_{11}}{R_{11}},
+\end{equation*}
+so the fractional span error is
+\begin{equation*}
+\frac{\Delta(\text{span})}{\text{span}}
+= \frac{\Delta a}{a}
+\approx \frac{\Delta R_{12}}{R_{12}} - \frac{\Delta R_{11}}{R_{11}}.
+\end{equation*}
+A matched 1\% tolerance gives roughly a \(\pm 1\%\) span error, while a worst–case
+1\% mismatch (one resistor high, the other low) produces a \(\pm 2\%\) span error.
+For the designed ratio $a = R_{12}/R_{11} = 5/3$ this corresponds to about
+\(\pm 0.04\)\,V on the nominal \SI{2.0}{\volt} span.
+
+The zero level is more sensitive because it also depends on the divider ratio
+$b = R_{14}/(R_{13}+R_{14})$.  Using the nominal values
+$R_{11}=\SI{30}{\kilo\ohm}$,
+$R_{12}=\SI{50}{\kilo\ohm}$,
+$R_{13}=\SI{20}{\kilo\ohm}$,
+$R_{14}=\SI{11.3}{\kilo\ohm}$,
+the nominal outputs are
+$V_0 \approx \SI{2.48}{\volt}$ and
+$V_{\text{FS}} \approx \SI{0.48}{\volt}$.
+Sweeping the resistors over their tolerance bands shows that even modest
+tolerances lead to large shifts in both zero and span, as summarized in
+\Cref{tab:output_tolerance}.
 
 \begin{table}[H]
   \centering
-  \caption{Predicted zero/span error versus resistor tolerance for the output stage.}
-  \label{tab:output_sensitivity}
+  \caption{Predicted zero/span variation versus resistor tolerance
+           (worst–case combinations of $R_{11}$–$R_{14}$).}
+  \label{tab:output_tolerance}
   \begin{tabular}{cccc}
     \toprule
     Tolerance class & Zero shift (V) & Span shift (V) & Comment \\
     \midrule
-    1\% & $\pm 0.03$ & $\pm 0.40$ & within ADC headroom \\
-    5\% & $\pm 0.18$ & $\pm 2.11$ & risk of clipping both rails \\
-    10\% & $\pm 0.38$ & $\pm 4.44$ & unusable; saturates immediately \\
+    1\%  & $\pm 0.08$ & $\pm 0.04$ & small but measurable drift \\
+    5\%  & $\pm 0.40$ & $\pm 0.20$ & large gain change, easy to see in lab \\
+    10\% & $\pm 0.80$ & $\pm 0.40$ & zero can move outside ADC window \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-The tolerance study above assumes the instrumentation amplifier spans \SI{1.2}{\volt}. Even with 1\% resistors, the residual \SI{0.4}{\volt} span error is the dominant contributor to the \SI{\pm0.05}{\kilogram} uncertainty of the calibrated scale; switching to 0.1\% resistors or trimming $R_{12}$ in situ would cut that span error in half.
+These results match the bench observation that swapping in 5\% resistors for
+$R_{11}$–$R_{14}$ caused the calibrated scale to swing by several hundred
+millivolts at both zero and full load, even though each individual resistor
+only moved by a few percent. Even with 1\% resistors, the measured value is withing
+the margin of error $\pm 0.12 V$. However, we can clearly see that the differential circuit is 
+quite sensitive to resistor tolerances.
+
 
 \paragraph*{More robust difference amplifier}
-To reduce span sensitivity even further, the output stage can be replaced by a precision difference amplifier that uses a matched resistor network. Texas Instruments' SBOA237\footnote{\href{https://www.ti.com/lit/an/sboa237/sboa237.pdf}{TI SBOA237, ``Improving Gain Accuracy of Difference Amplifiers,'' 2023}.} and Analog Devices' AN-140\footnote{\href{https://www.analog.com/media/en/technical-documentation/application-notes/AN-140.pdf}{Analog Devices AN-140, ``High Common-Mode Voltage Instrumentation Amplifier,'' 2007}.} both recommend the LT5400 or NOMCA networks, where all four resistors are laser-trimmed on the same die. In that configuration the closed-loop gain becomes
+To reduce span sensitivity even further, the output stage can be replaced by a precision difference amplifier that uses a matched resistor network. 
+Texas Instruments' SBOA237\footnote{\href{https://www.ti.com/lit/an/sboa237/sboa237.pdf}
+{TI SBOA237, ``Improving Gain Accuracy of Difference Amplifiers,'' 2023}.} and Analog Devices' 
+AN-140\footnote{\href{https://www.analog.com/media/en/technical-documentation/application-notes/AN-140.pdf}
+{Analog Devices AN-140, ``High Common-Mode Voltage Instrumentation Amplifier,'' 2007}.} 
+both recommend the LT5400, where there are four resistors are laser-trimmed on the same die. In that configuration the closed-loop gain becomes
 \begin{equation}
 \label{eq:precision_diffamp}
 V_{out2} = \left(1 + \frac{2R_{\text{net}}}{R_G}\right)\frac{R_{\text{net}}}{R_{\text{net}}}(V_{out} - V_{\text{ref}}) + V_{\text{ref}}
@@ -696,16 +920,20 @@ with resistor tracking on the order of $10~\text{ppm}/^\circ\text{C}$. A 0.01\% 
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.2in}\rule{0.9\linewidth}{0pt}}
-  \caption{LTspice comparison of the discrete output stage and a difference amplifier that uses a monolithic resistor network (placeholder for the simulated transfer curves).}
+  \includegraphics[width=0.7\linewidth]{LT5400-9139.png}
+  \caption{LT5400 - Differential Op-Amp configuration.}
   \label{fig:precision_diffamp}
 \end{figure}
 
 \subsection{Exercise 6: Embedded Acquisition}
-The MSP430 firmware for the weight-scale channel is identical to the thermistor code in \Cref{lst:msp430}; only the ADC input channel and reference level change. For both sensors the ADC runs in 10-bit mode over a \SI{0}{\volt}–\SI{3.6}{\volt} span, the ISR accumulates eight conversions, and the UART framing remains $[255, \text{MS5B}, \text{LS5B}]$. This reuse simplified validation because the same desktop parser in \Cref{lst:csharp} can be pointed at either COM port source. A moving-average filter over 128 combined samples stabilized the least-significant 5~bits before transmission.
+The MSP430 firmware for the weight-scale channel is identical to the thermistor code in \Cref{lst:msp430}; 
+We can simply reuse the code because we are transmitting the same UART packets to the COM ports.
+The only changes needed are to set up the ADC to read from the load-cell channel (A1) instead of the thermistor channel (A0),
+and increasing the sample rate from 50 Hz to 100 Hz to make the program more responsive.
 
 \subsection{Exercise 7: Calibration}
-Known masses in \SI{0.5}{\kilogram} increments were measured three times each and averaged. The resulting linear regression between ADC codes and true mass is summarized in \Cref{tab:calibration}. The best-fit relationship is
+Known masses are loaded onto the load cell and the voltage output were measured. The resulting linear 
+regression between ADC codes and true mass is summarized in \Cref{tab:calibration}. The best-fit relationship is
 \begin{equation}
 \label{eq:weight_calibration}
 m(\text{kg}) = -6.21 + 0.0311\, \text{ADC}_{10\text{b}},
@@ -730,8 +958,14 @@ with $R^2 = 0.9992$.
   \end{tabular}
 \end{table}
 
+Note that in the actual implementation, the program has a calibrating function which performs the linear regression automatically when the user inputs known masses.
+The calibration follows the same procedure as in this Exercise 7.
+
 \subsection{Exercise 8: Desktop UI}
-The final C\# application reports weight instead of ADC counts, provides a tare button that stores the current averaged code as a baseline, and implements a stability indicator by evaluating the rolling standard deviation over the past \SI{500}{\milli\second}. When the deviation falls below \SI{0.02}{\kilogram}, the ``Stable'' badge illuminates and the reading is latched.
+The final C\# application reports weight instead of ADC counts, 
+provides a tare button that stores the current averaged code as a baseline, and implements a 
+stability indicator by evaluating the rolling standard deviation over the past \SI{500}{\milli\second}. 
+When the deviation falls below \SI{0.02}{\kilogram}, the ``Stable'' badge illuminates and the reading is latched.
 
 \begin{figure}[H]
   \centering
@@ -754,5 +988,101 @@ To make the system more engaging for demonstrations, two extensions are planned:
   \item Firmware reuse and a consistent serial framing format simplified switching between sensing modalities and accelerated the development of desktop visualization utilities.
 \end{itemize}
 Future improvements include migrating both sensors to a unified PCB, replacing the polynomial thermistor correction with a Steinhart--Hart fit calibrated across more temperature points, and adding EEPROM storage for the load-cell calibration coefficients so the MSP430 can report mass directly over UART.
+
+\section*{Appendix A - Instrumentation Amplifier Nodal Analysis Code}
+The following Python code solves the nodal equations in \Cref{eq:nodal_matrix_correct} to recover the instrumentation amplifier gain expression.
+\begin{verbatim}
+  import sympy as sp
+
+R4, R5, R6, RG = sp.symbols('R4 R5 R6 RG')
+Vin_p, Vin_m, Vref = sp.symbols('Vin_p Vin_m Vref')
+vo1, vo2, va, vb, vout = sp.symbols('vo1 vo2 va vb vout')
+
+x = sp.Matrix([vo1, vo2, va, vb, vout])
+
+A = sp.Matrix([
+    [-1/R4,      0,              0,              0,               0],
+    [     0, -1/R4,              0,              0,               0],
+    [     0,      0,             1,             -1,               0],
+    [-1/R5,      0,  1/R5 + 1/R6,              0,          -1/R6],
+    [     0, -1/R5,              0,  1/R5 + 1/R6,               0]
+])
+
+b = sp.Matrix([
+    Vin_m * (1/RG + 1/R4) - Vin_p * (1/RG),
+    Vin_p * (1/RG + 1/R4) - Vin_m * (1/RG),
+    0,
+    0,
+    Vref / R6
+])
+
+sol = A.LUsolve(b)
+vout_expr = sp.simplify(sol[4])
+
+print("Vout =")
+sp.pprint(vout_expr)
+
+# Optional: extract differential gain and offset
+G_diff = sp.simplify(sp.diff(vout_expr, Vin_p) - sp.diff(vout_expr, Vin_m))
+V_offset = sp.simplify(vout_expr.subs({Vin_p: 0, Vin_m: 0}))
+
+print("\nG_diff =")
+sp.pprint(G_diff)
+
+print("\nOffset term =")
+sp.pprint(V_offset)
+\end{verbatim}
+
+\section*{Appendix B - Error Analysis for Instrumentation Amplifier Gain}
+
+The nominal differential gain is
+\[
+G_{\text{diff}} = \Bigg(1 + \frac{2R_4}{R_G}\Bigg)\frac{R_6}{R_5}.
+\]
+For small perturbations we can write the fractional change in gain as
+\begin{equation*}
+\frac{\Delta G_{\text{diff}}}{G_{\text{diff}}}
+\approx
+S_{R_4}\frac{\Delta R_4}{R_4}
++ S_{R_G}\frac{\Delta R_G}{R_G}
++ S_{R_6}\frac{\Delta R_6}{R_6}
++ S_{R_5}\frac{\Delta R_5}{R_5},
+\end{equation*}
+where the sensitivity coefficients are obtained from
+$S_{R_i} = \partial\ln G_{\text{diff}}/\partial\ln R_i$.  Evaluating these for
+$R_4 = R_6 = \SI{100}{\kilo\ohm}$, $R_5 = R_G = \SI{10}{\kilo\ohm}$ gives
+\begin{align*}
+S_{R_4} &= \frac{2R_4/R_G}{1+2R_4/R_G}
+       = \frac{20}{21} \approx +0.95, \\
+S_{R_G} &= -\frac{2R_4/R_G}{1+2R_4/R_G}
+       = -\frac{20}{21} \approx -0.95, \\
+S_{R_6} &= +1, \qquad
+S_{R_5} = -1.
+\end{align*}
+
+If all four resistors are specified as 1\% parts and their errors happen to stack in the direction that *reduces* the gain (i.e.\ $R_4$ and $R_6$ low, $R_G$ and $R_5$ high), the worst–case fractional gain error is approximately
+\begin{equation*}
+\biggl|\frac{\Delta G_{\text{diff}}}{G_{\text{diff}}}\biggr|_{\text{1\% max}}
+\approx (|S_{R_4}| + |S_{R_G}| + |S_{R_6}| + |S_{R_5}|)\times 1\%
+\approx 3.9\%.
+\end{equation*}
+This corresponds to a gain range of roughly
+\[
+G_{\text{diff}} \approx 210 \times (1 \pm 0.039)
+\Rightarrow G_{\text{diff}} \in [\sim 202,\; \sim 218].
+\]
+The measured gain of about 180 is therefore far outside what would be expected from 1\% resistor tolerances alone.
+
+Repeating the same analysis for 5\% resistors,
+\begin{equation*}
+\biggl|\frac{\Delta G_{\text{diff}}}{G_{\text{diff}}}\biggr|_{\text{5\% max}}
+\approx (|S_{R_4}| + |S_{R_G}| + |S_{R_6}| + |S_{R_5}|)\times 5\%
+\approx 19.5\%,
+\end{equation*}
+which gives an approximate gain band
+\[
+G_{\text{diff}} \approx 210 \times (1 \pm 0.195)
+\Rightarrow G_{\text{diff}} \in [\sim 170,\; \sim 251].
+\]
 
 \end{document}

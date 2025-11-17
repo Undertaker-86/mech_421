@@ -1,6 +1,6 @@
 LTspice 24.1.10 for Windows
 Circuit: D:\Repository\mech_421\report\lab_3\LTSpice_circuit\4_instrumentation_amplifier.net
-Start Time: Wed Nov 12 22:44:42 2025
+Start Time: Mon Nov 17 01:33:56 2025
 solver = Normal
 Maximum thread count: 12
 tnom = 27
@@ -33,7 +33,7 @@ Gmin = 1.33182e-13
 Gmin = 0
 Gmin stepping succeeded in finding the operating point.
 
-Total elapsed time: 0.468 seconds.
+Total elapsed time: 0.513 seconds.
 
 Files loaded:
 D:\Repository\mech_421\report\lab_3\LTSpice_circuit\4_instrumentation_amplifier.net
