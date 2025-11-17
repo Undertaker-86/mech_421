@@ -6,7 +6,11 @@
 \usepackage{siunitx}
 \usepackage{booktabs}
 \usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{cleveref}
+\usepackage{tikz}
+\usepackage{circuitikz}
 \setlist[itemize]{noitemsep, topsep=0pt}
 \setlist[enumerate]{label=\alph*), itemsep=0.3em}
 \title{MECH 421/423 Lab 4\\Op-Amp Circuits for Noisy Environments}
@@ -50,35 +54,238 @@ Selecting $R_3 = \SI{200}{\kilo\ohm}$ and $R_4 = \SI{22}{\kilo\ohm}$ yields
 which is sufficiently close to the target bias.
 
 \subsubsection{Question 3: Choose \texorpdfstring{$R_5$}{R5} and \texorpdfstring{$C_1$}{C1}}
-For the AC-coupling high-pass filter, target $\omega_c = \SI{500}{\radian\per\second}$:
+For the filter design, the transfer function amplitude is equal to $\frac{1}{\sqrt{2}}$ at the cutoff frequency:
 \begin{align*}
-    \left|\frac{R_5}{R_5 + 1/(sC_1)}\right|_{\omega_c} &= \frac{1}{\sqrt{2}} \Rightarrow R_5 C_1 = \frac{1}{\omega_c} \approx \SI{2}{\milli\second}.
+\left| \frac{R}{R + \dfrac{1}{\omega C}} \right|
+  &= \frac{1}{\sqrt{2}} \\[6pt]
+\left| \frac{\omega R C j}{\omega R C j + 1} \right|
+  &= \frac{1}{\sqrt{2}} \\[6pt]
+\frac{(\omega R C)^2}{1 + (\omega R C)^2}
+  &= \frac{1}{2} \\[6pt]
+2(\omega R C)^2 &= 1 + (\omega R C)^2 \\[6pt]
+(\omega R C)^2 &= 1 \\[6pt]
+\omega R C &= 1 \\[6pt]
+RC &= \frac{1}{\omega}
+      = \frac{1}{2\pi \cdot 100} \\[6pt]
+RC &\approx \boxed{1.59155 \times 10^{-3}\ \text{s}}
 \end{align*}
-The lab implementation used $R_5 = \SI{1.6}{\kilo\ohm}$ and $C_1 = \SI{1}{\micro\farad}$, providing $R_5 C_1 = \SI{1.6}{\milli\second}$, close to specification.
+
+R$_5 = 1.6~\text{k}\Omega$, \quad C$_1 = 1~\mu\text{F}$ are good enough
 
 \subsubsection{Question 4: Demonstrate Ambient-Light Impact}
-Covering the photodiode reduced $V_2$ noticeably, confirming the DC sensitivity to room light. Uncovering restored the previous offset, making it clear that the high-pass stage is necessary.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/2_4-open.png}
+    \caption{Waveform when photodiode is exposed to ambient light.}
+    \label{fig:ambient_light}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/2_4-close.png}
+    \caption{Waveform when photodiode is covered.}
+    \label{fig:covered_photodiode}
+\end{figure}
+\Cref{fig:ambient_light} shows $V_2$ with the photodiode exposed to room light while \Cref{fig:covered_photodiode} shows the effect of covering it. As you can see, covering the photodiode reduces the DC offset, which is what we expected.
+
 
 \subsubsection{Question 5: Detect the \SI{1}{\kilo\hertz} Carrier at \texorpdfstring{$V_2$}{V2}}
-With the LED brought close to the photodiode, a small \SI{1}{\kilo\hertz} ripple became visible atop the ambient level at $V_2$, showing that the modulation reaches the detector even before filtering.
+First, setup the LED by using the AD2 waveform generator, connect the positive of the waveform to the anode of the LED and the negative to the cathode of the LED. Set the waveform generator to output a \SI{2.5}{\volt} amplitude square wave with a \SI{2.5}{\volt} DC offset at \SI{1}{\kilo\hertz}. \Cref{fig:wavegen_setup} shows the setup inside the WaveForm software.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/2_5-wavegen_setup.png}
+    \caption{Waveform generator setup for LED modulation}
+    \label{fig:wavegen_setup}
+\end{figure}
+After setting up the LED, bring the LED close to the photodiode, and observe the voltage using the AD2 oscilloscope at $V_2$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/2_5-result.png}
+    \caption{Waveform at $V_2$ with LED close to photodiode.}
+    \label{fig:2_5_result}
+\end{figure}
+The resulting waveform is shown in \Cref{fig:2_5_result}. Notice that this is a 1khz square wave signal (just count that there is 5 cycles in 5ms)
+
+This is what we should expect, here is the math for our result:
+
+Let the photodiode current be written as the sum of a DC component due to
+ambient light and an AC component due to the modulated LED,
+\[
+i_{\text{ph}}(t) = I_{\text{amb}} + \Delta I\,q(t),
+\]
+where \(q(t)\) is a unit-amplitude, zero-mean square wave of frequency
+\(f_0 = 1~\text{kHz}\) (i.e.\ \(q(t) = \pm 1\) with 50\% duty cycle), and
+\(\Delta I\) is the amplitude of the photocurrent variation when the LED
+is driven.
+
+The op-amp is configured as a transimpedance amplifier referenced to
+\(V_1\).  Because of the virtual short between the inputs, the inverting
+node is held at
+\[
+V_- \approx V_+ = V_1.
+\]
+Applying KCL at the inverting node gives
+\[
+\frac{V_2(t) - V_1}{R_2} = - i_{\text{ph}}(t),
+\]
+so the output voltage of the transimpedance stage is
+\[
+V_2(t) = V_1 - R_2\,i_{\text{ph}}(t)
+       = \bigl(V_1 - R_2 I_{\text{amb}}\bigr)
+         - R_2 \Delta I\, q(t).
+\]
+Thus \(V_2(t)\) consists of a DC offset
+\[
+V_{2,\text{DC}} = V_1 - R_2 I_{\text{amb}}
+\]
+plus a \(1~\text{kHz}\) square-wave component of peak amplitude
+\[
+V_{2,\text{AC}}(t) = - R_2 \Delta I\, q(t),
+\]
+so the peak-to-peak value of the \(1~\text{kHz}\) component at \(V_2\)
+is
+\[
+V_{2,\text{pp}} = 2 R_2 \Delta I.
+\]
+As the LED–photodiode distance changes, \(\Delta I\) changes, and the
+square-wave amplitude at \(V_2\) scales linearly with the photocurrent
+variation.
+
 
 \subsubsection{Question 6: Observe the High-Pass Output}
-Passing $V_2$ through the RC high-pass yielded $V_3$, a centered waveform where the \SI{1}{\kilo\hertz} square wave amplitude varied predictably with emitter-detector spacing.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/2_6-result.png}
+    \caption{Waveform at $V_3$ with LED close to photodiode.}
+    \label{fig:2_6_result}
+\end{figure}
+The result at $V_3$ is shown in \Cref{fig:2_6_result}. 
+
+The node \(V_2\) is now applied to the high-pass filter formed by \(C_1\)
+and \(R_5\).  Taking \(V_2(t)\) as the input and \(V_3(t)\) as the
+output, the transfer function of this first-order high-pass filter is
+\[
+H(s) = \frac{V_3(s)}{V_2(s)}
+     = \frac{s R_5 C_1}{1 + s R_5 C_1}.
+\]
+For a sinusoidal component of angular frequency \(\omega\),
+\[
+H(j\omega) = \frac{j\omega R_5 C_1}{1 + j\omega R_5 C_1},
+\]
+and its magnitude is
+\[
+\bigl|H(j\omega)\bigr|
+= \frac{\omega R_5 C_1}{\sqrt{1 + (\omega R_5 C_1)^2}}.
+\]
+
+The cut-off angular frequency is chosen as
+\[
+\omega_c = \frac{1}{R_5 C_1} \approx 500~\text{rad/s}
+\quad (\text{about }100~\text{Hz}),
+\]
+so at the LED modulation frequency \(f_0 = 1~\text{kHz}\),
+\(\omega_0 = 2\pi f_0\), we have
+\[
+\omega_0 R_5 C_1 = \frac{\omega_0}{\omega_c}
+= \frac{2\pi \cdot 1000}{500} \approx 12.6,
+\]
+and therefore
+\[
+\bigl|H(j\omega_0)\bigr|
+= \frac{12.6}{\sqrt{1 + 12.6^2}}
+\approx 0.997 \approx 1.
+\]
+
+The DC term \(V_{2,\text{DC}}\) is completely blocked by the high-pass
+filter (its gain at \(\omega = 0\) is zero), while the \(1~\text{kHz}\)
+square-wave component passes essentially unchanged in amplitude.
+Therefore the output at \(V_3\) is approximately
+\[
+V_3(t) \approx \bigl|H(j\omega_0)\bigr|\,
+             V_{2,\text{AC}}(t)
+         \approx - R_2 \Delta I\, q(t),
+\]
+with a peak-to-peak value
+\[
+V_{3,\text{pp}} \approx \bigl|H(j\omega_0)\bigr|\,V_{2,\text{pp}}
+                 \approx V_{2,\text{pp}}
+                 = 2 R_2 \Delta I.
+\]
+
+Hence, at \(V_3\) we observe a square wave at \(1~\text{kHz}\) whose
+peak-to-peak amplitude is essentially the same as the AC component of
+\(V_2\), but now centered around \(0~\text{V}\) rather than around the
+bias voltage \(V_1\). As the distance between the LED and photodiode is
+changed, \(\Delta I\) changes, and the peak-to-peak amplitude at \(V_3\)
+varies proportionally, which is what I found experimentally (and hopefully you too).
 
 \subsubsection{Question 7: Hardware Arrangement}
-The LED slider was taped to prevent rotation, the photodiode was bent into alignment, and measurements were taken in a darkened environment as recommended to minimize stray illumination.
+Follow the instruction and you'll end up with the setup shown in the lab manual. Note that this is very crucial for later experiments.
+Because you need to align the photodiode and LED properly, make sure that the LED is facing the photodiode directly. I experienced a lot
+of issues because of misalignment, particularly I couldn't get the full range of distance measurement because the photodiode couldn't "see" the LED properly. So future mechatronics student, please pay attention to this. If you're not convinced, I have derivation once we build the full circuit.
 
 \subsection{Exercise 3: High-Pass Filter and AC Amplifier}
 \subsubsection{Question 1: Bias Network}
-To keep the AC-coupled signal centered at roughly mid-supply, choose $R_7$ and $R_8$ such that $V_4 = \SI{2.5}{\volt}$:
-\begin{align*}
-    V_4 &= \frac{R_8}{R_7 + R_8} V_{\text{ref}} = 2.5.
-\end{align*}
-Using $R_7 = R_8$ satisfies this requirement. The notes denote the gain simplification as
-\[
-V_o = V_4 + \frac{R_6}{R_5} (V_4 - V_2),
-\]
-with $\left|\frac{R_6}{R_5}\right| = 10$. A practical selection was $R_5 = R_6 = \SI{16}{k\Omega}$, which keeps the gain near unity for DC while letting the AC response reach the target amplification.
+% --- 1) Choice of R8 and R7 ---
+\begin{align}
+\frac{R_8}{R_8 + R_7} &= \frac{1}{2} \\[4pt]
+2 R_8 &= R_8 + R_7 \\[4pt]
+R_8 &= R_7
+\end{align}
+
+We can choose, for example,
+\begin{align}
+R_8 = R_7 &= \boxed{10~\text{k}\Omega}.
+\end{align}
+
+% --- 2) Equivalent impedances Z1 and Z2 ---
+The input and feedback impedances of the op-amp stage are
+\begin{align}
+Z_1 &= R_5 + \frac{1}{s C_1}
+     = \frac{1 + s R_5 C_1}{s C_1}, \\[6pt]
+Z_2 &= R_6 \parallel \frac{1}{s C_2}
+     = \frac{R_6}{R_6 + \dfrac{1}{s C_2}}
+     = \frac{R_6}{1 + s R_6 C_2}.
+\end{align}
+
+% --- 3) Output expression V0 in terms of V2 and V4 ---
+For the non-inverting configuration, with \(V_4\) at the non-inverting input
+and \(V_2\) feeding the inverting node through \(Z_1\), the output is
+\begin{align}
+V_0 &= V_4\!\left(1 + \frac{Z_2}{Z_1}\right)
+      - V_2 \left(\frac{Z_2}{Z_1}\right) \\[4pt]
+    &= V_4 + \frac{Z_2}{Z_1}\left(V_4 - V_2\right).
+\end{align}
+
+% --- 4) Gain condition |Z2/Z1| = 10 ---
+We want the magnitude of the transfer ratio to be about 10:
+\begin{align}
+\left|\frac{Z_2}{Z_1}\right| &\approx 10.
+\end{align}
+
+Compute the ratio:
+\begin{align}
+\frac{Z_2}{Z_1}
+  &= \frac{\dfrac{R_6}{1 + s R_6 C_2}}
+          {R_5 + \dfrac{1}{s C_1}} \\[6pt]
+  &= \frac{R_6}{1 + s R_6 C_2}
+     \cdot \frac{s C_1}{1 + s R_5 C_1} \\[6pt]
+  &= \frac{R_6}{R_5} \;
+     \frac{s R_5 C_1}{1 + s R_5 C_1}
+     \cdot \frac{1}{1 + s R_6 C_2}.
+\end{align}
+
+In the midband of interest (where the frequency-dependent factors are near
+unity), the dominant term is \(R_6/R_5\), so we choose
+\begin{align}
+\frac{R_6}{R_5} &\approx \boxed{10}.
+\end{align}
+
+Then we can choose our resistor, which in this case I choose to be:
+\begin{align}
+R_5 &= \boxed{1.6~\text{k}\Omega}, \\
+R_6 &= \boxed{16~\text{k}\Omega}.
+\end{align}
 
 \subsubsection{Question 2: Choose \texorpdfstring{$C_2$}{C2}}
 The low-pass pole formed by $R_6$ and $C_2$ should be above $\SI{16}{\kilo\hertz}$:
@@ -95,24 +302,186 @@ Applying a \SI{100}{\milli\volt} sinusoid at \SI{1}{\kilo\hertz} produced the ex
 This stage reused the Exercise~2 sizing so $R_9 = \SI{1.6}{\kilo\ohm}$ and $C_3 = \SI{1}{\micro\farad}$, keeping the \SI{100}{\hertz} cutoff.
 
 \subsubsection{Question 2: Rectifier Gain}
-The rectifier amplifier was configured for $G = 1 + R_{11}/R_{10} = 11$, implemented with $R_{10} = \SI{1}{\kilo\ohm}$ and $R_{11} = \SI{10}{\kilo\ohm}$.
+
+The feedback network $R_6$--$C_2$ implements a first–order low-pass term of the form  
+\[
+H_{\text{LP}}(j\omega) = \frac{1}{1 + j\omega R_6 C_2}.
+\]
+The magnitude is
+\begin{align*}
+\left| H_{\text{LP}}(j\omega) \right|
+  &= \left| \frac{1}{1 + j\omega R_6 C_2} \right|
+   = \frac{1}{\sqrt{1 + (\omega R_6 C_2)^2}}.
+\end{align*}
+The $-3\,\mathrm{dB}$ cut-off occurs when $\lvert H_{\text{LP}}(j\omega_c)\rvert = 1/\sqrt{2}$:
+\begin{align*}
+\frac{1}{\sqrt{1 + (\omega_c R_6 C_2)^2}} &= \frac{1}{\sqrt{2}} \\
+1 + (\omega_c R_6 C_2)^2 &= 2 \\
+(\omega_c R_6 C_2)^2 &= 1 \\
+\omega_c R_6 C_2 &= 1 \\
+C_2 &= \frac{1}{\omega_c R_6}.
+\end{align*}
+
+With $R_6 = \SI{16}{k\ohm}$ and the desired cut-off
+$f_c = \SI{16}{kHz}$ (so $\omega_c = 2\pi f_c \approx 1.01\times10^5\ \mathrm{rad/s}$),
+\begin{align*}
+C_2 
+  &= \frac{1}{(2\pi f_c) R_6} \\
+  &= \frac{1}{(2\pi)(16\times10^3)(16\times10^3)} \\
+  &\approx 6.22\times 10^{-10}\ \mathrm{F}
+   = 0.622\ \mathrm{nF}
+   \approx 620\ \mathrm{pF}.
+\end{align*}
+Thus the ideal design value is
+\[
+\boxed{C_2 \approx \SI{0.622}{nF} \approx \SI{620}{pF}}.
+\]
+
+In the lab, the largest available capacitor not exceeding this value was
+$C_2 = \SI{100}{pF}$. Using this component shifts the pole to a higher
+frequency:
+\begin{align*}
+\omega_{c,\text{actual}} 
+  &= \frac{1}{R_6 C_2}
+   = \frac{1}{(16\times10^3)(100\times10^{-12})}
+   = 6.25\times10^5\ \mathrm{rad/s}, \\
+f_{c,\text{actual}}
+  &= \frac{\omega_{c,\text{actual}}}{2\pi}
+   \approx 9.95\times10^4\ \mathrm{Hz}
+   \approx \SI{100}{kHz}.
+\end{align*}
+So the implemented filter still satisfies the specification
+($\omega_c \ge 10^5\ \mathrm{rad/s}$) while providing even stronger
+attenuation of higher-frequency interference:
+\[
+\boxed{C_2 = \SI{100}{pF},\quad f_{c,\text{actual}} \approx \SI{100}{kHz}.}
+\]
+
+so what is this circuit doing? below are the derivation to see what is happening.
+
+
+For small AC signals, the bias node $V_4 \approx 2.5~\text{V}$ is a DC
+level, so its AC value is effectively zero.  
+Thus, the non-inverting input is at AC ground and the op-amp works as an
+\emph{inverting} amplifier with:
+
+\[
+V_2 \xrightarrow{\;C_1,\,R_5\;} \text{inverting node}, \qquad
+V_5 \xrightarrow{\;R_6 \parallel C_2\;} \text{feedback}.
+\]
+
+Define
+\begin{align*}
+Z_1 &= R_5 + \frac{1}{s C_1} &&\text{(series input impedance)},\\[4pt]
+Z_2 &= R_6 \parallel \frac{1}{s C_2}
+     = \frac{R_6}{1 + s R_6 C_2} &&\text{(feedback impedance)}.
+\end{align*}
+
+With the inverting-node voltage $\approx 0$ (ideal op-amp),
+Kirchhoff's current law gives
+\begin{align*}
+\frac{V_2(s) - 0}{Z_1} + \frac{V_5(s) - 0}{Z_2} &= 0,\\[4pt]
+\Rightarrow\quad
+\boxed{\displaystyle
+\frac{V_5(s)}{V_2(s)} = -\,\frac{Z_2}{Z_1}
+}.
+\end{align*}
+
+Substitute $Z_1$ and $Z_2$:
+\begin{align*}
+\frac{V_5(s)}{V_2(s)}
+&= -\,\frac{\dfrac{R_6}{1 + s R_6 C_2}}
+          {R_5 + \dfrac{1}{s C_1}} \\[6pt]
+&= -\,\frac{R_6}{1 + s R_6 C_2}
+      \cdot \frac{s C_1}{1 + s R_5 C_1} \\[6pt]
+&= \boxed{\frac{R_6}{R_5}
+\left(\frac{s R_5 C_1}{1 + s R_5 C_1}\right)
+\left(\frac{1}{1 + s R_6 C_2}\right)
+}
+\end{align*}
+
+This shows:
+\begin{itemize}
+  \item $C_1$ and $R_5$ form a \textbf{high-pass} with cutoff
+        $\omega_{\mathrm{HP}} = \dfrac{1}{R_5 C_1}$.
+  \item $R_6$ and $C_2$ form a \textbf{low-pass} with cutoff
+        $\omega_{\mathrm{LP}} = \dfrac{1}{R_6 C_2}$.
+  \item In between these two cutoffs,
+        the gain tends to the constant
+        \(\dfrac{R_6}{R_5}\) (inverting amplifier).
+\end{itemize}
 
 \subsubsection{Question 3: Low-Pass Filter}
-The smoothing network targeted $\omega_c = \SI{10}{\radian\per\second}$:
-\begin{align*}
-    \omega_c = \frac{1}{R_{12} C_4} = 10 \quad\Rightarrow\quad R_{12} C_4 = 0.1.
-\end{align*}
-With $R_{12} = \SI{1}{\mega\ohm}$ and $C_4 = \SI{100}{\nano\farad}$ the required time constant was achieved.
+Configure your waveform generator to 100 mV amplitude 1 kHz sine wave using the AD2 signal generator and 
+connect it to V2. Then use your oscilloscope to measure the output at V5. You should see a sine wave at V5. Measure the amplitude of the output sine wave at V5. Vary the frequency to see it's effect on the output amplitude.
+Here are my result for 1khz, 100khz, and 1mhz:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/3_3-1khz.png}
+    \caption{Waveform at $V_5$ with 1 kHz input.}
+    \label{fig:4_3_1khz}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/3_3-100khz.png}
+    \caption{Waveform at $V_5$ with 100 kHz input.}
+    \label{fig:4_3_100khz}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/3_3-1000khz.png}
+    \caption{Waveform at $V_5$ with 1 MHz input.}
+    \label{fig:4_3_1mhz}
+\end{figure}
+\subsection*{Frequency response and output amplitudes}
+
+Let the input at $V_2$ be a sine wave
+\[
+v_2(t) = \hat V_2 \sin(\omega t),
+\qquad \hat V_2 = 0.1~\text{V} \; (100~\text{mV}).
+\]
+The complex gain at frequency $\omega$ is
+\[
+A(j\omega) = \frac{V_5(j\omega)}{V_2(j\omega)}
+           = \frac{R_6}{R_5}
+\left(\frac{s R_5 C_1}{1 + s R_5 C_1}\right)
+\left(\frac{1}{1 + s R_6 C_2}\right).
+\]
+The output amplitude is
+\[
+\hat V_5 = \left|A(j\omega)\right|\hat V_2.
+\]
+
+If we go through the calculations, these are the amplitude modulations at
+different frequencies for our circuit (assuming R6/R5 = 10):
+\[
+\boxed{
+\hat V_5 \approx
+\begin{cases}
+9.99999~\text{V}, & f = 1~\text{kHz},\\[2pt]
+5.3~\text{V}, & f = 100~\text{kHz},\\[2pt]
+0.62~\text{V}, & f = 1~\text{MHz}.
+\end{cases}
+}
+\]
+
+Our result are similar to our calculation
+(\(1.044~\text{V}\), \(0.514~\text{V}\), \(64.2~\text{mV}\))
+are of the same order, so everything seems to check out. I believe
+this is reasonable given tolerances in the actual resistor/capacitor
+values, and can also be caused by the
+bandwidth and slew-rate limits of the real op-amp.
 
 \subsubsection{Question 4: Response Checks}
-Using a \SI{1}{\kilo\hertz}, \SI{100}{\milli\volt} square wave at $V_5$ confirmed the expected progression: the high-pass removed DC offsets, the rectifier amplified the magnitude, and the low-pass produced a smooth envelope proportional to optical intensity.
+The next step is to check if your circuit works for Exericse 3 number 4, 5, 6. This is the perfect time for you to test if your circuit
+has the full 2.5V range. If the range is bad, please first try aligning your photodiode, because that might be the number one cause of this issue.
 
 \subsection{Exercise 5: Assemble Complete Circuit}
 \subsubsection{Question 1: Integrate Stages}
-The transimpedance amplifier (Exercise~2), AC amplifier (Exercise~3), and rectifier/low-pass chain (Exercise~4) were wired together to form the complete sensor. Connections followed the manual schematic so that $V_{\text{out}}$ after the low-pass reflects LED distance.
+Finally, we are done with our circuit, the next step is to wire together the transimpedance amplifier (Exercise~2), AC amplifier (Exercise~3), and rectifier/low-pass chain (Exercise~4) to form the complete sensor. After this check all the connections again to make sure everything is correct. Once you are sure everything is correct, power up the circuit and test if it works as expected. 
 
 \subsubsection{Question 2: Constrain Output Range}
-Sweeping the LED along the rail verified that $V_{\text{out}}$ remained between 0~V and \SI{2.5}{\volt}. Minor trims to the rectifier gain---still using the $R_{10}/R_{11}$ network discussed earlier---kept the signal within the ADC range while preserving sensitivity.
+If everything is correct, you should be able to see the output voltage $V_{\text{out}}$ vary between 0~V and 2.5~V as you sweep the LED along the rail. It's okay if you don't get the full range, as long as it's close to 2.5V that's good enough.
 
 \section{Phase 3: Data Acquisition and Calibration}
 \subsection{Exercise 6: Firmware and C\# Acquisition}
