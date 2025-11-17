@@ -1,0 +1,57 @@
+# LaTeX intermediate files
+*.aux
+*.log
+*.lof
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.vrb
+
+# Bibliography
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+
+# Index / glossary
+*.idx
+*.ilg
+*.ind
+*.ist
+*.glo
+*.glg
+*.gls
+*.acn
+*.acr
+*.alg
+
+# Beamer / presentations
+*.nav
+*.snm
+
+# Meta files from some editors
+*.dvi
+*.xdv
+*.ps
+*~
+*.swp
+*.swx
+*.bak
+*.tmp
+*.tmp.*
+*.DS_Store
+
+# VS Code / other IDE stuff
+.vscode/
+*.code-workspace
+.idea/

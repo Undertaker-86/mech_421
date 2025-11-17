@@ -4,10 +4,19 @@
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cleveref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{parskip}
+
+
+
 
 \lstset{basicstyle=\ttfamily\small, frame=single}
 
-\title{Concept Proposal: Mini Morphobot-Inspired Mobility Platform}
+\title{Concept Proposal: Transformer Robot}
 \author{Gyan Edbert Zesiro (ID:38600060) \and Ryan Edric Nashota (ID:33508219)}
 \date{\today}
 
@@ -16,82 +25,191 @@
 
 \section{Concept Overview}
 \subsection{Goal and Vision}
-We will build a laptop-scale ``Mini Morphobot'' that emulates Caltech's Multi-Modal Mobility Morphobot (M4) but narrows the scope to two high-impact modes: agile wheeled driving indoors and short-hop quadrotor flight outdoors.\footnote{E.~Sabree et~al., ``Multi-Modal Mobility Morphobot (M4) with appendage repurposing for locomotion plasticity enhancement,'' \textit{Nature Communications}, 2023.} Proving that one set of rotor-wheel appendages can deliver both functions within three months would validate a deployable scout that can roll through doorways, collect samples, and then lift off to bypass rubble piles or elevator shafts without swapping hardware.
+We will build a simpler version of Caltech's Multi-Modal Mobility Morphobot (M4)\footnote{E.~Sabree et~al., 
+``Multi-Modal Mobility Morphobot (M4) with appendage repurposing for locomotion plasticity enhancement,'' \textit{Nature Communications}, 2023.}. 
+The original M4 platform can transform between six locomotion modes, however due to the
+time and resource constraints of this project, we will narrows the scope to two 
+high-impact modes: 
+\begin{itemize}
+    \item \textbf{Ground Mode:} Agile wheeled driving indoors.
+    \item \textbf{Flight Mode:} Short-hop quadrotor flight outdoors.
+\end{itemize}
+The vision and purpose of the device is that by utilizing the same set of rotor-wheel appendages,
+we can create a more versatile locomotion device, allowing it to be used in multiple scenarios. 
+For example, the robot could drive efficiently through a building's corridors to survey damage, 
+then switch to flight mode to cross a collapsed stairwell or navigate between floors through 
+an open atrium, enabling a single device to navigate complex environments.
 
-\subsection{Form Factor and Operating Concept}
-The platform uses four identical convertible rotor-wheel pods arranged in an ``X'' planform on a 28~cm $\times$ 28~cm carbon chassis. Each pod nests a 180~mm ducted rotor with a tire bonded to the rim. In Ground Mode, the ducts lock at $0^\circ$ and the hub motors drive the tires for smooth wheeled motion with active suspension. In Flight Mode, the pods articulate to a $45^\circ$ dihedral, propellers spin up, and the same hardware becomes a quadrotor for 60~s hops to new vantage points. Mode changes occur in under 6~s via indexed hinges and Hall-effect latches triggered from a tablet interface, letting an operator reposition the robot when rubble or stairs block the rolling path.
-
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{images/m4img-001.png}
-    \caption{M4-inspired rotor-wheel transformations guiding the Mini Morphobot's two-mode concept.}
+    \includegraphics[width=0.5\linewidth]{images/m4_caltech.png}
+    \caption{M4 Robot from Caltech.}
     \label{fig:modes}
 \end{figure}
 
+\subsection{Form Factor and Operating Concept of Final Product}
+The robot looks like a remote-control car with four motorized wheels arranged in an 
+"X" pattern on a frame as seen in \Cref{fig:sketch_simple}. What makes it special is 
+that each wheel is actually part of a convertible rotor-wheel pod, where it is 
+essentially a propeller enclosed in a protective duct with a tire attached to its outer rim.
+
+When driving on the ground, the ducts lock flat at $0^\circ$ and the 
+motors spin the tires like a normal RC car, complete with active suspension for smooth 
+movement over uneven terrain. When the robot needs to fly, say, to get over obstacles or 
+climb stairs, the four pods tilt upward to a $90^\circ$ angle, the propellers spin up, 
+and the whole system transforms into a quadcopter drone. Since the robot might be heavy,
+our goal is to give the robot enough flight time to hop over barriers and reach new locations, not a 
+high altitude flight found in most drones.
+
+Switching between driving and flying modes should be quick, currently we are targeting it to be less than
+10 seconds. The transformation happens through motorized hinges that click into preset positions, 
+with sensors confirming for feedback to ensure they are in the correct position. 
+An operator controls everything from a RC controller, deciding when to drive and 
+when to take flight based on what obstacles lie ahead.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/2modes.jpeg}
+    \caption{Sketch of Transforming Robot in (left) Ground Mode and (right) Flight Mode.}
+    \label{fig:sketch_simple}
+\end{figure}
+
+
 \subsection{Conceptual Interest and Motivation}
-The most compelling idea is appendage repurposing: a single electromechanical module provides traction, thrust, and stabilization, echoing M4's research insight while staying achievable with student resources. Instead of spreading effort across many locomotion styles, we concentrate on robust drive-and-fly transitions that matter to first responders. Success would demonstrate that a low-mass, battery-operated scout can reposition in 3D space without a separate drone, shrinking the kit responders carry and simplifying operator training.
+The most compelling idea is appendage repurposing, similar to how animals and humans use
+their limbs for multiple functions. We have to design a single electromechanical 
+module which provides traction, thrust, and stabilization, 
+echoing M4's research insight while staying achievable with the given time and resources in MECH421/423. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/mechanism.jpeg}
+    \caption{Preliminary Concept Sketch of Transforming Mechanism}
+    \label{fig:sketch_transform}
+\end{figure}
+
+Personally, both of us wanted to do further study in navigation of mobile robots, and as such
+this project provides another avenue for our graduate studies. Unlike typical drones or rovers,
+which navigation algorithm have been well studied, a morphing robot presents new challenges
+in state estimation, control, and path planning. We think that this project will be good to 
+expose ourself on hese topics which we want to research in the future. 
+
+Finally, we think it's just cool. As Richard Feynman once said, ``Physics is like sex: sure, 
+it may give some practical results, but that's not why we do it.'' The same applies here—while 
+this robot has practical applications in search-and-rescue, the real motivation is the challenge 
+and the learning experience. Even if the final prototype doesn't achieve full autonomous 
+flight-to-ground transitions, the process of designing the transformation mechanism, 
+integrating the control systems, and wrestling with the state estimation problems will teach us 
+far more than building yet another standard quadcopter or RC car. We'd rather aim high and 
+learn from the inevitable obstacles than play it safe with a project we could finish in our sleep.
+Afterall a wrong answer isn’t a meaningless one.
+
 
 \subsection{Functional Components}
-\begin{enumerate}[label=\textbf{FC\arabic*}:, leftmargin=1.5cm]
-    \item \textbf{Morphing Airframe and Locks} --- Carbon sandwich chassis with indexed hinge blocks, spring-loaded detents, and wiring passthroughs that hold each pod rigid in both ground and flight attitudes.
-    \item \textbf{Convertible Rotor-Wheel Pods} --- Custom ducts with bonded tires, 3D-printed hub carriers, and a shoulder gearbox that repositions the pods with $<1^\circ$ repeatability.
-    \item \textbf{Ground Drivetrain} --- In-wheel brushless motors with planetary reductions and field-oriented control for 0.8~m/s cruise plus differential steering.
-    \item \textbf{Flight Powertrain} --- 5-inch propellers, 1200~kV outrunners, and BLHeli ESCs sized for 1.5~kg thrust allowing stable quadrotor hops carrying the entire chassis.
-    \item \textbf{Perception and Control Stack} --- Teensy 4.1 motor controller linked to a Pixhawk or Cube Orange flight controller running PX4, with ROS~2 teleop on a Jetson Nano for shared state estimation.
-    \item \textbf{Power and Communications Backbone} --- 4S Li-ion battery with dual buck converters, current sensing, and Wi-Fi + RF telemetry for command and data logging.
-\end{enumerate}
 
-\subsection{Mermaid System Breakdown}
-\begin{figure}[h]
+Table~\ref{tab:functional_components} summarizes the six main subsystems that enable the robot's dual-mode operation.
+
+\begin{table}[h]
 \centering
-\begin{lstlisting}
-```mermaid
-flowchart TD
-    Start["Operator Command"]
-    Start --> Mode{Select Mode}
-    Mode -->|Drive| GroundFC[Ground Drivetrain]
-    Mode -->|Fly| FlightFC[Flight Powertrain]
-    GroundFC --> Locks[Morphing Locks]
-    FlightFC --> Locks
-    Locks --> Sensors[Perception + Control Stack]
-    Sensors --> Power[Power + Comms Backbone]
-    Power --> Start
-```
-\end{lstlisting}
-\caption{Mermaid flowchart summarizing subsystems needed for drive/fly operations.}
-\label{fig:mermaid}
+\caption{Functional Components of the Morphing Robot}
+\label{tab:functional_components}
+\begin{tabular}{p{0.3\textwidth} p{0.55\textwidth}}
+\toprule
+\textbf{Component} & \textbf{Description} \\
+\midrule
+\textbf{FC1: Morphing Airframe} & Carbon fiber chassis with motorized indexed hinges and Hall-effect sensors to lock pods at 0° (ground) and 45° (flight) positions. Target transition time under 10 seconds. \\
+\addlinespace
+\textbf{FC2: Rotor-Wheel Pods} & Four identical convertible modules, each containing a ducted rotor with tire bonded to the rim. Provides both ground traction and aerial thrust using the same hardware. \\
+\addlinespace
+\textbf{FC3: Ground Drivetrain} & Brushless hub motors with gearboxes drive the tires for wheeled locomotion. Differential steering enables agile indoor navigation. \\
+\addlinespace
+\textbf{FC4: Flight Powertrain} & Same motors repurposed as quadcopter propulsion with appropriate propellers and ESCs, enabling short flight hops to clear obstacles. \\
+\addlinespace
+\textbf{FC5: Control System} & RC transmitter for manual mode switching and teleoperation. Flight controller (e.g., Pixhawk with PX4 firmware) for stabilization. Optional onboard computer for future autonomous navigation research. \\
+\addlinespace
+\textbf{FC6: Power System} & Lithium-polymer battery with voltage regulation for motor and electronics power. Sized to support extended ground operation and multiple flight cycles per charge. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/flow_chart.png}
+    \caption{Flow Chart of Subsystem for Transforming Robot}
+    \label{fig:flow_chart}
 \end{figure}
+
 
 \section{Concept Questions}
 \begin{enumerate}[label=\textbf{Q\arabic*}:, leftmargin=0pt, itemsep=1.2em]
     \item \textbf{What is the value of your product to the end-user?}\\
-    Urban search and rescue teams gain a single robot that can roll quietly through doorways and then quickly hop over collapsed stair segments to reach trapped occupants. The mission storyboard in Fig.~\ref{fig:sar} illustrates how the operator stays at street level, teleoperates wheeled inspection, and only flies when debris gaps appear, minimizing battery use yet preserving access flexibility. This blend shortens mission timelines and reduces the number of specialized robots responders must stage at the incident.
-    \item \textbf{What is the closest alternative to your product?}\\
-    The closest alternative is deploying a small quadrotor alongside a separate rugged UGV (e.g., DJI Mavic + FLIR FirstLook). While that pair delivers comparable capabilities, it doubles logistics (two batteries, controllers, pilots) and forces responders to recover and redeploy hardware between modalities. Our Mini Morphobot trades heavy payload capacity for convenience: the same rotor-wheel pods stay on the robot, so mode changes are software triggers instead of equipment swaps.
-    \item \textbf{What is the metric of success for your product? How will you measure it?}\\
-    We will declare success if the robot (i) completes a ground-to-flight-to-ground cycle in under 12~s, (ii) sustains 0.8~m/s average speed in drive mode for 15~m, and (iii) performs a 5~m horizontal flight hop carrying its full chassis. Timing gates, encoder logs, and motion capture at the sandbox will provide objective data for each criterion.
-    \item \textbf{Pick one aspect to polish to a finished product.}\\
-    The mechanical morphing mechanism and locks will reach a polished standard: smooth bearing-supported hinges, hidden wiring, magnetic detents that audibly click, and covers that protect against dust during takeoff. A rough prototype (visible wobble, exposed wires, detents that need hand assistance) is explicitly unacceptable and will be engineered out through iterative machining and cable routing.
-    \item \textbf{Which aspect(s) will you not develop to a finished product?}\\
-    Full autonomy and onboard perception remain experimental. We will run ROS~2 teleoperation and simple PX4 position hold, but we will not harden SLAM, obstacle avoidance, or AI-based victim detection. Those features require datasets and validation far beyond the term, so we treat them as scaffolding for operator-driven demos.
-    \item \textbf{What is your most critical module and why?}\\
-    The convertible rotor-wheel pod (FC2) is most critical because it must satisfy conflicting requirements: structural stiffness for fast driving, low mass for flight, and precise alignment for vibration-free hover. Failure to meet any requirement instantly degrades both locomotion modes, so we will prototype this module first, run torsion/balance tests, and only then replicate it across all four corners.
-    \item \textbf{What kind of data infrastructure will you need? How will you test it?}\\
-    Our ROS~2 infrastructure will stream wheel encoder ticks, IMU data, hinge position, current draw, and PX4 state vectors over Wi-Fi to a logging laptop. A PostgreSQL-backed rosbag2 pipeline will archive every trial. We will inject mock data using Gazebo/PX4 SITL to ensure the telemetry topics saturate at expected bandwidth, then run hardware-in-the-loop bench tests where the Pixhawk publishes synthetic flight data while the Teensy reports wheel motion, verifying synchronization before field trials.
-\end{enumerate}
+    The added flexibility from the multiple modes allow a single robot to handle multiple scenarios.
+    For example, urban search and rescue teams gain a single robot that can roll quietly 
+    through doorways and then quickly hop over collapsed stair segments to reach 
+    trapped occupants. The mission storyboard in Fig.~\ref{fig:sar} 
+    illustrates how the operator stays at street level, teleoperates wheeled inspection, 
+    and only flies when debris gaps appear, minimizing battery use yet preserving access 
+    flexibility. This blend shortens mission timelines and reduces the number of specialized 
+    robots responders must stage at the incident.
 
-\begin{figure}[h]
+    \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{images/m4img-002.png}
+    \includegraphics[width=0.9\linewidth]{images/use_case.png}
     \caption{Caltech's SAR storyboard conveying the value proposition for responder end-users.}
     \label{fig:sar}
-\end{figure}
+    \end{figure}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.9\linewidth]{images/m4img-003.png}
-    \caption{Reference workflow for morphing appendages, guiding our subsystem architecture.}
-    \label{fig:workflow}
-\end{figure}
+    We would imagine that advancement of this technology will also find applications in
+    other fields such as space exploration (e,g, Mars rover), agriculture (e.g., inspecting crops on the ground and flying over
+    obstacles), military reconnaissance (e.g., driving through urban environments and flying
+    over barriers), and environmental monitoring (e.g., ground surveys and aerial mapping).
+
+
+    \item \textbf{What is the closest alternative to your product?}\\
+    Since the project is inspired by Caltech's M4, the research done on M4 is the best alternative to our product. 
+    But if we are only concerend with driving and flying robots, there are other academic prototype such as Caltech's ATMO (Aerially Transforming Morphobot), which also uses four 
+    thrusters that double as wheels and can transform between quadcopter and ground rover modes 
+    using a single motor mechanism.  
+
+    Another recent example is Virginia Tech's bistable morphing robot, which uses shape memory 
+    alloy actuators to rapidly switch between flying and driving configurations in under 50 milliseconds.  
+    Both of these platforms focus specifically on the flight-to-ground transition problem we're addressing.
+    
+    Outside of research prototypes, there isn't really a direct commercial equivalent. The practical alternative is simply using **two separate robots**: a standard quadcopter drone for aerial reconnaissance and an RC car or small ground rover for close-up inspection. This is what most hobbyists and even some professional applications currently do—switching between devices based on the terrain.
+
+    \item \textbf{What is the metric of success for your product? How will you measure it?}\\
+    We will declare success if the robot (i) completes a ground-to-flight-to-ground cycle in 
+    under 12~s, (ii) sustains 0.8~m/s average speed in drive mode for 15~m, and 
+    (iii) performs a 5~m horizontal flight hop carrying its full chassis. 
+    Timing gates, encoder logs, and motion capture at the sandbox will provide 
+    objective data for each criterion.
+    \item \textbf{Pick one aspect to polish to a finished product.}\\
+    The mechanical morphing mechanism and locks will reach a polished standard: 
+    smooth bearing-supported hinges, hidden wiring, 
+    magnetic detents that audibly click, and covers that protect against dust during takeoff. 
+    A rough prototype (visible wobble, exposed wires, detents that need hand assistance) is explicitly 
+    unacceptable and will be engineered out through iterative machining and cable routing.
+    \item \textbf{Which aspect(s) will you not develop to a finished product?}\\
+    Full autonomy and onboard perception remain experimental. 
+    We will run ROS~2 teleoperation and simple PX4 position hold, 
+    but we will not harden SLAM, obstacle avoidance, or AI-based victim detection. 
+    Those features require datasets and validation far beyond the term, 
+    so we treat them as scaffolding for operator-driven demos.
+    \item \textbf{What is your most critical module and why?}\\
+    The convertible rotor-wheel pod (FC2) is most critical because it must 
+    satisfy conflicting requirements: structural stiffness for fast driving, 
+    low mass for flight, and precise alignment for vibration-free hover. 
+    Failure to meet any requirement instantly degrades both locomotion modes, so we will 
+    prototype this module first, run torsion/balance tests, and only then replicate it across all 
+    four corners.
+    \item \textbf{What kind of data infrastructure will you need? How will you test it?}\\
+    Our ROS~2 infrastructure will stream wheel encoder ticks, IMU data, 
+    hinge position, current draw, and PX4 state vectors over Wi-Fi to a logging laptop. 
+    A PostgreSQL-backed rosbag2 pipeline will archive every trial. 
+    We will inject mock data using Gazebo/PX4 SITL to ensure the telemetry topics 
+    saturate at expected bandwidth, then run hardware-in-the-loop bench tests where the 
+    Pixhawk publishes synthetic flight data while the Teensy reports wheel motion, 
+    verifying synchronization before field trials.
+\end{enumerate}
 
 \end{document}
