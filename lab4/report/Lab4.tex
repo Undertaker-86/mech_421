@@ -47,10 +47,16 @@ This lab investigates the design of an optical distance sensor built from discre
 The experimental procedure was organized into three phases that progressively built up a complete optical distance sensor, from the analog front-end to digital acquisition and calibration. Each phase was completed only after verifying correct operation of the previous one.
 
 \subsection*{Phase 1: Analog Front-End}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/method_circuit_1.png}
+    \caption{Exercise 2 Circuit}
+    \label{fig:method_circuit_1}
+\end{figure}
 \begin{enumerate}
     \item Configure the Analog Discovery 2 (AD2) waveform generator to drive the red LED with a \SI{5}{\volt} amplitude square wave and \SI{2.5}{\volt} DC offset. Verify visible flashing at \SI{1}{\hertz} and continuous illumination at \SI{1}{\kilo\hertz}.
     \item Mechanically mount the LED on the linear rail and align it with the photodiode on the breadboard, ensuring smooth motion and stable geometry over the full travel range.
-    \item Design and assemble the photodiode transimpedance amplifier by selecting $R_2$ to convert a \SI{1}{\micro\ampere} photocurrent into a \SI{100}{\milli\volt} deviation about a bias voltage $V_1$.
+    \item Design and assemble the photodiode transimpedance amplifier by selecting $R_2$ to convert a \SI{1}{\micro\ampere} photocurrent into a \SI{100}{\milli\volt} deviation about a bias voltage $V_1$, see \Cref{fig:method_circuit_1}.
     \item Design the bias network using $R_3$ and $R_4$ to set $V_1 \approx \SI{0.5}{\volt}$ from the \SI{5}{\volt} supply, then build and verify the bias node on the breadboard.
     \item Choose and install $R_5$ and $C_1$ to implement the first high-pass filter with a cutoff near \SI{100}{\hertz}, and confirm the expected frequency response using the AD2.
     \item Characterize the effect of ambient light by observing $V_2$ with the photodiode alternately exposed and covered, documenting the change in DC level and the small \SI{1}{\kilo\hertz} carrier component.
@@ -58,14 +64,74 @@ The experimental procedure was organized into three phases that progressively bu
 \end{enumerate}
 
 \subsection*{Phase 2: Signal Conditioning and Rectification}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/method_circuit_2.png}
+    \caption{Exercise 3 Circuit}
+    \label{fig:method_circuit_2}
+\end{figure}
+
+Below outlines steps for Exercise 3:
 \begin{enumerate}
-    \item Design and build a second RC high-pass filter using $C_3$ and $R_9$ with the same cutoff frequency as the first stage to further suppress low-frequency ambient-light variations.
+  \item Design and construct a high-pass amplifier stage with the specified gain. 
+        Choose resistors $R_7$ and $R_8$ so that the DC level at node $V_4$ is 
+        $2.5~\text{V}$. Reuse $C_1$ and $R_5$ from the earlier exercises, and 
+        select $R_6$ so that the overall gain is $-10$.
+
+  \item The pair $R_6$ and $C_2$ should form a low-pass section that attenuates 
+        high-frequency noise. Choose $C_2$ so that the low-pass cut-off 
+        frequency is at least $16~\text{kHz}$, i.e.\ 
+        $\omega_c \ge 10^{5}~\text{rad/s}$.
+
+    \item Build the circuit shown in \Cref{fig:method_circuit_2} on your 
+        breadboard.
+
+  \item To evaluate the circuit, configure the AD2 signal generator to output a 
+        $1~\text{kHz}$ sine wave with a peak amplitude of $100~\text{mV}$ and 
+        apply this signal to node $V_2$.
+
+  \item Connect the input of this filter/amplifier stage (node $V_2$) to the 
+        output of the photodiode amplifier.
+
+  \item Observe the output signal amplitude while varying the distance between 
+        the LED transmitter and the photodiode receiver. The circuit should 
+        produce a clearly measurable $1~\text{kHz}$ square-wave signal over 
+        separation distances up to approximately $25~\text{cm}$, and the output 
+        should not saturate (remain below about $5~\text{V}$) when the 
+        separation is very small (less than about $3~\text{cm}$). For best 
+        results, perform this distance test in a dark room with your computer 
+        screen set to minimum brightness so that the photodiode primarily 
+        detects light from the LED.
+
+  \item If these conditions are not satisfied, adjust the gain of the circuit 
+        as needed. This may include changing the values of $C_1$, $C_2$, $R_5$, 
+        and $R_6$ until the performance meets the above criteria.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/method_circuit_3.png}
+    \caption{Exercise 4 Circuit}
+    \label{fig:method_circuit_3}
+\end{figure}
+Next is exercise 4 and 5, which involves building the rectifier and low-pass filter:
+\begin{enumerate}
+    \item Design and build a second RC high-pass filter using $C_3$ and $R_9$ with the same cutoff frequency as the first stage to further suppress low-frequency ambient-light variations and build the Exercise 4 circuit, see \Cref{fig:method_circuit_3}.
     \item Design and construct a non-inverting rectifier stage by selecting $R_{10}$ and $R_{11}$ to achieve an overall gain of approximately $11$, ensuring that the rectified signal remains within the op-amp linear range.
     \item Design and implement a low-pass RC filter using $C_4$ and $R_{12}$ with a cutoff near \SI{1.6}{\hertz} to extract a slowly varying DC voltage proportional to the \SI{1}{\kilo\hertz} carrier amplitude.
     \item Validate the signal-conditioning chain by driving $V_5$ with a known \SI{1}{\kilo\hertz} square wave (about \SI{100}{\milli\volt} peak-to-peak) from the AD2, probing the signal after each stage (high-pass, rectifier, low-pass) and confirming the expected waveforms.
     \item Connect the output of the Phase~1 amplifier chain to this rectifier/low-pass block and adjust $R_{10}$ and $R_{11}$ if necessary so that the final output $V_{\text{out}}$ remains within the target \SIrange{0}{2.5}{\volt} range over the full LED--photodiode separation.
     \item Measure and document the steady-state output voltage versus separation distance, confirming that the circuit neither saturates at close spacing nor loses the signal at the maximum separation.
+    \item Finally, connect everything together. See \Cref{fig:full_circuit} for the full circuit diagram. Then test your Vout by moving the LED along the rail and observing the output voltage change, ideally you want a noticeable change from 3cm to 25cm.
+    \item Congratulations, you're done with the circuit part
 \end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/method_circuit_4.png}
+    \caption{Full Circuit}
+    \label{fig:full_circuit}
+\end{figure}
 
 \subsection*{Phase 3: Digitization, Software, and Calibration}
 \begin{enumerate}
@@ -80,10 +146,10 @@ The experimental procedure was organized into three phases that progressively bu
 \section{Phase 1: Analog Front-End}
 \subsection{Exercise 1: Optical Transmitter}
 \subsubsection{Question 1: Assemble and Power the LED}
-The LED transmitter was mounted on the linear rail and connected to the Analog Discovery 2 (AD2) waveform generator. Vin was configured as a 5~V amplitude square wave with a 2.5~V DC offset so the LED could be pulsed at the desired current.
+I've built the distance sensor with the guide rail. This will be crucial later to get accurate and precise distance measurement.
 
 \subsubsection{Question 2: Verify 1~Hz Modulation}
-With the generator at 1~Hz the LED visibly flashed, demonstrating that the wiring and mechanical alignment were correct and that the LED could traverse the slider smoothly.
+With the generator at 1~Hz the LED visibly flashed,
 
 \subsubsection{Question 3: Verify 1~kHz Modulation}
 if you choose 1~kHz waveform, the LED appear continuously on, indicating that the chosen frequency exceeds the flicker fusion threshold and is suitable as the optical carrier for later exercises.
@@ -105,6 +171,15 @@ Selecting $R_3 = \SI{200}{\kilo\ohm}$ and $R_4 = \SI{22}{\kilo\ohm}$ yields
     V_1 &= \frac{22}{200+22}\times 5 \approx \SI{0.495}{\volt},
 \end{align*}
 which is sufficiently close to the target bias.
+
+Then you just have to build the circuit, see \Cref{fig:2_2_result} for the breadboard circuit diagram.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/2_3-circuit.jpg}
+    \caption{Breadboard circuit diagram for Exercise 2}
+    \label{fig:2_2_result}
+\end{figure}
 
 \subsubsection{Question 3: Choose \texorpdfstring{$R_5$}{R5} and \texorpdfstring{$C_1$}{C1}}
 For the filter design, the transfer function amplitude is equal to $\frac{1}{\sqrt{2}}$ at the cutoff frequency:
@@ -347,6 +422,16 @@ The low-pass pole formed by $R_6$ and $C_2$ should be above $\SI{16}{\kilo\hertz
 \end{align*}
 With $R_6 = \SI{16}{\kilo\ohm}$ this gives $C_2 \le \SI{0.622}{\nano\farad}$. The closest available capacitor was \SI{620}{\pico\farad}, yielding a calculated cutoff near \SI{99.5}{\kilo\hertz}.
 
+
+Go ahead and built the circuit, see \Cref{fig:ex_3_circuit} for my breadboard circuit implementation.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/3_3-circuit.jpg}
+    \caption{Breadboard circuit diagram for Exercise 3}
+    \label{fig:ex_3_circuit}
+\end{figure}
+
 \subsubsection{Question 3: Verification}
 Applying a \SI{100}{\milli\volt} sinusoid at \SI{1}{\kilo\hertz} produced the expected tenfold gain without saturation when the LED-photodiode spacing was swept between \SI{3}{\centi\metre} and \SI{25}{\centi\metre}. The high-pass chain maintained a detectable waveform across the entire travel range.
 
@@ -464,6 +549,13 @@ This shows:
         \(\dfrac{R_6}{R_5}\) (inverting amplifier).
 \end{itemize}
 
+Below are the complete circuit diagram for Exercise 4, and also for Exercise 5:
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/4_3-circuit.jpg}
+    \caption{Breadboard circuit diagram for Exercise 4 and Exercise 5}
+    \label{fig:ex_4_circuit}
+\end{figure}
 \subsubsection{Question 3: Low-Pass Filter}
 Configure your waveform generator to 100 mV amplitude 1 kHz sine wave using the AD2 signal generator and 
 connect it to V2. Then use your oscilloscope to measure the output at V5. You should see a sine wave at V5. Measure the amplitude of the output sine wave at V5. Vary the frequency to see it's effect on the output amplitude.
@@ -518,7 +610,7 @@ different frequencies for our circuit (assuming R6/R5 = 10):
 }
 \]
 
-Our result are similar to our calculation
+My result is similar to our calculation
 (\(1.044~\text{V}\), \(0.514~\text{V}\), \(64.2~\text{mV}\))
 are of the same order, so everything seems to check out. I believe
 this is reasonable given tolerances in the actual resistor/capacitor
@@ -661,6 +753,160 @@ The firmware on the MSP430FR5739 was written to sample the low-pass output with 
 \section{The Importance of Alignment with Photodiode and LED}
 I was struggling to get the full range of 2.5V output for a while, but thanks to our TA, he informed me that the alignment between the photodiode and LED is very crucial. To convince you, here is a simple math behind it:
 
+For clarity, \Cref{fig:alignment_geometry} shows the simplified geometry
+used in the small-angle discussion. This figure will be the basis for our derivation.
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=1.0]
+        % LED at origin
+        \filldraw[black] (0,0) circle (1pt) node[below left] {LED};
+        \draw[->,thick] (0,0) -- (4,0) node[below] {$z$};
+
+        % Photodiode position
+        \coordinate (PD) at (3,1.2);
+        \filldraw[black] (PD) circle (1pt);
+        \draw (PD) node[above right] {photodiode};
+
+        % Distance components
+        \draw[dashed] (0,0) -- (3,0) node[midway, below] {$d$};
+        \draw[dashed] (3,0) -- (PD) node[midway, right] {$r$};
+        \draw[thick] (0,0) -- (PD);
+
+        % Angle theta at LED
+        \draw (0.8,0) arc[start angle=0,end angle=21.8,radius=0.8];
+        \node at (0.9,0.3) {$\theta$};
+
+        % Photodiode normal (assumed perpendicular to LED axis)
+        \draw[->] (PD) -- ++(-1,0) node[above]{$\phi \approx \theta$};
+    \end{tikzpicture}
+    \caption{Geometry for lateral misalignment $r$ between LED and photodiode.}
+    \label{fig:alignment_geometry}
+\end{figure}
+\subsubsection*{Assumptions for the ``LED close'' case}
+
+Here I only care about what happens when the LED is \emph{already close} to
+the photodiode (say $d \approx \SI{3}{\centi\meter}$) and we introduce a
+small angular misalignment.  The assumptions are
+\begin{itemize}
+    \item The LED is a Lambertian source of order $m$, so the radiant
+          intensity versus angle $\theta$ from its optical axis is
+          \[
+              I(\theta) = I_0 \cos^{m} \theta.
+          \]
+          For a typical narrow LED with half-power angle
+          $\theta_{1/2} \approx 15^\circ$,
+          \[
+              m = -\frac{\ln 2}{\ln(\cos\theta_{1/2})} \approx 20.
+          \]
+    \item The photodiode follows a cosine law with respect to its surface
+          normal, so the received flux has an extra factor $\cos\theta$ when
+          we tilt away from perfect alignment.
+    \item At \SI{1}{\kilo\hertz} the electronic chain is linear with an
+          overall gain from photocurrent swing $\Delta I$ to final DC output
+          $V_{\text{out}}$:
+          \[
+              V_{\text{out}} = G_{\text{sys}}\,\Delta I,
+          \]
+          where
+          \[
+              G_{\text{sys}}
+              \approx R_2 \times 10 \times 11
+              = (100\,\text{k}\Omega)\times 10\times 11
+              \approx 1.1\times 10^{7}\ \frac{\text{V}}{\text{A}}.
+          \]
+          Here $R_2$ is the transimpedance gain, $10$ is the midband gain of
+          the AC amplifier (Exercise~3), and $11$ is the rectifier gain
+          (Exercise~4).  Both high-pass filters have essentially unity gain at
+          \SI{1}{\kilo\hertz}, and the low-pass has unity gain at DC.
+\end{itemize}
+
+When the LED is close and perfectly aligned, let the photocurrent modulation
+be $\Delta I_0$ and the corresponding output be
+\[
+    V_{\text{out},0} = G_{\text{sys}}\,\Delta I_0
+    \approx \SI{2.5}{\volt}.
+\]
+This is exactly the ``ideal close distance'' behaviour we tried to achieve.
+
+\subsubsection*{Small-angle dependence of $V_{\text{out}}$}
+
+If we now introduce a small angular deviation $\theta$ (by moving the LED
+slightly up/down or left/right), the received optical power, and therefore
+the photocurrent, pick up both the LED and photodiode cosine factors:
+\[
+    \Delta I(\theta)
+    = \Delta I_0 \cos^{m}\theta\cos\theta
+    = \Delta I_0 \cos^{m+1}\theta.
+\]
+Because the rest of the circuit is linear at \SI{1}{\kilo\hertz}, the final
+output becomes
+\begin{equation}
+    V_{\text{out}}(\theta)
+    = G_{\text{sys}}\Delta I(\theta)
+    = V_{\text{out},0}\,\cos^{m+1}\theta.
+    \label{eq:vout_theta}
+\end{equation}
+
+For small angles (in radians) we can use
+$\cos\theta \approx 1 - \theta^{2}/2$ to get
+\begin{align}
+    \frac{V_{\text{out}}(\theta)}{V_{\text{out},0}}
+    &= \cos^{m+1}\theta
+      \approx
+      \left(1 - \frac{\theta^{2}}{2}\right)^{m+1} \nonumber \\
+    &\approx
+      1 - \frac{(m+1)}{2}\,\theta^{2}.
+    \label{eq:small_angle_vout}
+\end{align}
+With $m \approx 20$,
+\[
+    \frac{m+1}{2} \approx 10.5,
+\]
+so even a modest $\theta$ gives a large fractional change in output.
+
+\paragraph{Numerical example (LED close).}
+Take $V_{\text{out},0} = \SI{2.5}{\volt}$ at perfect alignment and
+$m = 20$.  Using \eqref{eq:vout_theta},
+\[
+    V_{\text{out}}(\theta)
+    \approx 2.5\cos^{21}\theta.
+\]
+For several small angular misalignments:
+\begin{align*}
+    \theta &= 2^\circ
+      &\Rightarrow\quad
+      V_{\text{out}} &\approx 2.47~\text{V}, \\
+    \theta &= 5^\circ
+      &\Rightarrow\quad
+      V_{\text{out}} &\approx 2.31~\text{V}, \\
+    \theta &= 10^\circ
+      &\Rightarrow\quad
+      V_{\text{out}} &\approx 1.81~\text{V}, \\
+    \theta &= 15^\circ
+      &\Rightarrow\quad
+      V_{\text{out}} &\approx 1.21~\text{V}.
+\end{align*}
+So a ``tiny'' misalignment of only $10^\circ$ causes the final measured
+voltage to drop by almost \SI{0.7}{\volt} even though the LED is still very
+close.  The effect is so strong because
+\begin{enumerate}
+    \item the optical power itself falls roughly as $\cos^{21}\theta$, and
+    \item the electronic chain has a huge overall gain
+          ($\sim 10^7~\text{V/A}$), so any change in photocurrent is
+          magnified all the way to the \SI{0}{\volt}--\SI{2.5}{\volt} range.
+\end{enumerate}
+
+In terms of geometry on the rail, a $5^\circ$ tilt at
+$d \approx \SI{3}{\centi\meter}$ corresponds to only
+\[
+    r = d\tan\theta \approx (3~\text{cm})\tan 5^\circ \approx 2.6~\text{mm}
+\]
+of vertical or horizontal offset between the LED and photodiode centres.  So
+just a few millimetres of misalignment when the LED is close are enough to
+move the circuit from ``saturated near \SI{2.5}{\volt}'' to a much smaller
+output, exactly matching what I observed on the bench.
+
+
 \subsubsection{Question 2: C\# Application}
 The companion C\# program:
 \begin{enumerate}[label=\alph*)]
@@ -675,7 +921,7 @@ The companion C\# program:
 Measurements were recorded at a minimum of five LED-photodiode separations across the full mechanical travel. Each point stored both the ADC code and the physical distance measured with a ruler on the extrusion.
 
 \subsubsection{Question 2: Curve Fit}
-The voltage-to-distance data were fitted with a smooth function (e.g., inverse power). Plotting both the raw scatter and the fitted curve in the report allowed visual confirmation that the model captured the sensor response with minimal residual error.
+My C\# program has an inbuilt curve fit function. The voltage-to-distance data were fitted with a smooth function (e.g., inverse power). Plotting both the raw scatter and the fitted curve in the report allowed visual confirmation that the model captured the sensor response with minimal residual error.
 
 \subsubsection{Question 3: Conversion to Position}
 The inverse of the fitted function was implemented in software so that each ADC code could be converted in real time to an estimated separation distance.
