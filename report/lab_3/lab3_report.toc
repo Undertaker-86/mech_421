@@ -5,8 +5,8 @@
 \contentsline {section}{\numberline {3}Part 1 --- Temperature Sensing}{2}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Exercise 1: Thermistor Characterization}{2}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Exercise 2: Firmware and Desktop Acquisition}{8}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Part 2 --- Weight Scale}{10}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Exercise 1: Load-Cell Assembly}{10}{subsection.4.1}%
+\contentsline {section}{\numberline {4}Part 2 --- Weight Scale}{11}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Exercise 1: Load-Cell Assembly}{11}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Exercise 2: \SI {2.5}{\volt } Reference}{11}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Exercise 3: Mock Strain Gauge}{13}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Exercise 4: Instrumentation Amplifier}{15}{subsection.4.4}%

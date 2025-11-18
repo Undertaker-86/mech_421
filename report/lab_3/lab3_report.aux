@@ -21,19 +21,19 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Exercise 1: Thermistor Characterization}{2}{subsection.3.1}\protected@file@percent }
 \newlabel{eq:thermistor_beta}{{1}{2}{Exercise 1: Thermistor Characterization}{equation.3.1}{}}
 \newlabel{eq:thermistor_beta@cref}{{[equation][1][]1}{[1][1][]2}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Thermistor characterization data and temperature error.}}{2}{table.caption.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Thermistor circuit schematic}}{2}{figure.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:thermistor_data}{{1}{2}{Thermistor characterization data and temperature error}{table.caption.1}{}}
-\newlabel{tab:thermistor_data@cref}{{[table][1][]1}{[1][2][]2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Simulated divider voltage as a function of temperature. The red curve is the ideal Beta prediction, the blue markers emulate AD2 samples with \SI {\pm 2.5}{\percent } Gaussian resistance noise, and the black × symbols show the actual ice/\SI {40}{\celsius }/\SI {60}{\celsius } bath measurements.}}{3}{figure.caption.2}\protected@file@percent }
-\newlabel{fig:ntc_voltage_curve}{{1}{3}{Simulated divider voltage as a function of temperature. The red curve is the ideal Beta prediction, the blue markers emulate AD2 samples with \SI {\pm 2.5}{\percent } Gaussian resistance noise, and the black × symbols show the actual ice/\SI {40}{\celsius }/\SI {60}{\celsius } bath measurements}{figure.caption.2}{}}
-\newlabel{fig:ntc_voltage_curve@cref}{{[figure][1][]1}{[1][2][]3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Resistance--temperature curve derived exclusively from the captures in \texttt  {\nolinkurl  {NTC\_data/}}. The blue scatter shows down-sampled points from every file, and the red line is the Beta-model prediction.}}{3}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:ntc_resistance_curve}{{2}{3}{Resistance--temperature curve derived exclusively from the captures in \code {NTC\_data/}. The blue scatter shows down-sampled points from every file, and the red line is the Beta-model prediction}{figure.caption.3}{}}
-\newlabel{fig:ntc_resistance_curve@cref}{{[figure][2][]2}{[1][3][]3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Simulated divider voltage as a function of temperature. The red curve is the ideal Beta prediction, the blue markers emulate AD2 samples with \SI {\pm 2.5}{\percent } Gaussian resistance noise, and the black × symbols show the actual ice/\SI {40}{\celsius }/\SI {60}{\celsius } bath measurements.}}{4}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:ntc_voltage_curve}{{3}{4}{Simulated divider voltage as a function of temperature. The red curve is the ideal Beta prediction, the blue markers emulate AD2 samples with \SI {\pm 2.5}{\percent } Gaussian resistance noise, and the black × symbols show the actual ice/\SI {40}{\celsius }/\SI {60}{\celsius } bath measurements}{figure.caption.4}{}}
-\newlabel{fig:ntc_voltage_curve@cref}{{[figure][3][]3}{[1][3][]4}}
+\newlabel{fig:thermistor_circ}{{1}{2}{Thermistor circuit schematic}{figure.caption.1}{}}
+\newlabel{fig:thermistor_circ@cref}{{[figure][1][]1}{[1][2][]2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve.}}{3}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:thermistor_dc}{{2}{3}{LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve}{figure.caption.2}{}}
+\newlabel{fig:thermistor_dc@cref}{{[figure][2][]2}{[1][2][]3}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Thermistor characterization data and temperature error.}}{3}{table.caption.3}\protected@file@percent }
+\newlabel{tab:thermistor_data}{{1}{3}{Thermistor characterization data and temperature error}{table.caption.3}{}}
+\newlabel{tab:thermistor_data@cref}{{[table][1][]1}{[1][3][]3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Measured bath voltages/resistances (squares) compared to the Beta-model prediction (solid lines). The star marks the nominal \SI {25}{\celsius } point ($R_T=\SI {10.0}{\kilo \ohm }$, $V_{NTC}=\SI {1.65}{\volt }$).}}{4}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:ntc_beta_validation}{{3}{4}{Measured bath voltages/resistances (squares) compared to the Beta-model prediction (solid lines). The star marks the nominal \SI {25}{\celsius } point ($R_T=\SI {10.0}{\kilo \ohm }$, $V_{NTC}=\SI {1.65}{\volt }$)}{figure.caption.4}{}}
+\newlabel{fig:ntc_beta_validation@cref}{{[figure][3][]3}{[1][3][]4}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Measured \SI {0}{\celsius }\,$\rightarrow $\,\SI {60}{\celsius } heating transition. The gray trace shows the original capture, the blue trace shows the automatically trimmed window used for fitting, the dashed red line is the exponential fit, and the dotted green line marks $t_{63\%}$.}}{5}{figure.caption.5}\protected@file@percent }
 \newlabel{fig:ntc_heating}{{4}{5}{Measured \SI {0}{\celsius }\,$\rightarrow $\,\SI {60}{\celsius } heating transition. The gray trace shows the original capture, the blue trace shows the automatically trimmed window used for fitting, the dashed red line is the exponential fit, and the dotted green line marks $t_{63\%}$}{figure.caption.5}{}}
 \newlabel{fig:ntc_heating@cref}{{[figure][4][]4}{[1][4][]5}}
@@ -46,39 +46,37 @@
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Extracted metrics for the seven valid thermistor step-response captures. Noise is reported as the standard deviation of the final 50 samples.}}{6}{table.caption.8}\protected@file@percent }
 \newlabel{tab:ntc_runs}{{3}{6}{Extracted metrics for the seven valid thermistor step-response captures. Noise is reported as the standard deviation of the final 50 samples}{table.caption.8}{}}
 \newlabel{tab:ntc_runs@cref}{{[table][3][]3}{[1][6][]6}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Aggregate statistics for each transition (mean $\pm $ standard deviation).}}{6}{table.caption.9}\protected@file@percent }
-\newlabel{tab:ntc_summary}{{4}{6}{Aggregate statistics for each transition (mean $\pm $ standard deviation)}{table.caption.9}{}}
-\newlabel{tab:ntc_summary@cref}{{[table][4][]4}{[1][6][]6}}
-\newlabel{eq:thermistor_compensation}{{2}{7}{Exercise 1: Thermistor Characterization}{equation.3.2}{}}
-\newlabel{eq:thermistor_compensation@cref}{{[equation][2][]2}{[1][7][]7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve (placeholder for the plotted dataset exported from LTspice).}}{7}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:thermistor_dc}{{6}{7}{LTspice DC sweep of the thermistor divider highlighting the simulated transfer curve (placeholder for the plotted dataset exported from LTspice)}{figure.caption.10}{}}
-\newlabel{fig:thermistor_dc@cref}{{[figure][6][]6}{[1][7][]7}}
-\newlabel{eq:thermistor_sensitivity}{{3}{7}{}{equation.3.3}{}}
-\newlabel{eq:thermistor_sensitivity@cref}{{[equation][3][]3}{[1][7][]7}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Impact of $R_{\text  {bias}}$ tolerance on the computed \SI {40}{\celsius } bath.}}{7}{table.caption.11}\protected@file@percent }
-\newlabel{tab:thermistor_sensitivity}{{5}{7}{Impact of $R_{\text {bias}}$ tolerance on the computed \SI {40}{\celsius } bath}{table.caption.11}{}}
-\newlabel{tab:thermistor_sensitivity@cref}{{[table][5][]5}{[1][7][]7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces LTspice schematic of the thermistor divider used to predict the voltage--temperature relationship.}}{8}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:thermistor_spice}{{7}{8}{LTspice schematic of the thermistor divider used to predict the voltage--temperature relationship}{figure.caption.12}{}}
-\newlabel{fig:thermistor_spice@cref}{{[figure][7][]7}{[1][7][]8}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Aggregate statistics for each transition (mean $\pm $ standard deviation).}}{7}{table.caption.9}\protected@file@percent }
+\newlabel{tab:ntc_summary}{{4}{7}{Aggregate statistics for each transition (mean $\pm $ standard deviation)}{table.caption.9}{}}
+\newlabel{tab:ntc_summary@cref}{{[table][4][]4}{[1][6][]7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Representative thermistor step responses. The dashed line marks the detected step start, while the red cross indicates the $63\%$ crossing reported as $\tau $.}}{7}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:ntc_transition_gallery}{{6}{7}{Representative thermistor step responses. The dashed line marks the detected step start, while the red cross indicates the $63\%$ crossing reported as $\tau $}{figure.caption.10}{}}
+\newlabel{fig:ntc_transition_gallery@cref}{{[figure][6][]6}{[1][7][]7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Overlay of every heating/cooling capture after aligning the detected step start. The traces are generated directly from the measured $\tau $ values and illustrate how all transitions converge to a \SI {\sim 10}{\second } response.}}{8}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:ntc_tau_overlay}{{7}{8}{Overlay of every heating/cooling capture after aligning the detected step start. The traces are generated directly from the measured $\tau $ values and illustrate how all transitions converge to a \SI {\sim 10}{\second } response}{figure.caption.11}{}}
+\newlabel{fig:ntc_tau_overlay@cref}{{[figure][7][]7}{[1][7][]8}}
+\newlabel{eq:thermistor_compensation}{{2}{8}{Exercise 1: Thermistor Characterization}{equation.3.2}{}}
+\newlabel{eq:thermistor_compensation@cref}{{[equation][2][]2}{[1][8][]8}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Effectiveness of the temperature correction applied to the calibration baths.}}{8}{table.caption.12}\protected@file@percent }
+\newlabel{tab:thermistor_comp_performance}{{5}{8}{Effectiveness of the temperature correction applied to the calibration baths}{table.caption.12}{}}
+\newlabel{tab:thermistor_comp_performance@cref}{{[table][5][]5}{[1][8][]8}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Exercise 2: Firmware and Desktop Acquisition}{8}{subsection.3.2}\protected@file@percent }
-\newlabel{lst:msp430}{{1}{8}{Key MSP430FR5739 firmware routine for the thermistor channel}{lstlisting.1}{}}
-\newlabel{lst:msp430@cref}{{[listing][1][]1}{[1][8][]8}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Key MSP430FR5739 firmware routine for the thermistor channel.}}{8}{lstlisting.1}\protected@file@percent }
-\newlabel{lst:csharp}{{2}{8}{C\# snippet for parsing the thermistor data stream}{lstlisting.2}{}}
-\newlabel{lst:csharp@cref}{{[listing][2][]2}{[1][8][]8}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces C\# snippet for parsing the thermistor data stream.}}{8}{lstlisting.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}}{9}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:thermistor_ui}{{8}{9}{WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot)}{figure.caption.13}{}}
-\newlabel{fig:thermistor_ui@cref}{{[figure][8][]8}{[1][9][]9}}
-\newlabel{eq:firstorder}{{4}{9}{Exercise 2: Firmware and Desktop Acquisition}{equation.3.4}{}}
-\newlabel{eq:firstorder@cref}{{[equation][4][]4}{[1][9][]9}}
+\newlabel{lst:msp430}{{1}{9}{Key MSP430FR5739 firmware routine for the thermistor channel}{lstlisting.1}{}}
+\newlabel{lst:msp430@cref}{{[listing][1][]1}{[1][9][]9}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Key MSP430FR5739 firmware routine for the thermistor channel.}}{9}{lstlisting.1}\protected@file@percent }
+\newlabel{lst:csharp}{{2}{9}{C\# snippet for parsing the thermistor data stream}{lstlisting.2}{}}
+\newlabel{lst:csharp@cref}{{[listing][2][]2}{[1][9][]9}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces C\# snippet for parsing the thermistor data stream.}}{9}{lstlisting.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}}{10}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:thermistor_ui}{{8}{10}{WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot)}{figure.caption.13}{}}
+\newlabel{fig:thermistor_ui@cref}{{[figure][8][]8}{[1][9][]10}}
+\newlabel{eq:firstorder}{{3}{10}{Exercise 2: Firmware and Desktop Acquisition}{equation.3.3}{}}
+\newlabel{eq:firstorder@cref}{{[equation][3][]3}{[1][10][]10}}
 \@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Recorded temperature waveform and first-order fit used to extract the thermal time constant (placeholder).}}{10}{figure.caption.14}\protected@file@percent }
 \newlabel{fig:temp_waveform}{{9}{10}{Recorded temperature waveform and first-order fit used to extract the thermal time constant (placeholder)}{figure.caption.14}{}}
-\newlabel{fig:temp_waveform@cref}{{[figure][9][]9}{[1][9][]10}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Part 2 --- Weight Scale}{10}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Exercise 1: Load-Cell Assembly}{10}{subsection.4.1}\protected@file@percent }
+\newlabel{fig:temp_waveform@cref}{{[figure][9][]9}{[1][10][]10}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Part 2 --- Weight Scale}{11}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Exercise 1: Load-Cell Assembly}{11}{subsection.4.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{11}{figure.caption.15}\protected@file@percent }
 \newlabel{fig:mechanical_setup}{{10}{11}{Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder)}{figure.caption.15}{}}
 \newlabel{fig:mechanical_setup@cref}{{[figure][10][]10}{[1][10][]11}}
@@ -95,21 +93,21 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Exercise 3: Mock Strain Gauge}{13}{subsection.4.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Mock Strain Gauge Schematic}}{13}{figure.caption.19}\protected@file@percent }
 \newlabel{fig:mock_strain}{{13}{13}{Mock Strain Gauge Schematic}{figure.caption.19}{}}
-\newlabel{fig:mock_strain@cref}{{[figure][13][]13}{[1][12][]13}}
+\newlabel{fig:mock_strain@cref}{{[figure][13][]13}{[1][13][]13}}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Mock strain-gauge resistor network.}}{13}{table.caption.20}\protected@file@percent }
 \newlabel{tab:bridge_resistors}{{7}{13}{Mock strain-gauge resistor network}{table.caption.20}{}}
 \newlabel{tab:bridge_resistors@cref}{{[table][7][]7}{[1][13][]13}}
 \@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces LTspice schematic of the Mock Strain Gauge.}}{14}{figure.caption.21}\protected@file@percent }
 \newlabel{fig:bridge_spice}{{14}{14}{LTspice schematic of the Mock Strain Gauge}{figure.caption.21}{}}
-\newlabel{fig:bridge_spice@cref}{{[figure][14][]14}{[1][13][]14}}
+\newlabel{fig:bridge_spice@cref}{{[figure][14][]14}{[1][14][]14}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Exercise 4: Instrumentation Amplifier}{15}{subsection.4.4}\protected@file@percent }
-\newlabel{eq:inst_amp}{{5}{15}{Exercise 4: Instrumentation Amplifier}{equation.4.5}{}}
-\newlabel{eq:inst_amp@cref}{{[equation][5][]5}{[1][14][]15}}
+\newlabel{eq:inst_amp}{{4}{15}{Exercise 4: Instrumentation Amplifier}{equation.4.4}{}}
+\newlabel{eq:inst_amp@cref}{{[equation][4][]4}{[1][14][]15}}
 \@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Exercise 4 instrumentation amplifier schematic.}}{15}{figure.caption.22}\protected@file@percent }
 \newlabel{fig:inst_amp}{{15}{15}{Exercise 4 instrumentation amplifier schematic}{figure.caption.22}{}}
 \newlabel{fig:inst_amp@cref}{{[figure][15][]15}{[1][15][]15}}
-\newlabel{eq:nodal_matrix_correct}{{6}{16}{Exercise 4: Instrumentation Amplifier}{equation.4.6}{}}
-\newlabel{eq:nodal_matrix_correct@cref}{{[equation][6][]6}{[1][15][]16}}
+\newlabel{eq:nodal_matrix_correct}{{5}{16}{Exercise 4: Instrumentation Amplifier}{equation.4.5}{}}
+\newlabel{eq:nodal_matrix_correct@cref}{{[equation][5][]5}{[1][15][]16}}
 \newlabel{fig:lt_spice_inst_amp}{{16a}{17}{LTspice circuit for the instrumentation amplifier}{figure.caption.23}{}}
 \newlabel{fig:lt_spice_inst_amp@cref}{{[subfigure][1][16]16a}{[1][16][]17}}
 \newlabel{sub@fig:lt_spice_inst_amp}{{a}{17}{LTspice circuit for the instrumentation amplifier}{figure.caption.23}{}}
@@ -125,10 +123,10 @@
 \newlabel{tab:inst_amp_sensitivity}{{8}{17}{Predicted gain spread for different resistor tolerance classes, calculation in Appendix B}{table.caption.24}{}}
 \newlabel{tab:inst_amp_sensitivity@cref}{{[table][8][]8}{[1][17][]17}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Exercise 5: Output Stage}{17}{subsection.4.5}\protected@file@percent }
-\newlabel{eq:output_stage}{{7}{17}{Exercise 5: Output Stage}{equation.4.7}{}}
-\newlabel{eq:output_stage@cref}{{[equation][7][]7}{[1][17][]17}}
-\newlabel{eq:offset_tf}{{8}{18}{Exercise 5: Output Stage}{equation.4.8}{}}
-\newlabel{eq:offset_tf@cref}{{[equation][8][]8}{[1][17][]18}}
+\newlabel{eq:output_stage}{{6}{17}{Exercise 5: Output Stage}{equation.4.6}{}}
+\newlabel{eq:output_stage@cref}{{[equation][6][]6}{[1][17][]17}}
+\newlabel{eq:offset_tf}{{7}{18}{Exercise 5: Output Stage}{equation.4.7}{}}
+\newlabel{eq:offset_tf@cref}{{[equation][7][]7}{[1][17][]18}}
 \@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Output-stage resistor ratios: ideal vs.\ implemented.}}{18}{table.caption.25}\protected@file@percent }
 \newlabel{tab:output_stage_ratios}{{9}{18}{Output-stage resistor ratios: ideal vs.\ implemented}{table.caption.25}{}}
 \newlabel{tab:output_stage_ratios@cref}{{[table][9][]9}{[1][18][]18}}
@@ -149,15 +147,15 @@
 \@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Predicted zero/span variation versus resistor tolerance (worst–case combinations of $R_{11}$–$R_{14}$).}}{20}{table.caption.28}\protected@file@percent }
 \newlabel{tab:output_tolerance}{{10}{20}{Predicted zero/span variation versus resistor tolerance (worst–case combinations of $R_{11}$–$R_{14}$)}{table.caption.28}{}}
 \newlabel{tab:output_tolerance@cref}{{[table][10][]10}{[1][20][]20}}
-\newlabel{eq:precision_diffamp}{{9}{21}{}{equation.4.9}{}}
-\newlabel{eq:precision_diffamp@cref}{{[equation][9][]9}{[1][21][]21}}
+\newlabel{eq:precision_diffamp}{{8}{21}{}{equation.4.8}{}}
+\newlabel{eq:precision_diffamp@cref}{{[equation][8][]8}{[1][21][]21}}
 \@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces LT5400 - Differential Op-Amp configuration.}}{21}{figure.caption.29}\protected@file@percent }
 \newlabel{fig:precision_diffamp}{{19}{21}{LT5400 - Differential Op-Amp configuration}{figure.caption.29}{}}
 \newlabel{fig:precision_diffamp@cref}{{[figure][19][]19}{[1][21][]21}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Exercise 6: Embedded Acquisition}{21}{subsection.4.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Exercise 7: Calibration}{22}{subsection.4.7}\protected@file@percent }
-\newlabel{eq:weight_calibration}{{10}{22}{Exercise 7: Calibration}{equation.4.10}{}}
-\newlabel{eq:weight_calibration@cref}{{[equation][10][]10}{[1][22][]22}}
+\newlabel{eq:weight_calibration}{{9}{22}{Exercise 7: Calibration}{equation.4.9}{}}
+\newlabel{eq:weight_calibration@cref}{{[equation][9][]9}{[1][22][]22}}
 \@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Load-cell calibration data (averaged over three trials). }}{22}{table.caption.30}\protected@file@percent }
 \newlabel{tab:calibration}{{11}{22}{Load-cell calibration data (averaged over three trials)}{table.caption.30}{}}
 \newlabel{tab:calibration@cref}{{[table][11][]11}{[1][22][]22}}
