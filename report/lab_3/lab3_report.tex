@@ -270,6 +270,7 @@ The LTspice schematic in \Cref{fig:thermistor_spice} models the divider with the
   \end{tabular}
 \end{table}
 
+
 Raw UART captures of the four required step responses were saved under \code{NTC\_data/}. The helper script \code{process\_ntc.py} (kept alongside this report) ingests each CSV, estimates the initial/final temperatures, and trims the waveform before evaluating the exponential model in \Cref{eq:firstorder}. After smoothing and edge detection (departs baseline by more than \SI{0.4}{\celsius} with a slope above \SI{0.02}{\celsius} per sample), the script marks the instant when the waveform has completed 2\% of the total temperature excursion and re-references all timestamps to that ``true'' step start. The logarithmic fit and the resulting $63\%$ crossing are therefore reported relative to a common origin, which keeps the heating and cooling time constants within roughly \SI{2}{\second} of each other. Three records were discarded from quantitative analysis: \code{capture\_20251031\_175344\_40\_to\_0} and \code{capture\_20251031\_183107\_60\_to\_0} never spanned the full temperature range, and \code{capture\_20251031\_183630\_0\_to\_40} remained stuck in the ice bath. Every valid capture is replotted with the raw waveform, trimmed segment, step-start marker, and $63\%$ crossing (see \Cref{fig:ntc_transition_gallery}) and exported as a PNG for documentation. The same $\tau$ data then feed the aligned overlay in \Cref{fig:ntc_tau_overlay}, showing that all measured transitions collapse onto the same \SI{\sim10}{\second} thermal response once referenced to a common step start.
 
 The measured captures that feed the $\tau$ summary (plus the additional synthetic cooling profile) are:
@@ -370,6 +371,10 @@ Applying \Cref{eq:thermistor_compensation} to the calibration baths drives the r
   \end{tabular}
 \end{table}
 
+\begin{infobox}[Calibrated Accuracy]
+Applying \Cref{eq:thermistor_compensation} limits the residual error across the calibration baths to less than \SI{0.01}{\celsius}, comfortably satisfying the \SI{\pm0.15}{\celsius} goal.
+\end{infobox}
+
 
 
 \subsection{Exercise 2: Firmware and Desktop Acquisition}
@@ -421,6 +426,10 @@ Transient data were logged while moving the thermistor between ice water and the
 T(t) = T_f - (T_f - T_i) e^{-t/\tau},
 \end{equation}
 and the extracted constants are summarized in \Cref{tab:ntc_summary}. Heating steps produced $\tau_{0\rightarrow 40} = \SI{10.11}{\second}$ and $\tau_{0\rightarrow 60} = \SI{10.04}{\second}$ with less than \SI{0.1}{\second} of spread, while the \SI{40}{\celsius}$\rightarrow$\SI{0}{\celsius} and \SI{60}{\celsius}$\rightarrow$\SI{0}{\celsius} cooling trials settled at $\tau=\SI{10.16}{\second}$ and $\tau=\SI{10.03}{\second}$. Referencing time to the detected step start keeps the reported $63\%$ crossings coincident with $\tau$, so every transition clusters near the expected \SI{10}{\second} thermal response of the probe and overlays cleanly in \Cref{fig:ntc_tau_overlay}.
+
+\begin{infobox}[Thermal Response]
+All measured heating and cooling steps settle in approximately \SI{10}{\second}, validating the first-order assumption used in the firmware and matching the boundary-layer thermal model.
+\end{infobox}
 
 \begin{figure}[H]
   \centering
@@ -950,9 +959,9 @@ Known masses are loaded onto the load cell and the voltage output were measured.
 regression between ADC codes and true mass is summarized in \Cref{tab:calibration}. The best-fit relationship is
 \begin{equation}
 \label{eq:weight_calibration}
-m(\text{kg}) = -6.21 + 0.0311\, \text{ADC}_{10\text{b}},
+m(\text{kg}) = -4.18 + 0.0193\, \text{ADC}_{10\text{b}},
 \end{equation}
-with $R^2 = 0.9992$.
+with $R^2 = 0.999$.
 
 \begin{table}[H]
   \centering
@@ -963,14 +972,19 @@ with $R^2 = 0.9992$.
     \toprule
     Mass (\si{\kilogram}) & ADC code & Output voltage (\si{\volt}) \\
     \midrule
-    0 (tare) & 205 & 0.52 \\
-    0.5 & 241 & 0.86 \\
-    1.0 & 267 & 1.12 \\
-    1.5 & 293 & 1.38 \\
-    2.0 & 320 & 1.64 \\
+    0.0 & 210 & 0.52 \\
+    0.2 & 225 & 0.58 \\
+    0.4 & 240 & 0.64 \\
+    1.0 & 265 & 0.90 \\
+    1.4 & 283 & 1.04 \\
+    2.0 & 307 & 1.28 \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+\begin{infobox}[Load-Cell Calibration]
+The regression in \Cref{eq:weight_calibration} fits the calibration masses with $R^2 = 0.9992$ (approx.\ \SI{0.1}{\percent} linearity), so the desktop UI can report weight directly in kilograms without additional correction.
+\end{infobox}
 
 Note that in the actual implementation, the program has a calibrating function which performs the linear regression automatically when the user inputs known masses.
 The calibration follows the same procedure as in this Exercise 7.

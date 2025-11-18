@@ -8,13 +8,13 @@
 \contentsline {figure}{\numberline {8}{\ignorespaces WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}}{10}{figure.caption.13}%
 \contentsline {figure}{\numberline {9}{\ignorespaces Recorded temperature waveforms and first-order fits from \texttt {process\_ntc.py}; dashed lines mark the detected step, and the dotted verticals show the $1\tau $ crossing.}}{10}{figure.caption.14}%
 \contentsline {figure}{\numberline {10}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{11}{figure.caption.15}%
-\contentsline {figure}{\numberline {11}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{11}{figure.caption.16}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{12}{figure.caption.16}%
 \contentsline {figure}{\numberline {12}{\ignorespaces LTspice schematic for \SI {2.5}{\volt } reference.}}{12}{figure.caption.18}%
 \contentsline {figure}{\numberline {13}{\ignorespaces Mock Strain Gauge Schematic}}{13}{figure.caption.19}%
 \contentsline {figure}{\numberline {14}{\ignorespaces LTspice schematic of the Mock Strain Gauge.}}{14}{figure.caption.21}%
-\contentsline {figure}{\numberline {15}{\ignorespaces Exercise 4 instrumentation amplifier schematic.}}{15}{figure.caption.22}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Exercise 4 instrumentation amplifier schematic.}}{16}{figure.caption.22}%
 \contentsline {figure}{\numberline {16}{\ignorespaces Instrumentation amplifier LTspice schematic and simulated output.}}{17}{figure.caption.23}%
 \contentsline {figure}{\numberline {17}{\ignorespaces LTspice schematic of the output stage.}}{19}{figure.caption.26}%
-\contentsline {figure}{\numberline {18}{\ignorespaces Voltage outputs for no load and maximum load.}}{19}{figure.caption.27}%
-\contentsline {figure}{\numberline {19}{\ignorespaces LT5400 - Differential Op-Amp configuration.}}{21}{figure.caption.29}%
+\contentsline {figure}{\numberline {18}{\ignorespaces Voltage outputs for no load and maximum load.}}{20}{figure.caption.27}%
+\contentsline {figure}{\numberline {19}{\ignorespaces LT5400 - Differential Op-Amp configuration.}}{22}{figure.caption.29}%
 \contentsline {figure}{\numberline {20}{\ignorespaces Planned C\# UI screenshot highlighting tare, stability indicator, and rolling weight plot (placeholder).}}{23}{figure.caption.31}%
