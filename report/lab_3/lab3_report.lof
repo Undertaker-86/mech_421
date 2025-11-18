@@ -6,7 +6,7 @@
 \contentsline {figure}{\numberline {6}{\ignorespaces Representative thermistor step responses. The dashed line marks the detected step start, while the red cross indicates the $63\%$ crossing reported as $\tau $.}}{7}{figure.caption.10}%
 \contentsline {figure}{\numberline {7}{\ignorespaces Overlay of every heating/cooling capture after aligning the detected step start. The traces are generated directly from the measured $\tau $ values and illustrate how all transitions converge to a \SI {\sim 10}{\second } response.}}{8}{figure.caption.11}%
 \contentsline {figure}{\numberline {8}{\ignorespaces WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}}{10}{figure.caption.13}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Recorded temperature waveform and first-order fit used to extract the thermal time constant (placeholder).}}{10}{figure.caption.14}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Recorded temperature waveforms and first-order fits from \texttt {process\_ntc.py}; dashed lines mark the detected step, and the dotted verticals show the $1\tau $ crossing.}}{10}{figure.caption.14}%
 \contentsline {figure}{\numberline {10}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{11}{figure.caption.15}%
 \contentsline {figure}{\numberline {11}{\ignorespaces Mechanical assembly of the strut, load cell, and mass hanger (photograph placeholder).}}{11}{figure.caption.16}%
 \contentsline {figure}{\numberline {12}{\ignorespaces LTspice schematic for \SI {2.5}{\volt } reference.}}{12}{figure.caption.18}%

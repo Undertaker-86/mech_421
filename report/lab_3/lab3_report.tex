@@ -123,8 +123,7 @@
       \vspace{0.8ex}
       {\large \studentname\enspace (ID:\ \studentid)\par}
       \vspace{0.6ex}
-      {\normalsize Lab Performed:\ 12~February~2025 \\
-      Report Submitted:\ 19~February~2025\par}
+      {\normalsize Lab Performed:\ 31~October~2025}
     }
   \end{center}
   \vspace{1.2ex}
@@ -157,7 +156,7 @@
 \setcounter{page}{1}
 \pagestyle{fancy}
 \section{Introduction}
-The objective of MECH~421 Lab~3 is to design and validate op-amp-based signal conditioning chains for two sensors: an NTC thermistor that measures the temperature of a water bath, and a full-bridge load cell used as a weight scale. Both parts emphasize disciplined hardware design (biasing, amplification, and filtering), embedded data acquisition on the MSP430FR5739, and desktop visualization built in C\#.
+The objective of MECH~421 Lab~3 is to design and validate op-amp-based signal conditioning chains for two sensors: an NTC thermistor that measures the temperature of a water bath, and a full-bridge load cell used as a weight scale~\cite{lab_manual}. Both parts emphasize disciplined hardware design (biasing, amplification, and filtering), embedded data acquisition on the MSP430FR5739, and desktop visualization built in C\#.
 
 Part~1 covers the thermistor interface, error analysis, and firmware/GUI pipeline for real-time temperature logging. Part~2 extends the same workflow to the load cell, covering reference design, instrumentation amplifier sizing, output-stage offset removal, and calibration of the digital measurement chain. Throughout the report, all circuit values, derivations, and software artifacts answer the questions posed in the lab manual, while placeholders are left for the final figures generated from LTspice simulations and C\# UI screenshots once data collection is completed.
 
@@ -374,7 +373,7 @@ Applying \Cref{eq:thermistor_compensation} to the calibration baths drives the r
 
 
 \subsection{Exercise 2: Firmware and Desktop Acquisition}
-The MSP430 firmware samples the thermistor channel at \SI{200}{\hertz}, averages eight consecutive readings, and formats the 10-bit result into the specified byte stream $[255,\mathrm{MS5B},\mathrm{LS5B}]$. The essential routine is listed in \Cref{lst:msp430}.
+The MSP430 firmware samples the thermistor channel at \SI{200}{\hertz}, averages eight consecutive readings, and formats the 10-bit result into the specified byte stream $[255,\mathrm{MS5B},\mathrm{LS5B}]$ per the MSP430FR57xx datasheet and user's guide~\cite{ti_msp430_ds,ti_msp430_user}. The essential routine is listed in \Cref{lst:msp430}, and Appendix~C captures the full project for traceability.
 
 \begin{lstlisting}[language=C,label=lst:msp430,caption={Key MSP430FR5739 firmware routine for the thermistor channel.}]
 #pragma vector=ADC10_VECTOR
@@ -395,7 +394,7 @@ __interrupt void adc_isr(void) {
 }
 \end{lstlisting}
 
-On the PC side, a C\# WinForms application reconstructs the ADC value, converts it to temperature via \Cref{eq:thermistor_beta,eq:thermistor_compensation}, streams the compensated temperature to disk, and renders live graphs. \Cref{lst:csharp} highlights the parsing and compensation block.
+On the PC side, a C\# WinForms application reconstructs the ADC value, converts it to temperature via \Cref{eq:thermistor_beta,eq:thermistor_compensation}, streams the compensated temperature to disk, and renders live graphs. \Cref{lst:csharp} highlights the parsing and compensation block, while Appendix~C documents the capture/analysis pipeline, CSV logging, and tunable polynomial-calibration UI that were used to build the thermistor dataset.
 
 \begin{lstlisting}[language={[Sharp]C},label=lst:csharp,caption={C\# snippet for parsing the thermistor data stream.}]
 void HandleFrame(byte ms5b, byte ls5b) {
@@ -425,10 +424,19 @@ and the extracted constants are summarized in \Cref{tab:ntc_summary}. Heating st
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.6in}\rule{0.9\linewidth}{0pt}}
-  \caption{Recorded temperature waveform and first-order fit used to extract the thermal time constant (placeholder).}
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png}
+    \caption{$0{\rightarrow}40~\si{\celsius}$ heat, $\tau=10.11~\si{\second}$}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/ntc/capture_20251031_183923_40_to_0_degC_cooling.png}
+    \caption{$40{\rightarrow}0~\si{\celsius}$ cool, $\tau=10.16~\si{\second}$}
+  \end{subfigure}
+  \caption{Recorded temperature waveforms and first-order fits from \texttt{process\_ntc.py}; dashed lines mark the detected step, and the dotted verticals show the $1\tau$ crossing.}
   \label{fig:temp_waveform}
 \end{figure}
+
+Across all seven usable captures, the Python post-processing pipeline reports a weighted mean thermal time constant of $\bar{\tau} = \SI{10.09}{\second}$ with a sample standard deviation of \SI{0.08}{\second}, so $\tau_{\text{cal}} = \SI{10.09}{\second}$ is used when predicting step responses and aligning the plots in \Cref{fig:ntc_tau_overlay}.
 
 \section{Part 2 --- Weight Scale}
 \subsection{Exercise 1: Load-Cell Assembly}
@@ -915,11 +923,9 @@ quite sensitive to resistor tolerances.
 
 \paragraph*{More robust difference amplifier}
 To reduce span sensitivity even further, the output stage can be replaced by a precision difference amplifier that uses a matched resistor network. 
-Texas Instruments' SBOA237\footnote{\href{https://www.ti.com/lit/an/sboa237/sboa237.pdf}
-{TI SBOA237, ``Improving Gain Accuracy of Difference Amplifiers,'' 2023}.} and Analog Devices' 
-AN-140\footnote{\href{https://www.analog.com/media/en/technical-documentation/application-notes/AN-140.pdf}
-{Analog Devices AN-140, ``High Common-Mode Voltage Instrumentation Amplifier,'' 2007}.} 
-both recommend the LT5400, where there are four resistors are laser-trimmed on the same die. In that configuration the closed-loop gain becomes
+Texas Instruments' SBOA237~\cite{ti_sboa237} and Analog Devices' 
+AN-140~\cite{ad_an140}
+both recommend the LT5400, where there are four resistors laser-trimmed on the same die. In that configuration the closed-loop gain becomes
 \begin{equation}
 \label{eq:precision_diffamp}
 V_{out2} = \left(1 + \frac{2R_{\text{net}}}{R_G}\right)\frac{R_{\text{net}}}{R_{\text{net}}}(V_{out} - V_{\text{ref}}) + V_{\text{ref}}
@@ -974,6 +980,7 @@ The final C\# application reports weight instead of ADC counts,
 provides a tare button that stores the current averaged code as a baseline, and implements a 
 stability indicator by evaluating the rolling standard deviation over the past \SI{500}{\milli\second}. 
 When the deviation falls below \SI{0.02}{\kilogram}, the ``Stable'' badge illuminates and the reading is latched.
+Appendix~D documents the WinForms implementation, covering the UART parser, rolling-average and stability queues, tare handling, and the regression-based calibration workflow that backs the UI controls.
 
 \begin{figure}[H]
   \centering
@@ -996,6 +1003,20 @@ To make the system more engaging for demonstrations, two extensions are planned:
   \item Firmware reuse and a consistent serial framing format simplified switching between sensing modalities and accelerated the development of desktop visualization utilities.
 \end{itemize}
 Future improvements include migrating both sensors to a unified PCB, replacing the polynomial thermistor correction with a Steinhart--Hart fit calibrated across more temperature points, and adding EEPROM storage for the load-cell calibration coefficients so the MSP430 can report mass directly over UART.
+
+\newpage
+\begin{thebibliography}{9}
+\bibitem{lab_manual}
+Department of Mechanical Engineering, University of British Columbia, ``MECH 421/423 2025W Lab 3 Manual: Op Amp Circuits for DC Signal Processing,'' Oct.~2025.
+\bibitem{ti_msp430_ds}
+Texas Instruments, ``MSP430FR57xx Mixed-Signal Microcontrollers (Rev.~H),'' datasheet, 2020. Available: \url{https://www.ti.com/lit/ds/symlink/msp430fr5739.pdf}
+\bibitem{ti_msp430_user}
+Texas Instruments, ``MSP430FR57xx Family User's Guide (SLAU272O),'' 2021. Available: \url{https://www.ti.com/lit/pdf/slau272}
+\bibitem{ti_sboa237}
+Texas Instruments, ``SBOA237: Improving Gain Accuracy of Difference Amplifiers,'' Application Report, 2023.
+\bibitem{ad_an140}
+Analog Devices, ``AN-140: High Common-Mode Voltage Instrumentation Amplifier,'' Application Note, 2007.
+\end{thebibliography}
 
 \section*{Appendix A - Instrumentation Amplifier Nodal Analysis Code}
 The following Python code solves the nodal equations in \Cref{eq:nodal_matrix_correct} to recover the instrumentation amplifier gain expression.
@@ -1092,5 +1113,25 @@ which gives an approximate gain band
 G_{\text{diff}} \approx 210 \times (1 \pm 0.195)
 \Rightarrow G_{\text{diff}} \in [\sim 170,\; \sim 251].
 \]
+
+\section*{Appendix C - Thermistor Acquisition Code}
+\subsection*{MSP430FR5739 Firmware}
+\noindent Listing~\ref{lst:thermistor_firmware_full} captures the complete firmware used for the thermistor channel. GPIO routing, the ADC10\_B setup, and Timer\_A cadence follow the FR57xx documentation, while the UART framing matches the $[255,\mathrm{MS5B},\mathrm{LS5B}]$ packet described in Exercise~2.
+
+\lstinputlisting[language=C,basicstyle=\ttfamily\scriptsize,numbers=left,caption={Full MSP430FR5739 thermistor firmware (exported from \texttt{lab3/Ryan\_part1ex2/main.c}).},label=lst:thermistor_firmware_full]{appendix_sources/thermistor_main_export.c}
+
+\subsection*{WinForms Capture Utility}
+\noindent Listing~\ref{lst:thermistor_form_stream} shows the serial parser, Beta computation, polynomial correction, and live-plot update loop implemented in \texttt{Form1.cs}. Listing~\ref{lst:thermistor_form_capture} highlights the waveform capture manager, CSV export, and twin $\tau$ estimators (63\% crossing and log-domain regression) that feed the dataset summarized in \Cref{tab:ntc_summary}.
+
+\lstinputlisting[language={[Sharp]C},basicstyle=\ttfamily\scriptsize,numbers=left,caption={Thermistor WinForms stream handler, compensation, and UI refresh logic (excerpt from \texttt{Form1.cs}).},label=lst:thermistor_form_stream]{appendix_sources/thermistor_form_stream.cs}
+
+\lstinputlisting[language={[Sharp]C},basicstyle=\ttfamily\scriptsize,numbers=left,caption={Capture bookkeeping, CSV export, and dual $\tau$ estimators used by \texttt{process\_ntc.py}.},label=lst:thermistor_form_capture]{appendix_sources/thermistor_form_capture.cs}
+
+\section*{Appendix D - Load-Cell Desktop Application}
+\noindent The load-cell WinForms program reuses the same serial framing but layers on rolling averages, tare management, and a regression-based calibration workflow. Listing~\ref{lst:loadcell_stream} covers the byte parser, rolling queues that back the live plot, and the stability metric that drives the ``Stable'' badge. Listing~\ref{lst:loadcell_calibration} shows how calibration points are captured, filtered for stability, and converted into slope/intercept coefficients that update the UI in real time.
+
+\lstinputlisting[language={[Sharp]C},basicstyle=\ttfamily\scriptsize,numbers=left,caption={Load-cell serial parser, rolling statistics, and chart updates (\texttt{Form1.cs} excerpt).},label=lst:loadcell_stream]{appendix_sources/loadcell_form_stream.cs}
+
+\lstinputlisting[language={[Sharp]C},basicstyle=\ttfamily\scriptsize,numbers=left,caption={Calibration capture, regression, and tare handling routines for the load-cell UI.},label=lst:loadcell_calibration]{appendix_sources/loadcell_form_calibration.cs}
 
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.11.19)  17 NOV 2025 18:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10) (preloaded format=pdflatex 2023.11.19)  17 NOV 2025 19:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1479,18 +1479,28 @@ LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 [1
 
 {C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ot1-tlf
-.enc}] (lab3_report.lof)
+.enc}] (lab3_report.lof
+LaTeX Font Info:    Trying to load font information for T1+fvm on input line 9.
+
+
+(C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/bera\t1fvm.fd
+File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
+)
+LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
+(Font)              scaled to size 10.20007pt on input line 9.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `fvm' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+)
 \tf@lof=\write6
 \openout6 = `lab3_report.lof'.
 
- [2
 
-] (lab3_report.lot
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.8pt on input line 6.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.6pt on input line 6.
-)
+[2
+
+{C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
+(lab3_report.lot)
 \tf@lot=\write7
 \openout7 = `lab3_report.lot'.
 
@@ -1517,6 +1527,11 @@ Package textcomp Info: Symbol \textmu not provided by
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.8pt on input line 174.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.6pt on input line 174.
+
 [1
 
 {C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.en
@@ -1596,7 +1611,7 @@ LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 LaTeX Warning: Reference `fig:thermistor_spice' on page 1 undefined on input li
 ne 243.
 
-<figures/ntc/capture_20251031_182610_0_to_60_degC_heating.png, id=271, 448.074p
+<figures/ntc/capture_20251031_182610_0_to_60_degC_heating.png, id=269, 448.074p
 t x 245.718pt>
 File: figures/ntc/capture_20251031_182610_0_to_60_degC_heating.png Graphic file
  (type png)
@@ -1605,28 +1620,15 @@ Package pdftex.def Info: figures/ntc/capture_20251031_182610_0_to_60_degC_heati
 ng.png  used on input line 247.
 (pdftex.def)             Requested size: 413.3867pt x 226.70068pt.
 [4 <./figures/ntc/ntc_beta_validation.png>]
-<figures/ntc/ntc_tau_summary.png, id=277, 433.62pt x 245.718pt>
+<figures/ntc/ntc_tau_summary.png, id=275, 433.62pt x 245.718pt>
 File: figures/ntc/ntc_tau_summary.png Graphic file (type png)
 <use figures/ntc/ntc_tau_summary.png>
 Package pdftex.def Info: figures/ntc/ntc_tau_summary.png  used on input line 25
 4.
 (pdftex.def)             Requested size: 366.40834pt x 207.64273pt.
-LaTeX Font Info:    Trying to load font information for T1+fvm on input line 27
-4.
-
-(C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/bera\t1fvm.fd
-File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
-)
-LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 10.20007pt on input line 274.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `fvm' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
  [5 <./figures/ntc/capture_20251031_182610_0_to_60_degC_heating.png> <./figures
-/ntc/ntc_tau_summary.png>] [6{C:/Users/gyang/AppData/Local/Programs/MiKTeX/font
-s/enc/dvips/base/8r.enc}]
-<figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png, id=295, 448.074p
+/ntc/ntc_tau_summary.png>] [6]
+<figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png, id=291, 448.074p
 t x 245.718pt>
 File: figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png Graphic file
  (type png)
@@ -1686,7 +1688,7 @@ LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 (Font)              scaled to size 7.3pt on input line 327.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
 (Font)              scaled to size 5.5pt on input line 327.
-<figures/ntc/capture_20251031_183923_40_to_0_degC_cooling.png, id=296, 448.074p
+<figures/ntc/capture_20251031_183923_40_to_0_degC_cooling.png, id=292, 448.074p
 t x 245.718pt>
 File: figures/ntc/capture_20251031_183923_40_to_0_degC_cooling.png Graphic file
  (type png)
@@ -1700,7 +1702,7 @@ File: figures/ntc/capture_20251031_182610_0_to_60_degC_heating.png Graphic file
 Package pdftex.def Info: figures/ntc/capture_20251031_182610_0_to_60_degC_heati
 ng.png  used on input line 334.
 (pdftex.def)             Requested size: 225.4804pt x 123.6498pt.
-<figures/ntc/capture_20251031_182358_60_to_0_degC_cooling.png, id=297, 448.074p
+<figures/ntc/capture_20251031_182358_60_to_0_degC_cooling.png, id=293, 448.074p
 t x 245.718pt>
 File: figures/ntc/capture_20251031_182358_60_to_0_degC_cooling.png Graphic file
  (type png)
@@ -1708,22 +1710,21 @@ File: figures/ntc/capture_20251031_182358_60_to_0_degC_cooling.png Graphic file
 Package pdftex.def Info: figures/ntc/capture_20251031_182358_60_to_0_degC_cooli
 ng.png  used on input line 338.
 (pdftex.def)             Requested size: 225.4804pt x 123.6498pt.
-<figures/ntc/ntc_tau_overlay.png, id=298, 722.7pt x 520.344pt>
+<figures/ntc/ntc_tau_overlay.png, id=294, 722.7pt x 520.344pt>
 File: figures/ntc/ntc_tau_overlay.png Graphic file (type png)
 <use figures/ntc/ntc_tau_overlay.png>
 Package pdftex.def Info: figures/ntc/ntc_tau_overlay.png  used on input line 34
 7.
 (pdftex.def)             Requested size: 422.77664pt x 304.39603pt.
- [7 <./figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png> <./figures
-/ntc/capture_20251031_183923_40_to_0_degC_cooling.png> <./figures/ntc/capture_2
-0251031_182358_60_to_0_degC_cooling.png>]
-(C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+
+[7 <./figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png> <./figures/
+ntc/capture_20251031_183923_40_to_0_degC_cooling.png> <./figures/ntc/capture_20
+251031_182358_60_to_0_degC_cooling.png>] [8 <./figures/ntc/ntc_tau_overlay.png>
+] (C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
-)
-(C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
+) (C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
 File: lstmisc.sty 2023/02/27 1.9 (Carsten Heinz)
 )
-[8 <./figures/ntc/ntc_tau_overlay.png>]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 379.
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
@@ -1736,190 +1737,213 @@ LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10.95> not available
 (Font)              Font shape `T1/fvm/m/sl' tried instead on input line 386.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
 (Font)              scaled to size 9.30756pt on input line 386.
-
 (C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
 )
 [9]
-<figures/load_cell.jpeg, id=357, 1604.99625pt x 1399.2275pt>
+File: figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png Graphic file
+ (type png)
+<use figures/ntc/capture_20251031_183804_0_to_40_degC_heating.png>
+Package pdftex.def Info: figures/ntc/capture_20251031_183804_0_to_40_degC_heati
+ng.png  used on input line 429.
+(pdftex.def)             Requested size: 225.4804pt x 123.6498pt.
+File: figures/ntc/capture_20251031_183923_40_to_0_degC_cooling.png Graphic file
+ (type png)
+<use figures/ntc/capture_20251031_183923_40_to_0_degC_cooling.png>
+Package pdftex.def Info: figures/ntc/capture_20251031_183923_40_to_0_degC_cooli
+ng.png  used on input line 433.
+(pdftex.def)             Requested size: 225.4804pt x 123.6498pt.
+<figures/load_cell.jpeg, id=355, 1604.99625pt x 1399.2275pt>
 File: figures/load_cell.jpeg Graphic file (type jpg)
 <use figures/load_cell.jpeg>
-Package pdftex.def Info: figures/load_cell.jpeg  used on input line 439.
+Package pdftex.def Info: figures/load_cell.jpeg  used on input line 448.
 (pdftex.def)             Requested size: 328.82707pt x 286.67268pt.
  [10]
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 7.9pt on input line 444.
+(Font)              scaled to size 7.9pt on input line 453.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 7.9pt on input line 444.
+(Font)              scaled to size 7.9pt on input line 453.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 7.9pt on input line 444.
+(Font)              scaled to size 7.9pt on input line 453.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 7.9pt on input line 444.
+(Font)              scaled to size 7.9pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 7.9pt on input line 444.
+(Font)              scaled to size 7.9pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 7.9pt on input line 444.
+(Font)              scaled to size 7.9pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 7.9pt on input line 444.
+(Font)              scaled to size 7.9pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 14.4pt on input line 444.
+(Font)              scaled to size 14.4pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 10.5pt on input line 444.
+(Font)              scaled to size 10.5pt on input line 453.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 7.9pt on input line 444.
-<figures/mcp_2.5v.jpeg, id=364, 1284.8pt x 500.87125pt>
+(Font)              scaled to size 7.9pt on input line 453.
+<figures/mcp_2.5v.jpeg, id=361, 1284.8pt x 500.87125pt>
 File: figures/mcp_2.5v.jpeg Graphic file (type jpg)
 <use figures/mcp_2.5v.jpeg>
-Package pdftex.def Info: figures/mcp_2.5v.jpeg  used on input line 449.
+Package pdftex.def Info: figures/mcp_2.5v.jpeg  used on input line 458.
 (pdftex.def)             Requested size: 328.82707pt x 128.19049pt.
 Package textcomp Info: Symbol \textmu not provided by
 (textcomp)             font family ntxtlf in TS1 encoding.
-(textcomp)             Default family used instead on input line 454.
+(textcomp)             Default family used instead on input line 463.
  [11 <./figures/load_cell.jpeg> <./figures/mcp_2.5v.jpeg>]
 
-LaTeX Warning: Reference `fig:vref_output' on page 1 undefined on input line 45
-6.
+LaTeX Warning: Reference `fig:vref_output' on page 1 undefined on input line 46
+5.
 
 Package textcomp Info: Symbol \textmu not provided by
 (textcomp)             font family ntxtlf in TS1 encoding.
-(textcomp)             Default family used instead on input line 456.
+(textcomp)             Default family used instead on input line 465.
 Package textcomp Info: Symbol \textmu not provided by
 (textcomp)             font family ntxtlf in TS1 encoding.
-(textcomp)             Default family used instead on input line 456.
+(textcomp)             Default family used instead on input line 465.
 Package textcomp Info: Symbol \textmu not provided by
 (textcomp)             font family ntxtlf in TS1 encoding.
-(textcomp)             Default family used instead on input line 468.
+(textcomp)             Default family used instead on input line 477.
 Package textcomp Info: Symbol \textmu not provided by
 (textcomp)             font family ntxtlf in TS1 encoding.
-(textcomp)             Default family used instead on input line 468.
-<figures/lt_spice/2.5ref.png, id=370, 1227.08438pt x 661.72218pt>
+(textcomp)             Default family used instead on input line 477.
+<figures/lt_spice/2.5ref.png, id=367, 1227.08438pt x 661.72218pt>
 File: figures/lt_spice/2.5ref.png Graphic file (type png)
 <use figures/lt_spice/2.5ref.png>
-Package pdftex.def Info: figures/lt_spice/2.5ref.png  used on input line 475.
+Package pdftex.def Info: figures/lt_spice/2.5ref.png  used on input line 484.
 (pdftex.def)             Requested size: 328.82707pt x 177.32446pt.
 [12 <./figures/lt_spice/2.5ref.png>]
-<figures/ex3.png, id=378, 501.37312pt x 420.82219pt>
+<figures/ex3.png, id=373, 501.37312pt x 420.82219pt>
 File: figures/ex3.png Graphic file (type png)
 <use figures/ex3.png>
-Package pdftex.def Info: figures/ex3.png  used on input line 509.
+Package pdftex.def Info: figures/ex3.png  used on input line 518.
 (pdftex.def)             Requested size: 328.82707pt x 276.00977pt.
 
 
 LaTeX Warning: Reference `fig:bridge_output' on page 1 undefined on input line 
-533.
+542.
 
 [13 <./figures/ex3.png>]
-<figures/lt_spice/circ_3_mock_strain.png, id=387, 1432.60219pt x 663.22781pt>
+<figures/lt_spice/circ_3_mock_strain.png, id=381, 1432.60219pt x 663.22781pt>
 File: figures/lt_spice/circ_3_mock_strain.png Graphic file (type png)
 <use figures/lt_spice/circ_3_mock_strain.png>
 Package pdftex.def Info: figures/lt_spice/circ_3_mock_strain.png  used on input
- line 537.
+ line 546.
 (pdftex.def)             Requested size: 328.82707pt x 152.22546pt.
 
 
 LaTeX Warning: Reference `tab:inst_amp_resistors' on page 1 undefined on input 
-line 576.
+line 585.
 
 [14 <./figures/lt_spice/circ_3_mock_strain.png>]
-<figures/ex4.jpg, id=397, 1284.8pt x 1043.9pt>
+<figures/ex4.jpg, id=390, 1284.8pt x 1043.9pt>
 File: figures/ex4.jpg Graphic file (type jpg)
 <use figures/ex4.jpg>
-Package pdftex.def Info: figures/ex4.jpg  used on input line 600.
+Package pdftex.def Info: figures/ex4.jpg  used on input line 609.
 (pdftex.def)             Requested size: 234.8775pt x 190.82475pt.
  [15 <./figures/ex4.jpg>]
-<figures/lt_spice/210_circ.png, id=411, 855.94781pt x 600.74437pt>
+<figures/lt_spice/210_circ.png, id=404, 855.94781pt x 600.74437pt>
 File: figures/lt_spice/210_circ.png Graphic file (type png)
 <use figures/lt_spice/210_circ.png>
-Package pdftex.def Info: figures/lt_spice/210_circ.png  used on input line 668.
+Package pdftex.def Info: figures/lt_spice/210_circ.png  used on input line 677.
 
 (pdftex.def)             Requested size: 225.4804pt x 158.25233pt.
-<figures/lt_spice/circ_3_vout_210.png, id=412, 714.41907pt x 662.475pt>
+<figures/lt_spice/circ_3_vout_210.png, id=405, 714.41907pt x 662.475pt>
 File: figures/lt_spice/circ_3_vout_210.png Graphic file (type png)
 <use figures/lt_spice/circ_3_vout_210.png>
 Package pdftex.def Info: figures/lt_spice/circ_3_vout_210.png  used on input li
-ne 674.
+ne 683.
 (pdftex.def)             Requested size: 225.4804pt x 209.08507pt.
 
 [16] [17 <./figures/lt_spice/210_circ.png> <./figures/lt_spice/circ_3_vout_210.
 png>]
-<figures/lt_spice/diff_amp.png, id=430, 478.03593pt x 502.87875pt>
+<figures/lt_spice/diff_amp.png, id=422, 478.03593pt x 502.87875pt>
 File: figures/lt_spice/diff_amp.png Graphic file (type png)
 <use figures/lt_spice/diff_amp.png>
-Package pdftex.def Info: figures/lt_spice/diff_amp.png  used on input line 801.
+Package pdftex.def Info: figures/lt_spice/diff_amp.png  used on input line 810.
 
 (pdftex.def)             Requested size: 234.8775pt x 247.08032pt.
  [18]
-<figures/lt_spice/v_no_load.png, id=436, 712.16063pt x 666.23906pt>
+<figures/lt_spice/v_no_load.png, id=428, 712.16063pt x 666.23906pt>
 File: figures/lt_spice/v_no_load.png Graphic file (type png)
 <use figures/lt_spice/v_no_load.png>
-Package pdftex.def Info: figures/lt_spice/v_no_load.png  used on input line 810
+Package pdftex.def Info: figures/lt_spice/v_no_load.png  used on input line 819
 .
 (pdftex.def)             Requested size: 225.4804pt x 210.93384pt.
-<figures/lt_spice/v_max_load.png, id=437, 713.66624pt x 664.73344pt>
+<figures/lt_spice/v_max_load.png, id=429, 713.66624pt x 664.73344pt>
 File: figures/lt_spice/v_max_load.png Graphic file (type png)
 <use figures/lt_spice/v_max_load.png>
-Package pdftex.def Info: figures/lt_spice/v_max_load.png  used on input line 81
-6.
+Package pdftex.def Info: figures/lt_spice/v_max_load.png  used on input line 82
+5.
 (pdftex.def)             Requested size: 225.4804pt x 210.02101pt.
 
 
 LaTeX Warning: Reference `tab:output_resistors' on page 1 undefined on input li
-ne 825.
+ne 834.
 
 
 LaTeX Warning: Reference `tab:output_sensitivity' on page 19 undefined on input
- line 830.
+ line 839.
 
 
 LaTeX Warning: Reference `eq:output_sensitivity' on page 1 undefined on input l
-ine 830.
+ine 839.
 
 [19 <./figures/lt_spice/diff_amp.png> <./figures/lt_spice/v_no_load.png> <./fig
 ures/lt_spice/v_max_load.png>]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 12.0pt on input line 860.
+(Font)              scaled to size 12.0pt on input line 869.
  [20]
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 7.3pt on input line 919.
-<figures/LT5400-9139.png, id=459, 1043.9pt x 742.775pt>
+<figures/LT5400-9139.png, id=447, 1043.9pt x 742.775pt>
 File: figures/LT5400-9139.png Graphic file (type png)
 <use figures/LT5400-9139.png>
-Package pdftex.def Info: figures/LT5400-9139.png  used on input line 931.
+Package pdftex.def Info: figures/LT5400-9139.png  used on input line 938.
 (pdftex.def)             Requested size: 328.82707pt x 233.97536pt.
  [21 <./figures/LT5400-9139.png (PNG copy)>] [22]
 
 LaTeX Warning: Reference `fig:thermistor_spice' on page 1 undefined on input li
-ne 988.
+ne 996.
 
-[23] [24] [25] (lab3_report.aux)
+[23] [24] [25] [26]
+LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
+(Font)              scaled to size 6.80005pt on input line 1122.
+ (appendix_sources/thermistor_main_export.c
+LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <8> not available
+(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1.
+LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
+(Font)              scaled to size 6.80005pt on input line 1.
+LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
+(Font)              scaled to size 6.80005pt on input line 3.
+ [27])
+(appendix_sources/thermistor_form_stream.cs [28] [29])
+(appendix_sources/thermistor_form_capture.cs [30] [31] [32])
+(appendix_sources/loadcell_form_stream.cs [33] [34] [35]) [36]
+(appendix_sources/loadcell_form_calibration.cs [37]) [38] (lab3_report.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1935,105 +1959,33 @@ Package rerunfilecheck Info: File `lab3_report.out' has not changed.
 (rerunfilecheck)             Checksum: EC416F45FD9BBB3328AB872FBD91F33F;3344.
  ) 
 Here is how much of TeX's memory you used:
- 42013 strings out of 475248
- 863334 string characters out of 5757812
- 2107785 words of memory out of 5000000
- 62555 multiletter control sequences out of 15000+600000
- 695210 words of font info for 293 fonts, out of 8000000 for 9000
+ 43498 strings out of 475248
+ 885229 string characters out of 5757812
+ 2310785 words of memory out of 5000000
+ 63304 multiletter control sequences out of 15000+600000
+ 694442 words of font info for 299 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 93i,14n,99p,1601b,1411s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{table.caption.31} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.29} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.26} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.21} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.18} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.13} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.11} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.6} has been referenced but does not e
-xist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.2} has been referenced but does not e
-xist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.32} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.30} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.28} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.24} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.20} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.17} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.12} has been referenced but does not
- exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.9} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.3} has been referenced but does not 
-exist, replaced by a fixed one
-
- <C:\Users\gyang\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm12
-00.pk><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/Ne
-wTXMI.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/newt
-x/NewTXMI7.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/bera/f
-vmb8a.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/bera/fvmr8a
-.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/bera/fvmro8a.pfb
-><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qhvb
-.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/
-qhvr.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-g
-yre/qtmr.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/n
-ewtx/txexas.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/newtx/txexs.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/newtx/txmiaX.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/newtx/txsys.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/newtx/ztmb.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/newtx/ztmr.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/newtx/ztmri.pfb>
-Output written on lab3_report.pdf (29 pages, 1892308 bytes).
+ 93i,14n,99p,1551b,3214s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\gyang\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm
+1200.pk><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/
+NewTXMI.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/ne
+wtx/NewTXMI7.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/bera
+/fvmb8a.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/bera/fvmr
+8a.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/bera/fvmro8a.p
+fb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qh
+vb.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyr
+e/qhvr.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex
+-gyre/qtmr.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/newtx/txexas.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/newtx/txexs.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/newtx/txmiaX.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type
+1/public/newtx/txsys.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/newtx/ztmb.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/newtx/ztmr.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/newtx/ztmri.pfb>
+Output written on lab3_report.pdf (42 pages, 2032564 bytes).
 PDF statistics:
- 598 PDF objects out of 1000 (max. 8388607)
- 138 named destinations out of 1000 (max. 500000)
- 54678 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 1505 PDF objects out of 1728 (max. 8388607)
+ 851 named destinations out of 1000 (max. 500000)
+ 54166 words of extra memory for PDF output out of 61914 (max. 10000000)
 
