@@ -1,0 +1,426 @@
+<Window x:Class="DistanceMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:conv="clr-namespace:DistanceMonitor.Converters"
+        mc:Ignorable="d"
+        Title="Distance Monitor"
+        Height="780"
+        Width="1200"
+        MinWidth="1024"
+        MinHeight="640"
+        Background="#F4F6FB">
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#4C6EF5" />
+        <SolidColorBrush x:Key="PrimaryBrushLight" Color="#E9EDFB" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="SoftBorderBrush" Color="#D5DDED" />
+        <SolidColorBrush x:Key="MutedTextBrush" Color="#4A5568" />
+        <conv:BooleanToLoggingTextConverter x:Key="LoggingTextConverter" />
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,16" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Border Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource SoftBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="18">
+                            <StackPanel>
+                                <Border Background="{StaticResource PrimaryBrushLight}"
+                                        CornerRadius="6"
+                                        Padding="6,2"
+                                        Margin="0,0,0,12">
+                                    <TextBlock Text="{TemplateBinding Header}"
+                                               Foreground="{StaticResource PrimaryBrush}"
+                                               FontWeight="SemiBold" />
+                                </Border>
+                                <ContentPresenter Margin="0"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="IndicatorBorderStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Background" Value="#F1F4FF" />
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrushLight}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsOutOfRange}" Value="True">
+                    <Setter Property="Background" Value="#FFEDEF" />
+                    <Setter Property="BorderBrush" Value="#E03131" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3B5BDB" />
+                    <Setter Property="BorderBrush" Value="#3B5BDB" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#2F4ABF" />
+                    <Setter Property="BorderBrush" Value="#2F4ABF" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#CAD3F5" />
+                    <Setter Property="BorderBrush" Value="#CAD3F5" />
+                    <Setter Property="Foreground" Value="#6C7A96" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="BorderBrush" Value="{StaticResource SoftBorderBrush}" />
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="6,2" />
+            <Setter Property="BorderBrush" Value="{StaticResource SoftBorderBrush}" />
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500" />
+            <ColumnDefinition Width="*" MinWidth="420" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      ClipToBounds="False"
+                      Padding="0,0,24,0">
+            <StackPanel>
+                <GroupBox Header="Connection">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <ComboBox Width="200"
+                                      ItemsSource="{Binding AvailablePorts}"
+                                      SelectedItem="{Binding SelectedPort}"
+                                      Margin="0,0,8,0" />
+                            <Button Content="Refresh"
+                                    Width="80"
+                                    Command="{Binding RefreshPortsCommand}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Connect"
+                                    Width="96"
+                                    Command="{Binding ConnectCommand}"
+                                    Margin="0,0,8,0" />
+                            <Button Content="Disconnect"
+                                    Width="96"
+                                    Command="{Binding DisconnectCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Live Measurement">
+                    <StackPanel>
+                        <TextBlock Text="{Binding MeasurementLabel}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource MutedTextBrush}" />
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,8">
+                            <TextBlock Text="{Binding DisplayValue, StringFormat=F3}"
+                                       FontSize="54"
+                                       FontWeight="Bold" />
+                            <TextBlock Text="{Binding MeasurementUnit}"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Margin="8,12,0,0" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,0,0,8">
+                            <RadioButton Content="Distance"
+                                         GroupName="Mode"
+                                         IsChecked="{Binding IsDistanceMode}"
+                                         Margin="0,0,12,0" />
+                            <RadioButton Content="Voltage"
+                                         GroupName="Mode"
+                                         IsChecked="{Binding IsVoltageMode}" />
+                        </StackPanel>
+
+                        <Border Style="{StaticResource IndicatorBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Text="ADC Snapshot" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding LastRawValue, StringFormat=Raw: {0}}"
+                                           Margin="0,4,0,0" />
+                                <TextBlock Text="{Binding CurrentVoltage, StringFormat=Voltage: {0:F3} V}"
+                                           Margin="0,2,0,0" />
+                                <TextBlock Text="{Binding CurrentDistance, StringFormat=Distance: {0:F2} cm}"
+                                           Margin="0,2,0,8" />
+                                <TextBlock Text="{Binding OutOfRangeMessage}"
+                                           FontSize="13"
+                                           FontWeight="SemiBold" />
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Working range"
+                                               Margin="0,0,8,0" />
+                                    <TextBlock Text="{Binding WorkingRangeSummary}"
+                                               FontWeight="SemiBold" />
+                                </StackPanel>
+                                <UniformGrid Columns="2" Margin="0,8,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Min (cm)" FontWeight="SemiBold" />
+                                        <TextBox Text="{Binding RangeMinimum, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Max (cm)" FontWeight="SemiBold" />
+                                        <TextBox Text="{Binding RangeMaximum, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,12,0,0" Padding="12" Background="#F9F9F9" CornerRadius="6">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="0,0,16,0">
+                                    <TextBlock Text="Linear estimate (fallback)" FontWeight="SemiBold" />
+                                    <TextBlock Text="Adjust before calibration is ready."
+                                               FontSize="11"
+                                               Foreground="#777" />
+                                    <StackPanel Margin="0,8,0,0">
+                                        <TextBlock Text="Scale (cm/V)" />
+                                        <TextBox Text="{Binding LinearScale, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="0,8,0,0">
+                                        <TextBlock Text="Offset (cm)" />
+                                        <TextBox Text="{Binding LinearOffset, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                                    <TextBlock Text="Plot Controls" FontWeight="SemiBold" />
+                                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                        <CheckBox Content="Voltage series"
+                                                  IsChecked="{Binding ShowVoltageSeries}"
+                                                  Margin="0,0,12,0" />
+                                        <CheckBox Content="Distance series"
+                                                  IsChecked="{Binding ShowDistanceSeries}" />
+                                        <CheckBox Content="ADC series"
+                                                  IsChecked="{Binding ShowAdcSeries}"
+                                                  Margin="12,0,0,0" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                        <CheckBox Content="Autoscale voltage"
+                                                  IsChecked="{Binding AutoScaleVoltage}"
+                                                  Margin="0,0,12,0" />
+                                        <CheckBox Content="Autoscale distance"
+                                                  IsChecked="{Binding AutoScaleDistance}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,6,0,0"
+                                                VerticalAlignment="Center">
+                                        <CheckBox Content="Average window"
+                                                  IsChecked="{Binding UsePlotAverage}"
+                                                  Margin="0,0,12,0" />
+                                        <TextBlock Text="Samples"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,6,0" />
+                                        <TextBox Width="48"
+                                                 Text="{Binding PlotAverageWindow, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="0,10,0,0">
+                                        <TextBlock Text="Time window" />
+                                        <ComboBox ItemsSource="{Binding TimeWindowOptions}"
+                                                  SelectedItem="{Binding SelectedTimeWindow}"
+                                                  DisplayMemberPath="Label"
+                                                  Width="140" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,12,0,0"
+                                    VerticalAlignment="Center">
+                            <CheckBox Content="Smoothing"
+                                      IsChecked="{Binding UseSmoothing}"
+                                      Margin="0,0,12,0" />
+                            <TextBlock Text="Window"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,6,0" />
+                            <TextBox Width="48"
+                                     Text="{Binding SmoothingWindow, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <Slider Minimum="{Binding RangeMinimum}"
+                                Maximum="{Binding RangeMaximum}"
+                                Value="{Binding CalibrationMeasuredDistance, Mode=TwoWay}"
+                                Margin="0,8,0,0"
+                                TickFrequency="1"
+                                IsSnapToTickEnabled="True"
+                                ToolTip="Use this to stage a calibration distance before capturing." />
+
+                        <Border Background="#F9F9FF" CornerRadius="6" Padding="12" Margin="0,12,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Noise snapshot (10 s)"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding NoiseSummary}"
+                                           Margin="0,4,0,8"
+                                           TextWrapping="Wrap" />
+                                <Button Content="Measure Noise"
+                                        Command="{Binding MeasureNoiseCommand}"
+                                        Width="140" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Calibration / Conversion">
+                    <StackPanel>
+                        <TextBlock Text="1. Place sensor, 2. Enter measured distance, 3. Capture point."
+                                   FontSize="11"
+                                   Foreground="#777"
+                                   TextWrapping="Wrap" />
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,8,0,0"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="Measured distance (cm)"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBox Width="96"
+                                     Text="{Binding CalibrationMeasuredDistance, UpdateSourceTrigger=LostFocus}" />
+                            <Button Content="Capture"
+                                    Command="{Binding CaptureCalibrationPointCommand}"
+                                    Margin="12,0,0,0" />
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding CalibrationPoints}"
+                                  SelectedItem="{Binding SelectedCalibrationPoint}"
+                                  AutoGenerateColumns="False"
+                                  Margin="0,12,0,0"
+                                  Height="180"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Timestamp"
+                                                    Binding="{Binding Timestamp, StringFormat=HH:mm:ss}"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Raw"
+                                                    Binding="{Binding RawValue}"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Voltage (V)"
+                                                    Binding="{Binding Voltage, StringFormat=F3}"
+                                                    Width="*" />
+                                <DataGridTextColumn Header="Distance (cm)"
+                                                    Binding="{Binding MeasuredDistance, StringFormat=F2}"
+                                                    Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,12,0,0"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="Polynomial order"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <ComboBox Width="80"
+                                      SelectedValue="{Binding CalibrationOrder}"
+                                      SelectedValuePath="Tag">
+                                <ComboBoxItem Content="1" Tag="1" />
+                                <ComboBoxItem Content="2" Tag="2" />
+                                <ComboBoxItem Content="3" Tag="3" />
+                                <ComboBoxItem Content="4" Tag="4" />
+                                <ComboBoxItem Content="5" Tag="5" />
+                            </ComboBox>
+                            <Button Content="Fit"
+                                    Command="{Binding FitCalibrationCommand}"
+                                    Margin="12,0,0,0" />
+                            <Button Content="Remove"
+                                    Command="{Binding RemoveCalibrationPointCommand}"
+                                    Margin="12,0,0,0" />
+                            <Button Content="Clear"
+                                    Command="{Binding ClearCalibrationPointsCommand}"
+                                    Margin="12,0,0,0" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding CalibrationSummary}"
+                                   Margin="0,8,0,0"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Logging">
+                    <StackPanel>
+                        <TextBlock Text="Folder"
+                                   FontWeight="SemiBold" />
+                        <TextBox Text="{Binding LogDirectory}"
+                                 Margin="0,4,0,8" />
+                        <Button Content="{Binding IsLogging, Converter={StaticResource LoggingTextConverter}}"
+                                Command="{Binding ToggleLoggingCommand}"
+                                Height="32" />
+                        <TextBlock Text="{Binding LastLogFile}"
+                                   Foreground="#666"
+                                   FontSize="11"
+                                   TextWrapping="Wrap"
+                                   Margin="0,8,0,0" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Status">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StatusText}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding TotalSamples, StringFormat=Total samples: {0:N0}}"
+                                   Margin="0,8,0,0" />
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.Column="1" Margin="24,0,0,0">
+            <Border BorderBrush="{StaticResource SoftBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="18"
+                    Background="{StaticResource SurfaceBrush}"
+                    MaxWidth="960"
+                    HorizontalAlignment="Stretch">
+                <StackPanel>
+                    <TextBlock Text="Scope View"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"
+                               Foreground="{StaticResource MutedTextBrush}" />
+                    <lvc:CartesianChart Series="{Binding ScopeSeries}"
+                                        XAxes="{Binding ScopeXAxes}"
+                                        YAxes="{Binding ScopeYAxes}"
+                                        ZoomMode="X"
+                                        LegendPosition="Bottom"
+                                        Background="#F8FAFF" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

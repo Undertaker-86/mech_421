@@ -1,0 +1,57 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Repository\\mech_421\\lab4\\lab4_c# Gyan\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FD228E51-D78E-F844-083A-E8FF71A27076}|DistanceMonitor.csproj|d:\\repository\\mech_421\\lab4\\lab4_c# gyan\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD228E51-D78E-F844-083A-E8FF71A27076}|DistanceMonitor.csproj|solutionrelative:viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD228E51-D78E-F844-083A-E8FF71A27076}|DistanceMonitor.csproj|d:\\repository\\mech_421\\lab4\\lab4_c# gyan\\models\\calibrationpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD228E51-D78E-F844-083A-E8FF71A27076}|DistanceMonitor.csproj|solutionrelative:models\\calibrationpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "D:\\Repository\\mech_421\\lab4\\lab4_c# Gyan\\ViewModels\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\MainViewModel.cs",
+              "ToolTip": "D:\\Repository\\mech_421\\lab4\\lab4_c# Gyan\\ViewModels\\MainViewModel.cs",
+              "RelativeToolTip": "ViewModels\\MainViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T01:05:41.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CalibrationPoint.cs",
+              "DocumentMoniker": "D:\\Repository\\mech_421\\lab4\\lab4_c# Gyan\\Models\\CalibrationPoint.cs",
+              "RelativeDocumentMoniker": "Models\\CalibrationPoint.cs",
+              "ToolTip": "D:\\Repository\\mech_421\\lab4\\lab4_c# Gyan\\Models\\CalibrationPoint.cs",
+              "RelativeToolTip": "Models\\CalibrationPoint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T01:05:30.648Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
