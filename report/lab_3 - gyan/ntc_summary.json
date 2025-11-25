@@ -1,0 +1,86 @@
+[
+  {
+    "file": "capture_20251031_182358_60_to_0_degC_(cooling).csv",
+    "transition": "60_to_0_cool",
+    "start_temp": 54.71977777777777,
+    "end_temp": 3.907863247863249,
+    "tau": 10.083140821017212,
+    "t63": 10.083140821017212,
+    "noise": 0.14731289828117566,
+    "duration": 94.225,
+    "samples": 4700,
+    "analysis_start_offset": 1.9620000000000006
+  },
+  {
+    "file": "capture_20251031_182610_0_to_60_degC_(heating).csv",
+    "transition": "0_to_60_heat",
+    "start_temp": 7.333522058823529,
+    "end_temp": 58.5844044117647,
+    "tau": 10.181096766429393,
+    "t63": 10.181096766429393,
+    "noise": 0.12710276314856384,
+    "duration": 109.099,
+    "samples": 5441,
+    "analysis_start_offset": 2.0300000000000002
+  },
+  {
+    "file": "capture_20251031_183302_0_to_60_degC_(heating).csv",
+    "transition": "0_to_60_heat",
+    "start_temp": 7.676196969696969,
+    "end_temp": 58.59987121212121,
+    "tau": 10.187458713591209,
+    "t63": 10.187458713591209,
+    "noise": 0.2866441564030219,
+    "duration": 106.328,
+    "samples": 5305,
+    "analysis_start_offset": 1.9799999999999995
+  },
+  {
+    "file": "capture_20251031_183804_0_to_40_degC_(heating).csv",
+    "transition": "0_to_40_heat",
+    "start_temp": 5.9484408602150545,
+    "end_temp": 38.905806451612904,
+    "tau": 10.111232505455588,
+    "t63": 10.111232505455588,
+    "noise": 0.2880118219795842,
+    "duration": 75.24,
+    "samples": 3754,
+    "analysis_start_offset": 1.5629999999999997
+  },
+  {
+    "file": "capture_20251031_183923_40_to_0_degC_(cooling).csv",
+    "transition": "40_to_0_cool",
+    "start_temp": 36.88726966292135,
+    "end_temp": 4.544842696629213,
+    "tau": 10.050143658548372,
+    "t63": 10.050143658548372,
+    "noise": 0.06400664028052086,
+    "duration": 71.46000000000001,
+    "samples": 3565,
+    "analysis_start_offset": 1.4050000000000002
+  },
+  {
+    "file": "capture_20251031_184049_0_to_40_degC_(heating).csv",
+    "transition": "0_to_40_heat",
+    "start_temp": 6.287226804123711,
+    "end_temp": 38.89020618556702,
+    "tau": 10.110118294138354,
+    "t63": 10.110118294138354,
+    "noise": 0.15063648429248477,
+    "duration": 78.097,
+    "samples": 3896,
+    "analysis_start_offset": 1.5820000000000007
+  },
+  {
+    "file": "capture_20251031_184246_40_to_0_degC_(cooling).csv",
+    "transition": "40_to_0_cool",
+    "start_temp": 36.25800751879698,
+    "end_temp": 4.430045112781954,
+    "tau": 10.05373964453089,
+    "t63": 10.05373964453089,
+    "noise": 0.05914191745285233,
+    "duration": 107.14099999999999,
+    "samples": 5345,
+    "analysis_start_offset": 1.0820000000000003
+  }
+]

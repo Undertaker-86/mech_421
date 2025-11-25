@@ -3,9 +3,9 @@
 \contentsline {table}{\numberline {3}{\ignorespaces Extracted metrics for the seven valid thermistor step-response captures. Noise is reported as the standard deviation of the final 50 samples.}}{6}{table.caption.8}%
 \contentsline {table}{\numberline {4}{\ignorespaces Aggregate statistics for each transition (mean $\pm $ standard deviation).}}{7}{table.caption.9}%
 \contentsline {table}{\numberline {5}{\ignorespaces Effectiveness of the temperature correction applied to the calibration baths.}}{8}{table.caption.12}%
-\contentsline {table}{\numberline {6}{\ignorespaces Component summary for the \SI {2.5}{\volt } reference.}}{12}{table.caption.17}%
+\contentsline {table}{\numberline {6}{\ignorespaces Component summary for the \SI {2.5}{\volt } reference.}}{13}{table.caption.17}%
 \contentsline {table}{\numberline {7}{\ignorespaces Mock strain-gauge resistor network.}}{14}{table.caption.20}%
-\contentsline {table}{\numberline {8}{\ignorespaces Predicted gain spread for different resistor tolerance classes, calculation in Appendix B}}{17}{table.caption.24}%
+\contentsline {table}{\numberline {8}{\ignorespaces Predicted gain spread for different resistor tolerance classes, calculation in Appendix B}}{18}{table.caption.24}%
 \contentsline {table}{\numberline {9}{\ignorespaces Output-stage resistor ratios: ideal vs.\ implemented.}}{19}{table.caption.25}%
 \contentsline {table}{\numberline {10}{\ignorespaces Predicted zero/span variation versus resistor tolerance (worst–case combinations of $R_{11}$–$R_{14}$).}}{21}{table.caption.28}%
 \contentsline {table}{\numberline {11}{\ignorespaces Load-cell calibration data (averaged over three trials). }}{23}{table.caption.30}%

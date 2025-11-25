@@ -75,7 +75,7 @@
 \newcommand{\labnum}{Lab 3}
 \newcommand{\labtitle}{Op Amp Circuits for DC Signal Processing}
 \newcommand{\studentname}{Ryan Edric Nashota}
-\newcommand{\studentid}{33800060}
+\newcommand{\studentid}{33508219}
 \lhead{\sffamily \labnum}
 \chead{\sffamily \labtitle}
 \rhead{\sffamily \studentname}
@@ -415,10 +415,11 @@ void HandleFrame(byte ms5b, byte ls5b) {
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.5in}\rule{0.9\linewidth}{0pt}}
-  \caption{WinForms UI mock-up showing raw temperature, compensated value, and rolling waveform (placeholder for final screenshot).}
+  \includegraphics{figures/thermistor_ui.jpg}
+  \caption{WinForms UI showing raw temperature, compensated value, and rolling waveform.}
   \label{fig:thermistor_ui}
 \end{figure}
+The UI records the raw data and the compensated temperature and can display the waveform in realtime.
 
 Transient data were logged while moving the thermistor between ice water and the \SI{40}{\celsius} and \SI{60}{\celsius} baths. Each waveform was fit to
 \begin{equation}
@@ -716,20 +717,6 @@ When the real load cell was connected to no load and \SI{2}{\kilogram}, the valu
 
 
 \subsection{Exercise 5: Output Stage}
-To map the \SIrange{1.4}{2.6}{\volt} instrumentation amplifier range into the \SIrange{0.5}{2.5}{\volt} ADC window, an inverting level-shifter with selectable gain was implemented, as 
-illustrated in \Cref{fig:output_stage_spice}. The initial equal-valued pair ($R_{11}=\SI{10}{\kilo\ohm}$, $R_{12}=\SI{20}{\kilo\ohm}$) yielded insufficient offset. Swapping to $R_{11}=\SI{3}{\kilo\ohm}$ and $R_{12}=\SI{50}{\kilo\ohm}$ increased the theoretical closed-loop gain to $G=1+R_{12}/R_{11}=17.7$. Together with $R_{13}=\SI{40}{\kilo\ohm}$ and $R_{14}=\SI{33}{\kilo\ohm}$ on the summing node, the ideal transfer function is
-
-\begin{equation}
-\label{eq:output_stage}
-V_{out2,\text{ideal}}
-  = \underbrace{\left(1 + \frac{R_{12}}{R_{11}}\right)}_{\displaystyle G}
-    \bigl(V_{out} - V_{\text{cm}}\bigr)
-  + \underbrace{\frac{R_{13}}{R_{14}}}_{\displaystyle K} V_{\text{ref}},
-\end{equation}
-where $G$ is the gain applied to the instrumentation-amp output relative to the
-tare voltage $V_{\text{cm}}=\SI{1.40}{\volt}$ and $K$ sets the output offset
-from the reference $V_{\text{ref}}=\SI{2.50}{\volt}$.
-
 To map the instrumentation-amplifier range
 $V_{\text{in}} \in [\SI{1.4}{\volt},\SI{2.6}{\volt}]$
 onto the ADC window
@@ -989,6 +976,13 @@ The regression in \Cref{eq:weight_calibration} fits the calibration masses with 
 Note that in the actual implementation, the program has a calibrating function which performs the linear regression automatically when the user inputs known masses.
 The calibration follows the same procedure as in this Exercise 7.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/calibration_func.jpg}
+  \caption{Inbuilt Load-cell calibration function.}
+  \label{fig:calibration_plot_load_cell}
+\end{figure}
+
 \subsection{Exercise 8: Desktop UI}
 The final C\# application reports weight instead of ADC counts, 
 provides a tare button that stores the current averaged code as a baseline, and implements a 
@@ -998,17 +992,18 @@ Appendix~D documents the WinForms implementation, covering the UART parser, roll
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{2.5in}\rule{0.9\linewidth}{0pt}}
-  \caption{Planned C\# UI screenshot highlighting tare, stability indicator, and rolling weight plot (placeholder).}
+  \includegraphics[width=0.7\linewidth]{figures/load_cell_calibrate.jpg}
+  \caption{C\# UI screenshot - there are functions for tare, stability indicator, calibration and rolling weight plot.}
+  \label{fig:weight_ui}
+\end{figure}
+The following two figures showcases the UI when loaded with 1 kg weight.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/1kg_weight.jpg}
+  \caption{C\# UI screenshot - there are functions for tare, stability indicator, calibration and rolling weight plot.}
   \label{fig:weight_ui}
 \end{figure}
 
-\section{Discussion}
-Part~1 demonstrated that the thermistor can easily meet the \SI{\pm0.5}{\celsius} accuracy goal once a second-order compensation curve is applied. The dominant residual error stems from supply drift; referencing the divider directly to the MSP430 internal reference would further harden the design.
-
-For Part~2, the instrumentation amplifier gain agreed with theory despite using discrete \SI{10}{\kilo\ohm} resistors, showing that the MCP6002-based reference and bridge balancer provided a clean \SI{2.5}{\volt} common-mode. The custom output stage successfully kept the ADC range within \SIrange{0.5}{2.5}{\volt}, and the calibration fit produced near-unity linearity across \SIrange{0}{2}{\kilogram}. The remaining task is to capture actual screenshots and LTspice plots to replace the placeholders in \Cref{fig:thermistor_spice,fig:thermistor_ui,fig:temp_waveform,fig:mechanical_setup,fig:inst_amp,fig:weight_ui}.
-
-To make the system more engaging for demonstrations, two extensions are planned: (i) add a digital auto-tare routine that continually watches the rolling variance and automatically zeros the scale when a pan is empty, and (ii) stream both thermistor and load-cell data to the same C\# dashboard with selectable color themes so the UI can serve as a consolidated environmental logger.
 
 \section{Conclusions}
 \begin{itemize}

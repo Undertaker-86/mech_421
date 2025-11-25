@@ -7,12 +7,11 @@
 \contentsline {subsection}{\numberline {3.2}Exercise 2: Firmware and Desktop Acquisition}{9}{subsection.3.2}%
 \contentsline {section}{\numberline {4}Part 2 --- Weight Scale}{11}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Exercise 1: Load-Cell Assembly}{11}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Exercise 2: \SI {2.5}{\volt } Reference}{11}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Exercise 3: Mock Strain Gauge}{13}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Exercise 4: Instrumentation Amplifier}{15}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.2}Exercise 2: \SI {2.5}{\volt } Reference}{12}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Exercise 3: Mock Strain Gauge}{14}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Exercise 4: Instrumentation Amplifier}{16}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Exercise 5: Output Stage}{18}{subsection.4.5}%
 \contentsline {subsection}{\numberline {4.6}Exercise 6: Embedded Acquisition}{22}{subsection.4.6}%
 \contentsline {subsection}{\numberline {4.7}Exercise 7: Calibration}{22}{subsection.4.7}%
 \contentsline {subsection}{\numberline {4.8}Exercise 8: Desktop UI}{23}{subsection.4.8}%
-\contentsline {section}{\numberline {5}Discussion}{24}{section.5}%
-\contentsline {section}{\numberline {6}Conclusions}{24}{section.6}%
+\contentsline {section}{\numberline {5}Conclusions}{25}{section.5}%

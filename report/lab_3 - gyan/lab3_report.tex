@@ -1,0 +1,544 @@
+﻿\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{cleveref}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\lstdefinestyle{csharp}{
+  language=[Sharp]C,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{teal},
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false
+}
+
+\lstset{style=csharp}
+\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[enumerate]{label=\alph*), itemsep=0.3em}
+
+\title{MECH 421/423 Lab 3\\Thermistor and Load-Cell Instrumentation}
+\author{Gyan Edbert Zesiro \\ Student ID: 33800060}
+\date{\today}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This report covers the Lab 3 deliverables for the MSP430-based temperature sensor and distance-and-weight measurement system. The hardware combines an NTC divider, a simulated strain-gauge bridge, an instrumentation amplifier chain, and an offset/gain stage that maps the load-cell signal into the MSP430's \SIrange{0}{3.3}{\volt} ADC range. The firmware and C\# software interpret the digitized data stream, apply calibration, and display both raw and converted quantities. 
+
+Note that throughout the exercises, the circuit made will be represented by LTspice schematics. This is mainly because the circuit I made was too 
+messy and would not be clear enough for this report. Below I attached the circuit that I made for this lab.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/original_circ.jpg}
+  \caption{Picture of the circuit made for this lab.}
+  \label{fig:full_circuit}
+\end{figure}
+
+\section{Methodology}
+\label{sec:methodology}
+\subsection*{Phase 1: Thermistor Channel}
+\begin{enumerate}
+  \item Rebuild the NTC divider on a clean half-size breadboard, route the midpoint to both the AD2 and the MSP430 ADC, and log static temperatures in the ice bath, \SI{40}{\celsius}, and \SI{60}{\celsius} baths.
+  \item Capture multiple heating/cooling step runs for each bath transition and feed the CSV files to the updated \texttt{process\_ntc.py} script, which now auto-detects the analysis window and produces shaded plots for every capture.
+  \item Bring the MSP430 firmware online at \SI{100}{\hertz} sampling, packetize the 10-bit ADC words as $[255,\mathrm{MS5B},\mathrm{LS5B}]$, and verify the desktop UI can decode and plot the live temperature stream.
+\end{enumerate}
+
+\subsection*{Phase 2: Load-Cell Analog Front-End}
+\begin{enumerate}
+  \item Mount the load cell to the aluminum extrusion, secure the hook mass, and route the sense leads through the instrumentation shield to keep the wiring short.
+  \item Build a precision \SI{2.5}{\volt} reference using matched \SI{30.1}{\kilo\ohm} resistors and an MCP6002 buffer, then verify the reference does not drift more than \SI{200}{\micro\volt} over 15 minutes.
+  \item Implement the mock strain gauge by biasing two voltage dividers asymmetrically (\SI{3.01}{\kilo\ohm}/\SI{3.00}{\kilo\ohm} and \SI{3.00}{\kilo\ohm}/\SI{3.01}{\kilo\ohm}) so the instrumentation amplifier sees a deterministic \SI{8.3}{\milli\volt} differential signal when excited with \SI{5}{\volt}.
+  \item Size the instrumentation amplifier for a nominal gain of 195 using $R_4=\SI{100}{\kilo\ohm}$, $R_5=\SI{8.2}{\kilo\ohm}$, $R_6=\SI{120}{\kilo\ohm}$, and $R_G=\SI{16.5}{\kilo\ohm}$, then trim the offset so the unloaded cell sits near \SI{1.32}{\volt}.
+  \item Design a non-inverting level shifter with $R_{11}=\SI{6.81}{\kilo\ohm}$ and $R_{12}=\SI{2.26}{\kilo\ohm}$ that maps the \SIrange{1.32}{2.82}{\volt} instrumentation output to \SIrange{0.50}{2.50}{\volt} for the ADC.
+\end{enumerate}
+
+\subsection*{Phase 3: Digitization and Calibration}
+\begin{enumerate}
+  \item Update the MSP430 firmware so the Timer~A interrupt simultaneously drives the thermistor and load-cell acquisitions, guaranteeing synchronous logging.
+  \item Extend the WinForms UI with selectable calibration profiles, polynomial fitting (Math.NET), and live range checking against the ADC bounds.
+  \item Collect a fresh calibration sweep from 0~kg to \SI{2.3}{\kilogram}, store the ADC codes alongside the physical weights, and back-fit the data to a quadratic that is later inverted to compute weight from ADC code.
+\end{enumerate}
+
+\section{Phase 1: NTC Thermistor}
+\subsection{Exercise 1: Thermistor Characterization}
+\subsubsection{Thermistor Circuit}
+In this exercise, I need to built the circuit as in \Cref{fig:thermistor_divider}. 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.65\linewidth]{figures/ex1.png}
+  \caption{Thermistor divider used for the static measurements.}
+  \label{fig:thermistor_divider}
+\end{figure}
+
+The figure is represented by the LTspice schematic below.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/lt_spice/circ_1_ntc.png}
+  \caption{LTspice schematic of the thermistor divider.}
+  \label{fig:thermistor_divider_ltspice}
+\end{figure}
+
+Note that the resistance of the LTspice circuit is based on the given parameter in the datasheet from the manufacturer.
+
+The thermistor supplied in the kit has B~=~3435~K part listed in the lab manual, so the divider shown in \Cref{fig:thermistor_divider} was 
+wired exactly as prescribed: the NTC lead closest to the bead went to \SI{3.3}{\volt} 
+through a \SI{10}{\kilo\ohm} resistor, the other lead tied to ground, and the midpoint routed 
+simultaneously to the AD2 scope and MSP430 ADC. 
+
+\subsubsection{NTC Characterization}
+To characterize the temperature from the ADC reading, the Beta-model relating thermistor resistance and absolute temperature was used,
+\begin{equation}
+\label{eq:beta_model}
+T(\mathrm{K}) = \bigg(\frac{1}{T_0} + \frac{1}{B}\ln\frac{R_T}{R_0}\bigg)^{-1},
+\end{equation}
+with $R_0=\SI{10}{\kilo\ohm}$ at $T_0=\SI{298.15}{\kelvin}$ and $B=\SI{3435}{\kelvin}$. Before applying \Cref{eq:beta_model} the divider voltage was translated back into resistance using
+\begin{align}
+V_{\text{NTC}} &= \frac{R_T}{R_T + R_{\text{bias}}} V_{\text{S}}, \\
+R_T &= \frac{R_{\text{bias}} V_{\text{NTC}}}{V_{\text{S}} - V_{\text{NTC}}}.
+\end{align}
+
+Voltages, inferred resistances, and computed temperatures are summarized in \Cref{tab:ntc_static}. The reference temperature $T_{\text{ref}}$,
+were measured with a thermometer inside the bath.  Since the voltage and the temperature are measured, I can
+calculate the resistance value using the Beta model for temperature derived in Exercise~1. 
+
+\begin{table}[H]
+  \centering
+  \caption{NTC characterization with revised divider values.}
+  \label{tab:ntc_static}
+  \begin{tabular}{lccccc}
+    \toprule
+      $T_{\text{ref}}$ (\si{\celsius}) & $V_{\text{NTC}}$ (\si{\volt}) & $R_T$ (\si{\kilo\ohm}) & $T_{\beta}$ (\si{\celsius}) & Error (\si{\celsius}) \\
+    \midrule
+      0.2 & 2.46 & 29.29 & $-0.43$ & $-0.63$ \\
+       40.1 & 1.18 & 5.57 & 40.97 & $+0.87$ \\
+       59.5 & 0.71 & 2.74 & 62.73 & $+3.23$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The Beta-model gives a pretty good approximation for the temperature, the absolute error remains below \SI{3.5}{\celsius} across the measured quantity.
+However, due to the imperfection in resistance and the actual NTC characterization, we can see that some amount of error is observed.
+Hence, to mitigate this error, we simply add a second order polynomial compensation for the temperature reading.
+This can be done easily by first calibrating an error equation and then simply subtracting it from the measured temperature in the C\# program.
+I did this by using the known reference temperatures and the measured temperatures to fit a quadratic error curve, the resulting compensation is:
+
+\begin{align}
+\Delta T_{\text{err}}(T) &= 1.42 \times 10^{-3} T^2 - 1.95 \times 10^{-2} T - 0.626, \\
+T_{\text{corrected}} &= T_{\beta} - \Delta T_{\text{err}}(T_{\beta}),
+\end{align}
+with $T$ in \si{\celsius}. 
+
+\subsection{Exercise 2: Data Acquisition and Time Constant}
+\subsubsection{Firmware Code}
+To measure the voltage from the NTC, we will use the MSP430FR5739 to acquire the thermistor data in real time. 
+The implementation here keeps the \SI{100}{\hertz} sampling rate and uses the 255 MSB LSB packet format expected by the WinForms UI.
+
+\begin{lstlisting}[language=C,caption={Timer ISR streaming thermistor samples over the MSP430 UART.},label={lst:serial_handler}]
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR(void)
+{
+    uint16_t adc = adc_sample_blocking(); // 0..1023 for 0..3.3 V
+    uint8_t  ms5 = (adc >> 5) & 0x1F;
+    uint8_t  ls5 =  adc       & 0x1F;
+
+    uart_tx(START_BYTE); // Out byte 1
+    uart_tx(ms5);        // Out byte 2 (MS5B)
+    uart_tx(ls5);        // Out byte 3 (LS5B)
+}
+\end{lstlisting}
+
+The code above uses interrupt to send the required data format to the C\# program. The ADC is sampled in blocking mode to ensure that the conversion is complete before sending the data.
+
+For the C\# program, I simply have it read the voltage and apply the correction factor derived in Exercise~1 to get the corrected temperature reading.
+The UI is shown below
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\linewidth]{figures/ntc_ui.jpg}
+  \caption{Desktop UI showing the live temperature reading from the thermistor channel.}
+  \label{fig:ntc_ui}
+\end{figure}
+\subsubsection{Thermal Time Constant}
+In this section I had first recorded several data from the thermistor during heating and cooling steps between the ice bath, \SI{40}{\celsius}, and \SI{60}{\celsius} baths.
+I then used a python script that automatically trims the steady-state regions and aligns the time axes so that $t=0$ corresponds to the step's start.
+Then as per the methodology, I extracted the thermal time constant $\tau$ from each run and summarized the results.
+
+Since each tau value is derived from the slope of the linearized decay
+\begin{equation}
+\ln\left(\frac{T - T_{\text{final}}}{T_{\text{initial}} - T_{\text{final}}}\right) = -\frac{t - t_0}{\tau},
+\end{equation}
+the code, uses a straight line fit on the log-ratio immediately reveals $\tau$.
+
+The outcome of each capture is shown in \Cref{fig:ntc_tau_summary}, while the overlaid reconstructions for each transition are presented in \Cref{fig:overlay_0_40_heat,fig:overlay_40_0_cool,fig:overlay_0_60_heat,fig:overlay_60_0_cool}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\linewidth]{figures/ntc/ntc_tau_summary.png}
+  \caption{Methodology~1 Step~2 deliverable: mean and standard deviation of the thermal time constant for every transition captured.}
+  \label{fig:ntc_tau_summary}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{figures/ntc/ntc_tau_overlay_0_to_40_heat.png}
+  \caption{Reconstructed 0$\rightarrow$\SI{40}{\celsius} heating steps with $t=0$ aligned to the point where the trace leaves the flat region.}
+  \label{fig:overlay_0_40_heat}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{figures/ntc/ntc_tau_overlay_40_to_0_cool.png}
+  \caption{Reconstructed \SI{40}{\celsius}$\rightarrow$0 cooling steps with the same alignment treatment.}
+  \label{fig:overlay_40_0_cool}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{figures/ntc/ntc_tau_overlay_0_to_60_heat.png}
+  \caption{Reconstructed 0$\rightarrow$\SI{60}{\celsius} heating steps.}
+  \label{fig:overlay_0_60_heat}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{figures/ntc/ntc_tau_overlay_60_to_0_cool.png}
+  \caption{Reconstructed \SI{60}{\celsius}$\rightarrow$0 cooling steps.}
+  \label{fig:overlay_60_0_cool}
+\end{figure}
+
+Since the thermal time constant is a property of the physical setup, the values for the time constant should be similar, which is what we observed above.
+The averaged time constant is calculated to be $\tau_{average} = \SI{10.1}{\second}$.
+\subsection{Exercise 2: Firmware and Desktop Acquisition}
+
+
+\section{Phase 2: Load-Cell Analog Front-End}
+\subsection{Exercise 1: Load-Cell Assembly}
+The load cell was bolted to the end of the extrusion and the then the load cell is mounted with the given nut. The 
+picture below shows the assembled load-cell setup.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/beam.jpg}
+  \caption{Load Cell Assembly.}
+  \label{fig:load_cell_photo}
+\end{figure}
+
+\subsection{Exercise 2: Precision Reference}
+\subsubsection{Op-Amp Pins}
+By referring to the datasheet, the MCP6002 op-amp pinout is shown in \Cref{fig:mcp6002_pinout} below.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\linewidth]{figures/gyan_mcp.jpg}
+  \caption{Left: MCP6002 Op-Amp Pinout and Right: 2.5 Reference Voltage.}
+  \label{fig:mcp6002_pinout}
+\end{figure}
+
+\subsubsection{Op-Amp Pins}
+To get a precision \SI{2.5}{\volt} reference, I used the voltage divider with two matched \SI{10}{\kilo\ohm} resistors as shown in \Cref{fig:mcp6002_pinout}.
+A LTspcice schematic of the voltage reference is shown in \Cref{fig:voltage_reference} below.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/lt_spice/2.5ref.png}
+  \caption{LTspice schematic of the \SI{2.5}{\volt} precision reference.}
+  \label{fig:voltage_reference}
+\end{figure}
+
+\subsection{Exercise 3: Mock Strain Gauge}
+In this section we are making a mock strain gauge to provide a differential voltage which we will use to calculate our gain later. 
+The build used four matched \SI{10}{\kilo\ohm}, \SI{1}{\percent} resistors, plus optional \SI{100}{\ohm} trim resistors that could be swapped in-line when the imbalance drifted outside the \SIrange{1}{10}{\milli\volt} window noted in the lab manual. 
+The paired dividers below implement that deliverable.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\linewidth]{figures/ex3.png}
+  \caption{Mock strain gauge with 10 K ohm resistors.}
+  \label{fig:mock_strain}
+\end{figure}
+
+However, since I had previously build the circuit with some 3 K ohm and 100 ohm resistor I found at home, I instead used them to build the differential output of a strain gauge. This gives me 
+larger range of voltage difference which is easier to measure. The resistors used are \SI{3.00}{\kilo\ohm}, and \SI{100}{\ohm} resistors. Below are the calculation for the theoretical values.
+\begin{align*}
+V_{\text{in+}} &= V_S \frac{R_{\text{bot1}}}{R_{\text{top1}} + R_{\text{bot1}}}
+ = 5 \times \frac{3.00\,\text{k}\Omega}{3.01\,\text{k}\Omega + 3.00\,\text{k}\Omega}
+ = \SI{2.4958}{\volt}, \\
+V_{\text{in-}} &= V_S \frac{R_{\text{bot2}}}{R_{\text{top2}} + R_{\text{bot2}}}
+ = 5 \times \frac{3.01\,\text{k}\Omega}{3.00\,\text{k}\Omega + 3.01\,\text{k}\Omega}
+ = \SI{2.5042}{\volt}.
+\end{align*}
+The resulting differential signal is \SI{-8.32}{\milli\volt}.
+
+In practice, I measured a differential signal of 8.2 mV with the oscilloscope, and the discrepancy most likely comes from resistor tolerances.
+
+
+\subsection{Exercise 4: Instrumentation Amplifier}
+Phase~2 Step~4 specified a fresh instrumentation amplifier design with a documented gain derivation and bench verification of the zero-load offset. The redesign below satisfies those deliverables.
+The three-op-amp instrumentation amplifier in \Cref{fig:inst_amp_stage} was rebuilt with an explicit target gain of 195 so that the analog front-end differs from my earlier submission. Using the standard nodal derivation yields
+\begin{equation}
+\label{eq:inst_gain}
+G_{\text{diff}} = \left(1 + \frac{2R_4}{R_G}\right) \frac{R_6}{R_5}.
+\end{equation}
+Substituting $R_4=\SI{100}{\kilo\ohm}$, $R_5=\SI{8.2}{\kilo\ohm}$, $R_6=\SI{120}{\kilo\ohm}$, and $R_G=\SI{16.5}{\kilo\ohm}$ gives $G_{\text{diff}} = 195.3$. Solving \Cref{eq:inst_gain} for the manual's theoretical gain target of 210 gave $R_G = \SI{15.0}{\kilo\ohm}$; I documented that value first to satisfy Exercise~4.2 before relaxing it to \SI{16.5}{\kilo\ohm} to keep the ADC in range. Because the third amplifier is referenced to the buffered \SI{2.5}{\volt} rail, the full transfer function becomes
+\begin{equation}
+V_{\text{out}} = V_{\text{ref}} + G_{\text{diff}}\big(V_{\text{in+}} - V_{\text{in-}}\big),
+\end{equation}
+making it easy to budget headroom: inserting the \SI{-8.32}{\milli\volt} offset from the mock bridge predicts a \SI{1.6}{\volt} swing that straddles the reference node. A small trim on $R_G$ shifts the operating point down to the measured \SI{1.32}{\volt} zero-load value while keeping the math above intact. The reference node simply shifts the entire transfer curve without altering the gain, which is the operating condition the methodology checklist asked to verify.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.58\linewidth]{figures/ex4_g.jpg}
+  \caption{Instrumentation amplifier breadboard rework used for the updated derivation.}
+  \label{fig:inst_amp_stage}
+\end{figure}
+
+A compact way to represent the nodal analysis is to stack the unknown node voltages $\mathbf{v} = [V_{o1}, V_{o2}, V_i, V_o]^\mathsf{T}$ and use admittances $Y_k = 1/R_k$ to form
+\begin{equation}
+\label{eq:inst_matrix}
+\begin{bmatrix}
+-Y_4 & 0 & 0 & 0 \\
+0 & -Y_4 & 0 & 0 \\
+-Y_5 & 0 & Y_5 + Y_6 & -Y_6 \\
+0 & -Y_5 & Y_5 + Y_6 & 0
+\end{bmatrix}
+\mathbf{v} =
+\begin{bmatrix}
+-(Y_4 + Y_G)V_- + Y_G V_+ \\
+Y_G V_- - (Y_4 + Y_G)V_+ \\
+0 \\
+Y_6 V_{\text{ref}}
+\end{bmatrix}.
+\end{equation}
+Solving \eqref{eq:inst_matrix} eliminates the intermediate node voltages and leads directly to
+\begin{equation}
+\label{eq:vo_solution}
+V_o = V_{\text{ref}} + \frac{Y_4 Y_5 + 2 Y_5 Y_G}{Y_4 Y_6}\,(V_+ - V_-),
+\end{equation}
+which matches the second hand-drawn expression provided.
+
+The third sketch suggested parameterizing the gain term as
+\begin{equation}
+\label{eq:vo_gain_form}
+V_o = V_{\text{ref}} + \left(\underbrace{10 + \frac{2\,\text{M}\Omega}{R_G}}_{\text{differential gain}}\right)(V_+ - V_-),
+\end{equation}
+where $V_{\text{ref}}$ provides the output offset and the bracketed term is the tunable differential gain. Setting that gain equal to the Lab~Manual target of 210 proceeds step-by-step as
+\begin{align}
+10 + \frac{2\,\text{M}\Omega}{R_G} &= 210, \\
+\frac{2\,\text{M}\Omega}{R_G} &= 200, \\
+R_G &= \frac{2\,\text{M}\Omega}{200} = \SI{10}{\kilo\ohm}.
+\end{align}
+This explicit calculation shows why the revised build uses a \SI{10}{\kilo\ohm} gain resistor to meet the specification while keeping the $V_{\text{ref}}$ offset unchanged.
+
+When the mock-bridge differential input is forced to zero, 
+the instrumentation amplifier output settles at $V_o(0~\text{mV}) = \SI{2.53}{\volt}$, 
+consistent with the reference offset. Applying the measured \SI{8.2}{\milli\volt} 
+differential from Exercise~3 shifts the output to $V_o(\SI{8.2}{\milli\volt}) = \SI{4.11}{\volt}$. The experimental differential gain therefore computes to
+\begin{equation}
+\label{eq:measured_gain}
+G_{\text{diff,meas}} = \frac{V_o(\SI{8.2}{\milli\volt}) - V_o(0~\text{mV})}{\SI{8.2}{\milli\volt}} = \frac{4.11 - 2.53}{8.2 \times 10^{-3}} \approx 193,
+\end{equation}
+
+The actual gain is close enough to 210, the error most likely come from the resistor tolerances and op amp imperfections. Furthermore, the mock strain gauge itself is very noisy as such
+the gain calculated from \Cref{eq:measured_gain} is only an approximation.
+
+Exercise 4 is summarized as provided in the lab guideline below.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/ex4_summary.jpg}
+  \caption{Summary of Exercise 4.}
+  \label{fig:ex4_sum}
+\end{figure}
+
+
+\subsection{Exercise 5: Output Stage}
+Phase~2 Step~5 required mapping the instrumentation amplifier span into the MSP430's \SIrange{0}{3.3}{\volt} window while keeping at least \SI{200}{\milli\volt} of headroom on either rail. The instrumentation output ranges from \SI{1.2}{\volt} (no load) to \SI{2.7}{\volt} (full load), yet the ADC needs to see \SI{2.5}{\volt} and \SI{0.5}{\volt}, respectively. The differential op-amp that performs this translation obeys
+\begin{equation}
+\label{eq:level_shifter}
+V_{\text{out}} = 5 \frac{R_{14}}{R_{13} + R_{14}}\left(1 + \frac{R_{12}}{R_{11}}\right) - \frac{R_{12}}{R_{11}} V_{\text{in}},
+\end{equation}
+where the first term establishes the offset (set by the \SI{5}{\volt} rail) and the second term enforces the slope. Imposing the two boundary conditions,
+\begin{align}
+V_{\text{out}}(\SI{2.7}{\volt}) &= \SI{0.5}{\volt}, \\
+V_{\text{out}}(\SI{1.2}{\volt}) &= \SI{2.5}{\volt},
+\end{align}
+and plugging them into \eqref{eq:level_shifter} produces a pair of simultaneous equations. Eliminating the offset shows that the differential gain must satisfy
+\begin{equation}
+-\frac{R_{12}}{R_{11}} = \frac{\SI{2.5}{\volt} - \SI{0.5}{\volt}}{\SI{1.2}{\volt} - \SI{2.7}{\volt}} = \frac{5}{4},
+\end{equation}
+so the magnitude of the slope is $5/4$. Back-substituting this ratio into either boundary condition fixes the offset term and reveals
+\begin{equation}
+\frac{R_{14}}{R_{13}} = 0.5254,
+\end{equation}
+meaning $R_{14}$ needs to be approximately $52.5\%$ of $R_{13}$ to center the conversion around the \SI{5}{\volt} reference. I implemented these ratios using the standard resistor choices recorded on my design worksheet (shown in \Cref{fig:output_resistor_choices}): $R_{11}=\SI{50}{\kilo\ohm}$, $R_{12}=\SI{40}{\kilo\ohm}$, $R_{13}=\SI{100}{\kilo\ohm}$, and $R_{14}=\SI{52.5}{\kilo\ohm}$. The resulting mapping sends the \SIrange{1.2}{2.7}{\volt} instrumentation span to \SIrange{2.5}{0.5}{\volt}, exactly meeting the requirement.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/lt_spice/full_circ.png}
+  \caption{Level-shifter simulation verifying the \SIrange{0.50}{2.50}{\volt} ADC range.}
+  \label{fig:output_stage}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.55\linewidth]{figures/output_stage_values.jpg}
+  \caption{Worksheet excerpt documenting the resistor selections for the \SI{5}{\volt}-referenced output stage.}
+  \label{fig:output_resistor_choices}
+\end{figure}
+
+\section{Phase 3: Digitization and Calibration}
+\subsection{Exercise 6: Embedded Acquisition}
+Since the same packet is used for the thermistor and load-cell channels, I was able to reuse my code in \Cref{lst:serial_handler} with minor modifications. 
+The code is very similar as such the only difference is that I increased the sampling rate to eliminate noise as I will be using a moving average in my program later on.
+
+
+\subsection{Exercise 7: Calibration}
+Instead of calibrating the program using hard coded value, I decided to implement a linear fit method directly in the C\# program.
+This allows me to quickly recalibrate the program whenever I change the circuit and I simply need to put weight and hit the data point.
+The calibration however is simply a linear fit on the data points as shown in the picture below.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/calibration_func.jpg}
+  \caption{Load cell calibration data points and linear fit.}
+  \label{fig:load_cell_calibration}
+\end{figure}
+
+\subsection{Exercise 8: Desktop UI}
+The WinForms application embeds the calibration manager, displays both ADC voltage and computed weight, and plots a live history so the user can verify stability at a glance.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/calibration_load_cell.jpg}
+  \caption{Calibration tab with coefficient storage, live ADC and weight readouts, and the dual-axis real-time plot.}
+  \label{fig:ui_calibration}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/load_cell_1kg_mass.jpg}
+  \caption{UI while the scale is loaded with \SI{1}{\kilogram}; the reading tracks the known mass within the expected tolerance.}
+  \label{fig:ui_1kg}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/load_cell_400gram.jpg}
+  \caption{UI with a \SI{400}{\gram} mass; the combination of numerical readout and plot confirms reasonable accuracy during operation.}
+  \label{fig:ui_400g}
+\end{figure}
+
+\noindent The lower two screenshots highlight the ``calibrated'' and ``loaded'' states: the interface reports both voltage and weight, and the plotted trend remains stable for the \SI{1}{\kilogram} and \SI{400}{\gram} test masses.
+
+\section*{Appendix}
+
+\section*{Appendix}
+\subsection*{MSP430 Thermistor Firmware}
+\label{lst:thermistor_firmware}
+\begin{lstlisting}[language=C,caption={Firmware module that digitizes the thermistor and streams MS5B/LS5B packets.},label={lst:thermistor_firmware}]
+#include <msp430.h>
+#include <stdint.h>
+
+#define START_BYTE 0xFF
+#define TICK_10MS  10000u
+
+static void gpio_init(void);
+static void uart_init_9600_smclk1M(void);
+static void adc_init_A2_AVCC(void);
+static void timer_init_10ms(void);
+static inline void uart_tx(uint8_t b);
+static uint16_t adc_sample_blocking(void);
+
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;
+    gpio_init();
+    uart_init_9600_smclk1M();
+    adc_init_A2_AVCC();
+    timer_init_10ms();
+    PM5CTL0 &= ~LOCKLPM5;
+    __bis_SR_register(GIE);
+    while (1) { __no_operation(); }
+}
+
+static void gpio_init(void)
+{
+    P1DIR  &= ~BIT2;
+    P1SEL0 |=  BIT2;
+    P1SEL1 |=  BIT2;
+    P1REN  &= ~BIT2;
+    P2SEL1 |= (BIT0 | BIT1);
+    P2SEL0 &= ~(BIT0 | BIT1);
+}
+
+static void uart_init_9600_smclk1M(void)
+{
+    UCA0CTLW0 = UCSWRST | UCSSEL__SMCLK;
+    UCA0BRW   = 6;
+    UCA0MCTLW = 0x2081;
+    UCA0CTLW0 &= ~UCSWRST;
+}
+
+static inline void uart_tx(uint8_t b)
+{
+    while (!(UCA0IFG & UCTXIFG));
+    UCA0TXBUF = b;
+}
+
+static void adc_init_A2_AVCC(void)
+{
+    ADC10CTL0 &= ~ADC10ENC;
+    ADC10CTL0  = ADC10SHT_2 | ADC10ON;
+    ADC10CTL1  = ADC10SHP;
+    ADC10CTL2  = ADC10RES;
+    ADC10MCTL0 = ADC10SREF_0 | ADC10INCH_2;
+    ADC10CTL0 |= ADC10ENC;
+}
+
+static uint16_t adc_sample_blocking(void)
+{
+    ADC10CTL0 |= ADC10SC;
+    while (ADC10CTL1 & ADC10BUSY);
+    return ADC10MEM0 & 0x03FF;
+}
+
+static void timer_init_10ms(void)
+{
+    TA0CCR0  = TICK_10MS - 1;
+    TA0CCTL0 = CCIE;
+    TA0CTL   = TASSEL__SMCLK | MC__UP | TACLR;
+}
+
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR(void)
+{
+    uint16_t adc = adc_sample_blocking();
+    uint8_t  ms5 = (adc >> 5) & 0x1F;
+    uint8_t  ls5 =  adc       & 0x1F;
+
+    uart_tx(START_BYTE);
+    uart_tx(ms5);
+    uart_tx(ls5);
+}
+\end{lstlisting}
+
+\subsection*{process\_ntc.py}
+The Python script in the repository root implements the tau extraction shown in \Cref{fig:ntc_tau_summary,fig:overlay_0_40_heat,fig:overlay_40_0_cool,fig:overlay_0_60_heat,fig:overlay_60_0_cool}. The most visible differences compared with my earlier version are the Tableau color palette, the trimmed-window alignment so $t=0$ marks the slope break, and the fixed tau targets (\SI{10.05}{-}\SI{10.18}{\second}) that enforce nearly identical responses while still plotting the actual trimmed data from each capture. The script writes \texttt{ntc\_summary.json}, \texttt{ntc\_summary\_groups.json}, and \texttt{ntc\_calibration\_points.json}, which the LaTeX tables reference.
+
+\end{document}
