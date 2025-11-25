@@ -1,0 +1,55 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "J:\\My Drive\\UBC\\400\\MECH 4\\MECH 423\\Encoder Reader\\Encoder Reader\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FB234E8D-EBFC-4C8B-A510-600E8660AD08}|PWM Control\\Encoder Reader.csproj|j:\\my drive\\ubc\\400\\mech 4\\mech 423\\encoder reader\\encoder reader\\pwm control\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB234E8D-EBFC-4C8B-A510-600E8660AD08}|PWM Control\\Encoder Reader.csproj|solutionrelative:pwm control\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB234E8D-EBFC-4C8B-A510-600E8660AD08}|PWM Control\\Encoder Reader.csproj|J:\\My Drive\\UBC\\400\\MECH 4\\MECH 423\\Encoder Reader\\Encoder Reader\\pwm control\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{FB234E8D-EBFC-4C8B-A510-600E8660AD08}|PWM Control\\Encoder Reader.csproj|solutionrelative:pwm control\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "J:\\My Drive\\UBC\\400\\MECH 4\\MECH 423\\Encoder Reader\\Encoder Reader\\PWM Control\\Form1.cs",
+              "RelativeDocumentMoniker": "PWM Control\\Form1.cs",
+              "ToolTip": "J:\\My Drive\\UBC\\400\\MECH 4\\MECH 423\\Encoder Reader\\Encoder Reader\\PWM Control\\Form1.cs",
+              "RelativeToolTip": "PWM Control\\Form1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD0BAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-23T23:47:04.96Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "J:\\My Drive\\UBC\\400\\MECH 4\\MECH 423\\Encoder Reader\\Encoder Reader\\PWM Control\\Form1.cs",
+              "RelativeDocumentMoniker": "PWM Control\\Form1.cs",
+              "ToolTip": "C:\\Users\\islap\\Documents\\1 - UBC Reduced File Path\\MECH 423\\Labs\\Lab 3\\4 - Encoder Reader\\Encoder Reader\\PWM Control\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-30T00:34:05.444Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
