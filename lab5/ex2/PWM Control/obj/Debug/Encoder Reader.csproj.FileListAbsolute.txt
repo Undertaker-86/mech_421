@@ -1,0 +1,31 @@
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.exe.config
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.exe
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.pdb
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.AssemblyReference.cache
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM_Control.Form1.resources
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM_Control.Properties.Resources.resources
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.GenerateResource.cache
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.CoreCompileInputs.cache
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM Control.exe
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\4 - Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM Control.pdb
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.exe.config
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.exe
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.pdb
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.AssemblyReference.cache
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM_Control.Form1.resources
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM_Control.Properties.Resources.resources
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.GenerateResource.cache
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.CoreCompileInputs.cache
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM Control.exe
+C:\Users\bobsy\Desktop\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM Control.pdb
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.exe.config
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.exe
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\bin\Debug\PWM Control.pdb
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.AssemblyReference.cache
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM Control.exe.config
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM_Control.Form1.resources
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM_Control.Properties.Resources.resources
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.GenerateResource.cache
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\Encoder Reader.csproj.CoreCompileInputs.cache
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM Control.exe
+J:\My Drive\UBC\400\MECH 4\MECH 423\Encoder Reader\Encoder Reader\PWM Control\obj\Debug\PWM Control.pdb

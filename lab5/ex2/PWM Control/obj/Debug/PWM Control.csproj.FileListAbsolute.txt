@@ -1,0 +1,10 @@
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\bin\Debug\PWM Control.exe.config
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\bin\Debug\PWM Control.exe
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\bin\Debug\PWM Control.pdb
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\obj\Debug\PWM Control.csproj.AssemblyReference.cache
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\obj\Debug\PWM_Control.Form1.resources
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\obj\Debug\PWM_Control.Properties.Resources.resources
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\obj\Debug\PWM Control.csproj.GenerateResource.cache
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\obj\Debug\PWM Control.csproj.CoreCompileInputs.cache
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\obj\Debug\PWM Control.exe
+C:\Users\islap\Documents\1 - UBC Reduced File Path\MECH 423\Labs\Lab 3\2 - DC Motor Control\PWM Control\PWM Control\obj\Debug\PWM Control.pdb

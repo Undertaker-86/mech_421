@@ -1,0 +1,267 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+% Page setup
+\geometry{margin=1in}
+
+% Code listing style
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Placeholder command for images
+\newcommand{\imageplaceholder}[2]{
+    \begin{figure}[H]
+        \centering
+        \fbox{\begin{minipage}{0.8\textwidth}
+            \centering
+            \vspace{2cm}
+            \textbf{PLACEHOLDER FOR: #1} \\
+            \vspace{1cm}
+            \textit{#2}
+            \vspace{2cm}
+        \end{minipage}}
+        \caption{#1}
+        \label{fig:#1}
+    \end{figure}
+}
+
+\title{\textbf{MECH 421 Lab 5: PCB Assembly and Stepper Motor Control}}
+\author{Student Name 1 \and Student Name 2}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report details the assembly and testing of a custom Printed Circuit Board (PCB) for mechatronic applications, specifically focusing on stepper motor control. The lab is divided into three exercises: PCB assembly, single-axis stepper motor control, and dual-axis gantry control. The objective is to provide a comprehensive guide for future students to replicate the assembly and control logic without external references.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+The purpose of this lab is to gain hands-on experience in PCB assembly, soldering surface-mount components, and implementing real-time control for stepper motors using a microcontroller. The final system is a 2-axis gantry capable of drawing complex shapes, demonstrating the integration of hardware (PCB, motors, mechanics) and software (firmware, PC interface).
+
+\section{Exercise 1: PCB Assembly and Soldering}
+
+\subsection{Objective}
+The goal of this exercise is to populate a bare PCB with surface-mount and through-hole components to create a functional motor control board. This board includes a microcontroller (MSP430), USB interface (FTDI), power regulation, and motor drivers.
+
+\subsection{Theory and Circuit Description}
+The PCB consists of several key functional blocks:
+\begin{itemize}
+    \item \textbf{Power Supply}: Converts external 12V DC input to 5V and 3.3V logic levels using linear regulators (NCP1117). 5V is used for the USB interface and some logic, while 3.3V powers the MSP430 microcontroller.
+    \item \textbf{USB Interface}: Uses an FT230XS chip to convert USB signals from a PC into UART (Serial) signals compatible with the microcontroller. This allows for data logging and control commands.
+    \item \textbf{Microcontroller}: The MSP430FR5739 is the brain of the board. It executes firmware to generate PWM signals for motors, read sensors, and communicate via UART.
+    \item \textbf{Motor Driver}: The DRV8841 is a dual H-bridge driver capable of driving DC motors or bipolar stepper motors. It handles the high currents required by the motors, controlled by low-power logic signals from the MCU.
+\end{itemize}
+
+\subsection{Parts List}
+The following components are required for assembly. Ensure all parts are accounted for before starting.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}llc@{}}
+\toprule
+\textbf{Component} & \textbf{Description} & \textbf{Qty} \\ \midrule
+MSP430FR5739 & Microcontroller (TSSOP-38) & 1 \\
+FT230XS & USB-to-UART Bridge (SSOP-16) & 1 \\
+DRV8841 & Motor Driver (HTSSOP-28) & 1 \\
+NCP1117-3.3 & 3.3V Regulator (SOT-223) & 1 \\
+NCP1117-5.0 & 5.0V Regulator (SOT-223) & 1 \\
+Resistors & Various (0603/1206 SMD) & Kit \\
+Capacitors & Various (0603/1206 SMD) & Kit \\
+Connectors & USB Mini-B, DC Jack, Headers & Kit \\
+LEDs & Green (1206) & 6 \\
+\bottomrule
+\end{tabular}
+\caption{Major Components List}
+\end{table}
+
+\subsection{Assembly Procedure}
+The assembly should follow a specific order to ensure testability at each stage.
+
+\subsubsection{Step 1: Underside Resistors}
+Solder the 150 $\Omega$ resistors on the bottom side of the PCB. These limit current to the MCU pins.
+\begin{itemize}
+    \item \textbf{Tip}: Use flux and a clean iron tip. Tin one pad, slide the resistor in, then solder the other side.
+\end{itemize}
+
+\subsubsection{Step 2: Power Supply}
+Install the DC jack, diodes, and voltage regulators (3.3V and 5V).
+\begin{itemize}
+    \item \textbf{Verification}: Plug in a 12V supply. Measure the output of the regulators with a multimeter. You should see stable 3.3V and 5V rails. The Power LED should light up.
+\end{itemize}
+
+\subsubsection{Step 3: USB Interface}
+Solder the FT230XS chip, USB connector, and associated passives.
+\begin{itemize}
+    \item \textbf{Caution}: The FT230XS has fine-pitch pins. Use plenty of flux and drag solder if necessary. Check for bridges.
+    \item \textbf{Verification}: Connect to a PC via USB. The PC should recognize the device (e.g., as a COM port). If the chip gets hot, disconnect immediately.
+\end{itemize}
+
+\subsubsection{Step 4: Microcontroller}
+Solder the MSP430FR5739 and the JTAG header.
+\begin{itemize}
+    \item \textbf{Verification}: Connect the JTAG programmer. Attempt to flash a "Blink LED" program. If successful, the MCU is operational.
+\end{itemize}
+
+\subsubsection{Step 5: Motor Driver}
+Solder the DRV8841 and the large bulk capacitors.
+\begin{itemize}
+    \item \textbf{Note}: The thermal pad under the chip must be soldered for heat dissipation (via the hole on the back).
+\end{itemize}
+
+\subsection{Results and Discussion}
+\imageplaceholder{Assembled PCB (Front)}{Insert a clear photo of the fully assembled PCB (Front View).}
+\imageplaceholder{Assembled PCB (Back)}{Insert a clear photo of the fully assembled PCB (Back View).}
+
+\textbf{Challenges Encountered:}
+% TODO: Describe any soldering issues (e.g., bridges, cold joints) and how they were fixed.
+(Example: We encountered a solder bridge on the FTDI chip pins, which prevented USB recognition. This was resolved using solder wick and additional flux.)
+
+\section{Exercise 2: Stepper Motor Control}
+
+\subsection{Objective}
+To control a bipolar stepper motor using the assembled PCB. This involves generating precise PWM waveforms to drive the motor phases in a specific sequence (half-stepping) and implementing a UART interface for velocity control.
+
+\subsection{Theory}
+\subsubsection{Stepper Motor Operation}
+A bipolar stepper motor has two coils (Phase A and Phase B). By energizing these coils in a specific sequence, the rotor aligns with the magnetic field, moving in discrete steps.
+\begin{itemize}
+    \item \textbf{Full-Stepping}: Energizing phases in sequence (A+ $\rightarrow$ B+ $\rightarrow$ A- $\rightarrow$ B-).
+    \item \textbf{Half-Stepping}: Inserting intermediate states where both phases are energized, doubling the resolution (A+ $\rightarrow$ A+B+ $\rightarrow$ B+ ...).
+\end{itemize}
+
+\subsubsection{Current Control (PWM)}
+To prevent overheating, the voltage applied to the coils is modulated using Pulse Width Modulation (PWM). A duty cycle of roughly 25\% is sufficient for no-load operation.
+
+\subsection{Firmware Implementation}
+The firmware uses a state machine and a look-up table to determine the coil excitation for each step.
+\begin{itemize}
+    \item \textbf{Look-up Table}: An array storing the PWM duty cycle values (or enable bits) for the 8 half-step states.
+    \item \textbf{Timer Interrupt}: A timer interrupt triggers the next step. The frequency of this interrupt determines the motor speed.
+    \item \textbf{UART Command}: The PC sends a velocity command (byte). The MCU maps this byte to a timer period (CCR0 value).
+\end{itemize}
+
+\imageplaceholder{Stepper State Table}{Insert the Half-Step State Table used in your code.}
+
+\subsection{Software Interface (C\#)}
+A C\# GUI was developed to send commands. It features:
+\begin{itemize}
+    \item \textbf{Slider}: Sets velocity (Center = 0, Left = CCW Max, Right = CW Max).
+    \item \textbf{Buttons}: Trigger single steps.
+\end{itemize}
+
+\subsection{Results}
+\imageplaceholder{C\# GUI Screenshot}{Insert a screenshot of the C\# application controlling the motor.}
+
+\imageplaceholder{Packet Structure}{Insert a diagram of the UART packet structure (Start Byte, Command, Data, Checksum).}
+
+\imageplaceholder{Electrical Schematic}{Insert the schematic of the minimum components to drive the stepper (MCU + Driver + Motor).}
+
+\textbf{Speed Measurements:}
+\begin{itemize}
+    \item \textbf{Max No-Load Speed}: [Value] steps/s
+    \item \textbf{Max Loaded Speed}: [Value] steps/s
+\end{itemize}
+
+\textbf{Discussion:}
+The maximum speed is limited by the inductance of the motor coils, which opposes rapid current changes. As speed increases, the current doesn't have enough time to reach the target level within a step period, reducing torque until the motor stalls.
+
+\section{Exercise 3: 2-Axis Control with Dual Stepper Motors}
+
+\subsection{Objective}
+To extend the system to 2 axes (X and Y) for a gantry stage. This requires driving a second stepper motor using an external H-bridge driver wired to the PCB.
+
+\subsection{Procedure}
+\subsubsection{Wiring the Second Motor}
+Since the PCB has only one DRV8841, a second external driver is used.
+\begin{itemize}
+    \item \textbf{Connections}: The external driver inputs are connected to available GPIO pins on the MCU.
+    \item \textbf{Power}: Shared 12V rail.
+\end{itemize}
+
+\subsubsection{Coordinated Motion}
+To draw shapes, both motors must move simultaneously.
+\begin{itemize}
+    \item \textbf{Algorithm}: The MCU receives a target coordinate (X, Y). It calculates the number of steps for each axis. To move in a straight line, the step rates are synchronized such that both axes finish at the same time.
+\end{itemize}
+
+\subsection{Results}
+\imageplaceholder{Standard Shapes Plot}{Insert photo of the paper with the 6 test points/lines drawn.}
+
+\imageplaceholder{Creative Shape Plot}{Insert photo of the creative shape drawn by the gantry.}
+
+\imageplaceholder{Creative Shape Design Overlay}{Insert photo of the drawn shape with the intended design overlaid for comparison.}
+
+\textbf{Discussion on Accuracy:}
+Deviations between the design and the result can be attributed to:
+\begin{itemize}
+    \item \textbf{Backlash}: Play in the belt/pulley system.
+    \item \textbf{Missed Steps}: If the motor torque was insufficient for the acceleration.
+    \item \textbf{Resolution}: The discrete nature of stepper motors (finite step size).
+\end{itemize}
+
+\section{Conclusion}
+This lab successfully demonstrated the complete process of building a mechatronic controller, from soldering the PCB to implementing low-level motor control firmware and high-level PC software. The final 2-axis gantry system was able to draw complex shapes, validating the integration of all subsystems.
+
+\newpage
+\appendix
+\section{Microcontroller Code (C)}
+\begin{lstlisting}[language=C, caption=MSP430 Firmware Main Loop]
+// Insert your C code here
+// Example:
+// void main(void) {
+//    WDTCTL = WDTPW | WDTHOLD; // Stop watchdog timer
+//    init_clocks();
+//    init_uart();
+//    while(1) {
+//       // Control loop
+//    }
+// }
+\end{lstlisting}
+
+\section{PC Interface Code (C\#)}
+\begin{lstlisting}[language=C, caption=C\# Serial Communication Handler]
+// Insert your C# code here
+// Example:
+// private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e) {
+//     // Handle incoming data
+// }
+\end{lstlisting}
+
+\end{document}
