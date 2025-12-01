@@ -26,7 +26,7 @@
 // 8kHz: Period=1000
 // 20kHz: Period=400 (Silent)
 #define PWM_PERIOD 400
-#define PWM_DUTY   (PWM_PERIOD * 80 / 100)
+#define PWM_DUTY   (PWM_PERIOD * 50 / 100)
 
 // Stepper Constants
 #define STEPS_PER_REV 200 // Standard 1.8 deg stepper

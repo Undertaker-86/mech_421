@@ -1,8 +1,14 @@
 using System;
 using System.IO.Ports;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Win32;
 
 namespace GantryControl
 {
@@ -10,15 +16,26 @@ namespace GantryControl
     {
         SerialPort _serialPort;
         // Calibration: Steps per CM
-        // Assuming 200 steps/rev, maybe 0.5cm pitch lead screw? -> 400 steps/cm?
-        // Let's assume 50 steps per cm for now as a placeholder.
-        const double STEPS_PER_CM = 100.0; 
+        // Motor 1 (Physical X, now UI Y): 100 steps/cm
+        // Motor 2 (Physical Y, now UI X): 125 steps/cm
+        const double STEPS_PER_CM_M1 = 100.0; 
+        const double STEPS_PER_CM_M2 = 125.0;
+
+        // Position Tracking (Relative to "Center")
+        double _currentX = 0;
+        double _currentY = 0;
+
+        // Speeds
+        const int TRACING_SPEED = 1;
+        const int RETURN_SPEED = 1;
 
         public MainWindow()
         {
             InitializeComponent();
             LoadPorts();
         }
+
+
 
         private void LoadPorts()
         {
@@ -68,7 +85,7 @@ namespace GantryControl
 
             // Escape byte logic
             byte esc = 0;
-            if (vel == 255) { esc |= 0x01; vel = 0; } // Note: Firmware logic needs to match this replacement
+            if (vel == 255) { esc |= 0x01; vel = 0; } 
             if (yl == 255) { esc |= 0x02; yl = 0; }
             if (yh == 255) { esc |= 0x04; yh = 0; }
             if (xl == 255) { esc |= 0x08; xl = 0; }
@@ -82,18 +99,35 @@ namespace GantryControl
             packet[7] = esc;
 
             _serialPort.Write(packet, 0, 8);
+
+            // Update Position Tracking
+            // dxSteps was sent to Motor 1 (Physical X / UI Y) -> Wait, let's check MoveBtn_Click mapping
+            // In MoveBtn_Click: 
+            // dx (Motor 1) = yCm * STEPS_PER_CM_M1
+            // dy (Motor 2) = xCm * STEPS_PER_CM_M2
+            // So dxSteps corresponds to UI Y, dySteps corresponds to UI X.
+            
+            double movedY = dxSteps / STEPS_PER_CM_M1;
+            double movedX = dySteps / STEPS_PER_CM_M2;
+
+            _currentX += movedX;
+            _currentY += movedY;
         }
 
         private void MoveBtn_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(XInput.Text, out double xCm) && double.TryParse(YInput.Text, out double yCm))
             {
-                int dx = (int)(xCm * STEPS_PER_CM);
-                int dy = (int)(yCm * STEPS_PER_CM);
+                // Axis Flip:
+                // UI X -> Motor 2 (Physical Y)
+                // UI Y -> Motor 1 (Physical X)
+                
+                int dx = (int)(yCm * STEPS_PER_CM_M1); // Motor 1 is now Y input
+                int dy = (int)(xCm * STEPS_PER_CM_M2); // Motor 2 is now X input
                 int vel = (int)VelSlider.Value;
                 
                 SendPacket(dx, dy, vel);
-                StatusText.Text = $"Sent Move: {xCm}cm, {yCm}cm @ {vel}%";
+                StatusText.Text = $"Sent Move: X={xCm}cm, Y={yCm}cm @ {vel}%";
             }
         }
 
@@ -112,7 +146,6 @@ namespace GantryControl
             if (sender is Button btn && btn.Tag is string tag)
             {
                 int id = int.Parse(tag);
-                // Demo Locations from Table
                 double x = 0, y = 0;
                 int v = 50;
 
@@ -126,8 +159,8 @@ namespace GantryControl
                     case 6: x = 0; y = -5; v = 10; break;
                 }
 
-                int dx = (int)(x * STEPS_PER_CM);
-                int dy = (int)(y * STEPS_PER_CM);
+                int dx = (int)(y * STEPS_PER_CM_M1); 
+                int dy = (int)(x * STEPS_PER_CM_M2); 
                 SendPacket(dx, dy, v);
                 StatusText.Text = $"Demo {id}: {x}, {y} @ {v}%";
             }
@@ -135,11 +168,6 @@ namespace GantryControl
 
         private async void ShapeBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Draw a Star (5 points)
-            // We need to send sequential commands. 
-            // Since we don't have feedback from MCU when move is done, we will use delays.
-            // This is a naive implementation. Ideally MCU sends "Done" byte.
-            
             int[][] points = new int[][] {
                 new int[] { 2, 6 },
                 new int[] { 3, -6 },
@@ -150,16 +178,195 @@ namespace GantryControl
 
             foreach (var p in points)
             {
-                int dx = (int)(p[0] * STEPS_PER_CM);
-                int dy = (int)(p[1] * STEPS_PER_CM);
+                int dx = (int)(p[1] * STEPS_PER_CM_M1); 
+                int dy = (int)(p[0] * STEPS_PER_CM_M2); 
                 SendPacket(dx, dy, 80);
                 StatusText.Text = $"Shape: {p[0]}, {p[1]}";
-                
-                // Estimate time: Distance / Speed. 
-                // Let's just wait 1 second for simplicity in this demo.
-                await System.Threading.Tasks.Task.Delay(1500); 
+                await Task.Delay(1500); 
             }
             StatusText.Text = "Shape Complete";
+        }
+
+        // --- New Drawing & Tracing Logic ---
+
+        private void SetCenterBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _currentX = 0;
+            _currentY = 0;
+            StatusText.Text = "Center Set to Current Position (0,0)";
+        }
+
+        private async void GoToCenterBtn_Click(object sender, RoutedEventArgs e)
+        {
+            double moveX = -_currentX;
+            double moveY = -_currentY;
+
+            int dx = (int)(moveY * STEPS_PER_CM_M1);
+            int dy = (int)(moveX * STEPS_PER_CM_M2);
+
+            SendPacket(dx, dy, RETURN_SPEED); // Moderate speed for return
+            StatusText.Text = $"Returning to Center: {moveX:F2}, {moveY:F2}";
+            
+            // Wait for move to complete (estimated)
+            int delay = (int)(Math.Max(Math.Abs(moveX), Math.Abs(moveY)) * 200 + 500);
+            await Task.Delay(delay);
+        }
+
+        private void ImportImageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                BitmapImage bitmap = new BitmapImage(new Uri(openFileDialog.FileName));
+                TraceImage.Source = bitmap;
+                StatusText.Text = "Image Imported";
+            }
+        }
+
+        private void ClearBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DrawingCanvas.Strokes.Clear();
+            TraceImage.Source = null;
+            StatusText.Text = "Canvas Cleared";
+        }
+
+        private async void TraceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            StatusText.Text = "Processing Image...";
+            await Task.Delay(100); // UI Refresh
+
+            // 1. Render Canvas to Bitmap
+            int width = (int)DrawingCanvas.ActualWidth;
+            int height = (int)DrawingCanvas.ActualHeight;
+            
+            // We need to render the parent Grid to capture both Image and InkCanvas
+            Grid parentGrid = (Grid)DrawingCanvas.Parent;
+            
+            RenderTargetBitmap rtb = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+            rtb.Render(parentGrid);
+
+            // 2. Extract Points (Downsampling)
+            // Canvas is 300x300. Physical is 15x15cm.
+            // 1 pixel = 0.05 cm = 0.5 mm.
+            // Let's sample every 2 pixels for 1mm resolution.
+            
+            int stride = width * 4;
+            byte[] pixels = new byte[height * stride];
+            rtb.CopyPixels(pixels, stride, 0);
+
+            List<Point> points = new List<Point>();
+
+            for (int y = 0; y < height; y += 2)
+            {
+                for (int x = 0; x < width; x += 2)
+                {
+                    int index = y * stride + x * 4;
+                    // BGRA format
+                    byte b = pixels[index];
+                    byte g = pixels[index + 1];
+                    byte r = pixels[index + 2];
+                    // byte a = pixels[index + 3];
+
+                    // Simple threshold: if dark enough, it's a point
+                    if (r < 128 && g < 128 && b < 128)
+                    {
+                        // Map pixel (0-300) to cm (-7.5 to 7.5)
+                        // x=0 -> -7.5, x=300 -> 7.5
+                        double cmX = (x / (double)width) * 15.0 - 7.5;
+                        // y=0 -> 7.5 (Top), y=300 -> -7.5 (Bottom)
+                        // Note: WPF Y is down, Physical Y is Up? 
+                        // Let's assume standard Cartesian: Up is +Y. WPF is Down is +Y.
+                        // So y=0 is +7.5, y=300 is -7.5.
+                        double cmY = -((y / (double)height) * 15.0 - 7.5);
+
+                        points.Add(new Point(cmX, cmY));
+                    }
+                }
+            }
+
+            if (points.Count == 0)
+            {
+                StatusText.Text = "No drawing found!";
+                return;
+            }
+
+            StatusText.Text = $"Found {points.Count} points. Sorting...";
+            await Task.Delay(100);
+
+            // 3. Sort Points (Nearest Neighbor)
+            List<Point> sortedPoints = SortPointsNearestNeighbor(points);
+
+            // 4. Execute
+            StatusText.Text = "Tracing...";
+            
+            // Move to first point
+            Point currentPos = new Point(_currentX, _currentY);
+            
+            foreach (var target in sortedPoints)
+            {
+                double moveX = target.X - currentPos.X;
+                double moveY = target.Y - currentPos.Y;
+
+                // Skip tiny moves
+                if (Math.Abs(moveX) < 0.05 && Math.Abs(moveY) < 0.05) continue;
+
+                int dx = (int)(moveY * STEPS_PER_CM_M1);
+                int dy = (int)(moveX * STEPS_PER_CM_M2);
+
+                // Low speed for tracing
+                SendPacket(dx, dy, TRACING_SPEED);
+
+                currentPos = target;
+                
+                // Wait based on distance
+                double dist = Math.Sqrt(moveX*moveX + moveY*moveY);
+                int waitTime = (int)(dist * 100 + 50); // Heuristic
+                await Task.Delay(waitTime);
+            }
+
+            StatusText.Text = "Tracing Complete";
+        }
+
+        private List<Point> SortPointsNearestNeighbor(List<Point> points)
+        {
+            List<Point> sorted = new List<Point>();
+            HashSet<int> visited = new HashSet<int>();
+            
+            // Start with the point closest to current position
+            Point current = new Point(_currentX, _currentY);
+            
+            while (sorted.Count < points.Count)
+            {
+                int nearestIndex = -1;
+                double minDistSq = double.MaxValue;
+
+                for (int i = 0; i < points.Count; i++)
+                {
+                    if (visited.Contains(i)) continue;
+
+                    double dSq = (points[i].X - current.X) * (points[i].X - current.X) + 
+                                 (points[i].Y - current.Y) * (points[i].Y - current.Y);
+                    
+                    if (dSq < minDistSq)
+                    {
+                        minDistSq = dSq;
+                        nearestIndex = i;
+                    }
+                }
+
+                if (nearestIndex != -1)
+                {
+                    visited.Add(nearestIndex);
+                    current = points[nearestIndex];
+                    sorted.Add(current);
+                }
+                else
+                {
+                    break; 
+                }
+            }
+            return sorted;
         }
     }
 }

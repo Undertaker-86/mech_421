@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GantryControl")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ef6b3ed49794379370a69c900184f06642cde49")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aad73195dbaa45abf618267334ea2263efd17b0d")]
 [assembly: System.Reflection.AssemblyProductAttribute("GantryControl")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GantryControl")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

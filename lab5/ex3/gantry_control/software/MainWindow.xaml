@@ -36,23 +36,56 @@
         </StackPanel>
 
         <!-- Demo Panel -->
-        <GroupBox Grid.Column="1" Header="Demo Sequences" Foreground="White" BorderBrush="#444" Padding="10">
-            <StackPanel>
-                <TextBlock Text="Pre-defined Locations" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,0,0,10"/>
-                <WrapPanel>
-                    <Button Content="Loc 1 (5, 0)" Click="DemoBtn_Click" Tag="1" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                    <Button Content="Loc 2 (0, 5)" Click="DemoBtn_Click" Tag="2" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                    <Button Content="Loc 3 (-5, -5)" Click="DemoBtn_Click" Tag="3" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                    <Button Content="Loc 4 (7, 2)" Click="DemoBtn_Click" Tag="4" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                    <Button Content="Loc 5 (-7, 3)" Click="DemoBtn_Click" Tag="5" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                    <Button Content="Loc 6 (0, -5)" Click="DemoBtn_Click" Tag="6" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                </WrapPanel>
+        <!-- Right Panel -->
+        <TabControl Grid.Column="1" Margin="0,0,0,0" Background="#252526" BorderThickness="0">
+            <TabItem Header="Demo" Background="#333" Foreground="White">
+                <GroupBox Header="Demo Sequences" Foreground="White" BorderBrush="#444" Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="Pre-defined Locations" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,0,0,10"/>
+                        <WrapPanel>
+                            <Button Content="Loc 1 (5, 0)" Click="DemoBtn_Click" Tag="1" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                            <Button Content="Loc 2 (0, 5)" Click="DemoBtn_Click" Tag="2" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                            <Button Content="Loc 3 (-5, -5)" Click="DemoBtn_Click" Tag="3" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                            <Button Content="Loc 4 (7, 2)" Click="DemoBtn_Click" Tag="4" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                            <Button Content="Loc 5 (-7, 3)" Click="DemoBtn_Click" Tag="5" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                            <Button Content="Loc 6 (0, -5)" Click="DemoBtn_Click" Tag="6" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                        </WrapPanel>
 
-                <TextBlock Text="Creative Mode" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,20,0,10"/>
-                <Button Content="Draw Star Shape" Click="ShapeBtn_Click" Height="50" Background="#6610f2" Foreground="White" BorderThickness="0"/>
-                
-                <TextBlock x:Name="StatusText" Text="Ready" Margin="0,20,0,0" Foreground="#888" FontStyle="Italic"/>
-            </StackPanel>
-        </GroupBox>
+                        <TextBlock Text="Creative Mode" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,20,0,10"/>
+                        <Button Content="Draw Star Shape" Click="ShapeBtn_Click" Height="50" Background="#6610f2" Foreground="White" BorderThickness="0"/>
+                        
+                        <TextBlock x:Name="StatusText" Text="Ready" Margin="0,20,0,0" Foreground="#888" FontStyle="Italic"/>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+            
+            <TabItem Header="Drawing" Background="#333" Foreground="White">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Set Center" Click="SetCenterBtn_Click" Width="100" Height="30" Margin="0,0,10,0" Background="#17A2B8" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Go to Center" Click="GoToCenterBtn_Click" Width="100" Height="30" Margin="0,0,10,0" Background="#17A2B8" Foreground="White" BorderThickness="0"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="1" BorderBrush="#555" BorderThickness="1" Width="302" Height="302" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Grid Width="300" Height="300" Background="White">
+                            <Image x:Name="TraceImage" Stretch="Fill"/>
+                            <InkCanvas x:Name="DrawingCanvas" Background="Transparent" Width="300" Height="300"/>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Content="Import Image" Click="ImportImageBtn_Click" Width="100" Height="30" Margin="0,0,10,0" Background="#6C757D" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Clear" Click="ClearBtn_Click" Width="80" Height="30" Margin="0,0,10,0" Background="#DC3545" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Trace Drawing" Click="TraceBtn_Click" Width="120" Height="30" Background="#28A745" Foreground="White" BorderThickness="0"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
