@@ -1,0 +1,9 @@
+D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.csproj.AssemblyReference.cache
+D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.Form1.resources
+D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.csproj.GenerateResource.cache
+D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.csproj.CoreCompileInputs.cache
+D:\repository\MECH_421\lab5\ex2\stepper_control\bin\Debug\StepperControl.exe.config
+D:\repository\MECH_421\lab5\ex2\stepper_control\bin\Debug\StepperControl.exe
+D:\repository\MECH_421\lab5\ex2\stepper_control\bin\Debug\StepperControl.pdb
+D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.exe
+D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.pdb

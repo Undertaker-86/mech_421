@@ -1,0 +1,58 @@
+<Window x:Class="GantryControl.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="2-Axis Gantry Control" Height="500" Width="800" Background="#1E1E1E" Foreground="White">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Control Panel -->
+        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+            <GroupBox Header="Connection" Foreground="White" BorderBrush="#444" Padding="10">
+                <StackPanel>
+                    <ComboBox x:Name="PortSelector" Margin="0,0,0,10" Height="30"/>
+                    <Button x:Name="ConnectBtn" Content="Connect" Click="ConnectBtn_Click" Height="30" Background="#007ACC" Foreground="White" BorderThickness="0"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Manual Control" Foreground="White" BorderBrush="#444" Padding="10" Margin="0,20,0,0">
+                <StackPanel>
+                    <TextBlock Text="X Distance (cm)" Foreground="#AAA"/>
+                    <TextBox x:Name="XInput" Text="0" Background="#333" Foreground="White" BorderThickness="0" Padding="5" Margin="0,5,0,10"/>
+
+                    <TextBlock Text="Y Distance (cm)" Foreground="#AAA"/>
+                    <TextBox x:Name="YInput" Text="0" Background="#333" Foreground="White" BorderThickness="0" Padding="5" Margin="0,5,0,10"/>
+
+                    <TextBlock Text="Velocity (%)" Foreground="#AAA"/>
+                    <Slider x:Name="VelSlider" Minimum="1" Maximum="100" Value="50" TickFrequency="10" IsSnapToTickEnabled="True" Margin="0,5,0,10"/>
+                    <TextBlock Text="{Binding ElementName=VelSlider, Path=Value, StringFormat={}{0}%}" HorizontalAlignment="Right" Foreground="#AAA"/>
+
+                    <Button Content="Move" Click="MoveBtn_Click" Height="40" Background="#28A745" Foreground="White" BorderThickness="0" Margin="0,10,0,0"/>
+                    <Button Content="Stop" Click="StopBtn_Click" Height="40" Background="#DC3545" Foreground="White" BorderThickness="0" Margin="0,10,0,0"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- Demo Panel -->
+        <GroupBox Grid.Column="1" Header="Demo Sequences" Foreground="White" BorderBrush="#444" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Pre-defined Locations" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,0,0,10"/>
+                <WrapPanel>
+                    <Button Content="Loc 1 (5, 0)" Click="DemoBtn_Click" Tag="1" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                    <Button Content="Loc 2 (0, 5)" Click="DemoBtn_Click" Tag="2" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                    <Button Content="Loc 3 (-5, -5)" Click="DemoBtn_Click" Tag="3" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                    <Button Content="Loc 4 (7, 2)" Click="DemoBtn_Click" Tag="4" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                    <Button Content="Loc 5 (-7, 3)" Click="DemoBtn_Click" Tag="5" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                    <Button Content="Loc 6 (0, -5)" Click="DemoBtn_Click" Tag="6" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
+                </WrapPanel>
+
+                <TextBlock Text="Creative Mode" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,20,0,10"/>
+                <Button Content="Draw Star Shape" Click="ShapeBtn_Click" Height="50" Background="#6610f2" Foreground="White" BorderThickness="0"/>
+                
+                <TextBlock x:Name="StatusText" Text="Ready" Margin="0,20,0,0" Foreground="#888" FontStyle="Italic"/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</Window>
