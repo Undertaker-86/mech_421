@@ -26,8 +26,15 @@
                     <TextBox x:Name="YInput" Text="0" Background="#333" Foreground="White" BorderThickness="0" Padding="5" Margin="0,5,0,10"/>
 
                     <TextBlock Text="Velocity (%)" Foreground="#AAA"/>
-                    <Slider x:Name="VelSlider" Minimum="1" Maximum="100" Value="50" TickFrequency="10" IsSnapToTickEnabled="True" Margin="0,5,0,10"/>
-                    <TextBlock Text="{Binding ElementName=VelSlider, Path=Value, StringFormat={}{0}%}" HorizontalAlignment="Right" Foreground="#AAA"/>
+                    <Grid Margin="0,5,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Slider x:Name="VelSlider" Grid.Column="0" Minimum="1" Maximum="100" Value="50" TickFrequency="10" IsSnapToTickEnabled="False" Margin="0,0,10,0" ValueChanged="VelSlider_ValueChanged"/>
+                        <TextBox x:Name="VelInput" Grid.Column="1" Text="50" Background="#333" Foreground="White" BorderThickness="0" Padding="5" TextAlignment="Center" TextChanged="VelInput_TextChanged"/>
+                    </Grid>
+                    <TextBlock Text="{Binding ElementName=VelSlider, Path=Value, StringFormat='Speed: {0}%'}" HorizontalAlignment="Right" Foreground="#AAA"/>
 
                     <Button Content="Move" Click="MoveBtn_Click" Height="40" Background="#28A745" Foreground="White" BorderThickness="0" Margin="0,10,0,0"/>
                     <Button Content="Stop" Click="StopBtn_Click" Height="40" Background="#DC3545" Foreground="White" BorderThickness="0" Margin="0,10,0,0"/>

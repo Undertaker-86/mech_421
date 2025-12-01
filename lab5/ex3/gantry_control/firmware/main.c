@@ -249,6 +249,8 @@ void start_move(int16_t dx, int16_t dy, uint8_t speed) {
     // If speed is 100, CCR0 = 1000.
     // If speed is 10, CCR0 = 10000.
     // Formula: CCR0 = 100000 / speed (if speed 1..100)
+    
+    // Speed is now pre-scaled in C# (1-12% range)
     if (speed == 0) speed = 1;
     TA1CCR0 = 40000 / speed; // Adjust constant to tune max speed
 

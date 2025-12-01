@@ -29,10 +29,36 @@ namespace GantryControl
         const int TRACING_SPEED = 1;
         const int RETURN_SPEED = 1;
 
+        private bool _isUpdatingVelocity = false;
+
         public MainWindow()
         {
             InitializeComponent();
             LoadPorts();
+        }
+
+        private void VelSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (_isUpdatingVelocity) return;
+            _isUpdatingVelocity = true;
+            if (VelInput != null)
+            {
+                VelInput.Text = ((int)VelSlider.Value).ToString();
+            }
+            _isUpdatingVelocity = false;
+        }
+
+        private void VelInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isUpdatingVelocity) return;
+            _isUpdatingVelocity = true;
+            if (int.TryParse(VelInput.Text, out int value))
+            {
+                if (value < 1) value = 1;
+                if (value > 100) value = 100;
+                VelSlider.Value = value;
+            }
+            _isUpdatingVelocity = false;
         }
 
 
@@ -124,10 +150,13 @@ namespace GantryControl
                 
                 int dx = (int)(yCm * STEPS_PER_CM_M1); // Motor 1 is now Y input
                 int dy = (int)(xCm * STEPS_PER_CM_M2); // Motor 2 is now X input
-                int vel = (int)VelSlider.Value;
                 
-                SendPacket(dx, dy, vel);
-                StatusText.Text = $"Sent Move: X={xCm}cm, Y={yCm}cm @ {vel}%";
+                // Remap speed: UI 1-100% -> Actual 1-12%
+                double uiSpeed = VelSlider.Value;
+                int actualSpeed = (int)Math.Round(1.0 + (uiSpeed - 1.0) * 11.0 / 99.0);
+                
+                SendPacket(dx, dy, actualSpeed);
+                StatusText.Text = $"Sent Move: X={xCm}cm, Y={yCm}cm @ {uiSpeed:F0}% (actual: {actualSpeed}%)";
             }
         }
 
