@@ -93,6 +93,37 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Image Processing" Background="#333" Foreground="White">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Set Center" Click="SetCenterBtn_Click" Width="100" Height="30" Margin="0,0,10,0" Background="#17A2B8" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Go to Center" Click="GoToCenterBtn_Click" Width="100" Height="30" Margin="0,0,10,0" Background="#17A2B8" Foreground="White" BorderThickness="0"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="1" BorderBrush="#555" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,10">
+                        <Image x:Name="ProcImage" Stretch="Uniform"/>
+                    </Border>
+
+                    <StackPanel Grid.Row="2" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Button Content="Import Image" Click="ProcImportBtn_Click" Width="100" Height="30" Margin="0,0,10,0" Background="#6C757D" Foreground="White" BorderThickness="0"/>
+                            <Button Content="Convert to Drawing" Click="ProcConvertBtn_Click" Width="140" Height="30" Margin="0,0,10,0" Background="#FFC107" Foreground="Black" BorderThickness="0"/>
+                            <CheckBox x:Name="HighResCheck" Content="High Resolution" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Draw Edges" Click="ProcDrawBtn_Click" Width="120" Height="30" Background="#28A745" Foreground="White" BorderThickness="0"/>
+                            <TextBlock x:Name="ProcStatusText" Text="Ready" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="#AAA"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

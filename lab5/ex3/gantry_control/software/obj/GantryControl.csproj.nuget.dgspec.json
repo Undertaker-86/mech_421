@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj": {}
+    "d:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj": {}
   },
   "projects": {
-    "D:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj": {
+    "d:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj",
+        "projectUniqueName": "d:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj",
         "projectName": "GantryControl",
-        "projectPath": "D:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj",
+        "projectPath": "d:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\GantryControl.csproj",
         "packagesPath": "C:\\Users\\gyang\\.nuget\\packages\\",
-        "outputPath": "D:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\obj\\",
+        "outputPath": "d:\\repository\\MECH_421\\lab5\\ex3\\gantry_control\\software\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
