@@ -30,6 +30,7 @@ namespace GantryControl
         const int RETURN_SPEED = 1;
 
         private bool _isUpdatingVelocity = false;
+        private volatile bool _stopRequested = false;
 
         public MainWindow()
         {
@@ -166,12 +167,29 @@ namespace GantryControl
 
         private void StopBtn_Click(object sender, RoutedEventArgs e)
         {
+            _stopRequested = true;
             if (_serialPort == null || !_serialPort.IsOpen) return;
             byte[] packet = new byte[8];
             packet[0] = 255;
             packet[1] = 2; // Stop
             _serialPort.Write(packet, 0, 8);
             StatusText.Text = "Sent Stop";
+        }
+
+        private void StopDrawingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _stopRequested = true;
+            StatusText.Text = "Stopping...";
+            ProcStatusText.Text = "Stopping...";
+            
+            // Also send hardware stop
+            if (_serialPort != null && _serialPort.IsOpen)
+            {
+                byte[] packet = new byte[8];
+                packet[0] = 255;
+                packet[1] = 2; // Stop
+                _serialPort.Write(packet, 0, 8);
+            }
         }
 
         private void ClearHistoryBtn_Click(object sender, RoutedEventArgs e)
@@ -297,12 +315,19 @@ namespace GantryControl
 
             // 4. Execute
             StatusText.Text = "Tracing...";
+            _stopRequested = false;
             
             // Move to first point
             Point currentPos = new Point(_currentX, _currentY);
             
             foreach (var target in sortedPoints)
             {
+                if (_stopRequested)
+                {
+                    StatusText.Text = "Tracing Stopped by User";
+                    return;
+                }
+
                 double moveX = target.X - currentPos.X;
                 double moveY = target.Y - currentPos.Y;
 
@@ -525,11 +550,18 @@ namespace GantryControl
             List<Point> sortedPoints = SortPointsNearestNeighbor(points);
 
             ProcStatusText.Text = "Drawing...";
+            _stopRequested = false;
             
             Point currentPos = new Point(_currentX, _currentY);
             
             foreach (var target in sortedPoints)
             {
+                if (_stopRequested)
+                {
+                    ProcStatusText.Text = "Drawing Stopped by User";
+                    return;
+                }
+
                 double moveX = target.X - currentPos.X;
                 double moveY = target.Y - currentPos.Y;
 

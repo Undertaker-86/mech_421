@@ -86,7 +86,8 @@
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
                         <Button Content="Import Image" Click="ImportImageBtn_Click" Width="100" Height="30" Margin="0,0,10,0" Background="#6C757D" Foreground="White" BorderThickness="0"/>
                         <Button Content="Clear" Click="ClearBtn_Click" Width="80" Height="30" Margin="0,0,10,0" Background="#DC3545" Foreground="White" BorderThickness="0"/>
-                        <Button Content="Trace Drawing" Click="TraceBtn_Click" Width="120" Height="30" Background="#28A745" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Trace Drawing" Click="TraceBtn_Click" Width="120" Height="30" Background="#28A745" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+                        <Button Content="Stop" Click="StopDrawingBtn_Click" Width="80" Height="30" Background="#DC3545" Foreground="White" BorderThickness="0"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -115,7 +116,8 @@
                             <CheckBox x:Name="HighResCheck" Content="High Resolution" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="Draw Edges" Click="ProcDrawBtn_Click" Width="120" Height="30" Background="#28A745" Foreground="White" BorderThickness="0"/>
+                            <Button Content="Draw Edges" Click="ProcDrawBtn_Click" Width="120" Height="30" Background="#28A745" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
+                            <Button Content="Stop" Click="StopDrawingBtn_Click" Width="80" Height="30" Background="#DC3545" Foreground="White" BorderThickness="0"/>
                             <TextBlock x:Name="ProcStatusText" Text="Ready" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="#AAA"/>
                         </StackPanel>
                     </StackPanel>
