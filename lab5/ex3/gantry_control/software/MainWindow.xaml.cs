@@ -152,10 +152,10 @@ namespace GantryControl
                 int dx = (int)(yCm * STEPS_PER_CM_M1); // Motor 1 is now Y input
                 int dy = (int)(xCm * STEPS_PER_CM_M2); // Motor 2 is now X input
                 
-                // Remap speed: UI 1-100% -> Actual 1-9.8 (Old 80%)
+                // Remap speed: UI 1-100% -> Actual 1-6.4 (Old 50%)
                 double uiSpeed = VelSlider.Value;
-                // Old max was 12 (range 11). New max is value at 80%: 1 + (79/99)*11 = ~9.77
-                double targetMax = 1.0 + (80.0 - 1.0) * 11.0 / 99.0;
+                // Old max was 12 (range 11). New max is value at 50%: 1 + (49/99)*11 = ~6.44
+                double targetMax = 1.0 + (50.0 - 1.0) * 11.0 / 99.0;
                 int actualSpeed = (int)Math.Round(1.0 + (uiSpeed - 1.0) * (targetMax - 1.0) / 99.0);
                 
                 SendPacket(dx, dy, actualSpeed);
