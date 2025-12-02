@@ -285,10 +285,10 @@ namespace GantryControl
                     byte b = pixels[index];
                     byte g = pixels[index + 1];
                     byte r = pixels[index + 2];
-                    // byte a = pixels[index + 3];
+                    byte a = pixels[index + 3];
 
-                    // Simple threshold: if dark enough, it's a point
-                    if (r < 128 && g < 128 && b < 128)
+                    // Simple threshold: if dark enough AND not transparent
+                    if (a > 50 && r < 128 && g < 128 && b < 128)
                     {
                         // Map pixel (0-300) to cm (-6 to 6)
                         // x=0 -> -6, x=300 -> 6
