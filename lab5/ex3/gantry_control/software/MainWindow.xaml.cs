@@ -158,7 +158,9 @@ namespace GantryControl
                 int actualSpeed = (int)Math.Round(1.0 + (uiSpeed - 1.0) * (targetMax - 1.0) / 99.0);
                 
                 SendPacket(dx, dy, actualSpeed);
-                StatusText.Text = $"Sent Move: X={xCm}cm, Y={yCm}cm @ {uiSpeed:F0}% (actual: {actualSpeed}%)";
+                string msg = $"Sent Move: X={xCm}cm, Y={yCm}cm @ {uiSpeed:F0}%";
+                StatusText.Text = msg;
+                AddToHistory(msg);
             }
         }
 
@@ -172,50 +174,16 @@ namespace GantryControl
             StatusText.Text = "Sent Stop";
         }
 
-        private void DemoBtn_Click(object sender, RoutedEventArgs e)
+        private void ClearHistoryBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is string tag)
-            {
-                int id = int.Parse(tag);
-                double x = 0, y = 0;
-                int v = 50;
-
-                switch (id)
-                {
-                    case 1: x = 5; y = 0; v = 100; break;
-                    case 2: x = 0; y = 5; v = 50; break;
-                    case 3: x = -5; y = -5; v = 20; break;
-                    case 4: x = 7; y = 2; v = 60; break;
-                    case 5: x = -7; y = 3; v = 80; break;
-                    case 6: x = 0; y = -5; v = 10; break;
-                }
-
-                int dx = (int)(y * STEPS_PER_CM_M1); 
-                int dy = (int)(x * STEPS_PER_CM_M2); 
-                SendPacket(dx, dy, v);
-                StatusText.Text = $"Demo {id}: {x}, {y} @ {v}%";
-            }
+            HistoryList.Items.Clear();
+            StatusText.Text = "History Cleared";
         }
 
-        private async void ShapeBtn_Click(object sender, RoutedEventArgs e)
+        private void AddToHistory(string message)
         {
-            int[][] points = new int[][] {
-                new int[] { 2, 6 },
-                new int[] { 3, -6 },
-                new int[] { -5, 4 },
-                new int[] { 6, 0 },
-                new int[] { -6, -4 }
-            };
-
-            foreach (var p in points)
-            {
-                int dx = (int)(p[1] * STEPS_PER_CM_M1); 
-                int dy = (int)(p[0] * STEPS_PER_CM_M2); 
-                SendPacket(dx, dy, 80);
-                StatusText.Text = $"Shape: {p[0]}, {p[1]}";
-                await Task.Delay(1500); 
-            }
-            StatusText.Text = "Shape Complete";
+            string time = DateTime.Now.ToString("HH:mm:ss");
+            HistoryList.Items.Insert(0, $"[{time}] {message}");
         }
 
         // --- New Drawing & Tracing Logic ---

@@ -45,24 +45,21 @@
         <!-- Demo Panel -->
         <!-- Right Panel -->
         <TabControl Grid.Column="1" Margin="0,0,0,0" Background="#252526" BorderThickness="0">
-            <TabItem Header="Demo" Background="#333" Foreground="White">
-                <GroupBox Header="Demo Sequences" Foreground="White" BorderBrush="#444" Padding="10">
-                    <StackPanel>
-                        <TextBlock Text="Pre-defined Locations" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,0,0,10"/>
-                        <WrapPanel>
-                            <Button Content="Loc 1 (5, 0)" Click="DemoBtn_Click" Tag="1" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                            <Button Content="Loc 2 (0, 5)" Click="DemoBtn_Click" Tag="2" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                            <Button Content="Loc 3 (-5, -5)" Click="DemoBtn_Click" Tag="3" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                            <Button Content="Loc 4 (7, 2)" Click="DemoBtn_Click" Tag="4" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                            <Button Content="Loc 5 (-7, 3)" Click="DemoBtn_Click" Tag="5" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                            <Button Content="Loc 6 (0, -5)" Click="DemoBtn_Click" Tag="6" Width="100" Height="40" Margin="5" Background="#333" Foreground="White"/>
-                        </WrapPanel>
-
-                        <TextBlock Text="Creative Mode" FontSize="16" FontWeight="Bold" Foreground="#AAA" Margin="0,20,0,10"/>
-                        <Button Content="Draw Star Shape" Click="ShapeBtn_Click" Height="50" Background="#6610f2" Foreground="White" BorderThickness="0"/>
+            <TabItem Header="History" Background="#333" Foreground="White">
+                <GroupBox Header="Command History" Foreground="White" BorderBrush="#444" Padding="10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                         
-                        <TextBlock x:Name="StatusText" Text="Ready" Margin="0,20,0,0" Foreground="#888" FontStyle="Italic"/>
-                    </StackPanel>
+                        <ListBox x:Name="HistoryList" Grid.Row="0" Background="#333" Foreground="White" BorderThickness="0" Margin="0,0,0,10"/>
+                        
+                        <Button Grid.Row="1" Content="Clear History" Click="ClearHistoryBtn_Click" Height="30" Background="#DC3545" Foreground="White" BorderThickness="0" Margin="0,0,0,10"/>
+                        
+                        <TextBlock x:Name="StatusText" Grid.Row="2" Text="Ready" Foreground="#888" FontStyle="Italic"/>
+                    </Grid>
                 </GroupBox>
             </TabItem>
             
