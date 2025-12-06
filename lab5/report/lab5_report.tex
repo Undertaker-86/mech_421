@@ -11,7 +11,7 @@
 \usepackage{xcolor}
 \usepackage{tcolorbox}
 \usepackage{tikz}
-\usetikzlibrary{shapes, arrows, positioning, calc}
+\usetikzlibrary{shapes, arrows, positioning, calc, decorations.pathmorphing}
 \usepackage{circuitikz} % Try to use if available, otherwise fallback to tikz
 \usepackage{listings}
 \usepackage{array}
@@ -159,8 +159,7 @@ First, we assembled and soldered the PCB, verifying proper functionality of the 
 and motor driver components. We configured UART communication to enable data transfer for 
 future exercises. Second, we developed firmware to control a stepper motor using half-stepping, 
 implementing both single-step commands and continuous velocity control through a C\# graphical interface. 
-We measured the maximum loaded and unloaded speeds of the motor and analyzed the factors limiting its performance. 
-Finally, we expanded the system to control a two-axis gantry stage using dual stepper motors. We programmed the microcontroller 
+We expanded the system to control a two-axis gantry stage using dual stepper motors. We programmed the microcontroller 
 to execute coordinated movements, allowing the stage to follow straight-line paths between specified coordinates. 
 The system successfully drew predetermined shapes and a custom design, demonstrating precise synchronized control of both axes. 
 Throughout the lab, we gained practical experience in PCB assembly, firmware development, serial communication protocols, 
@@ -318,15 +317,18 @@ The power supply section converts the 12V input to 5V and 3.3V rails.
     \item For LEDs, ensure correct orientation.
     \item To verify the system, connect to a 12V power supply. The power LED should glow brightly at 12V. Additionally, measure $\approx$5.0V and $\approx$3.3V on the regulators' outputs.
 \end{itemize}
+See \Cref{fig:power-supply-layout,fig:power-supply-schematic} for layout and schematic reference.
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{figures/power_supply_layout.png}
     \caption{Power supply PCB layout}
+    \label{fig:power-supply-layout}
   \end{subfigure}\hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{figures/power_supply_schematic.png}
     \caption{Power supply schematic}
+    \label{fig:power-supply-schematic}
   \end{subfigure}
   \caption{Power supply reference during assembly}
 \end{figure}
@@ -342,15 +344,18 @@ This section enables communication with the PC.
     \item To verify, plug into a PC; listen for the USB connect chime and confirm the device enumerates as "USB Serial Port (COM3)". 
     The FT230XS should stay cool to the touch (no noticeable heating).
 \end{itemize}
+See \Cref{fig:usb-layout,fig:usb-schematic} for the USB layout and schematic.
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{figures/usb_layout.png}
     \caption{USB interface PCB layout}
+    \label{fig:usb-layout}
   \end{subfigure}\hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{figures/usb_schematic.png}
     \caption{USB interface schematic}
+    \label{fig:usb-schematic}
   \end{subfigure}
   \caption{USB interface reference during assembly}
 \end{figure}
@@ -363,10 +368,12 @@ The core of the system.
     \item For the crystal, there are 3 pads, you can do the tack and reflow technique on one pad, then solder the other two pads normally.
     \item To verify the circuit works, we flashed a simple LED blink for the MSP430 via CCS; the blinking LED confirms JTAG wiring and basic MCU operation.
 \end{itemize}
+See \Cref{fig:mcu-layout} for the MSP430 placement and decoupling.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/mcu_layout.png}
   \caption{MSP430FR5739 layout reference}
+  \label{fig:mcu-layout}
 \end{figure}
 
 \subsubsection{Step 5: Motor Driver and Encoder}
@@ -380,23 +387,36 @@ Finally, the high-power motor drivers and encoder logic were added.
     \item The encoder section has not yet been tested in this lab as it will be used for future MECH423 labs, however we can still 
     verify continuity on the encoder pins to ensure no shorts.
 \end{itemize}
+See \Cref{fig:motor-driver-layout,fig:shaft-encoder-layout} for driver and encoder routing.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/motor_driver_layout.png}
   \caption{Motor driver layout reference}
+  \label{fig:motor-driver-layout}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/shaft_encoder_layout.png}
   \caption{Shaft encoder layout reference}
+  \label{fig:shaft-encoder-layout}
 \end{figure}
 
 \subsection{Results and Discussion}
-\imageplaceholder{Assembled PCB (Front)}{Insert a clear photo of the fully assembled PCB (Front View).}
-\imageplaceholder{Assembled PCB (Back)}{Insert a clear photo of the fully assembled PCB (Back View).}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/pcb_board_front.jpeg}
+  \caption{Assembled PCB (Front)}
+  \label{fig:ex2-pcb-front}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/pcb_board_back_overview.jpeg}
+  \caption{Assembled PCB (Back)}
+  \label{fig:ex2-pcb-back}
+\end{figure}
 
-Challenges encountered:
+\subsection{Challenges} 
 \begin{enumerate}
     \item Early joints on resistors/capacitors/LEDs worked electrically but looked rough; practice improved finish. One pad lifted when we overused the vacuum pump, but we repaired the net with a wire jumper.
     \item Fine-pitch IC pins were hard to see; a magnifying glass was essential to spot bridges.
@@ -411,6 +431,37 @@ Challenges encountered:
 
 \subsection{Objective}
 To control a bipolar stepper motor using the assembled PCB. This involves generating precise PWM waveforms to drive the motor phases in a specific sequence (half-stepping) and implementing a UART interface for velocity control.
+
+\subsection{UI Computations and Telemetry}
+\paragraph{Single-step.} Each press calls \texttt{MoveByAngle} with the half-step increment $\theta_{\text{step}} = 360^{\circ}/N_{\text{steps}}$ and wraps position with $p_{\text{deg}} = (\text{deg} \bmod 360 + 360) \bmod 360$ to stay in $[0,360)$.
+
+\paragraph{Continuous mode.} The slider $s\in[-100,100]$ maps to signed steps/s, RPM, and TA1CCR0:
+\begin{align}
+  f_{\text{steps}} &= \max\!\bigl(1,\; |s|/100 \cdot f_{\text{max}}\bigr)\,\text{sgn}(s) \\
+  \text{RPM} &= \frac{f_{\text{steps}}\cdot 60}{N_{\text{steps}}} \\
+  \text{TA1CCR0} &= \frac{f_{\text{clk}}}{|f_{\text{steps}}|} - 1,\qquad f_{\text{clk}}=1{,}000{,}000~\text{Hz} \\
+  f_{\text{step\_timer}} &= \frac{f_{\text{clk}}}{\text{TA1CCR0}+1}
+\end{align}
+where $N_{\text{steps}}=200$ (SY35ST36 motor) and $f_{\text{max}}$ comes from the UI numeric box (default 1200~steps/s). The code that applies these equations and sends the UART packet is shown in \Cref{lst:handle-velocity}.
+\begin{lstlisting}[language=C, caption={Continuous mode mapping and packet send}, label={lst:handle-velocity}]
+private void HandleVelocityChange()
+{
+    int sliderValue = velocityTrackBar.Value;          // s in [-100, 100]
+    double maxStepsPerSecond = (double)maxSpeedNumeric.Value; // f_max
+    if (sliderValue == 0) { StopMotor("Slider at zero -> stop timer"); return; }
+    double fraction = Math.Abs(sliderValue) / 100.0;
+    double commandedStepsPerSecond = Math.Max(1.0, fraction * maxStepsPerSecond);
+    bool clockwise = sliderValue > 0;
+    double rpm = commandedStepsPerSecond * 60.0 / StepperCommander.StepsPerRevolution;
+    if (!clockwise) rpm *= -1;
+    byte dir; ushort ccr0;
+    byte[] packet = commander.BuildContinuousPacketFromRpm(rpm, out ccr0, out dir);
+    commander.SendPacket(packet);
+    UpdateVelocityLabels(sliderValue, commandedStepsPerSecond, ccr0);
+    UpdateModeAndFreq($"Continuous {(clockwise ? "CW" : "CCW")}", ccr0);
+    SetTelemetry(commander.CurrentAngleDeg, commandedStepsPerSecond);
+}
+\end{lstlisting}
 
 \subsection{Stepper Motor Basics}
 \subsubsection{Stepper Motor Operation}
@@ -444,7 +495,7 @@ The half-stepping sequence requires 8 distinct states. We used the following bit
 the phases A1, A2, B1, B2:
 
 \begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=Stepper Step Table]
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C, caption={Half-step lookup table}, label={lst:stepper-table}]
 // Half-step lookup table (8 steps)
 // bit0=A1, bit1=A2, bit2=B1, bit3=B2
 static const uint8_t stepper_table[8] = {
@@ -464,7 +515,7 @@ static const uint8_t stepper_table[8] = {
 The \texttt{step\_motor1} function applies these masks to the Timer Capture Compare Registers 
 (TB0CCR1/2, TB1CCR1/2) to set the PWM duty cycle for each connected pin.
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C, caption={Step generation logic}, label={lst:step-motor1}]
 void step_motor1(uint8_t step) {
     uint8_t mask = stepper_table[step & 0x07];
     // Update PWM Duty Cycles based on mask
@@ -487,7 +538,7 @@ While this lab focused on stepper motors, the lab manual did mention DC motors f
 Controlling the movement of a DC motor would require constantly changing the PWM to match the desired speed or position. 
 As such, often to control a DC motor's position, a PID loop reading an encoder is required. The pseudocode for such a system would be:
 
-\begin{lstlisting}[language=C, caption=DC Motor PID Pseudocode]
+\begin{lstlisting}[language=C, caption={DC motor PID pseudocode}, label={lst:dc-pid}]
 // ISR triggered by Encoder Pulse
 void Encoder_ISR() {
     if (ChannelA == ChannelB) position++;
@@ -509,7 +560,42 @@ void Control_Loop() {
 
 \subsection{Software Interface (C\#)}
 The C\# application acts as the commander. It sends packets to the MCU to set velocity or trigger single steps.
+We programmed it to have two modes: single-step (half-step CW/CCW) and continuous velocity control (CW/CCW). 
+The half-step buttons issue one table entry per press, update position telemetry, and stop the motor when requested. 
+Continuous mode streams a signed speed derived from the slider and converts it to TA1CCR0. See \Cref{fig:ui-step,fig:ui-continuous} 
+for both screens.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/ex2_ui_cont.png}
+  \caption{Single-step UI: half-step CW/CCW buttons with stop and position telemetry}
+  \label{fig:ui-step}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/ex2_ui_step.png}
+  \caption{Continuous UI: slider sets signed speed, TA1CCR0 is reported}
+  \label{fig:ui-continuous}
+\end{figure}
 
+Packets follow the layout in \Cref{fig:packet-diagram} and feed the half-step table in \Cref{lst:stepper-table}. The start byte gates parsing; the instruction selects mode (1=CCW cont, 2=CW cont, 3/4=single-step CCW/CW); `DataH|DataL` carry TA1CCR0; the escape byte flags 0xFF substitutions.
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[node distance=0.3cm, font=\sffamily\small]
+    \tikzstyle{field}=[rectangle, draw, rounded corners=2pt, minimum height=0.9cm, align=center, inner sep=4pt]
+    \node[field] (start) {Start\\(0xFF)};
+    \node[field, right=of start] (instr) {Instr\\(1..4)};
+    \node[field, right=of instr] (datah) {DataH\\CCR0[15:8]};
+    \node[field, right=of datah] (datal) {DataL\\CCR0[7:0]};
+    \node[field, right=of datal] (esc) {Escape\\mask};
+    \draw[->] (start.south) -- ++(0,-0.6) node[below] {byte 1};
+    \draw[->] (instr.south) -- ++(0,-0.6) node[below] {byte 2};
+    \draw[->] (datah.south) -- ++(0,-0.6) node[below] {byte 3};
+    \draw[->] (datal.south) -- ++(0,-0.6) node[below] {byte 4};
+    \draw[->] (esc.south) -- ++(0,-0.6) node[below] {byte 5};
+  \end{tikzpicture}
+  \caption{UART packet layout for step/continuous commands}
+  \label{fig:packet-diagram}
+\end{figure}
 \subsubsection{Communication Protocol}
 The packet structure is designed for reliability. Table \ref{tab:packet} details the byte layout.
 
@@ -529,7 +615,7 @@ Escape Byte & 5 & \begin{tabular}[c]{@{}l@{}}Bitmask for handling 255 in data:\\
 \end{table}
 
 Code snippet for packet building (from \texttt{StepperCommander.cs}):
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C, caption={Packet builder}, label={lst:build-packet}]
 public byte[] BuildPacket(byte dirByte, ushort ccr0)
 {
     byte high = (byte)(ccr0 >> 8);
@@ -541,9 +627,6 @@ public byte[] BuildPacket(byte dirByte, ushort ccr0)
 \end{lstlisting}
 
 \subsection{Results}
-\imageplaceholder{C Sharp GUI Screenshot}{Insert a screenshot of the C\# application controlling the motor.}
-
-\imageplaceholder{Packet Structure}{Insert a diagram of the UART packet structure (Start Byte, Command, Data, Checksum).}
 
 \begin{figure}[H]
 \centering
@@ -581,14 +664,44 @@ public byte[] BuildPacket(byte dirByte, ushort ccr0)
 \label{fig:sch_ex2}
 \end{figure}
 
-\textbf{Speed Measurements:}
-\begin{itemize}
-    \item \textbf{Max No-Load Speed}: [Value] steps/s
-    \item \textbf{Max Loaded Speed}: [Value] steps/s
-\end{itemize}
+\subsection{Speed Results and Limits}
+\textbf{Measured and commanded speeds:}
+From our software, we are sending a maximum frequency of 1200 Hz. Since each pulse creates a half step, the value for theoretical step/s is
+\begin{equation}
+    f_{\text{steps}} = \frac{f_{\text{max}}}{2} = \frac{1200}{2} = 600 \text{ steps/s}
+\end{equation}
+For a motor with 200 steps/rev, this is
+\begin{equation}
+    \text{rev/s}_{\text{cmd}} = \frac{f_{\text{steps}}}{200} = \frac{600}{200} = 3 \text{ rev/s}
+\end{equation}
 
-\textbf{Discussion:}
-The maximum speed is limited by the inductance of the motor coils, which opposes rapid current changes. As speed increases, the current doesn't have enough time to reach the target level within a step period, reducing torque until the motor stalls.
+We then measured the actual speed of the motor using the scope in \Cref{fig:motor_oscilloscope}. The scope captured a stable step frequency of $f_{\text{steps}} \approx 759$ Hz; 
+which gives $\text{steps/s}_{\text{meas}} = \frac{759}{2} = 379.5 \text{ steps/s}$ and $\text{rev/s}_{\text{meas}}=\frac{759}{2*200}=1.895$ rev/s.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/motor_oscilloscope.png}
+    \caption{Scope capture of step frequency}
+    \label{fig:motor_oscilloscope}
+\end{figure}
+
+\subsubsection{Discussion}
+The theoretical UI ceiling is fixed by $f_{\text{max}} = 1200$ Hz, corresponding to a shaft speed of 3 rev/s. However, our experimental results demonstrated a physical limit of approximately $1.9$ rev/s ($f_{\text{ISR}} \approx 759$ Hz) before the motor lost synchronization.
+
+We think that this discrepancy is primarily governed by the physical properties of the motor. The Pololu 1208 stepper has a relatively high coil 
+inductance ($13.5$ mH). As the step rate increases, the back-EMF rises and the time 
+interval available to energize the coils decreases, preventing the current from reaching its rated level. This results in a sharp torque reduction, causing the motor to stall well below the software limit.
+
+Additionally, software timing errors may contribute to the restricted speed. At higher frequencies, interrupt latency or timing jitter can introduce uneven step intervals. This instability can cause the motor to stall prematurely by momentarily demanding a higher acceleration than the available torque can support. Practically, a safe operating ceiling should be set near 1.5 rev/s to account for these physical and timing variances.
+
+\subsection{Challenges}
+\begin{enumerate}
+    \item Connecting the stepper motor coils (A1, A2, B1, B2) to the driver required careful verification. Swapping a pair could reverse direction or cause vibration without movement.
+    \item Setting the VREF on the driver was critical. If too low, the motor skips steps; if too high, the motor/driver overheats.
+    \item Starting the motor at high speed immediately causes stalling due to inertia. We had to find the maximum start speed to avoid this.
+    \item At certain speeds, the motor vibrates excessively. Avoiding those specific frequencies helped maintain smooth operation.
+    \item Sending commands too fast from the PC caused the RX buffer to overflow. Implementing a circular buffer fixed this issue.
+\end{enumerate}
 
 \section{Exercise 3: 2-Axis Control with Dual Stepper Motors}
 
@@ -603,106 +716,406 @@ The 2-axis gantry was assembled using V-slot aluminum extrusions and timing belt
     \item \textbf{Frame}: Assembled the base frame using corner brackets and T-nuts.
     \item \textbf{X-Axis}: Mounted the X-axis carriage and belt drive.
     \item \textbf{Y-Axis}: Mounted the Y-axis extrusion on top of the X-carriage.
-    \item \textbf{Pen Holder}: Uniquely, we designed and 3D printed a custom pen holder that attaches to the Y-axis slider. This holder uses a interference fit to secure a Sharpie marker, ensuring rigid contact with the paper during drawing operations.
+    \item \textbf{Pen Holder}:  We designed and 3D printed a custom pen holder that attaches to the Y-axis slider. This holder uses a interference fit to secure a Sharpie marker, ensuring rigid contact with the paper during drawing operations.
 \end{enumerate}
-
-\subsubsection{Wiring the Second Motor}
-To enable Y-axis control, a second stepper driver (Pololu DRV8825) was wired to the system. Figure \ref{fig:sch_ex3} illustrates the 2-axis connections.
+Our assembled gantry is shown in Figure \ref{fig:gantry}.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[node distance=2.5cm, auto, >=latex, thick]
-    \tikzstyle{block} = [rectangle, draw, fill=blue!10, text width=2cm, text centered, minimum height=3cm]
-    \tikzstyle{motor} = [circle, draw, fill=gray!20, text width=1.5cm, text centered, minimum height=1.5cm]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/gantry_annotated.jpg}%
+  \caption{Gantry Assembly}
+  \label{fig:gantry}
+\end{figure}
 
-    \node [block] (mcu) {\textbf{MSP430}};
-    \node [block, right=of mcu, yshift=2cm] (drvX) {\textbf{DRV8841}\\(X-Axis)};
-    \node [block, right=of mcu, yshift=-2cm] (drvY) {\textbf{Pololu}\\(Y-Axis)};
-    \node [motor, right=of drvX] (motX) {\textbf{Motor}\\X};
-    \node [motor, right=of drvY] (motY) {\textbf{Motor}\\Y};
-    
-    % Connections
-    \draw[->] (mcu.east) -- (drvX.west) node[midway, above, sloped] {PWM/Dir};
-    \draw[->] (mcu.east) -- (drvY.west) node[midway, below, sloped] {Step/Dir};
-    \draw[->] (drvX.east) -- (motX.west);
-    \draw[->] (drvY.east) -- (motY.west);
-\end{tikzpicture}
-\caption{2-Axis Control Wiring Diagram}
-\label{fig:sch_ex3}
+\subsubsection{Motor 2 Pin Map and Wiring Reference}
+Motor 1 (X) uses the same wiring diagram for part 2 with timer PWM pins (TB0.1/0.2 on P1.4/P1.5 and TB1.1/1.2 on P3.4/P3.5). 
+For Motor 2 (Y), we need to use the external driver which uses the GPIO-mapped driver pins below:
+\begin{itemize}
+    \item P1.3 $\rightarrow$ Motor 2 PWM/enable
+    \item PJ.0/PJ.1 $\rightarrow$ AIN2/AIN1 (Coil A)
+    \item PJ.2/PJ.3 $\rightarrow$ BIN1/BIN2 (Coil B)
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/ex3_wiring_diagram.png}
+  \caption{2-axis control wiring diagram}
+  \label{fig:ex3-wiring}
+\end{figure}
+
+\subsubsection{Gantry Mechanism}
+\begin{figure}[H]
+  \centering
+  \IfFileExists{figures/ex3_gantry.png}{%
+    \includegraphics[width=0.8\textwidth]{figures/ex3_gantry.png}%
+  }{%
+    \fbox{\parbox{0.75\textwidth}{Gantry sketch/assembly (add \texttt{figures/ex3\_gantry.png}) showing X/Y rails, carriage, and pen holder.}}%
+  }
+  \caption{Gantry arrangement: orthogonal rails with pen carriage}
+  \label{fig:ex3-gantry}
 \end{figure}
 
 \subsubsection{Coordinated Motion Control (Firmware)}
-To draw straight lines and complex shapes, the X and Y axes must move in sync. We implemented a simplified Digital Differential Analyzer (DDA) algorithm in the firmware.
+The firmware implements a Bresenham-like DDA (Digital Differential Analyzer) algorithm to drive both motors simultaneously in a straight line. The `start\_move` function calculates the total steps needed (the larger of $\Delta x$ or $\Delta y$) and sets the timer frequency based on the requested speed.
 
-\textbf{Firmware Logic:}
-The `Timer\_A1\_ISR` function serves as the central tick for motion.
-\begin{enumerate}
-    \item \textbf{Accumulators}: We maintain `acc\_x` and `acc\_y`.
-    \item \textbf{Step Decision}: At every interrupt, we add the target delta ($\Delta X, \Delta Y$) to the accumulators.
-    \item \textbf{Threshold}: If an accumulator exceeds `total\_steps`, a step is issued to that motor, and `total\_steps` is subtracted.
-\end{enumerate}
-This ensures that the ratio of X steps to Y steps is constant, producing a straight line.
+The firmware receives an 8-byte packet from the PC to initiate moves. The packet structure is shown in Figure \ref{fig:ex3-packet}.
 
-\begin{lstlisting}[language=C]
-// DDA Algorithm in Timer_A1_ISR
-acc_x += delta_x;
-acc_y += delta_y;
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[node distance=0.3cm, font=\sffamily\small]
+    \tikzstyle{field}=[rectangle, draw, rounded corners=2pt, minimum height=0.9cm, align=center, inner sep=4pt]
+    \node[field] (start) {Start\\(0xFF)};
+    \node[field, right=of start] (cmd) {Cmd\\(1=Move)};
+    \node[field, right=of cmd] (xh) {XH\\(High)};
+    \node[field, right=of xh] (xl) {XL\\(Low)};
+    \node[field, right=of xl] (yh) {YH\\(High)};
+    \node[field, right=of yh] (yl) {YL\\(Low)};
+    \node[field, right=of yl] (vel) {Vel\\(Speed)};
+    \node[field, right=of vel] (esc) {Esc\\(Mask)};
+    
+    \draw[->] (start.south) -- ++(0,-0.4) node[below] {Byte 1};
+    \draw[->] (cmd.south) -- ++(0,-0.4) node[below] {Byte 2};
+    \draw[->] (xh.south) -- ++(0,-0.4) node[below] {Byte 3};
+    \draw[->] (xl.south) -- ++(0,-0.4) node[below] {Byte 4};
+    \draw[->] (yh.south) -- ++(0,-0.4) node[below] {Byte 5};
+    \draw[->] (yl.south) -- ++(0,-0.4) node[below] {Byte 6};
+    \draw[->] (vel.south) -- ++(0,-0.4) node[below] {Byte 7};
+    \draw[->] (esc.south) -- ++(0,-0.4) node[below] {Byte 8};
+  \end{tikzpicture}
+  \caption{UART packet structure for 2-axis control (8 bytes)}
+  \label{fig:ex3-packet}
+\end{figure}
 
-if (acc_x >= total_steps_needed) {
-    motor1_state = (motor1_state + step_x_inc) & 0x07;
-    step_motor1(motor1_state);
-    acc_x -= total_steps_needed;
+\begin{lstlisting}[language=C, caption={Firmware: Start Move Logic}, label={lst:start-move}]
+void start_move(int16_t dx, int16_t dy, uint8_t speed) {
+    delta_x = abs(dx);
+    delta_y = abs(dy);
+    total_steps_needed = (delta_x > delta_y) ? delta_x : delta_y;
+    
+    // Speed mapping: CCR0 = 40000 / speed
+    if (speed == 0) speed = 1;
+    TA1CCR0 = 40000 / speed; 
+
+    is_moving = 1;
+    TA1CTL |= MC__UP; // Start Timer
 }
-// Repeat for Y...
 \end{lstlisting}
 
-\subsection{Software Interface Features}
-The C\# application provides a comprehensive dashboard:
+The Timer A1 ISR executes the stepping logic. It accumulates the delta values and steps the respective motor when the accumulator exceeds the total steps. This ensures the slope is maintained.
+
+\begin{lstlisting}[language=C, caption={Firmware: DDA Stepping ISR}, label={lst:dda-isr}]
+__interrupt void Timer_A1_ISR(void) {
+    acc_x += delta_x;
+    acc_y += delta_y;
+
+    if (acc_x >= total_steps_needed) {
+        motor1_state = (motor1_state + step_x_inc) & 0x07;
+        step_motor1(motor1_state);
+        acc_x -= total_steps_needed;
+    }
+    
+    if (acc_y >= total_steps_needed) {
+        motor2_state = (motor2_state + step_y_inc) & 0x07;
+        step_motor2(motor2_state);
+        acc_y -= total_steps_needed;
+    }
+}
+\end{lstlisting}
+
+To control the gantry, we use C\# to create a simple UI to control the gantry. there are 3 specifics features:
 \begin{itemize}
-    \item \textbf{Connection Panel}: Serial port selection and connect/disconnect.
-    \item \textbf{Manual Control}: Slider for variable speed (1-100\%), Buttons for single stepping.
-    \item \textbf{Gantry Control}: Input fields for X/Y coordinates (cm) and "Move" button.
-    \item \textbf{Image Processing}:
-    \begin{itemize}
-        \item \textbf{Canvas}: Displays the loaded image and computed path.
-        \item \textbf{Import}: Loads JPG/PNG.
-        \item \textbf{Process}: Runs Sobel edge detection and Nearest Neighbor sorting.
-        \item \textbf{Draw}: Sends the point stream to the robot.
-    \end{itemize}
+    \item Manual Move Control
+    \item Continuous Move Control
+    \item Image Processing
 \end{itemize}
 
-\subsection{Image Processing Results \& Critique}
-The "Image to Drawing" feature successfully identified edges and generated a path, but the physical result was mixed. The bitmaps were recognizable, but the drawing quality suffered due to several factors:
+\subsection{Feature 1: Manual Move Control}
+The first feature allows us to move the gantry by a specific relative distance in X and Y.
+We can also set the speed of each gantry axis.
 
+\subsubsection{Software Implementation}
+The C\# application takes input in centimeters and converts it to steps. The linear movement depends on the bore of the pulley,
+from our calibration we found that for our system, the steps per cm is:
+\textbf{Calibration and Math:}
 \begin{itemize}
-    \item \textbf{Z-Axis}: We lacked a Z-axis servo to lift the pen between strokes. This resulted in "travel lines" connecting distinct parts of the drawing, cluttering the image.
-    \item \textbf{Precision}: The nearest-neighbor path optimization is greedy and often chose sub-optimal routes, increasing drawing time and error accumulation.
-    \item \textbf{Mechanical}: The pen holder, while rigid, had no suspension. Variations in table height caused the pen to skip or dig into the paper.
+    \item Motor 1 (UI Y): 100 steps/cm
+    \item Motor 2 (UI X): 125 steps/cm
 \end{itemize}
+\[
+dx_{\text{steps}} = y_{\text{cm}} \times 100, \quad dy_{\text{steps}} = x_{\text{cm}} \times 125
+\]
+The velocity slider (1-100\%) is mapped to a firmware speed byte (1-6) to limit the maximum speed to a safe range.
 
-\textbf{Future Improvements:}
+\begin{lstlisting}[language=C, caption={Software: Manual Move Command}, label={lst:move-btn}]
+private void MoveBtn_Click(object sender, RoutedEventArgs e)
+{
+    // Axis Flip: UI X -> Motor 2, UI Y -> Motor 1
+    int dx = (int)(yCm * STEPS_PER_CM_M1); 
+    int dy = (int)(xCm * STEPS_PER_CM_M2);
+    
+    // Speed Mapping
+    double targetMax = 1.0 + (50.0 - 1.0) * 11.0 / 99.0; // ~6.44
+    int actualSpeed = (int)Math.Round(1.0 + (uiSpeed - 1.0) * (targetMax - 1.0) / 99.0);
+    
+    SendPacket(dx, dy, actualSpeed);
+}
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/ex_3_move.png}
+  \caption{Manual Move UI}
+  \label{fig:ex3-move}
+\end{figure}
+
+\subsubsection{Results}
+Using this feature, we can move the gantry to any position in the workspace. We used this to test our test drawing as instructed by the Lab Manual, where we moved as follows:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Location} & \textbf{X (cm)} & \textbf{Y (cm)} & \textbf{Velocity (\%)} \\ \hline
+1 & 5 & 0 & 100 \\ \hline
+2 & 0 & 5 & 50 \\ \hline
+3 & -5 & -5 & 20 \\ \hline
+4 & 7 & 2 & 60 \\ \hline
+5 & -7 & 3 & 80 \\ \hline
+6 & 0 & -5 & 10 \\ \hline
+\end{tabular}
+\caption{Test Move Sequence}
+\label{tab:test-moves}
+\end{table}
+
+The simulated path of these relative moves is shown below. Starting from $(0,0)$, the gantry visits points $(5,0) \rightarrow (5,5) \rightarrow (0,0) \rightarrow (7,2) \rightarrow (0,5) \rightarrow (0,0)$.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[scale=0.8, font=\sffamily\small]
+    % Grid
+    \draw[step=1cm, gray!20, very thin] (-1,-1) grid (8,6);
+    \draw[->] (-1,0) -- (8,0) node[right] {X (cm)};
+    \draw[->] (0,-1) -- (0,6) node[above] {Y (cm)};
+    
+    % Path
+    \coordinate (p0) at (0,0);
+    \coordinate (p1) at (5,0);
+    \coordinate (p2) at (5,5);
+    \coordinate (p3) at (0,0);
+    \coordinate (p4) at (7,2);
+    \coordinate (p5) at (0,5);
+    \coordinate (p6) at (0,0);
+    
+    \draw[thick, blue, ->] (p0) -- (p1) node[midway, below] {1};
+    \draw[thick, blue, ->] (p1) -- (p2) node[midway, right] {2};
+    \draw[thick, blue, ->] (p2) -- (p3) node[midway, sloped, above] {3};
+    \draw[thick, blue, ->] (p3) -- (p4) node[midway, sloped, above] {4};
+    \draw[thick, blue, ->] (p4) -- (p5) node[midway, sloped, above] {5};
+    \draw[thick, blue, ->] (p5) -- (p6) node[midway, left] {6};
+    
+    % Points
+    \fill[red] (p0) circle (2pt) node[below left] {Start/End};
+    \fill[red] (p1) circle (2pt);
+    \fill[red] (p2) circle (2pt);
+    \fill[red] (p4) circle (2pt);
+    \fill[red] (p5) circle (2pt);
+    
+  \end{tikzpicture}
+  \caption{Simulated Path of Test Moves}
+  \label{fig:sim-path}
+\end{figure}
+
+The resulting picture can be seen below
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/ex3_part1_result.jpg}
+  \caption{Lab movement result}
+  \label{fig:ex3-move}
+\end{figure}
+Note that the picture has a lot of red colored marks due to the bleeding of the red marker as well as because we were 
+trying to draw another picture after it has successfully finished drawing the first picture. However, the shape of the
+picture is still recognizable and the TA has already confirmed that the picture is correct.
+
+\subsection{Feature 2: Canvas Drawing}
+This feature allows the user to draw on a digital canvas, which is then replicated by the gantry.
+
+\subsubsection{Software Implementation}
+The drawing is captured as a bitmap. The software iterates through pixels, identifying dark pixels as points to draw. These points are mapped from pixel coordinates to physical centimeters.
+
+\textbf{Coordinate Mapping:}
+The canvas is 300x300 pixels, mapped to a 12x12 cm area centered at (0,0).
+\[
+X_{\text{cm}} = \left(\frac{x_{\text{px}}}{W} \times 12\right) - 6, \quad Y_{\text{cm}} = -\left[\left(\frac{y_{\text{px}}}{H} \times 12\right) - 6\right]
+\]
+
+To optimize movement, points are sorted using a Nearest Neighbor algorithm to minimize travel distance between points.
+
+\begin{lstlisting}[language=C, caption={Software: Nearest Neighbor Sorting}, label={lst:nearest-neighbor}]
+private List<Point> SortPointsNearestNeighbor(List<Point> points)
+{
+    List<Point> sorted = new List<Point>();
+    Point current = new Point(_currentX, _currentY);
+    
+    while (sorted.Count < points.Count) {
+        // Find point with min distance squared to current
+        double minDistSq = double.MaxValue;
+        // ... (Loop through points) ...
+        // dSq = (p.X - c.X)^2 + (p.Y - c.Y)^2
+    }
+    return sorted;
+}
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{figures/ex_3_creative_square.png}
+    \caption{Square Drawing}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{figures/ex_3_creative_star.png}
+    \caption{Star Drawing}
+  \end{subfigure}
+  \caption{Canvas Drawing Examples}
+  \label{fig:ex3-drawing}
+\end{figure}
+
+\subsubsection{Results}
+When we tried to draw the star in \Cref{fig:ex3-drawing}, the result is shown in \Cref{fig:ex3-drawing-star}. 
+The gantry was able to trace the star shape using a series of triangle due to the nature of the closest neighbor algorithm. 
+But, since the bed is not properly leveled, some part of the marker did not touch the bed, hence the missing triangle (marked in blue)
+that was later added on by the TA by retracing it's path. That is, the motion planning was good and works as expected.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/ex3_freeform_star_result.jpg}
+  \caption{Star Drawing Result}
+  \label{fig:ex3-drawing-star}
+\end{figure}
+
+\subsection{Feature 3: Image to Bitmap (Edge Detection)}
+The final feature imports an image, detects edges, and converts them into a drawing path.
+
+\subsubsection{Software Implementation}
+The core of this feature is the Sobel edge detection algorithm, which identifies boundaries within an image by calculating the gradient of image intensity at each pixel.
+
+\textbf{1. Grayscale Conversion:}
+First, the input image is converted to an 8-bit grayscale format, where each pixel $P(x,y)$ represents an intensity value from 0 (black) to 255 (white).
+
+\textbf{2. Convolution with Sobel Kernels:}
+We apply two $3\times3$ convolution kernels, $G_x$ and $G_y$, to the image. $G_x$ detects horizontal changes (vertical edges), and $G_y$ detects vertical changes (horizontal edges).
+
+\[
+G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix}, \quad
+G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix}
+\]
+
+For a pixel at $(x,y)$, the horizontal gradient approximation $g_x$ is computed by convolving the neighborhood with $G_x$:
+\begin{align*}
+g_x &= -P(x-1, y-1) + P(x+1, y-1) \\
+    &\quad -2P(x-1, y) + 2P(x+1, y) \\
+    &\quad -P(x-1, y+1) + P(x+1, y+1)
+\end{align*}
+Similarly, $g_y$ is computed using $G_y$.
+
+\textbf{3. Gradient Magnitude:}
+The total gradient magnitude $G$ for the pixel is calculated as the Euclidean distance of the gradient vector:
+\[
+G = \sqrt{g_x^2 + g_y^2}
+\]
+This magnitude represents the strength of the edge at that pixel.
+
+\textbf{4. Thresholding:}
+To create a binary "edge map," we compare $G$ against a user-defined threshold $T$.
+\[
+\text{Edge}(x,y) = \begin{cases} 
+255 (\text{White}) & \text{if } G > T \\
+0 (\text{Black}) & \text{otherwise}
+\end{cases}
+\]
+
+\begin{lstlisting}[language=C, caption={Software: Sobel Edge Detection Loop}, label={lst:sobel}]
+// Iterate through image pixels (excluding border)
+for (int y = 1; y < height - 1; y++) {
+    for (int x = 1; x < width - 1; x++) {
+        // Compute gx and gy using the kernels
+        int gx = ...; 
+        int gy = ...;
+
+        int mag = (int)Math.Sqrt(gx * gx + gy * gy);
+        
+        // Thresholding
+        resultPixels[i] = (byte)(mag > threshold ? 255 : 0);
+    }
+}
+\end{lstlisting}
+
+The resulting binary image is then processed to extract the coordinates of all white pixels. These points are sorted using the Nearest Neighbor algorithm to form a continuous drawing path for the gantry.
+
+\subsubsection{Results}
+The following images show the results of the image processing. We traced a drawing from a comic book character in My Hero Academia, called 
+Deku. The result is shown in \Cref{fig:ex3-deku}. Since there is not much edges and background, this image shows a good example of a drawable image for our gantry.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{figures/ex3_image_deku.png}
+    \caption{Original Image (Deku)}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{figures/ex3_image_deku_converted.png}
+    \caption{Edge Detected}
+  \end{subfigure}
+  \caption{Image Processing Example 1}
+  \label{fig:ex3-deku}
+\end{figure}
+
+On the other hand, when we tried to draw Prof. Hong Ma, the present of multiple object in the background made it hard to trace the edges.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{figures/ex3_image_hong.png}
+    \caption{Original Image (Hong)}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{figures/ex3_image_hong_converted.png}
+    \caption{Edge Detected}
+  \end{subfigure}
+  \caption{Image Processing Example 2}
+  \label{fig:ex3-hong}
+\end{figure}
+
+When we trid to draw Deku however, the result was not as expected. The image was too complex and perhaps it required more advanced path planning or 
+resolution. The result is shown in \Cref{fig:ex3-deku-drawing}. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/ex3_deku_result.jpg}
+  \caption{Drawing Result (Deku)}
+  \label{fig:ex3-deku-drawing}
+\end{figure}
+This is most likely because after drawing the fist, the gantry tries to draw the face, however since it requires point skipping, 
+the gantry is unable to draw the face. This coupled with the fact that we did not have a Z-axis, control for the height of the marker, 
+means that even if we were able to plan the path, the gantry would not be able to draw the face eitherway. Regardless, it is still a fun exercise
+for turning the images into a bitmap for drawing.
+
+\subsection{Challenges}
 \begin{enumerate}
-    \item Add a servo to lift the pen.
-    \item Implement microstepping (1/16 or 1/32) to smooth out the lines.
-    \item Use a vector-based approach (SVG) instead of raster edge detection for cleaner lines.
+    \item The gantry rails were not perfectly parallel, causing binding at certain spots. We had to adjust the eccentric spacers and belt tension to ensure smooth movement.
+    \item The assembly instructions was not consistent between each steps, thus we sometimes had to back track and reassemble the gantry.
+    \item The belt has to be tightened to ensure smooth movement, otherwise the motor would skip, a friends suggested using a nut tightener like in 3D printers to help mitigate this.
+    \item Converting pixel coordinates (0-300) to physical cm (-6 to 6) required careful calibration. We also had to flip the Y-axis in software to match the physical gantry orientation.
+    \item Hysteresis in the belt drive caused circles to look like ovals. We minimized this by tightening the belts and ensuring the pulleys were secure.
+    \item The lack of a Z-axis meant the pen dragged during "non-drawing" moves. We had to manually lift it or plan paths to minimize travel over the drawing area.
+    \item The Sobel filter picked up too many edges from noisy images. Tuning the threshold was critical to get a clean drawing.
+    \item Implementing the Bresenham/DDA algorithm for integer-based coordinated motion was challenging. We had to ensure no floating-point math was used in the ISR for performance.
+    \item The marker would dry out if left uncapped or if the drawing took too long. We had to cap it between tests.
+    \item At high speeds, the gantry wobble made wavy lines. Slowing down the drawing speed improved the quality significantly.
 \end{enumerate}
-
-\subsection{Results}
-We tested the gantry by drawing standard shapes (Square, Diamond, Triangle) and a complex "Creative Shape" (imported image).
-
-\imageplaceholder{Standard Shapes Plot}{Insert photo of the paper with the 6 test points/lines drawn.}
-
-\imageplaceholder{Creative Shape Plot}{Insert photo of the creative shape drawn by the gantry.}
-
-\imageplaceholder{Creative Shape Design Overlay}{Insert photo of the drawn shape with the intended design overlaid for comparison.}
-
-\textbf{Discussion on Accuracy:}
-Deviations between the design and the result can be attributed to:
-\begin{itemize}
-    \item \textbf{Backlash}: Play in the belt/pulley system caused circle endpoints to not perfectly meet.
-    \item \textbf{Vibration}: At high speeds, the gantry frame resonance caused some line waviness.
-    \item \textbf{Resolution}: The standard 200 step/rev motor + DDA rounding errors limit the finest detail to approx 0.2mm.
-\end{itemize}
 
 \section{Conclusion}
 This lab successfully demonstrated the complete process of building a mechatronic controller, from soldering the PCB to implementing low-level motor control firmware and high-level PC software. The final 2-axis gantry system was able to draw complex shapes, validating the integration of all subsystems.
@@ -712,7 +1125,7 @@ This lab successfully demonstrated the complete process of building a mechatroni
 \appendix
 \section{Exercise 2 Code}
 \subsection{Microcontroller Firmware}
-(Note: Exercise 2 functionality was integrated into the Exercise 3 firmware below.)
+\lstinputlisting[language=C, caption=Microcontroller Firmware (Ex2)]{code/ex2/main.c}
 
 \subsection{PC Interface (C\#)}
 \lstinputlisting[language=C, caption=StepperCommander.cs]{code/ex2/StepperCommander.cs}
@@ -724,5 +1137,85 @@ This lab successfully demonstrated the complete process of building a mechatroni
 
 \subsection{PC Interface (C\#)}
 \lstinputlisting[language=C, caption=MainWindow.xaml.cs]{code/ex3/MainWindow.xaml.cs}
+
+\section{Gantry Assembly}
+\textbf{Safety}: Please note there are a number of risks to be aware of while working with this device. Ensure the device is on a stable and level surface before operating. Keep fingers, hair, and loose clothing away from the device when it is operational. Keep your hands and any liquids away from the electronics while the circuit is live, only ever work on the circuit when it is not powered or plugged into a power source.
+
+\subsection*{Step 1. Assemble the Frame}
+\begin{enumerate}
+    \item Gather the necessary components.
+    \item Mount one side of the X-axis beam, put the slider on the extrusion.
+    \item Mount the other side of the X-axis beam.
+    \item Flip the base, and place the other two extrusions as shown.
+    \item Fix the four corners.
+    \item The base should now look like this.
+    \item Gather the necessary components for the top of the frame.
+    \item Mount the two support arms, front and back.
+    \item Mount the Y-axis beam with the slider on the extrusion.
+\end{enumerate}
+
+\subsection*{Step 2. Assemble the X-axis}
+\begin{enumerate}
+    \item Gather necessary components.
+    \item Mount the free pulley.
+    \item Mount the DC motor mount.
+    \item Gather DC motor parts. \textit{Note: DC motor in photo has been upgraded.}
+    \item Mount the DC motor.
+    \item Attach the 4mm bore gear.
+\end{enumerate}
+
+\subsection*{Step 3. Assemble the Y-axis}
+\begin{enumerate}
+    \item Gather necessary components. \textit{Note: Stepper motor in photo has been upgraded.}
+    \item Mount the components similar to the X-axis. \textit{Note: Stepper motor mounted with nuts and bolts.}
+    \item \textbf{Custom Marker Holder}: We designed and CADed a custom marker holder which mounts onto the gantry Y-axis slider. The holder features a press-fit mechanism to securely hold the marker during operation.
+\end{enumerate}
+
+\subsection*{Step 4. Assembling the belt drive}
+\begin{enumerate}
+    \item Feed belt through V-slot extrusion.
+    \item Loop through slider. \textit{Note: Timing belt should lock with itself.}
+    \item Zip tie the timing belt together.
+    \item Zip tie the other end. \textit{Note: Timing belt should be looped around both the gear and free pulley.}
+    \item Tighten the belt at the free pulley end.
+    \item Repeat on the Y-axis.
+\end{enumerate}
+
+\section{Appendix D: PCB Photos}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/pcb_board_front_appendix_1.jpeg}
+    \caption{PCB Front View 1}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/pcb_board_front_appendix_2.jpeg}
+    \caption{PCB Front View 2}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/pcb_board_front_appendix_3.jpeg}
+    \caption{PCB Front View 3}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/pcb_board_front_appendix_4.jpeg}
+    \caption{PCB Front View 4}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/pcb_board_front_appendix_5.jpeg}
+    \caption{PCB Front View 5}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/pcb_board_front_appendix_6.jpeg}
+    \caption{PCB Front View 6}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/pcb_board_front_appendix_7.jpeg}
+    \caption{PCB Front View 7}
+\end{figure}
 
 \end{document}
