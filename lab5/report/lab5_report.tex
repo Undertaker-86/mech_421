@@ -743,18 +743,6 @@ For Motor 2 (Y), we need to use the external driver which uses the GPIO-mapped d
   \label{fig:ex3-wiring}
 \end{figure}
 
-\subsubsection{Gantry Mechanism}
-\begin{figure}[H]
-  \centering
-  \IfFileExists{figures/ex3_gantry.png}{%
-    \includegraphics[width=0.8\textwidth]{figures/ex3_gantry.png}%
-  }{%
-    \fbox{\parbox{0.75\textwidth}{Gantry sketch/assembly (add \texttt{figures/ex3\_gantry.png}) showing X/Y rails, carriage, and pen holder.}}%
-  }
-  \caption{Gantry arrangement: orthogonal rails with pen carriage}
-  \label{fig:ex3-gantry}
-\end{figure}
-
 \subsubsection{Coordinated Motion Control (Firmware)}
 The firmware implements a Bresenham-like DDA (Digital Differential Analyzer) algorithm to drive both motors simultaneously in a straight line. The `start\_move` function calculates the total steps needed (the larger of $\Delta x$ or $\Delta y$) and sets the timer frequency based on the requested speed.
 
@@ -836,7 +824,6 @@ We can also set the speed of each gantry axis.
 \subsubsection{Software Implementation}
 The C\# application takes input in centimeters and converts it to steps. The linear movement depends on the bore of the pulley,
 from our calibration we found that for our system, the steps per cm is:
-\textbf{Calibration and Math:}
 \begin{itemize}
     \item Motor 1 (UI Y): 100 steps/cm
     \item Motor 2 (UI X): 125 steps/cm
