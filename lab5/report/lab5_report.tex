@@ -11,7 +11,7 @@
 \usepackage{xcolor}
 \usepackage{tcolorbox}
 \usepackage{tikz}
-\usetikzlibrary{shapes, arrows, positioning, calc, decorations.pathmorphing}
+\usetikzlibrary{shapes, arrows, positioning, calc, decorations.pathmorphing, shadows}
 \usepackage{circuitikz} % Try to use if available, otherwise fallback to tikz
 \usepackage{listings}
 \usepackage{array}
@@ -129,8 +129,7 @@
       {\large \studentone\enspace (ID:\ \studentoneid) \\[0.4ex]
       \studenttwo\enspace (ID:\ \studenttwoid)\par}
       \vspace{0.6ex}
-      {\normalsize Lab Performed:\ \labperformed \\ 
-      Report Submitted:\ \labsubmitted\par}
+      {\normalsize  Report Submitted:\ \labsubmitted\par}
     }
   \end{center}
   \vspace{1.2ex}
@@ -664,6 +663,94 @@ public byte[] BuildPacket(byte dirByte, ushort ccr0)
 \label{fig:sch_ex2}
 \end{figure}
 
+The exact pin configuration is shown below
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\sffamily,
+    thick,
+    component/.style={
+        draw,
+        rounded corners,
+        fill=white,
+        drop shadow,
+        align=center,
+        inner sep=5pt
+    },
+    wire/.style={
+        thick
+    }
+]
+
+% MSP430 Block
+\node[component, minimum width=3.5cm, minimum height=4.5cm] (msp) at (0,0) {};
+\node[anchor=north west] at (msp.north west) {\textbf{MSP430}};
+\node[below=0.2cm] at (msp.south) {Microcontroller};
+
+% Internal separator line
+\draw ([yshift=-0.8cm]msp.north west) -- ([yshift=-0.8cm]msp.north east);
+\draw (msp.north) -- (msp.south);
+
+% Pin Labels
+\foreach \tb/\p/\y/\i in {TB0.2/P1.5/1.2/1, TB0.1/P1.4/0.4/2, TB1.2/P3.5/-0.4/3, TB1.1/P3.4/-1.2/4} {
+    \node[anchor=east] at ([xshift=-0.2cm, yshift=\y cm]msp.center) {\tb};
+    \node[anchor=west] at ([xshift=0.2cm, yshift=\y cm]msp.center) {\p};
+    \coordinate (msp_out_\i) at (msp.east |- 0, \y);
+}
+
+
+% DRV8841 Block
+\node[component, minimum width=3cm, minimum height=4.5cm, right=4cm of msp] (drv) {};
+\node[anchor=north west] at (drv.north west) {\textbf{DRV8841}};
+\node[below=0.2cm] at (drv.south) {Motor Driver};
+
+% Internal separator line
+\draw ([yshift=-0.8cm]drv.north west) -- ([yshift=-0.8cm]drv.north east);
+
+% DRV Pins
+\foreach \in/\out/\y/\i in {IN1/A1/1.2/1, IN2/A2/0.4/2, IN3/A3/-0.4/3, IN4/A4/-1.2/4} {
+    \node[anchor=west] at ([xshift=0.2cm, yshift=\y cm]drv.west |- 0, \y) {\in};
+    \node[anchor=east] at ([xshift=-0.2cm, yshift=\y cm]drv.east |- 0, \y) {\out};
+    \coordinate (drv_in_\i) at (drv.west |- 0, \y);
+    \coordinate (drv_out_\i) at (drv.east |- 0, \y);
+}
+
+
+% Connections MSP -> DRV
+\foreach \i in {1,2,3,4} {
+    \draw (msp_out_\i) -- (drv_in_\i);
+}
+
+
+% Stepper Motor Block
+\node[component, minimum width=2.5cm, minimum height=3.5cm, right=3cm of drv] (motor) {};
+\node[below=0.2cm] at (motor.south) {Stepper Motor};
+
+% Motor Symbol (Oval)
+\draw[fill=gray!10] (motor.center) ellipse (0.6cm and 1.2cm);
+\draw (motor.center) ellipse (0.2cm and 0.8cm); % Inner detail
+
+
+% Connections DRV -> Motor
+\foreach \i in {1,2,3,4} {
+    \draw (drv_out_\i) -- (motor.west |- drv_out_\i);
+}
+
+
+% Power Supply Block
+\node[component, minimum width=3cm, minimum height=1cm, above=1.5cm of drv] (power) {12V \quad | \quad GND};
+\node[right=0.2cm] at (power.east) {Power Supply};
+
+% Power Connections
+\draw (power.south) -- (drv.north);
+
+\end{tikzpicture}
+\caption{Electrical Schematic of Stepper Control System}
+\label{fig:sch_ex2}
+\end{figure}
+
+
 \subsection{Speed Results and Limits}
 \textbf{Measured and commanded speeds:}
 From our software, we are sending a maximum frequency of 1200 Hz. Since each pulse creates a half step, the value for theoretical step/s is
@@ -1076,7 +1163,7 @@ On the other hand, when we tried to draw Prof. Hong Ma, the present of multiple 
   \label{fig:ex3-hong}
 \end{figure}
 
-When we trid to draw Deku however, the result was not as expected. The image was too complex and perhaps it required more advanced path planning or 
+When we tried to draw Deku however, the result was not as expected. The image was too complex and perhaps it required more advanced path planning or 
 resolution. The result is shown in \Cref{fig:ex3-deku-drawing}. 
 
 \begin{figure}[H]
@@ -1090,6 +1177,17 @@ the gantry is unable to draw the face. This coupled with the fact that we did no
 means that even if we were able to plan the path, the gantry would not be able to draw the face eitherway. Regardless, it is still a fun exercise
 for turning the images into a bitmap for drawing.
 
+\subsection{Discussion: Stepper Motor Performance}
+Stepper motors offer distinct advantages for 2-axis stage control, primarily their ability to provide precise open-loop position control without the need for encoders. This simplifies the control architecture significantly. They also provide high holding torque, which ensures the gantry maintains its position when stationary. The digital interface (step and direction signals) is straightforward to implement with microcontrollers.
+
+However, there are limitations. Stepper motors are susceptible to resonance at specific speeds, which can cause vibration and noise. Since the system is open-loop, any skipped steps due to high load or acceleration result in permanent position errors for the remainder of the operation. Additionally, the discrete nature of stepping can cause "aliasing" or stair-stepping artifacts when drawing diagonal lines or curves, especially at low resolutions.
+
+\textbf{Shape Difficulty Analysis:}
+\begin{itemize}
+    \item \textbf{Easy Shapes}: Straight lines, squares, and rectangles are the easiest to draw. They align well with the linear interpolation (DDA) algorithm and the orthogonal axes of the gantry. The motion is continuous and requires minimal acceleration changes.
+    \item \textbf{Hard Shapes}: Circles, arcs, and complex curves are difficult. They must be approximated by a series of very short line segments. This requires the motor to constantly accelerate and decelerate, increasing the risk of vibration and step loss. The "stair-stepping" effect is also most visible on these shapes, requiring microstepping or higher gear reduction to smooth out.
+\end{itemize}
+
 \subsection{Challenges}
 \begin{enumerate}
     \item The gantry rails were not perfectly parallel, causing binding at certain spots. We had to adjust the eccentric spacers and belt tension to ensure smooth movement.
@@ -1102,6 +1200,8 @@ for turning the images into a bitmap for drawing.
     \item Implementing the Bresenham/DDA algorithm for integer-based coordinated motion was challenging. We had to ensure no floating-point math was used in the ISR for performance.
     \item The marker would dry out if left uncapped or if the drawing took too long. We had to cap it between tests.
     \item At high speeds, the gantry wobble made wavy lines. Slowing down the drawing speed improved the quality significantly.
+    \item The edge detection algorithm is good, however the actual drawing is very hard to replicate lightly because nearest neighbor causes
+    very high point for image drawing. This causes it to twitch around and thus the results is not very good.
 \end{enumerate}
 
 \section{Conclusion}
