@@ -7,3 +7,4 @@ D:\repository\MECH_421\lab5\ex2\stepper_control\bin\Debug\StepperControl.exe
 D:\repository\MECH_421\lab5\ex2\stepper_control\bin\Debug\StepperControl.pdb
 D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.exe
 D:\repository\MECH_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.pdb
+D:\Repository\mech_421\lab5\ex2\stepper_control\obj\Debug\StepperControl.exe.config

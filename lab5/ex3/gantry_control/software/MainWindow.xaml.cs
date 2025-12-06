@@ -467,7 +467,8 @@ namespace GantryControl
                     int mag = (int)Math.Sqrt(gx * gx + gy * gy);
                     
                     // Threshold
-                    resultPixels[i] = (byte)(mag > 128 ? 255 : 0);
+                    int threshold = (int)EdgeThresholdSlider.Value;
+                    resultPixels[i] = (byte)(mag > threshold ? 255 : 0);
                 }
             }
 
@@ -513,9 +514,10 @@ namespace GantryControl
             // However, the robot has physical limits.
             // Let's just take every pixel that is an edge.
 
-            for (int y = 0; y < height; y++)
+            int skip = (int)PointSkipSlider.Value;
+            for (int y = 0; y < height; y += skip)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < width; x += skip)
                 {
                     if (pixels[y * stride + x] > 128) // Edge
                     {

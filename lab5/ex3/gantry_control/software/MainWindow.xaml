@@ -115,6 +115,18 @@
                             <Button Content="Convert to Drawing" Click="ProcConvertBtn_Click" Width="140" Height="30" Margin="0,0,10,0" Background="#FFC107" Foreground="Black" BorderThickness="0"/>
                             <CheckBox x:Name="HighResCheck" Content="High Resolution" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
                         </StackPanel>
+
+                        <!-- New Controls -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock Text="Edge Threshold:" Foreground="#AAA" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <Slider x:Name="EdgeThresholdSlider" Width="100" Minimum="0" Maximum="255" Value="128" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding ElementName=EdgeThresholdSlider, Path=Value, StringFormat=N0}" Foreground="White" VerticalAlignment="Center" Width="30" Margin="0,0,15,0"/>
+
+                            <TextBlock Text="Point Skip:" Foreground="#AAA" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <Slider x:Name="PointSkipSlider" Width="100" Minimum="1" Maximum="20" Value="1" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding ElementName=PointSkipSlider, Path=Value, StringFormat=N0}" Foreground="White" VerticalAlignment="Center" Width="30"/>
+                        </StackPanel>
+
                         <StackPanel Orientation="Horizontal">
                             <Button Content="Draw Edges" Click="ProcDrawBtn_Click" Width="120" Height="30" Background="#28A745" Foreground="White" BorderThickness="0" Margin="0,0,10,0"/>
                             <Button Content="Stop" Click="StopDrawingBtn_Click" Width="80" Height="30" Background="#DC3545" Foreground="White" BorderThickness="0"/>
