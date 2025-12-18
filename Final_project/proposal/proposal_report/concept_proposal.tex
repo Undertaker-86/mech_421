@@ -1,6 +1,8 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{enumitem}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{listings}
@@ -113,7 +115,7 @@ and the learning experience. Even if the final prototype doesn't achieve full au
 flight-to-ground transitions, the process of designing the transformation mechanism, creating a working PCB, integrating the control systems, and wrestling with the state estimation problems will teach us 
 far more than building yet another standard quadcopter or RC car. We'd rather aim high and 
 learn from the inevitable obstacles than play it safe with a project we could finish in our sleep.
-Afterall a wrong answer isn’t a meaningless one.
+After all, a wrong answer isn't a meaningless one.
 
 
 \subsection{Functional Components}
@@ -128,7 +130,7 @@ Table~\ref{tab:functional_components} summarizes the six main subsystems that en
 \toprule
 \textbf{Component} & \textbf{Description} & Responsibility\\
 \midrule
-\textbf{FC1: Morphing Airframe} & Lightweight PLA chassis with motorized indexed hinges and Hall-effect sensors to lock pods at 0° (ground) and 45° (flight) positions. Target transition time under 10 seconds. If budget permits we will use fancier material such as carbon fiber to reduce weight and improve durability.& Ryan \\
+\textbf{FC1: Morphing Airframe} & Lightweight PLA chassis with motorized indexed hinges and Hall-effect sensors to lock pods at $0^\circ$ (ground) and $45^\circ$ (flight) positions. Target transition time under 10 seconds. If budget permits we will use fancier material such as carbon fiber to reduce weight and improve durability.& Ryan \\
 \addlinespace
 \textbf{FC2: Rotor-Wheel Pods} & Four identical convertible modules, each containing a ducted rotor with tire bonded to the rim. Provides both ground traction and aerial thrust using the same hardware. & Ryan \\
 \addlinespace

@@ -1,0 +1,72 @@
+00:00:01
+this is a remote controlled vehicle I made this thing is basically a tank what's cool about this tank is it has a secret feature with just one press of a button it transforms from a tank into a quadcopter and let me tell you this project was a hard one it involved hundreds of 3D printed Parts multiple design iterations broken Hardware faulty software and some very questionable design decisions but at the end of the day I made something that actually kind of works all right let's re a little bit
+
+00:00:31
+all of this started because I wanted to combine two things that I've made before an RC car and a quadcopter from searching online not many people have done this before except for a couple universities so clearly I needed to do some designing myself when I design things like this I like to pour myself a large cup of coffee and then just dive into CAD CAD stands for computer AED design and I use a program called on shape in on shape I can lay out my rough ideas and some sketches just to make sure everything is going to kind of work
+
+00:00:55
+for this project the hardest part was the linkage system which transforms the vehicle from driving mode to flying mode this set of linkages holds the wheels and tracks perpendicular to the ground when it's driving however just by actuating a Servo the entire body of the vehicle lowers then two linear actuators can be used to Pivot the rotors up to be parallel with the ground sometimes for unintuitive designs like this I find that making small 2D models is really useful this helps me test out different
+
+00:01:19
+ideas while I'm still early in the design process using the dimensions for my small 2D model and after a couple more hours in CAD fueled by a lot of coffee I now had a three-dimensional design which I could actually start building most of the parts in this vehicle actually meant to be 3D printed which works out great cuz bamboo Labs is sponsoring this video all of the over 100 3D printed Parts on this vehicle were printed using their X1 Carbon and p1s printers and let me tell you these things are just awesome I've had these
+
+00:01:44
+printers for over a year now and they just work they are incredibly fast and reliable and just have really really good quality they've seriously changed the game when it comes to 3D printing these printers can also print some pretty cool materials like carbon fiber nylon which is really stiff and extremely lightweight on this project I'm using the car and fiber nylon on some of the parts that need to be stronger and more loadbearing and then for the rest of the parts I'm just using some of bamboo lab's matte pla filament
+
+00:02:07
+since I'm just using pla I made these parts extra Strong by adding extra parameters and infill this is likely going to increase the weight of the vehicle but if I need to reduce weight I can always come back and 3D print them in carbon fiber nylon which is 20% lighter but almost three times as strong not to mention the carbon fiber nylon Parts have this really cool surface finish and they're much more heat resistant now to keep the carbon fiber theme going one of the few non-3d printed Parts on this are the side
+
+00:02:31
+plates these need to be extremely strong since they basically make up the entire structure of the body but they also need to look cool which is equally important using my CNC router I was actually able to cut this carbon fiber surprisingly easy the side plates have several holes in them for mounting to the 3D printed components that make up the body and then I used a lot of triangular cutouts to reduce weight each one of these plates is 3 mm thick which is probably a little bit of Overkill but I had it
+
+00:02:53
+lying around so I might as well use it at this point the box of parts for this project is getting a little insane so I need to start assembling things and this is where where you find out all the mistakes you made while you're designing starting off the servo housing gets assembled and this is what will actually move the body up and down all right now all we need is a couple of bearings which go right in here perfect fit through here Boom the arms themselves slide onto some bolts and then a front plate gets added
+
+00:03:24
+to keep everything in place this means we have a service set up that should be ready to go all right look at this it works so well this Servo actuation system will eventually get added to the carbon fiber side plates but first I need to add the battery holder as well as a piece that holds the linear actuators all these parts get assembled using just some thread forming screws I found that these type of screws are a really reliable way to join plastic parts they allow you to assemble and disassemble Parts without risking
+
+00:03:55
+stripping the plastic [Music] all right so to test this out we can hook it up to a Servo tester plug in a battery and we should be able to move These Arms oh yeah that's so cool so now why why aren't they going all the way down oh I see why we got a small problem very small right in here as this arm comes down it actually hits the carbon fiber frame and it can't actually go any further this thing should turn all the way to be parallel with the body dang can't believe I did that this
+
+00:04:47
+is why you got to pay attention when you're designing things luckily though since all these parts are 3D printed it's so easy just to redesign it and reprint it reprinting these parts on the bamboo lab p1s only takes a couple hours which makes iteration like this really easy if you're looking to get into 3D printing or you just want to take your projects to the next level now is a great time to check out bamboo lab printers as well as their awesome filaments because they're having the
+
+00:05:08
+biggest sale of the year right now until December 3rd I'll put links in the description of this video to the printers and filament I used in this video as well is where you can find the files for this project completely for free if you want to make this yourself all right here we go oh yeah that's much better all right main body is complete now we got to assemble the rotors the rotor system on this quad is actually kind of complicated because it needs to function as Wheels in driving mode and
+
+00:05:37
+then rotors in flying mode the basic breakdown of this design is there's an outer wheel which engages with the driving motor using some gear teeth there's two of these wheels and they'll engage with the tank treads we're going to add later and to make sure these wheels rotate freely they're mounted on with some bearings the wheels get attached to an arm piece which ties everything together this is a really important part of the design which needs to be strong so I printed it out of the
+
+00:05:58
+carbon fiber nylon filament and in flying mode four Motors one in each wheel spin propellers to lift the quad these motors are 201812 pro series motors from emac they sent me these motors for this project as well as esc's I'm using and so far they've been fantastic so definitely check them out if you're going to build something like this or any other quad once both wheels are installed the drive motor gets bolted in place and this ties both of the wheels together now they're basically linked together
+
+00:06:27
+lastly the 3D printed tank track gets looped around on both wheels and they get attached together using some plastic screws Treads like this are probably not necessary because it'd be four-wheel drive anyway but I mean tracks are awesome so why not time for everybody's favorite thing Electronics now this vehicle has six brushless motors two servos and two linear actuators so I need something to control all of this and that is where this comes in this is the TT 4.0 which is running dreamflight
+
+00:06:52
+which I customize a little bit to run everything I assembled all these Electronics onto a PCB I made for a previous project which simplifies all the wiring this PCB also has some headers that break out all the pins so it's expandable so I could add the linear actuator controllers on top of it this control board as well as a bunch of wires to distribute power get added to the body we assembled previously and at this point we're getting pretty close to being done using just a couple bolts
+
+00:07:15
+both sets of rotors get added to the main body perfect and then some bolts go into to attach everything and for the first time we can see if this thing actually moves correctly all right here we go first ever test all right that's driving mode now we'll switch it into quadcopter [Music] mode I can't believe how well that works all right we know this thing can at least transform the way it's supposed to but can it drive and fly only one way to find [Music] out it can do [Music] wheelies
+
+00:08:27
+oh this thing has way too much power I was actually really surprised by how well this thing drove it was super easy to control and it has a ton of power sometimes maybe even a little too much power all right the real question is though can this thing actually fly there's only one way to find out now immediately when I tried to transition to flight mode I knew something was wrong I tried switching between modes a couple times but still this thing was just not acting right why is this thing acting so weird all of a
+
+00:08:57
+sudden oh all right we got problems I flip this thing up and there you go that actuator is not meant to be cracked in half now these are definitely cheap actuators but also this quad is really heavy so they're put under a lot of load so I think the best way to fix this is just by reducing the weight of the Quad which will help it when it flies anyway I tried to measure how heavy this thing is and it actually overloaded my scale which is not a good sign that means it's roughly 3.3 kg which is way too heavy to
+
+00:09:25
+fix this weight problem I started by taking everything apart I used more of the bamboo lab carbon nylon to reprint a bunch of the parts including the wheels this stuff is roughly 20% lighter than PLA and it's even stronger which is awesome now I didn't want this whole thing just be one color because it has to look good for YouTube after all so I reprinted the Treads and the actuation arms using this carbon fiber pla this is also sold by bamboo lab and it's this awesome green color this stuff is also
+
+00:09:48
+slightly lighter than normal PLA and I printed it with a lot less infill and perimeters than before the bearings and the wheels are also a huge source of weight these things are giant and there's eight of them so I replaced these using some 3D printed pieces which use rods to kind of create a roller bearing these wheels are not going to be spinning that much or at that high of speed so these should hopefully be okay with all these parts reprinted I shaved off over 600 G from this quadcopter
+
+00:10:11
+which is huge that will allow it to fly a lot better and a lot longer so finally after multiple iterations and a lot of 3D printing we can test out if this thing will actually fly or not [Music] let's see if this thing will actually fly now entering flying [Music] mode oh [Music] yeah all right moment of truth [Music] oh definitely needs a little more tuning [Music] that was awesome that worked so much better than I ever thought it would now the real test is will it go back in the driving mode all right folding back
+
+00:12:04
+down [Music] nice yes all right so finally we got the thingle work but what's the point why even have this thing well imagine this one day you're driving your quadcopter through the woods like everyone does and you come up to a small stream both sides are really Steep and you can't drive through it normally this might ruin your day but with this vehicle all you have to do is transition into flying mode then you can just take off and fly right over [Music] it that was [Music] terrifying all right in all seriousness
+
+00:12:58
+even though this thing has been a huge challenge to build I'm really happy with how it turned out it looks awesome and it works really well too there's a ton more stuff I could try to do with this vehicle so let me know what you want to see next if you like this project you should definitely subscribe to my channel because I have a lot more things like this coming but that's where I'm going to leave off in this video so thanks for watching and I'll see you next time [Music]
+
