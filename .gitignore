@@ -56,7 +56,14 @@
 *.code-workspace
 .idea/
 
+# Visual Studio / Rider
+.vs/
+*.suo
 *.user
 *.cache
 *.dtbcache.v2
 *.futdcache.v2
+
+# .NET build outputs
+**/bin/
+**/obj/
