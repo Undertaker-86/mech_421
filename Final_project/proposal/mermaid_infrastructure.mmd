@@ -1,0 +1,94 @@
+%%{init: {
+  "flowchart": {
+    "diagramPadding": 10,
+    "nodeSpacing": 25,
+    "rankSpacing": 30
+  }
+}}%%
+graph LR
+    %% Styles
+    classDef compute fill:#333,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef sensor fill:#e1f5fe,stroke:#01579b,stroke-width:1px,color:#000;
+    classDef actuator fill:#ffebee,stroke:#b71c1c,stroke-width:1px,color:#000;
+    classDef infra fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,color:#000;
+    classDef comms fill:#fff3e0,stroke:#e65100,stroke-width:1px,color:#000;
+    classDef stack fill:#eceff1,stroke:#455a64,stroke-width:1px,stroke-dasharray: 5 5,color:#000;
+
+    %% ROBOT / EDGE
+    subgraph Robot["ROBOT / EDGE"]
+        direction TB
+
+        %% Nice to Have / Future Expansion
+        subgraph Future["NICE TO HAVE (FUTURE)"]
+            direction LR
+            Lidar("Lidar"):::sensor
+            Jetson("Jetson Nano<br/>(Companion Computer)<br/><sub>CV, SLAM, Neural Nets</sub>"):::compute
+            Cam("Camera"):::sensor
+
+            Lidar --> Jetson
+            Cam --> Jetson
+        end
+
+        PX4("Pixhawk Flight Controller<br/>(PX4 Firmware)<br/><sub>Control & Morphing Logic</sub>"):::compute
+        Jetson -.->|"Offboard Control<br/>(Object Tracking)"| PX4
+
+        %% Sensors in a horizontal row below PX4
+        subgraph Sensors["State & Feedback"]
+            direction LR
+            RC("RC Receiver<br/>(Safety Failsafe)"):::sensor
+            IMU("IMU / Mag<br/>(State)"):::sensor
+            Enc("Wheel Encoders<br/>(Odometry)"):::sensor
+            Hall("Hall Sensors<br/>(Hinge Pos)"):::sensor
+            Pwr("Power Module<br/>(V/I)"):::sensor
+        end
+
+        %% Actuators in a horizontal row
+        subgraph Acts["Actuators"]
+            direction LR
+            Srv("Hinge Servos<br/>(Morphing)"):::actuator
+            Mtr("BLDC Motors<br/>(Thrust/Drive)"):::actuator
+        end
+
+        %% Connections to PX4
+        RC --> PX4
+        IMU --> PX4
+        Enc --> PX4
+        Hall --> PX4
+        Pwr --> PX4
+        PX4 --> Srv
+        PX4 --> Mtr
+    end
+
+    %% Wi-Fi link
+    Wifi{{"Wi-Fi (UDP)"}}:::comms
+
+    %% BASE STATION / INFRASTRUCTURE
+    subgraph Base["PC / BASE STATION"]
+        direction TB
+        Sim("Gazebo / SITL<br/>(Physics Sim)"):::infra
+        ROS("ROS 2 / Micro-ROS Agent<br/>(Middleware)"):::infra
+        Viz("QGroundControl / Rviz2<br/>(Command & Viz)"):::infra
+        Bag("rosbag2<br/>(Raw Logging)"):::infra
+        DB[("PostgreSQL<br/>(Archival)")]:::infra
+
+        Sim -.->|"Simulated State<br/>& Telemetry"| ROS
+        ROS <-->|"High-Level Cmds<br/>& Telemetry"| Viz
+        ROS -->|"Topic Stream"| Bag
+        Bag --> DB
+    end
+
+    %% PX4 Internal Software Stack (Positioned to fill empty space)
+    subgraph Details["PX4 INTERNAL SOFTWARE STACK"]
+        direction LR
+        Drv("Drivers"):::stack --> Est("EKF2<br/>(Estimator)"):::stack
+        Est --> Ctl("Rate/Att/Pos<br/>Control"):::stack
+        Ctl --> Mix("Mixer"):::stack
+        Mix --> Out("PWM/DShot"):::stack
+    end
+
+    %% Bidirectional Command & Telemetry
+    PX4 <==>|"MAVLink / DDS<br/>(Cmd & Telem)"| Wifi
+    Wifi <==> ROS
+    
+    %% Visual Link from PX4 to its Stack
+    PX4 -.-> Drv

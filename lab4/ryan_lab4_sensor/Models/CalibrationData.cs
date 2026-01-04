@@ -20,8 +20,8 @@ namespace RyanSensorApp.Models
         public double[] Coefficients { get; set; }
         public double RSquared { get; set; }
         public string Equation { get; set; }
-        public int MinAdcValue { get; set; }
-        public int MaxAdcValue { get; set; }
+        public int MinAdcThreshold { get; set; }  // ADC value below this = too far
+        public int MaxAdcThreshold { get; set; }  // ADC value above this = too close
 
         public CalibrationData()
         {
@@ -29,8 +29,8 @@ namespace RyanSensorApp.Models
             FitType = FitType.Polynomial2;
             Coefficients = Array.Empty<double>();
             Equation = string.Empty;
-            MinAdcValue = 50;   // Default minimum threshold
-            MaxAdcValue = 950;  // Default maximum threshold
+            MinAdcThreshold = 200;   // Default: too far threshold
+            MaxAdcThreshold = 800;   // Default: too close threshold
         }
 
         public double ConvertAdcToDistance(int adcValue)
@@ -80,7 +80,17 @@ namespace RyanSensorApp.Models
 
         public bool IsInRange(int adcValue)
         {
-            return adcValue >= MinAdcValue && adcValue <= MaxAdcValue;
+            return adcValue >= MinAdcThreshold && adcValue <= MaxAdcThreshold;
+        }
+
+        public string GetRangeStatus(int adcValue)
+        {
+            if (adcValue > MaxAdcThreshold)
+                return "Too Close";
+            else if (adcValue < MinAdcThreshold)
+                return "Too Far";
+            else
+                return "In Range";
         }
     }
 }

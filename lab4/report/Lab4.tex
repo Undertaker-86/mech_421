@@ -416,31 +416,6 @@ R_6 &= \boxed{16~\text{k}\Omega}.
 \end{align}
 
 \subsubsection{Question 2: Choose \texorpdfstring{$C_2$}{C2}}
-The low-pass pole formed by $R_6$ and $C_2$ should be above $\SI{16}{\kilo\hertz}$:
-\begin{align*}
-    \omega_{c,\text{LP}} &= \frac{1}{R_6 C_2} \ge 10^5~\text{rad/s}.
-\end{align*}
-With $R_6 = \SI{16}{\kilo\ohm}$ this gives $C_2 \le \SI{0.622}{\nano\farad}$. The closest available capacitor was \SI{620}{\pico\farad}, yielding a calculated cutoff near \SI{99.5}{\kilo\hertz}.
-
-
-Go ahead and built the circuit, see \Cref{fig:ex_3_circuit} for my breadboard circuit implementation.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/3_3-circuit.jpg}
-    \caption{Breadboard circuit diagram for Exercise 3}
-    \label{fig:ex_3_circuit}
-\end{figure}
-
-\subsubsection{Question 3: Verification}
-Applying a \SI{100}{\milli\volt} sinusoid at \SI{1}{\kilo\hertz} produced the expected tenfold gain without saturation when the LED-photodiode spacing was swept between \SI{3}{\centi\metre} and \SI{25}{\centi\metre}. The high-pass chain maintained a detectable waveform across the entire travel range.
-
-\subsection{Exercise 4: High-Pass Filter, Rectifier, and Low-Pass Filter}
-\subsubsection{Question 1: Duplicate High-Pass}
-This stage reused the Exercise~2 sizing so $R_9 = \SI{1.6}{\kilo\ohm}$ and $C_3 = \SI{1}{\micro\farad}$, keeping the \SI{100}{\hertz} cutoff.
-
-\subsubsection{Question 2: Rectifier Gain}
-
 The feedback network $R_6$--$C_2$ implements a first–order low-pass term of the form  
 \[
 H_{\text{LP}}(j\omega) = \frac{1}{1 + j\omega R_6 C_2}.
@@ -549,14 +524,18 @@ This shows:
         \(\dfrac{R_6}{R_5}\) (inverting amplifier).
 \end{itemize}
 
-Below are the complete circuit diagram for Exercise 4, and also for Exercise 5:
+
+
+Go ahead and built the circuit, see \Cref{fig:ex_3_circuit} for my breadboard circuit implementation.
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{images/4_3-circuit.jpg}
-    \caption{Breadboard circuit diagram for Exercise 4 and Exercise 5}
-    \label{fig:ex_4_circuit}
+    \includegraphics[width=0.8\textwidth]{images/3_3-circuit.jpg}
+    \caption{Breadboard circuit diagram for Exercise 3}
+    \label{fig:ex_3_circuit}
 \end{figure}
-\subsubsection{Question 3: Low-Pass Filter}
+
+\subsubsection{Question 3: Verification}
 Configure your waveform generator to 100 mV amplitude 1 kHz sine wave using the AD2 signal generator and 
 connect it to V2. Then use your oscilloscope to measure the output at V5. You should see a sine wave at V5. Measure the amplitude of the output sine wave at V5. Vary the frequency to see it's effect on the output amplitude.
 Here are my result for 1khz, 100khz, and 1mhz:
@@ -616,24 +595,60 @@ are of the same order, so everything seems to check out. I believe
 this is reasonable given tolerances in the actual resistor/capacitor
 values, and can also be caused by the
 bandwidth and slew-rate limits of the real op-amp.
+\subsection{Exercise 4: High-Pass Filter, Rectifier, and Low-Pass Filter}
+\subsubsection{Question 1: Duplicate High-Pass}
+This stage reused the Exercise~2 sizing so $R_9 = \SI{1.6}{\kilo\ohm}$ and $C_3 = \SI{1}{\micro\farad}$, keeping the \SI{100}{\hertz} cutoff.
+
+\subsubsection{Question 2: Rectifier Gain}
+
+\begin{align*}
+V_7 &= V_6\!\left(1 + \frac{R_{11}}{R_{10}}\right), \\
+\frac{R_{11}}{R_{10}} &= 10
+      \quad\Rightarrow\quad
+      \boxed{R_{10} = 1~\text{k}\Omega,\; R_{11} = 10~\text{k}\Omega\ \text{works}.}
+\end{align*}
+
+
+\subsubsection{Question 3: Low-Pass Filter}
+\begin{align*}
+V_8 &= \frac{\dfrac{1}{sC_4}}{\dfrac{1}{sC_4} + R_{12}}\,V_7 \\
+    &= \frac{1}{1 + R_{12}sC_4}\,V_7
+\end{align*}
+
+For the \(-3\:\text{dB}\) point we set \(s = j\omega\) and
+\begin{align*}
+\left|\frac{1}{1 + j\omega R_{12}C_4}\right|
+  &= \frac{1}{\sqrt{2}} \\
+1 + (\omega R_{12}C_4)^2 &= 2 \\
+\omega R_{12}C_4 &= 1 \\
+R_{12}C_4 &= \frac{1}{\omega}
+          = \frac{1}{1.6\cdot 2\pi}
+          \approx 9.95\times 10^{-2}.
+\end{align*}
+
+\[
+\boxed{C_4 = 100~\text{nF}},\qquad
+\boxed{R_{12} = 1~\text{M}\Omega}
+\]
+
 
 \subsubsection{Question 4: Response Checks}
 The next step is to check if your circuit works for Exericse 3 number 4, 5, 6. This is the perfect time for you to test if your circuit
 has the full 2.5V range. If the range is bad, please first try aligning your photodiode, because that might be the number one cause of this issue.
 Below are my results for V6, V7, and V8:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/4_4-v6.png}
     \caption{Waveform at $V_6$.}
     \label{fig:4_4_v6}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/4_4-v7.png}
     \caption{Waveform at $V_7$.}
     \label{fig:4_4_v7}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/4_4-v8.png}
     \caption{Waveform at $V_8$.}
@@ -739,18 +754,23 @@ waveform, so the filter effectively averages the rectified signal and
 outputs an almost constant DC value.
 
 \subsection{Exercise 5: Assemble Complete Circuit}
+Below are the complete circuit diagram for Exercise 4, and also for Exercise 5:
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/4_3-circuit.jpg}
+    \caption{Breadboard circuit diagram for Exercise 4 and Exercise 5}
+    \label{fig:ex_4_circuit}
+\end{figure}
 \subsubsection{Question 1: Integrate Stages}
 Finally, we are done with our circuit, the next step is to wire together the transimpedance amplifier (Exercise~2), AC amplifier (Exercise~3), and rectifier/low-pass chain (Exercise~4) to form the complete sensor. After this check all the connections again to make sure everything is correct. Once you are sure everything is correct, power up the circuit and test if it works as expected. 
 
 \subsubsection{Question 2: Constrain Output Range}
-If everything is correct, you should be able to see the output voltage $V_{\text{out}}$ vary between 0~V and 2.5~V as you sweep the LED along the rail. It's okay if you don't get the full range, as long as it's close to 2.5V that's good enough.
+If everything is correct, you should be able to see the output voltage $V_{\text{out}}$ vary between 0~V and 2.5~V as you sweep the LED along the rail. It's okay if you don't get the full range, as long as it's close to 2.5V that's good enough. 
+After following the advice of our TA to get good alignnment, I managed to get a full voltage of 2.3V when the LED is close, which is good enough.
 
 \section{Phase 3: Data Acquisition and Calibration}
-\subsection{Exercise 6: Firmware and C\# Acquisition}
-\subsubsection{Question 1: MSP430 Firmware}
-The firmware on the MSP430FR5739 was written to sample the low-pass output with the on-chip 10-bit ADC referenced to the \SI{3.3}{\volt} rail. Each conversion was formatted into a three-byte packet \texttt{[255, MS5B, LS5B]} where the most- and least-significant five bits occupy separate bytes to simplify parsing on the PC.
 
-\section{The Importance of Alignment with Photodiode and LED}
+\subsection{The Importance of Alignment with Photodiode and LED}
 I was struggling to get the full range of 2.5V output for a while, but thanks to our TA, he informed me that the alignment between the photodiode and LED is very crucial. To convince you, here is a simple math behind it:
 
 For clarity, \Cref{fig:alignment_geometry} shows the simplified geometry
@@ -906,6 +926,9 @@ just a few millimetres of misalignment when the LED is close are enough to
 move the circuit from ``saturated near \SI{2.5}{\volt}'' to a much smaller
 output, exactly matching what I observed on the bench.
 
+\subsection{Exercise 6: Firmware and C\# Acquisition}
+\subsubsection{Question 1: MSP430 Firmware}
+The firmware on the MSP430FR5739 was written to sample the low-pass output with the on-chip 10-bit ADC referenced to the \SI{3.3}{\volt} rail. Each conversion was formatted into a three-byte packet \texttt{[255, MS5B, LS5B]} where the most- and least-significant five bits occupy separate bytes to simplify parsing on the PC. See Appendix for a detailed explanation of my code
 
 \subsubsection{Question 2: C\# Application}
 The companion C\# program:
@@ -918,16 +941,33 @@ The companion C\# program:
 
 \subsection{Exercise 7: Calibration and Resolution}
 \subsubsection{Question 1: Distance Sweep}
-Measurements were recorded at a minimum of five LED-photodiode separations across the full mechanical travel. Each point stored both the ADC code and the physical distance measured with a ruler on the extrusion.
-
+I used a caliper to measure my distance, and then used it to record both the distance and then my program will display the ADC, which will be used for the curve fit.
 \subsubsection{Question 2: Curve Fit}
-My C\# program has an inbuilt curve fit function. The voltage-to-distance data were fitted with a smooth function (e.g., inverse power). Plotting both the raw scatter and the fitted curve in the report allowed visual confirmation that the model captured the sensor response with minimal residual error.
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/calibration_curve.png}
+    \caption{Calibration data and fitted curve.}
+    \label{fig:calibration_curve}
+\end{figure}
+As you can see from \Cref{fig:calibration_curve}, I used a second order fit and it has a 0.97 R-squared value, which is pretty good considering I have lots of points (9 points). You can also see the fit equation from \Cref{fig:calibration_curve}. 
 \subsubsection{Question 3: Conversion to Position}
-The inverse of the fitted function was implemented in software so that each ADC code could be converted in real time to an estimated separation distance.
+Using the fit equation from \Cref{fig:calibration_curve}, I implemented the conversion from ADC code to position in my C\# program. The conversion formula is:
+\begin{equation}
+y = 2.616\times 10^{-5} x^{2} - 0.046524\,x + 23.191794
+\end{equation}
+Here, \(y\) is the distance in \(\text{cm}\) and \(x\) is the ADC bit value.
 
 \subsubsection{Noise Characterization}
-With the slider set near mid-range, the converted position was logged for roughly \SI{10}{\second} and its standard deviation was interpreted as RMS noise. The experiment was repeated near both extremes of travel, and differences in noise level were attributed to the varying sensitivity (slope of the calibration curve) at those points.
+\begin{figure}[H    ]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/noise_measurement.png}
+    \caption{Noise characterization at medium distance.}
+    \label{fig:noise_characterization}
+\end{figure}
+\Cref{fig:noise_characterization} shows my noise characterization at a medium distance. I recorded 1000 samples and calculated the standard deviation, which is around 1.2 ADC codes. Using the conversion formula, this corresponds to a distance resolution of approximately 0.15 cm at this distance. 
+
+\subsubsection{Other Features}
+Other than this, I've confirmed the feature for out of range or too close (verified by the TA). My implementation was simply to have an upper and lower threshold for the ADC code, and if the code is out of this range, the program will display "Out of Range" if it's too low and "Too Close" if it's too high.
 
 \section{Appendix}
 

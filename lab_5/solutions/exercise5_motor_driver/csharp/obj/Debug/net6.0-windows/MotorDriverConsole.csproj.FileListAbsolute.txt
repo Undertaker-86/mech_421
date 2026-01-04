@@ -1,0 +1,5 @@
+D:\repository\MECH_421\lab_5\solutions\exercise5_motor_driver\csharp\obj\Debug\net6.0-windows\MotorDriverConsole.GeneratedMSBuildEditorConfig.editorconfig
+D:\repository\MECH_421\lab_5\solutions\exercise5_motor_driver\csharp\obj\Debug\net6.0-windows\MotorDriverConsole.AssemblyInfoInputs.cache
+D:\repository\MECH_421\lab_5\solutions\exercise5_motor_driver\csharp\obj\Debug\net6.0-windows\MotorDriverConsole.AssemblyInfo.cs
+D:\repository\MECH_421\lab_5\solutions\exercise5_motor_driver\csharp\obj\Debug\net6.0-windows\MotorDriverConsole.csproj.CoreCompileInputs.cache
+D:\repository\MECH_421\lab_5\solutions\exercise5_motor_driver\csharp\obj\Debug\net6.0-windows\MotorDriverConsole.sourcelink.json

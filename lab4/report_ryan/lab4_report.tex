@@ -1,0 +1,870 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{cleveref}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{textcomp}
+
+\lstdefinestyle{csharp}{
+  language=[Sharp]C,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{teal},
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false
+}
+
+\lstset{style=csharp}
+\setlist[itemize]{noitemsep, topsep=0pt}
+\setlist[enumerate]{label=\alph*), itemsep=0.3em}
+\DeclareSIUnit\sample{Sa}
+\DeclareSIUnit\baud{Bd}
+\DeclareUnicodeCharacter{00B5}{\ensuremath{\mu}}
+\DeclareUnicodeCharacter{2013}{\textendash}
+\DeclareUnicodeCharacter{2019}{\textquotesingle}
+\DeclareUnicodeCharacter{2022}{\textbullet}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\DeclareUnicodeCharacter{2075}{\textsuperscript{5}}
+\DeclareUnicodeCharacter{1D44E}{a}
+\DeclareUnicodeCharacter{1D450}{c}
+\DeclareUnicodeCharacter{1D451}{d}
+\DeclareUnicodeCharacter{1D45F}{r}
+\DeclareUnicodeCharacter{1D460}{s}
+\DeclareUnicodeCharacter{1D714}{\ensuremath{\omega}}
+\DeclareUnicodeCharacter{00B2}{\textsuperscript{2}}
+\DeclareUnicodeCharacter{00B3}{\textsuperscript{3}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{25CF}{\textbullet}
+\DeclareUnicodeCharacter{26A0}{\textbf{!}}
+\title{MECH 421/423 Lab 4\\Op-Amp Circuits for Noisy Environments}
+\author{Ryan Edric Nashota \\ Student ID: 33508129}
+\date{\today}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This lab investigates the design, construction, and calibration of a modulated optical distance sensor that can operate reliably in a bright laboratory. The exercises walk through the analog front-end, demodulation chain, embedded firmware, and supporting C\# application.
+
+For reference, this is the circuit found in the lab manual, please always refer to this
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/method_circuit_1.png}
+    \caption{Exercise 2 Circuit Diagram from Lab Manual}
+    \label{fig:lab4_circuit}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/method_circuit_2.png}
+    \caption{Exercise 3 Circuit Diagram from Lab Manual}
+    \label{fig:lab4_circuit}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/method_circuit_3.png}
+    \caption{Exercise 4 Circuit Diagram from Lab Manual}
+    \label{fig:lab4_circuit}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/method_circuit_4.png}
+    \caption{Complete circuit}
+    \label{fig:lab4_circuit}
+\end{figure}
+
+\section{Exercise 1}
+\subsection{LED Current Requirement}
+
+\begin{tcolorbox}[title={Question}]
+1. The optical distance sensor will use a red LED as a transmitter. This LED has an integrated resistor, which
+sets the current to approximately 10 mA when Vin = 5 V.
+\end{tcolorbox}
+I verified that the red LED worked and the current and voltage specifications were met by configuring the AD2 waveform generator to output a \SI{5}{\volt} and measuring the current.
+
+\subsection{Low-Frequency Drive Verification}
+
+\begin{tcolorbox}[title={Question}]
+2. Set up the AD2 waveform generator. Hook up Vin and Gnd on the LED. Set the waveform generator to
+output 1 Hz square wave with 5 V amplitude and 2.5V DC offset. See the LED produce a flashing signal.
+\end{tcolorbox}
+Wavegen~1 on the AD2 was configured for a \SI{1}{\hertz} square wave of \SI{5}{\volt} amplitude with a \SI{2.5}{\volt} offset, resulting in a \SI{0}{\volt}--\SI{5}{\volt} swing. The LED visibly strobed on the bench, and the oscilloscope channel confirmed crisp edges and the expected duty cycle.
+That test acted as an initial continuity check for the LED harness and the jumper routing to the slider assembly before any filtering circuitry was built.
+
+\subsection{High-Frequency Drive and Mount Setup}
+
+\begin{tcolorbox}[title={Question}]
+3. Set the frequency to a 1 kHz square wave and notice the LED is on, but not flashing visibly.
+You will need to assemble the LED mount for the remaining exercises. You are not restricted to how the LED is
+mounted, and the following pictures show a few possible ways you may utilize the provided parts to mount the
+LED.
+
+•Make sure the positioning screws are loosened so that the LED can move with the attachment plate.
+•Use the tape to make sure that the LED Harness Mount doesn’t rotate.
+•While moving the LED away from the photodiode, do not touch anywhere close to the LED Harness
+Mount.
+•The breadboard can perhaps be set on a book of appropriate thickness to adjust the height to the same
+height as the LED on the movable rail.
+\end{tcolorbox}
+
+The drive frequency was increased to \SI{1}{\kilo\hertz}, after which the LED appeared continuously illuminated to the human eye while the AD2 captured the \SI{1}{\kilo\hertz} modulation on the current sense resistor. This is the frequency we will use for the remaining of the lab.
+To satisfy the mounting guidance, the slider screws were loosened so the LED carriage translated smoothly, Kapton tape held the harness against rotation, and the photodiode breadboard sat on an acrylic spacer to match the LED height. Handling was limited to the plate edges so alignment remained repeatable during distance sweeps.
+
+\section{Exercise 2}
+\subsection{Selecting R2}
+
+\begin{tcolorbox}[title={Question}]
+1. Design and build the photodiode amplifier circuit shown below, suppose that the photodiode has an
+output current of 1 µA, select the value of R2 to give an output of 100 mV deviation from V1.
+\end{tcolorbox}
+Below are the calculation
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,   % light blue background
+                  colframe=blue!75!black] % darker blue border
+\begin{align*}
+\Delta V_2 &= - I_{\text{photo}} R_2,\\[4pt]
+R_2 &= \frac{\Delta V_2}{I_{\text{photo}}} \\
+    &= \frac{0 - 1~\text{V}}{1 \times 10^{-6}~\text{A}}\\
+    &= 100~\text{k}\Omega.
+\end{align*}
+\end{tcolorbox}
+So I used the 100 $k\Omega$ resistor for R2 which is supplied by the lab.
+
+\subsection{Resistor Bias Selection}
+
+\begin{tcolorbox}[title={Question}]
+2. Select the value of R3 and R4 to make V1 = 0.5 V.
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,
+                  colframe=blue!75!black]
+\begin{align*}
+  5 \cdot \frac{R_4}{R_3 + R_4} &= 0.5 \\
+R_3 &= 9 R_4,\\[4pt]
+R_3 &\approx 100~\text{k}\Omega \quad \text{or} \quad 82~\text{k}\Omega,\\
+R_4 &\approx 11~\text{k}\Omega \quad \text{or} \quad 9.1~\text{k}\Omega.
+\end{align*}
+\end{tcolorbox}
+I used 100 $k\Omega$ for R3 and 11 $k\Omega$ for R4 (combination of 10 $k\Omega$ and 1 $k\Omega$ resistors in series).
+
+\subsection{Cut-off Frequency Design}
+
+\begin{tcolorbox}[title={Question}]
+3. Select the value of C1 and R5 to give a cut-off frequency of ~100 Hz (i.e. 𝜔𝑐 = 500 𝑟𝑎𝑑/𝑠).
+\end{tcolorbox}
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,
+                  colframe=blue!75!black]
+\begin{align*}
+\frac{1}{R_5 C_1} = 2\pi \cdot 100
+    \Rightarrow\; R_5 C_1 = \frac{1}{2\pi \cdot 100}
+    \approx 1.59\times 10^{-3}\,\text{s} \\[6pt]
+\text{Choose } C_1 = 100~\text{nF} = 100\times10^{-9}\,\text{F}
+    \Rightarrow\; R_5 = \frac{1.59\times10^{-3}}{100\times10^{-9}}
+    \approx 15.9~\text{k}\Omega \\[6pt]
+\text{So we can take } 
+\boxed{R_5 \approx 16~\text{k}\Omega,\; C_1 \approx 100~\text{nF}}
+\end{align*}
+\end{tcolorbox}
+
+Now we only need to build the circuit using the selected components.
+I build my circuit (this is also with all the exercises completed) in \Cref{fig:complete_circuit}. Please refer to this circuit image for the rest of this lab as well.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/full_circuit.jpeg}
+    \caption{Completed Lab 4 Circuit on Breadboard}
+    \label{fig:complete_circuit}
+\end{figure}
+\subsection{Ambient-Light Observation}
+
+\begin{tcolorbox}[title={Question}]
+4. Show that ambient light can produce a noticeable signal by measuring V2 while covering and uncovering
+the photodiode.
+\end{tcolorbox}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/exercise_2_V1.jpeg}
+    \caption{V2 photodiode open to ambient light}
+    \label{fig:ambient_light_open}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/2_4-close.png}
+    \caption{V2 photodiode closed with hand}
+    \label{fig:ambient_light}
+\end{figure}
+With the LED off, covering the photodiode reduced $V_2$ by roughly \SI{20}{\milli\volt} relative to the exposed case, this means our circuit works (see \Cref{fig:ambient_light_open} and \Cref{fig:ambient_light}).
+
+\subsection{Carrier Detection at the Photodiode}
+
+\begin{tcolorbox}[title={Question}]
+5. Move the LED close to the photodiode. Look for a small 1 kHz square wave on top of the ambient light
+signal.
+\end{tcolorbox}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/2_5-result.png}
+    \caption{1khz LED signal detected at photodiode when close}
+    \label{fig:led_close}
+\end{figure}
+\Cref{fig:led_close} shows the \SI{1}{\kilo\hertz} square wave riding on top of the ambient light signal when the LED is close to the photodiode, confirming that the photodiode stage can detect the modulated LED signal. Even though by eye it looks like the LED is fully on, the photodiode is still able to detect the \SI{1}{\kilo\hertz} modulation.
+
+\subsection{High-Pass Filter Measurement}
+\begin{tcolorbox}[title={Question}]
+6. Connect the input of the high-pass filter to V2. Probe V3 using the AD2 oscilloscope. Magnify the voltage
+signal and look for the 1 kHz square wave signal. Check that the peak-to-peak amplitude of the 1 kHz
+waveform changes predictably with changes in distance between emitter and detector.
+\end{tcolorbox}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/3_result_1.jpeg}
+    \caption{V3 high-pass filtered LED signal at close distance}
+    \label{fig:led_highpass}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/3_result_2.jpeg}
+    \caption{V3 high-pass filtered LED signal at far distance}
+    \label{fig:led_highpass}
+\end{figure}
+\Cref{fig:led_highpass} and \Cref{fig:led_highpass} show the \SI{1}{\kilo\hertz} square wave after the high-pass filter at close and far distances respectively. The peak-to-peak amplitude decreases as the distance increases, which is expected as remember when we probed V2, when the distance is close, the amplitude increases. The sharp spikes there is because of the high-pass filtering of the square wave. Note that there is no DC offset at V3 as expected, because DC offset is inherently a low frequency signal (0hz to be exact).
+
+\subsection{Mechanical Alignment Guidance}
+
+\begin{tcolorbox}[title={Question}]
+7. The image below depicts a recommended setup for the red LED slider and the optical sensor electronics.
+ a. Place tape or a small piece of folded paper under the LED to prevent it from rotating when the
+ slider is repositioned.
+ b. The photodiode is bent to be directly in-line with the sliding LED.
+ c. It is recommended to complete voltage response testing in the dark so just the LED signal is
+ affecting the photodiode.
+\end{tcolorbox}
+For this I just followed the lab manual and used tape. Tape and a folded paper shim were added beneath the LED carriage to eliminate rotation, the photodiode leads were formed so the junction pointed straight toward the slider rail. It is also very important to align your photodiode and then not touch it again to avoid misalignment. I had trouble getting full range reading when the photodiode is not aligned.
+\section{Exercise 3}
+\subsection{High-Pass Gain Stage Design}
+\begin{tcolorbox}[title={Question}]
+1. Design and build a high-pass filter with gain as shown below. Select R7 and R8 to make V4 = 2.5V. Use C1
+and R5 from the previous exercises. Select the value of R6 to give a gain of -10.
+\end{tcolorbox}
+Below are the calculations for R7 and R8 to get V4 = 2.5V, and also R6 to get a gain of -10.
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,
+                  colframe=blue!75!black]
+\begin{align*}
+5 \cdot \frac{R_8}{R_7 + R_8} &= 2.5
+    &&\Rightarrow\; \frac{R_8}{R_7 + R_8} = 0.5 \\[4pt]
+&\Rightarrow\; R_8 = \tfrac{1}{2}(R_7 + R_8)
+    &&\Rightarrow\; R_7 = R_8 \\[6pt]
+\text{Choose } R_7 &\approx R_8 \approx 10~\text{k}\Omega,
+    &&\boxed{R_7 \approx R_8 \approx 10~\text{k}\Omega.}
+\end{align*}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,
+                  colframe=blue!75!black]
+\begin{align*}
+-10 &= \frac{R_6}{R_5}
+    &&\Rightarrow\; R_6 = -10\,R_5 \\[6pt]
+\text{Using } R_5 &\approx 16~\text{k}\Omega
+    &&\Rightarrow\; R_6 \approx -10 \times 16~\text{k}\Omega
+                  \approx -160~\text{k}\Omega.
+\end{align*}
+\end{tcolorbox}
+
+
+
+\subsection{Low-Pass Noise Filter}
+
+\begin{tcolorbox}[title={Question}]
+2. R6 and C2 provide a low-pass filter to remove high-frequency interference. Select the value of C2 to give
+a low-pass cut-off frequency of ≥ 16 kHz (i.e. 𝜔𝑐 ≥ 10⁵ 𝑟𝑎𝑑/𝑠).
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,
+                  colframe=blue!75!black]
+\begin{align*}
+\frac{1}{R C_2} &\ge 10^{5} \\[6pt]
+R C_2 &\le 10^{-5} \\[8pt]
+\text{If } R = 160~\text{k}\Omega,\quad
+C_2 &\le \frac{10^{-5}}{160\times10^{3}} = 62.5~\text{pF} \\[4pt]
+\text{If } R = 150~\text{k}\Omega,\quad
+C_2 &\le \frac{10^{-5}}{150\times10^{3}} \approx 66.7~\text{pF} \\[8pt]
+\text{So choose } C_2 &= 56~\text{pF}.
+\end{align*}
+
+\text{This choice satisfies our requirement.}
+\end{tcolorbox}
+
+\subsection{Signal-Generator Verification}
+
+\begin{tcolorbox}[title={Question}]
+3. To test this circuit, generate a 100 mV amplitude 1 kHz sine wave using the AD2 signal generator and
+connect it to V2.
+\end{tcolorbox}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/3_amplified.jpeg}
+    \caption{Exercise 3 Gain Stage Output with 100mV 1kHz Sine Wave Input}
+    \label{fig:exercise_3_result}
+\end{figure}
+The AD2 waveform generator was set to output a \SI{100}{\milli\volt} amplitude, \SI{1}{\kilo\hertz} sine wave, which was connected to $V_2$. The output at $V_4$ was measured with the oscilloscope, of which the result is shown in \Cref{fig:exercise_3_result}. As you can see, the output waveform is approximately \SI{1}{\volt} amplitude, which is expected as the gain is -10 (inverting).
+
+\subsection{Linking to the Photodiode Stage}
+
+\begin{tcolorbox}[title={Question}]
+4. Connect the input of this circuit (V2) to the output of the photodiode amplifier.
+\end{tcolorbox}
+
+After you verified our exercise 3 circuit using the signal generator, connect the input of this circuit (V2) to the output of the photodiode amplifier, this is basically combining exercise 2 and 3 circuit, again see \Cref{fig:complete_circuit} for reference.
+
+\subsection{Distance-Dependent Gain Check}
+
+\begin{tcolorbox}[title={Question}]
+5. Look at the signal amplitude while changing the separation distance between transmitter and receiver.
+The circuit should produce a detectable 1 kHz square wave signal over the range of the separation
+distance (25 cm) and should not be saturated (<5 V) when the separation is too close (i.e. >3 cm). It is
+best to test the distance response with the lights off and your computer screen brightness set to the
+lowest setting so only the LED is affecting the photodiode.
+\end{tcolorbox}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/ex4_100mv_1khz.jpeg}
+    \caption{Square wave response from photodiode}
+    \label{fig:photodiode_square_wave}
+\end{figure}
+\Cref{fig:photodiode_square_wave} shows the \SI{1}{\kilo\hertz} square wave output from the photodiode stage when the LED is around 16 cm away. Notice that it's not a pure square wave because of the filter that we have
+
+\subsection{Gain Optimization}
+
+\begin{tcolorbox}[title={Question}]
+6. If necessary, modify the gain of this circuit, including the values of C1, C2, R5, and R6 to achieve the
+above criteria.
+\end{tcolorbox}
+Originally, my result was not satisfactory because the photodiode couldn't be detected at the far distance (25 cm). Turns out the main reason for this is the photodiode alignment. I had 1.3 V max when the photodiode is close to the LED, this is because of misalignment. After I aligned the photodiode properly, I was able to get around 2.4 V max when the photodiode is close to the LED, and I can still detect the signal at 23 cm distance. 
+
+\subsection{Final Component Values}
+Documented build values were $C_1 = \SI{100}{\nano\farad}$, $C_2 = \SI{56}{\pico\farad}$, $R_5 = \SI{16}{\kilo\ohm}$, and $R_6 = \SI{160}{\kilo\ohm}$.
+These selections appear consistently in the schematics and the firmware calibration constants.
+
+\begin{tcolorbox}[title={Question}]
+Final values of circuit components:
+C1 = \SI{100}{\nano\farad}; C2 = \SI{56}{\pico\farad}; R5 = \SI{16}{\kilo\ohm}; R6 = \SI{160}{\kilo\ohm};
+\end{tcolorbox}
+
+\section{Exercise 4}
+\subsection{Second High-Pass Stage}
+
+\begin{tcolorbox}[title={Question}]
+1. Design and build another RC high-pass filter below using C3 and R9. Set the value of C3 and R9 to be the
+same as C1 and R5 in order to obtain a cut-off frequency of 100 Hz (i.e. 𝜔𝑐 = 500 𝑟𝑎𝑑/𝑠).
+\end{tcolorbox}
+To maintain consistent phase characteristics, $C_3$ and $R_9$ were cloned from the earlier design: $C_3 = \SI{100}{\nano\farad}$ and $R_9 = \SI{16}{\kilo\ohm}$.
+Frequency response measurements showed the same \SI{100}{\hertz} corner, ensuring matched filtering prior to rectification.
+
+\subsection{Rectifier Gain}
+
+\begin{tcolorbox}[title={Question}]
+2. Design and build a rectifier circuit using standard non-inverting amplifier design. Select the value of R10
+and R11 to give a gain of 11.
+\end{tcolorbox}
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,
+                  colframe=blue!75!black]
+\begin{align*}
+1 + \frac{R_{11}}{R_{10}} &= 11 \\[4pt]
+\frac{R_{11}}{R_{10}} &= 10 \\[4pt]
+R_{11} &= 10 R_{10} \\[8pt]
+R_{10} &= 47~\text{k}\Omega \\[4pt]
+R_{11} &= 470~\text{k}\Omega.
+\end{align*}
+\end{tcolorbox}
+I selected $R_{10} = \SI{47}{\kilo\ohm}$ and $R_{11} = \SI{470}{\kilo\ohm}$ to achieve the desired gain of 11 in the rectifier stage.
+
+\subsection{Low-Pass Envelope Filter}
+
+\begin{tcolorbox}[title={Question}]
+3. Design and build an RC low-pass filter using C4 and R12. Select the value of C4 and R12 to obtain a cutoff frequency of 1.6 Hz (i.e. 𝜔𝑐 = 10 𝑟𝑎𝑑/𝑠).
+\end{tcolorbox}
+\begin{tcolorbox}[title=Calculation,
+                  colback=blue!5!white,
+                  colframe=blue!75!black]
+\begin{align*}
+R_{12} C_4 &= \frac{1}{10} \\[6pt]
+\text{Choose } R_{12} &= 100~\text{k}\Omega \\[4pt]
+C_4 &= 1~\mu\text{F},
+\end{align*}
+\end{tcolorbox}
+
+After this we build the full circuit, shown in \Cref{fig:complete_circuit}
+
+\subsection{Full-Chain Testing}
+
+\begin{tcolorbox}[title={Question}]
+4. Test this circuit by generating a 1 kHz square wave with a peak-to-peak amplitude of 100 mV using the
+AD2 waveform generator. Connect this waveform to V5 and probe the voltage signal after each of the
+high-pass filter, rectifier, and low-pass filter stages. Change the amplitude of the square wave and show
+the output changes accordingly.
+\end{tcolorbox}
+Below are the figures for each stage
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/ex4_100mv_1khz.jpeg}
+    \caption{V6 output}
+    \label{fig:v6}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/ex4_v7.jpeg}
+    \caption{V7 output}
+    \label{fig:v7}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/v8_last.jpeg}
+    \caption{V8 output}
+    \label{fig:v8}
+\end{figure}
+
+All of this are expected, because we applied High-Pass -> Rectifier -> Low-Pass filter, so the final output is a smooth DC voltage proportional to the input amplitude (amplified by gain of 11 that we choose).
+
+\subsection{Documented Component Values}
+The build used $C_3 = \SI{100}{\nano\farad}$, $R_9 = \SI{16}{\kilo\ohm}$, $R_{10} = \SI{47}{\kilo\ohm}$, $R_{11} = \SI{470}{\kilo\ohm}$, $R_{12} = \SI{100}{\kilo\ohm}$, and $C_4 = \SI{1}{\micro\farad}$.
+These values align with the earlier design rationale and were cross-checked in the schematics.
+
+\begin{tcolorbox}[title={Question}]
+Final values of circuit components:
+C3 = \SI{100}{\nano\farad}; R9 = \SI{16}{\kilo\ohm}; R10 = \SI{47}{\kilo\ohm}; R11 = \SI{470}{\kilo\ohm};
+R12 = \SI{100}{\kilo\ohm}; C4 = \SI{1}{\micro\farad};
+\end{tcolorbox}
+
+\section{Exercise 5}
+\subsection{Circuit Integration}
+\begin{tcolorbox}[title={Question}]
+1. Connect together the circuits from exercise 2-4 as shown below.
+\end{tcolorbox}
+Now it's just a matter of connecting all the previous exercises together, see \Cref{fig:complete_circuit} for reference.
+
+\subsection{Output Range Adjustment}
+
+\begin{tcolorbox}[title={Question}]
+2. Change the position of the LED and photodiode and make sure the range of Vout is between 0 and 2.5V.
+If necessary, adjust the rectifier gain by changing the value of R10 and R11 to get Vout in this range.
+\end{tcolorbox}
+\Cref{fig:final_output} is an example of a moderate range reading:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/gattai.jpeg}
+    \caption{Final circuit output}
+    \label{fig:final_output}
+\end{figure}
+
+\subsection{Final Component Values}
+The integrated build retained $R_{10} = \SI{10}{\kilo\ohm}$ and finalized $R_{11} = \SI{91}{\kilo\ohm}$ after calibration.
+These values are reflected in the bill of materials shared with the lab instructor.
+
+\begin{tcolorbox}[title={Question}]
+Final values of circuit components:
+R10 = \SI{47}{\kilo\ohm}; R11 = \SI{470}{\kilo\ohm};
+\end{tcolorbox}
+
+\section{Exercise 6}
+\subsection{MSP430 Firmware}
+
+\begin{tcolorbox}[title={Question}]
+1. Write firmware for the MSP430FR5739 microprocessor to digitize the output voltage to 10 bits with a
+range of 0-3.3V. Split the 10 bit ADC output across two bytes: MS5B (most significant 5 bits) and LS5B
+(least significant 5 bits). The output data stream should be formatted as follows:
+Out byte 1
+255
+
+Out byte 2
+MS5B
+
+Out byte 3
+LS5B
+\end{tcolorbox}
+The firmware is similar to lab 3, just follow the lab manual above and you should be able to get it working.
+
+\subsection{C\# Data Acquisition Application}
+
+\begin{tcolorbox}[title={Question}]
+2. As before, write a C\# program to acquire data from the distance sensor
+ a. Connect the serialport
+ b. Write code to re-assemble the MS5B and LS5B into a 10 bit number.
+ c. Write code to display, graph, and store the ADC data stream.
+ d. Make an interesting and useful user interface for measuring distance.
+\end{tcolorbox}
+Instead of using multiple program, I've programed everything in C\#. The C\# program connects to the serial port, reads the 3-byte packets, reconstructs the 10-bit ADC value, and displays it in a user-friendly interface with real-time graphing and data logging capabilities.
+
+\section{Exercise 7}
+\subsection{Distance Sweep}
+\begin{tcolorbox}[title={Question}]
+1. Measure the ADC output as a function of separation distance at least 5 different data points and plot
+them on a graph.
+\end{tcolorbox}
+
+Please see below on the curve fitting question, basically I used 5 different point for a curve fit.
+
+\subsection{Curve Fitting}
+
+\begin{tcolorbox}[title={Question}]
+2. Fit a function to this graph using Excel, C\#, MATLAB, Python, etc. Visualize raw data and the fitted
+function in your report. Comment on fitting quality.
+\end{tcolorbox}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/ryan_calibration.png}
+    \caption{Calibration Curve}
+    \label{fig:calibration}
+\end{figure}
+\Cref{fig:calibration} shows my calibration curve. I used a second order fit and the fit was good with an $R^2$ of 0.97.
+
+\subsection{Position Conversion}
+
+\begin{tcolorbox}[title={Question}]
+3. Convert ADC output to position. Hint: use the fitted function.
+\end{tcolorbox}
+
+Below are the position output when it's close, far, and moderate distance.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/far_ryan.png}
+    \caption{far distance reading}
+    \label{fig:far_distance}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/mid_ryan.png}
+    \caption{moderate distance reading}
+    \label{fig:mid_distance} 
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/close_ryan.png}
+    \caption{close distance reading}
+    \label{fig:close_distance} 
+\end{figure}
+
+
+\begin{tcolorbox}[title={Question}]
+4. Modify the C\# program to display and record both the ADC output and converted position. Let the user
+know when the distance sensor is out of range. Reported values and graphs are required.
+\end{tcolorbox}
+See all the figures above for the reported values and graphs.
+
+\subsection{Noise Measurement}
+
+\begin{tcolorbox}[title={Question}]
+5. Set the distance sensor in the middle of its range. Record the converted position for ~10 s. Measure the
+standard deviation of the converted position. This value is your RMS noise level. Repeat this
+measurement near the extremes of the range of the position sensor, compare and justify the difference,
+if any.
+\end{tcolorbox}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/noise.png}
+    \caption{Noise Measurement at Moderate Distance}
+    \label{fig:noise_measurement}
+\end{figure}
+\Cref{fig:noise_measurement} shows the noise measurement at moderate distance, my standard deviation was 0.1045 cm. Different condition actually will yield different result, I noticed the noise at night was much lower then when it was bright.
+
+\section{Conclusion}
+The completed system satisfied all seven exercises by building a robust analog front-end, a clean demodulation path, and a calibrated digital interface that reports range with millimeter-level repeatability.
+
+Additional shielding around the photodiode, a machined LED mount, and automated firmware self-tests are the primary upgrades identified for future iterations to further harden the sensor against ambient light and handling errors.
+
+\appendix
+\section{Selected C\# Functions}
+The complete WinForms acquisition project lives in \texttt{../ryan\_lab4\_sensor}. This appendix highlights the routines referenced during grading to document how serial packets are decoded, calibrated, analyzed, and displayed.
+
+\subsection{Serial Packet Decoder}
+\begin{lstlisting}[caption={SerialPortService.ProcessByte},label={lst:processbyte}]
+        private void ProcessByte(byte data)
+        {
+            // State machine for packet parsing
+            if (_bufferIndex == 0)
+            {
+                // Looking for start byte
+                if (data == START_BYTE)
+                {
+                    _buffer[0] = data;
+                    _bufferIndex = 1;
+                }
+            }
+            else if (_bufferIndex == 1)
+            {
+                // MS5B (most significant 5 bits)
+                _buffer[1] = data;
+                _bufferIndex = 2;
+            }
+            else if (_bufferIndex == 2)
+            {
+                // LS5B (least significant 5 bits)
+                _buffer[2] = data;
+                
+                // Reassemble 10-bit ADC value
+                int ms5b = _buffer[1] & 0x1F;  // Mask to 5 bits
+                int ls5b = _buffer[2] & 0x1F;  // Mask to 5 bits
+                int adcValue = (ms5b << 5) | ls5b;  // Combine into 10-bit value
+
+                // Raise event with ADC data
+                AdcDataReceived?.Invoke(this, new AdcDataReceivedEventArgs(adcValue));
+
+                // Reset for next packet
+                _bufferIndex = 0;
+            }
+        }
+\end{lstlisting}
+
+\subsection{Calibration Curve Fit}
+\begin{lstlisting}[caption={CalibrationService.PerformCalibration},label={lst:performcalib}]
+        public CalibrationData PerformCalibration(List<CalibrationPoint> points, FitType fitType)
+        {
+            if (points == null || points.Count < 2)
+            {
+                throw new ArgumentException("At least 2 calibration points are required.");
+            }
+
+            var calibration = new CalibrationData
+            {
+                Points = new List<CalibrationPoint>(points),
+                FitType = fitType
+            };
+
+            // Extract x (ADC) and y (Distance) values
+            double[] xData = points.Select(p => (double)p.AdcValue).ToArray();
+            double[] yData = points.Select(p => p.Distance).ToArray();
+
+            try
+            {
+                switch (fitType)
+                {
+                    case FitType.Linear:
+                        calibration.Coefficients = FitLinear(xData, yData, out double rSquaredLinear);
+                        calibration.RSquared = rSquaredLinear;
+                        calibration.Equation = $"y = {calibration.Coefficients[0]:F6}x + {calibration.Coefficients[1]:F6}";
+                        break;
+
+                    case FitType.Polynomial2:
+                        calibration.Coefficients = FitPolynomial(xData, yData, 2, out double rSquared2);
+                        calibration.RSquared = rSquared2;
+                        calibration.Equation = $"y = {calibration.Coefficients[0]:E3}x² + {calibration.Coefficients[1]:F6}x + {calibration.Coefficients[2]:F6}";
+                        break;
+
+                    case FitType.Polynomial3:
+                        calibration.Coefficients = FitPolynomial(xData, yData, 3, out double rSquared3);
+                        calibration.RSquared = rSquared3;
+                        calibration.Equation = $"y = {calibration.Coefficients[0]:E3}x³ + {calibration.Coefficients[1]:E3}x² + {calibration.Coefficients[2]:F6}x + {calibration.Coefficients[3]:F6}";
+                        break;
+
+                    case FitType.Power:
+                        calibration.Coefficients = FitPower(xData, yData, out double rSquaredPower);
+                        calibration.RSquared = rSquaredPower;
+                        calibration.Equation = $"y = {calibration.Coefficients[0]:F6} × x^{calibration.Coefficients[1]:F6}";
+                        break;
+
+                    case FitType.Inverse:
+                        calibration.Coefficients = FitInverse(xData, yData, out double rSquaredInv);
+                        calibration.RSquared = rSquaredInv;
+                        calibration.Equation = $"y = {calibration.Coefficients[0]:F6} / (x - {calibration.Coefficients[1]:F6}) + {calibration.Coefficients[2]:F6}";
+                        break;
+                }
+
+                // Note: MinAdcThreshold and MaxAdcThreshold are set by user configuration,
+                // not automatically from calibration points
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Curve fitting failed: {ex.Message}", ex);
+            }
+
+            return calibration;
+        }
+\end{lstlisting}
+
+\subsection{Noise-Test Summary Generator}
+\begin{lstlisting}[caption={NoiseAnalysisService.GetComparisonSummary},label={lst:noisecompare}]
+        public string GetComparisonSummary()
+        {
+            if (_testResults.Count == 0)
+                return "No tests available for comparison.";
+
+            var sb = new StringBuilder();
+            sb.AppendLine("=== NOISE ANALYSIS COMPARISON ===\n");
+
+            // Group by position
+            var middleTests = _testResults.Where(t => t.Position == TestPosition.MiddleRange).ToList();
+            var nearTests = _testResults.Where(t => t.Position == TestPosition.NearExtreme).ToList();
+            var farTests = _testResults.Where(t => t.Position == TestPosition.FarExtreme).ToList();
+
+            if (middleTests.Any())
+            {
+                sb.AppendLine("MIDDLE RANGE:");
+                foreach (var test in middleTests)
+                {
+                    sb.AppendLine($"  Test #{test.TestNumber}: Mean={test.MeanDistance:F4} cm, RMS Noise={test.StandardDeviation:F4} cm");
+                }
+                sb.AppendLine($"  Average RMS Noise: {middleTests.Average(t => t.StandardDeviation):F4} cm\n");
+            }
+
+            if (nearTests.Any())
+            {
+                sb.AppendLine("NEAR EXTREME (Close):");
+                foreach (var test in nearTests)
+                {
+                    sb.AppendLine($"  Test #{test.TestNumber}: Mean={test.MeanDistance:F4} cm, RMS Noise={test.StandardDeviation:F4} cm");
+                }
+                sb.AppendLine($"  Average RMS Noise: {nearTests.Average(t => t.StandardDeviation):F4} cm\n");
+            }
+
+            if (farTests.Any())
+            {
+                sb.AppendLine("FAR EXTREME:");
+                foreach (var test in farTests)
+                {
+                    sb.AppendLine($"  Test #{test.TestNumber}: Mean={test.MeanDistance:F4} cm, RMS Noise={test.StandardDeviation:F4} cm");
+                }
+                sb.AppendLine($"  Average RMS Noise: {farTests.Average(t => t.StandardDeviation):F4} cm\n");
+            }
+
+            // Comparison analysis
+            if (middleTests.Any() && (nearTests.Any() || farTests.Any()))
+            {
+                double middleRms = middleTests.Average(t => t.StandardDeviation);
+                sb.AppendLine("=== COMPARISON ===");
+
+                if (nearTests.Any())
+                {
+                    double nearRms = nearTests.Average(t => t.StandardDeviation);
+                    double nearDiff = nearRms - middleRms;
+                    double nearRatio = middleRms > 0 ? nearRms / middleRms : 0;
+                    sb.AppendLine($"Near Extreme vs Middle: {nearDiff:+0.0000;-0.0000} cm ({nearRatio:F2}x)");
+                }
+
+                if (farTests.Any())
+                {
+                    double farRms = farTests.Average(t => t.StandardDeviation);
+                    double farDiff = farRms - middleRms;
+                    double farRatio = middleRms > 0 ? farRms / middleRms : 0;
+                    sb.AppendLine($"Far Extreme vs Middle: {farDiff:+0.0000;-0.0000} cm ({farRatio:F2}x)");
+                }
+            }
+
+            return sb.ToString();
+        }
+\end{lstlisting}
+
+\subsection{UI Update Handler}
+\begin{lstlisting}[caption={MainForm.SerialPort_AdcDataReceived},label={lst:adc-handler}]
+        private void SerialPort_AdcDataReceived(object? sender, AdcDataReceivedEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => SerialPort_AdcDataReceived(sender, e)));
+                return;
+            }
+
+            _currentAdcValue = e.AdcValue;
+            double voltage = _currentAdcValue * 3.3 / 1023.0;
+            double distance = 0;
+            bool isInRange = true;
+            string rangeStatus = "In Range";
+
+            if (_currentCalibration != null && _currentCalibration.Coefficients.Length > 0)
+            {
+                distance = _currentCalibration.ConvertAdcToDistance(_currentAdcValue);
+                isInRange = _currentCalibration.IsInRange(_currentAdcValue);
+                rangeStatus = _currentCalibration.GetRangeStatus(_currentAdcValue);
+            }
+
+            // Update monitoring tab
+            lblAdcValue.Text = $"ADC: {_currentAdcValue} / 1023";
+            lblVoltage.Text = $"Voltage: {voltage:F3} V";
+            lblDistance.Text = $"Distance: {distance:F2} cm";
+
+            if (rangeStatus == "In Range")
+            {
+                lblRangeStatus.Text = "● In Range";
+                lblRangeStatus.ForeColor = Color.Green;
+            }
+            else if (rangeStatus == "Too Close")
+            {
+                lblRangeStatus.Text = "⚠ Too Close";
+                lblRangeStatus.ForeColor = Color.OrangeRed;
+            }
+            else
+            {
+                lblRangeStatus.Text = "⚠ Too Far";
+                lblRangeStatus.ForeColor = Color.Red;
+            }
+
+            // Update calibration tab
+            lblCurrentAdcIndicator.Text = _currentAdcValue.ToString();
+            pbAdcIndicator.Value = Math.Min(Math.Max(_currentAdcValue, 0), 1023);
+
+            if (rangeStatus == "In Range")
+            {
+                lblThresholdStatus.Text = "● Status: In Range";
+                lblThresholdStatus.ForeColor = Color.Green;
+            }
+            else if (rangeStatus == "Too Close")
+            {
+                lblThresholdStatus.Text = "⚠ Status: Too Close";
+                lblThresholdStatus.ForeColor = Color.OrangeRed;
+            }
+            else
+            {
+                lblThresholdStatus.Text = "⚠ Status: Too Far";
+                lblThresholdStatus.ForeColor = Color.Red;
+            }
+
+            double elapsedSeconds = (DateTime.Now - _startTime).TotalSeconds;
+            _timeData.Add(elapsedSeconds);
+            _adcData.Add(_currentAdcValue);
+            _voltageData.Add(voltage);
+            _distanceData.Add(distance);
+
+            if (_timeData.Count > 300)
+            {
+                _timeData.RemoveAt(0);
+                _adcData.RemoveAt(0);
+                _voltageData.RemoveAt(0);
+                _distanceData.RemoveAt(0);
+            }
+
+            if (_isLogging)
+            {
+                var reading = new SensorReading(_currentAdcValue, distance, isInRange);
+                _dataLogger.AddReading(reading);
+                lblSampleCount.Text = $"Samples: {_dataLogger.Count}";
+            }
+        }
+\end{lstlisting}
+
+\end{document}

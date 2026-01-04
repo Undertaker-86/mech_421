@@ -1,0 +1,363 @@
+80% of storage used … If you run out of space, you can't save to Drive or back up Google Photos. Get 100 GB of storage for CA$2.79 CA$0.69/month for 3 months.
+#include <msp430.h> 
+
+#define BUFF_SIZE                   51
+#define STEPPER_DUTY                2.7 / 12 * 0xFFFF
+#define STEPPER_PWM_THRESHOLD       0xDCFF
+#define STEPPER_MAX_FREQ            1000
+
+const int a_seq[] = {1, 1, 0, -1, -1, -1, 0, 1};
+const int b_seq[] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+volatile unsigned char buff[BUFF_SIZE];
+volatile unsigned char buff_start = 0;
+volatile unsigned char buff_end = 0;
+
+unsigned int stepper_duty = STEPPER_DUTY;
+volatile unsigned int stepper_speed = 0;
+volatile unsigned char stepper_state = 0;
+volatile int stepper_dir = 1;
+
+unsigned int uart_command = 0;
+unsigned int uart_data = 0;
+
+unsigned char packet_flag = 0;
+
+void clk_setup(void)
+{
+    //Enable CS register edit
+    CSCTL0 = CSKEY;
+
+    //DCO = 8MHz
+    CSCTL1 |= DCOFSEL_3;
+
+    //ACLK = SMCLK = DCO
+    CSCTL2 |= SELA__DCOCLK | SELS__DCOCLK;
+
+    //ACLK div1, SMCLK div8
+    CSCTL3 |= DIVA__1 | DIVS__8;
+
+    //Disable CS register edit
+    CSCTL0_H = 0;
+}
+
+void ta0_setup(void)
+{
+    //Set TA0.0
+    TA0CCR0 = 0xFFFF;
+
+    //TA0CCTL0 |= CCIE;
+
+    //TA0 on SMCLK, continuous mode, interrupt enable
+    TA0CTL |= TASSEL__SMCLK | MC__UP | TACLR;
+}
+
+void tb0_setup(void)
+{
+    //Set TB0.1 TB0.2 duty cycle
+    TB0CCR1 = 0;
+    TB0CCR2 = 0;
+
+    //Set-Reset mode for TB0.1 TB0.2
+    TB0CCTL1 |= OUTMOD_7;
+    TB0CCTL2 |= OUTMOD_7;
+
+    //Set up ports for TB0.1 TB0,2
+    P1DIR |= BIT4 | BIT5;
+    P1SEL0 |= BIT4 | BIT5;
+    P1SEL1 &= ~(BIT4 | BIT5);
+
+    //TB0 on ACLK, continuous mode
+    TB0CTL |= TBSSEL__ACLK | MC__CONTINUOUS | TBCLR;
+}
+
+void tb1_setup(void)
+{
+    //Set TB1.1 TB 1.2 duty cycle
+    TB1CCR1 = 0;
+    TB1CCR2 = 0;
+
+    //Set-Reset mode for TB1.1 TB2.2
+    TB1CCTL1 |= OUTMOD_7;
+    TB1CCTL2 |= OUTMOD_7;
+
+    //Set up ports for TB1.1 TB1,2
+    P3DIR |= BIT4 | BIT5;
+    P3SEL0 |= BIT4 | BIT5;
+    P3SEL1 &= ~(BIT4 | BIT5);
+
+    //TB1 on ACLK, continuous mode
+    TB1CTL |= TBSSEL__ACLK | MC__CONTINUOUS | TBCLR;
+}
+
+void tb2_setup(void)
+{
+    //Set TB2.1 duty cycle from 8MHz SMCLK
+    TB2CCR1 = 0;
+
+    //Set-Reset mode for TB2.1 TB2.2
+    TB2CCTL1 |= OUTMOD_7;
+
+    //Set up port for TB2.1
+    P2DIR |= BIT1;
+    P2SEL0 |= BIT1;
+    P2SEL1 &= ~BIT1;
+
+    //TB2 on ACLK, continuous mode
+    TB2CTL |= TBSSEL__ACLK | MC__CONTINUOUS | TBCLR;
+}
+
+void uart_setup()
+{
+    //UCSI software reset
+    UCA1CTLW0 |= UCSWRST;
+
+    //UART use SMCLK & 9600 Baud
+    UCA1CTLW0 |= UCSSEL__SMCLK;
+    UCA1BRW = 6;
+    UCA1MCTLW |= UCOS16 | UCBRF_8 | 0x2000;
+
+    //UART 8 bit
+    UCA1CTLW0 &= ~UC7BIT;
+
+    //UART no parity
+    UCA1CTLW0 &= ~UCPEN;
+
+    //UART 1 stop bit
+    UCA1CTLW0 &= ~UCSPB;
+
+    //P2.5 & P2.6 for UART
+    P2SEL0 &= ~(BIT5 | BIT6);
+    P2SEL1 |= BIT5 | BIT6;
+
+    //Enable UCSI
+    UCA1CTLW0 &= ~UCSWRST;
+
+    //UART receive interrupt enable
+    UCA1IE |= UCRXIE;
+}
+
+void io_setup(void)
+{
+    //Motor driver AIN1 AIN2
+    P3DIR |= BIT6 | BIT7;
+    P3OUT |= BIT6 | BIT7;
+}
+
+void dc_control(unsigned int cw, unsigned int pwm)
+{
+    //Change driver direction
+    if (cw)
+    {
+        P3OUT |= BIT7;
+        P3OUT &= ~BIT6;
+    }
+
+    else
+    {
+        P3OUT &= ~BIT7;
+        P3OUT |= BIT6;
+    }
+
+    //Change PWM output
+    if (pwm == 0)
+    {
+        P3OUT |= BIT6 | BIT7;
+    }
+
+    TB2CCR1 = pwm;
+}
+
+void stepper_half_step(void)
+{
+    stepper_state = (8 + stepper_state + stepper_dir) % 8;
+
+    TB0CCR1 = (a_seq[stepper_state] == 1) * stepper_duty;
+    TB0CCR2 = (a_seq[stepper_state] == -1) * stepper_duty;
+    TB1CCR1 = (b_seq[stepper_state] == 1) * stepper_duty;
+    TB1CCR2 = (b_seq[stepper_state] == -1) * stepper_duty;
+}
+
+void stepper_control(int dir, unsigned int speed)
+{
+    stepper_dir = dir;
+
+    if (speed == 0)
+    {
+        TA0CCTL0 &= ~CCIE;
+        stepper_duty = STEPPER_DUTY;
+        stepper_half_step();
+        return;
+    }
+
+    //No PWM at high speeds
+    if (speed > STEPPER_PWM_THRESHOLD)
+    {
+        //stepper_duty = 0xFFFF;
+    }
+
+    else
+    {
+        stepper_duty = STEPPER_DUTY;
+    }
+
+    TA0CCTL0 |= CCIE;
+
+    stepper_speed = (8000000 / STEPPER_MAX_FREQ) / speed;
+
+    TA0CCR0 = stepper_speed;
+}
+
+void process_uart_buff(void)
+{
+    static unsigned int pack_ind = 0xFFFF;
+    unsigned int c_byte;
+
+    if ((BUFF_SIZE + buff_end - buff_start) % BUFF_SIZE > 0)
+    {
+        c_byte = buff[buff_start];
+        buff_start = (buff_start + 1) % BUFF_SIZE;
+
+        if (c_byte == 255)
+        {
+            pack_ind = 0;
+            return;
+        }
+
+        pack_ind++;
+
+        switch (pack_ind)
+        {
+            case 1:
+                uart_command = c_byte;
+                break;
+
+            case 2:
+                uart_data = c_byte << 8;
+                break;
+
+            case 3:
+                uart_data += c_byte;
+                break;
+
+            case 4:
+
+                if (c_byte & 0x01)
+                {
+                    uart_data |= 0x00FF;
+                }
+
+                if (c_byte & 0x2)
+                {
+                    uart_data |= 0xFF00;
+                }
+                break;
+        }
+
+        if (pack_ind == 4)
+        {
+            while(!(UCA1IFG & UCTXIFG));
+            UCA1TXBUF = uart_command;
+
+            while(!(UCA1IFG & UCTXIFG));
+            UCA1TXBUF = uart_data >> 8;
+
+            while(!(UCA1IFG & UCTXIFG));
+            UCA1TXBUF = uart_data & 0xFF;
+
+            packet_flag = 1;
+        }
+    }
+}
+
+void process_packet(void)
+{
+    switch (uart_command)
+    {
+        case 1:
+            dc_control(1, uart_data);
+            break;
+
+        case 2:
+            dc_control(0, uart_data);
+            break;
+
+        case 3:
+            stepper_control(1, uart_data);
+            break;
+
+        case 4:
+            stepper_control(-1, uart_data);
+            break;
+    }
+}
+
+/**
+ * main.c
+ */
+int main(void)
+{
+	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
+	
+	io_setup();
+	clk_setup();
+	ta0_setup();
+    tb0_setup();
+    tb1_setup();
+	tb2_setup();
+	uart_setup();
+
+	_EINT();
+
+	while (1)
+	{
+	    process_uart_buff();
+
+	    if (packet_flag)
+	    {
+	        process_packet();
+	        packet_flag = 0;
+	    }
+	}
+}
+
+#pragma vector=TIMER0_A0_VECTOR
+__interrupt void STEPPER_SPIN_ISR(void)
+{
+    stepper_half_step();
+}
+
+#pragma vector = USCI_A1_VECTOR
+__interrupt void UART_recieve(void)
+{
+    unsigned char rxByte = 0;
+
+    switch(__even_in_range(UCA1IV, USCI_UART_UCTXCPTIFG))
+    {
+        case USCI_UART_UCRXIFG:
+
+            rxByte = UCA1RXBUF;
+
+            if ((BUFF_SIZE + buff_end - buff_start) % BUFF_SIZE == BUFF_SIZE - 1)
+            {
+                /*
+                char out[] = "Buffer Full";
+                int i;
+
+                for (i = 0; i < 11; i++)
+                {
+                    while(!(UCA1IFG & UCTXIFG));
+                    UCA1TXBUF = out[i];
+                }
+                */
+            }
+
+            else
+            {
+                buff[buff_end] = rxByte;
+                buff_end = (buff_end + 1) % BUFF_SIZE;
+            }
+
+            break;
+    }
+}

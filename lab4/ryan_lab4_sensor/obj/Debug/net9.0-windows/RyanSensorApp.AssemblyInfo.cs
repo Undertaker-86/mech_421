@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RyanSensorApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8e0215ed5d839c11039ddd3f7b029023a20b6a8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f70076aa85a2c37543e832be7f55728f9036e136")]
 [assembly: System.Reflection.AssemblyProductAttribute("RyanSensorApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RyanSensorApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

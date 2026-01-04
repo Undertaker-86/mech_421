@@ -1,0 +1,79 @@
+graph LR
+    %% Styles
+    classDef sensor fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef compute fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    classDef infra fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+    classDef user fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px;
+    classDef actuator fill:#ffebee,stroke:#b71c1c,stroke-width:2px;
+
+    %% Subgraph: Robot / Edge Side
+    subgraph Robot ["Robot Hardware & Embedded Control"]
+        direction TB
+        
+        %% Sensors (ADC / Digital)
+        subgraph Input ["Data Acquisition (ADC/Sensors)"]
+            IMU("IMU / Mag<br/>(State)"):::sensor
+            Encoder("Wheel Encoders<br/>(Odometry)"):::sensor
+            Hall("Hinge Sensors<br/>(Pos/Lock)"):::sensor
+            Current("Power Module<br/>(Voltage/Current)"):::sensor
+        end
+
+        %% Compute Units
+        subgraph Embedded ["Embedded Compute"]
+            Pixhawk("Pixhawk Flight Controller<br/>(PX4 Firmware / Control Logic)"):::compute
+            Teensy("Teensy Microcontroller<br/>(Wheel Interface)"):::compute
+        end
+
+        %% Actuators
+        subgraph Output ["Actuation"]
+            Motors("BLDC Motors<br/>(Drive/Thrust)"):::actuator
+            Servos("Hinge Servos<br/>(Morphing)"):::actuator
+        end
+    end
+
+    %% Subgraph: Infrastructure / Base Station
+    subgraph Infrastructure ["Data Infrastructure & Pipeline"]
+        direction TB
+
+        %% Middleware
+        Middleware("ROS 2 Middleware<br/>(MicroXRCE-DDS / Wi-Fi)"):::infra
+
+        %% Storage Pipeline
+        subgraph Storage ["Logging & Storage"]
+            Rosbag("rosbag2<br/>(Raw Topic Logging)"):::infra
+            Postgres[("PostgreSQL<br/>(Archival DB)")]:::infra
+        end
+
+        %% Simulation
+        Sim("Gazebo / SITL<br/>(Mock Data Injection)"):::infra
+
+        %% User Interface
+        User("User Station<br/>(Rviz2 / QGC)"):::user
+    end
+
+    %% --- Connections ---
+
+    %% Sensor to Compute Flow
+    IMU --> Pixhawk
+    Current --> Pixhawk
+    Hall --> Pixhawk
+    Encoder --> Teensy
+    Teensy -- "UART/Serial" --> Pixhawk
+
+    %% Telemetry Link (Bi-directional)
+    Pixhawk <== "Wi-Fi (UDP/MAVLink)" ==> Middleware
+
+    %% Infrastructure Flow
+    Middleware -- "Topic Stream" --> Rosbag
+    Middleware -- "Visualization" --> User
+    Rosbag -- "ETL Process" --> Postgres
+    
+    %% Simulation Injection (Mock Data)
+    Sim -.-> |"Inject Synthetic Topics"| Middleware
+
+    %% Control Path (User -> Actuator)
+    User -- "Teleop Commands" --> Middleware
+    Middleware -- "Control Signal" --> Pixhawk
+    Pixhawk -- "PWM/DShot" --> Motors
+    Pixhawk -- "PWM" --> Servos
+

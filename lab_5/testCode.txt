@@ -1,0 +1,279 @@
+#include <msp430.h>
+#include <stdint.h>
+
+//TO DO: velocity to CC0 relation
+
+// =========================================================
+// UART PACKET FORMAT: 255, CMD, DIR, VELOCITY_PERCENT (0–100)
+// CMD = 1 → start stepping
+// CMD = 0 → stop stepping
+// DIR: 0 = CW, 1 = CCW
+// =========================================================
+
+volatile uint8_t rx_buffer[4];
+volatile uint8_t rx_index = 0;
+volatile uint8_t packet_ready = 0;
+
+volatile uint8_t step_index = 0;
+volatile uint8_t direction = 0;
+volatile uint8_t velocity = 0;     // now 0–100%
+volatile uint8_t run_stepper = 0;
+volatile uint8_t do_single_step = 0;
+volatile uint8_t state = 0;
+
+
+const double MAX_VELOCITY = 5000.0;     // max steps per second
+#define SMCLK_FREQ 8000000.0
+
+// Half-step table
+const uint8_t halfstep_table[8][4] = {
+    {1,0,0,0},
+    {1,0,1,0},
+    {0,0,1,0},
+    {0,1,1,0},
+    {0,1,0,0},
+    {0,1,0,1},
+    {0,0,0,1},
+    {1,0,0,1}
+};
+
+// =========================================================
+// Apply PWM to coils (25% energize, off otherwise)
+// =========================================================
+void apply_halfstep(uint8_t s)
+{
+    uint8_t a_p = halfstep_table[s][0];
+    uint8_t a_n = halfstep_table[s][1];
+    uint8_t b_p = halfstep_table[s][2];
+    uint8_t b_n = halfstep_table[s][3];
+
+    uint16_t duty = TB0CCR0 >> 2;    // 25% duty
+
+    TB0CCR1 = a_p ? duty : 0;
+    TB0CCR2 = a_n ? duty : 0;
+    TB1CCR1 = b_p ? duty : 0;
+    TB1CCR2 = b_n ? duty : 0;
+}
+
+// =========================================================
+// Velocity percent 0–100 → Timer period
+// =========================================================
+uint16_t velocity_to_period(uint8_t v)
+{
+    if(v == 0) return 0;
+
+    double step_rate = (v / 100.0) * MAX_VELOCITY; //steps per second
+    double period = SMCLK_FREQ / step_rate;
+
+    if(period > 65535.0) period = 65535.0;
+
+    return (uint16_t)period;
+}
+
+/* ================================
+ * Clock Init (8 MHz)
+ * ================================ */
+void initClock(void)
+{
+    CSCTL0_H = CSKEY >> 8;
+    CSCTL1   = DCOFSEL_3;
+    CSCTL2   = SELM0 + SELM1 + SELA0 + SELA1 + SELS0 + SELS1;
+    CSCTL3   = DIVM_1 | DIVS1 | DIVA_1;
+    CSCTL0_H = 0;
+}
+
+
+void init_uart()
+{
+
+    // Set P2.5 / P2.6 to UART function
+    P2SEL1 |=  BIT5 | BIT6;
+    P2SEL0 &= ~(BIT5 | BIT6);
+
+    UCA1CTLW0 |= UCSWRST;
+    UCA1CTLW0 |= UCSSEL__SMCLK;     // SMCLK = 8 MHz
+
+    UCA1BRW = 52;                   // 9600 baud
+    UCA1MCTLW = UCOS16 | 0x4900;    // modulation
+
+    UCA1CTLW0 &= ~UCSWRST;          // start UART
+    UCA1IE |= UCRXIE;               // enable RX interrupt
+
+    // UCA0CTL1 |= UCSWRST;
+    // UCA0CTL1 |= UCSSEL__SMCLK;
+
+    // UCA0BR0 = 52;
+    // UCA0BR1 = 0;
+    // UCA0MCTLW = 0x4900 | UCOS16;
+
+    // P2SEL1 |= BIT0 | BIT1;   // UART pins
+
+    // UCA0CTL1 &= ~UCSWRST;
+    // UCA0IE |= UCRXIE;
+
+    // // Configure clocks
+    // CSCTL0 = CSKEY; // Write password to modify CS registers
+    // CSCTL1 = DCOFSEL0 + DCOFSEL1; // DCO = 8 MHz
+    // CSCTL2 = SELM0 + SELM1 + SELA0 + SELA1 + SELS0 + SELS1; // MCLK = DCO, ACLK = DCO, SMCLK = DCO
+    // // Configure ports for UART
+    // P2SEL0 &= ~(BIT5 + BIT6);
+    // P2SEL1 |= BIT5 + BIT6;
+
+   
+
+    // // Configure UART0
+    // UCA1CTLW0 |= UCSWRST;
+    // UCA1CTLW0 |= UCSSEL__SMCLK; // Run the UART using ACLK
+    // UCA1MCTLW = UCOS16 + UCBRF0 + 0x4900; // Baud rate = 9600 from an 8 MHz clock
+    // UCA1BRW = 52;
+    // UCA1CTLW0 &= ~UCSWRST;
+    // UCA1IE |= UCRXIE; // Enable UART Rx interrupt
+}
+
+// =========================================================
+void init_pwm_outputs()
+{
+    P3DIR |= BIT4 + BIT5;         // Set P3.4 and 3.5 as output
+    P3OUT &= ~BIT4 + ~BIT5;         //turn off LEDs
+    P3SEL0 |= BIT4 + BIT5;        // Select primary peripheral function
+    P3SEL1 &= ~BIT4 +  ~BIT5;            // TB1.1 output (TBI.1) on P3.4 and TB1.2 output on 3.5
+
+    P1DIR |= BIT4 + BIT5;       // Set P1.4 and 1.5 as ouput
+    P1OUT &= ~BIT4 + ~BIT5;         //turn off LEDs
+    P1SEL0 |= BIT4 + BIT5;      
+    P1SEL1 &= ~BIT4 + BIT5;     //TB0.1 for P1.4 and TB0.2 for P1.5
+
+    TB0CTL = TBSSEL__SMCLK | MC__UP | TBCLR;
+    TB0CCR0 = 200;
+    TB0CCTL1 = OUTMOD_7;
+    TB0CCTL2 = OUTMOD_7;
+
+    TB1CTL = TBSSEL__SMCLK | MC__UP | TBCLR;
+    TB1CCR0 = 200;
+    TB1CCTL1 = OUTMOD_7;
+    TB1CCTL2 = OUTMOD_7;
+
+    TB0CCR1 = TB0CCR2 = 0;
+    TB1CCR1 = TB1CCR2 = 0;
+}
+
+// =========================================================
+void init_step_timer()
+{
+    TA0CTL = TASSEL__SMCLK | MC__STOP | TACLR;
+    TA0CCTL0 = CCIE;
+}
+
+// =========================================================
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;
+    //PM5CTL0 &= ~LOCKLPM5;
+    initClock();
+    init_uart();
+    init_pwm_outputs();
+    init_step_timer();
+
+    __enable_interrupt();
+
+    while(1)
+    {
+        if(packet_ready)
+        {
+            packet_ready = 0;
+
+            uint8_t cmd = rx_buffer[1];
+            direction = rx_buffer[2];
+            velocity  = rx_buffer[3];   // still 0–100%
+
+            if(cmd == 1 && velocity > 0)
+            {
+                // ---- Continuous motion ----
+                run_stepper = 1;
+                do_single_step = 0;
+
+                TA0CCR0 = velocity_to_period(velocity);
+                TA0CTL |= MC__UP;   // start timer
+            }
+            else if(cmd == 0)
+            {
+                // ---- Single half-step ----
+                run_stepper = 0;
+                do_single_step = 1;
+
+                TA0CTL &= ~MC__UP;  // stop timer
+
+                // perform one step immediately
+                if(direction == 0)
+                    step_index = (step_index + 1) & 0x07;
+                else
+                    step_index = (step_index - 1) & 0x07;
+
+                apply_halfstep(step_index);
+
+                // turn off single-step flag
+                do_single_step = 0;
+            }
+            else
+            {
+                // Stop everything
+                run_stepper = 0;
+                TA0CTL &= ~MC__UP;
+
+                // de-energize
+                TB0CCR1 = TB0CCR2 = 0;
+                TB1CCR1 = TB1CCR2 = 0;
+            }
+        }
+
+    }
+}
+
+
+#pragma vector = USCI_A1_VECTOR
+__interrupt void USCI_A1_ISR(void)
+{
+    unsigned int RxByte;
+    RxByte = UCA1RXBUF; // Get the new byte from the Rx buffer
+
+    if(state == 0) //read byte #1
+    {
+        if(RxByte == 255)
+        {
+            state = 1;
+            rx_buffer[rx_index++] = RxByte;
+        }
+    }
+    else if(state == 1)
+    {
+        state = 2;
+        rx_buffer[rx_index++] = RxByte;
+    }
+    else if(state == 2)
+    {
+        state = 3;
+        rx_buffer[rx_index++] = RxByte;
+    }
+    else if(state == 3)
+    {
+        state = 0;
+        rx_buffer[rx_index++] = RxByte;
+        packet_ready = 1;
+        rx_index = 0;
+    }
+}
+
+// =========================================================
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR(void)
+{
+    if(!run_stepper) return;  // only for continuous mode
+
+    if(direction == 0)
+        step_index = (step_index + 1) & 0x07;
+    else
+        step_index = (step_index - 1) & 0x07;
+
+    apply_halfstep(step_index);
+}
+

@@ -63,9 +63,8 @@ namespace RyanSensorApp.Services
                         break;
                 }
 
-                // Set min/max ADC values based on calibration points
-                calibration.MinAdcValue = (int)xData.Min();
-                calibration.MaxAdcValue = (int)xData.Max();
+                // Note: MinAdcThreshold and MaxAdcThreshold are set by user configuration,
+                // not automatically from calibration points
             }
             catch (Exception ex)
             {

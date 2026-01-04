@@ -55,3 +55,8 @@
 .vscode/
 *.code-workspace
 .idea/
+
+*.user
+*.cache
+*.dtbcache.v2
+*.futdcache.v2

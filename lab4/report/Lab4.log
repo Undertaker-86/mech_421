@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.15)  17 NOV 2025 19:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.5.15)  17 NOV 2025 23:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -951,119 +951,132 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout5 = `Lab4.toc'.
 
 [2]
-<images/method_circuit_1.png, id=226, 1559.07469pt x 563.10374pt>
+<images/method_circuit_1.png, id=231, 1559.07469pt x 563.10374pt>
 File: images/method_circuit_1.png Graphic file (type png)
 <use images/method_circuit_1.png>
 Package pdftex.def Info: images/method_circuit_1.png  used on input line 52.
 (pdftex.def)             Requested size: 375.80544pt x 135.73193pt.
  [3 <./images/method_circuit_1.png>]
-<images/method_circuit_2.png, id=244, 907.89188pt x 484.81125pt>
+<images/method_circuit_2.png, id=249, 907.89188pt x 484.81125pt>
 File: images/method_circuit_2.png Graphic file (type png)
 <use images/method_circuit_2.png>
 Package pdftex.def Info: images/method_circuit_2.png  used on input line 69.
 (pdftex.def)             Requested size: 375.80544pt x 200.67508pt.
  [4 <./images/method_circuit_2.png>]
-<images/method_circuit_3.png, id=261, 948.54375pt x 524.71031pt>
+<images/method_circuit_3.png, id=266, 948.54375pt x 524.71031pt>
 File: images/method_circuit_3.png Graphic file (type png)
 <use images/method_circuit_3.png>
 Package pdftex.def Info: images/method_circuit_3.png  used on input line 113.
 (pdftex.def)             Requested size: 375.80544pt x 207.8868pt.
 
 [5 <./images/method_circuit_3.png>]
-<images/method_circuit_4.png, id=276, 1681.03032pt x 750.55406pt>
+<images/method_circuit_4.png, id=281, 1681.03032pt x 750.55406pt>
 File: images/method_circuit_4.png Graphic file (type png)
 <use images/method_circuit_4.png>
 Package pdftex.def Info: images/method_circuit_4.png  used on input line 131.
 (pdftex.def)             Requested size: 375.80544pt x 167.79083pt.
  [6 <./images/method_circuit_4.png>]
-<images/2_3-circuit.jpg, id=294, 3011.25pt x 4015.0pt>
+<images/2_3-circuit.jpg, id=299, 3011.25pt x 4015.0pt>
 File: images/2_3-circuit.jpg Graphic file (type jpg)
 <use images/2_3-circuit.jpg>
 Package pdftex.def Info: images/2_3-circuit.jpg  used on input line 179.
 (pdftex.def)             Requested size: 375.80544pt x 501.07735pt.
 
 [7] [8 <./images/2_3-circuit.jpg>]
-<images/2_4-open.png, id=306, 930.85266pt x 532.23843pt>
+<images/2_4-open.png, id=311, 930.85266pt x 532.23843pt>
 File: images/2_4-open.png Graphic file (type png)
 <use images/2_4-open.png>
 Package pdftex.def Info: images/2_4-open.png  used on input line 206.
 (pdftex.def)             Requested size: 375.80544pt x 214.87318pt.
-<images/2_4-close.png, id=307, 929.72343pt x 532.23843pt>
+<images/2_4-close.png, id=312, 929.72343pt x 532.23843pt>
 File: images/2_4-close.png Graphic file (type png)
 <use images/2_4-close.png>
 Package pdftex.def Info: images/2_4-close.png  used on input line 213.
 (pdftex.def)             Requested size: 375.80544pt x 215.13307pt.
  [9 <./images/2_4-open.png>]
-<images/2_5-wavegen_setup.png, id=317, 931.98187pt x 535.6261pt>
+<images/2_5-wavegen_setup.png, id=322, 931.98187pt x 535.6261pt>
 File: images/2_5-wavegen_setup.png Graphic file (type png)
 <use images/2_5-wavegen_setup.png>
 Package pdftex.def Info: images/2_5-wavegen_setup.png  used on input line 224.
 (pdftex.def)             Requested size: 375.80544pt x 215.97931pt.
  [10 <./images/2_4-close.png>]
-<images/2_5-result.png, id=324, 933.4875pt x 531.10922pt>
+<images/2_5-result.png, id=329, 933.4875pt x 531.10922pt>
 File: images/2_5-result.png Graphic file (type png)
 <use images/2_5-result.png>
 Package pdftex.def Info: images/2_5-result.png  used on input line 231.
 (pdftex.def)             Requested size: 375.80544pt x 213.81761pt.
  [11 <./images/2_5-wavegen_setup.png> <./images/2_5-result.png>]
-<images/2_6-result.png, id=331, 933.8639pt x 536.3789pt>
+<images/2_6-result.png, id=336, 933.8639pt x 536.3789pt>
 File: images/2_6-result.png Graphic file (type png)
 <use images/2_6-result.png>
 Package pdftex.def Info: images/2_6-result.png  used on input line 286.
 (pdftex.def)             Requested size: 375.80544pt x 215.84909pt.
 
-[12] [13 <./images/2_6-result.png>] [14]
-<images/3_3-circuit.jpg, id=357, 3011.25pt x 4015.0pt>
+[12] [13 <./images/2_6-result.png>] [14] [15] [16]
+<images/3_3-circuit.jpg, id=378, 3011.25pt x 4015.0pt>
 File: images/3_3-circuit.jpg Graphic file (type jpg)
 <use images/3_3-circuit.jpg>
-Package pdftex.def Info: images/3_3-circuit.jpg  used on input line 430.
+Package pdftex.def Info: images/3_3-circuit.jpg  used on input line 533.
 (pdftex.def)             Requested size: 375.80544pt x 501.07735pt.
- [15] [16 <./images/3_3-circuit.jpg>]
-[17]
-<images/4_3-circuit.jpg, id=377, 3011.25pt x 4015.0pt>
-File: images/4_3-circuit.jpg Graphic file (type jpg)
-<use images/4_3-circuit.jpg>
-Package pdftex.def Info: images/4_3-circuit.jpg  used on input line 555.
-(pdftex.def)             Requested size: 375.80544pt x 501.07735pt.
-<images/3_3-1khz.png, id=378, 1082.16797pt x 638.385pt>
+<images/3_3-1khz.png, id=379, 1082.16797pt x 638.385pt>
 File: images/3_3-1khz.png Graphic file (type png)
 <use images/3_3-1khz.png>
-Package pdftex.def Info: images/3_3-1khz.png  used on input line 565.
+Package pdftex.def Info: images/3_3-1khz.png  used on input line 544.
 (pdftex.def)             Requested size: 375.80544pt x 221.68471pt.
- [18] [19 <./images/4_3-circuit.jpg>]
-<images/3_3-100khz.png, id=391, 1083.6736pt x 640.64343pt>
+<images/3_3-100khz.png, id=380, 1083.6736pt x 640.64343pt>
 File: images/3_3-100khz.png Graphic file (type png)
 <use images/3_3-100khz.png>
-Package pdftex.def Info: images/3_3-100khz.png  used on input line 571.
+Package pdftex.def Info: images/3_3-100khz.png  used on input line 550.
 (pdftex.def)             Requested size: 375.80544pt x 222.16594pt.
-<images/3_3-1000khz.png, id=392, 1082.92078pt x 638.76141pt>
+ [17] [18 <./images/3_3-circuit.jpg>]
+<images/3_3-1000khz.png, id=390, 1082.92078pt x 638.76141pt>
 File: images/3_3-1000khz.png Graphic file (type png)
 <use images/3_3-1000khz.png>
-Package pdftex.def Info: images/3_3-1000khz.png  used on input line 577.
+Package pdftex.def Info: images/3_3-1000khz.png  used on input line 556.
 (pdftex.def)             Requested size: 375.80544pt x 221.66924pt.
- [20 <./images/3_3-1khz.png> <./images/3_3-100khz.png>]
-<images/4_4-v6.png, id=399, 1081.41516pt x 639.89063pt>
+ [19 <./images/3_3-1khz.png> <./images/3_3-100khz.png>] [20 <./images/3_3-1000k
+hz.png>]
+<images/4_4-v6.png, id=404, 1081.41516pt x 639.89063pt>
 File: images/4_4-v6.png Graphic file (type png)
 <use images/4_4-v6.png>
-Package pdftex.def Info: images/4_4-v6.png  used on input line 626.
+Package pdftex.def Info: images/4_4-v6.png  used on input line 641.
 (pdftex.def)             Requested size: 375.80544pt x 222.36378pt.
-<images/4_4-v7.png, id=400, 1083.6736pt x 639.89063pt>
+<images/4_4-v7.png, id=405, 1083.6736pt x 639.89063pt>
 File: images/4_4-v7.png Graphic file (type png)
 <use images/4_4-v7.png>
-Package pdftex.def Info: images/4_4-v7.png  used on input line 632.
+Package pdftex.def Info: images/4_4-v7.png  used on input line 647.
 (pdftex.def)             Requested size: 375.80544pt x 221.90488pt.
-<images/4_4-v8.png, id=401, 1082.92078pt x 639.13782pt>
+ [21]
+<images/4_4-v8.png, id=410, 1082.92078pt x 639.13782pt>
 File: images/4_4-v8.png Graphic file (type png)
 <use images/4_4-v8.png>
-Package pdftex.def Info: images/4_4-v8.png  used on input line 638.
+Package pdftex.def Info: images/4_4-v8.png  used on input line 653.
 (pdftex.def)             Requested size: 375.80544pt x 221.79985pt.
- [21 <./images/3_3-1000khz.png>] [22 <./images/4_4-v6.png>]
-[23 <./images/4_4-v7.png> <./images/4_4-v8.png>] [24] [25] [26]
+ [22 <./images/4_4-v6.png> <./images/4_4-v7.png>] [23 <./images/4_4-v8.png>]
+<images/4_3-circuit.jpg, id=422, 3011.25pt x 4015.0pt>
+File: images/4_3-circuit.jpg Graphic file (type jpg)
+<use images/4_3-circuit.jpg>
+Package pdftex.def Info: images/4_3-circuit.jpg  used on input line 760.
+(pdftex.def)             Requested size: 375.80544pt x 501.07735pt.
+ [24] [25] [26 <./images/4_3-circuit.jpg>] [27] [28]
+<images/calibration_curve.png, id=463, 1805.9972pt x 1008.01593pt>
+File: images/calibration_curve.png Graphic file (type png)
+<use images/calibration_curve.png>
+Package pdftex.def Info: images/calibration_curve.png  used on input line 948.
+(pdftex.def)             Requested size: 375.80544pt x 209.75157pt.
 
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 910.
+Runaway argument?
+{figure}[H ] \centering \includegraphics [width=0.8\textwidth ]{image\ETC.
+! Paragraph ended before \@float@HH was complete.
+<to be read again> 
+                   \par 
+l.968 
+      
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
 
-[27]
+[29 <./images/calibration_curve.png>]
 
 ! Package Listings Error: Couldn't load requested style.
 
@@ -1071,7 +1084,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.955 ...n firmware entry point},label={lst:main}]
+l.995 ...n firmware entry point},label={lst:main}]
                                                   
 The following styles weren't loadable:
     ,mspstyle$
@@ -1084,18 +1097,18 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.955 ...n firmware entry point},label={lst:main}]
+l.995 ...n firmware entry point},label={lst:main}]
                                                   
 The style is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-[28]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 955.
+nput line 995.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 962.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 1002.
 
-Overfull \hbox (23.28796pt too wide) in paragraph at lines 985--992
+[30]
+Overfull \hbox (23.28796pt too wide) in paragraph at lines 1025--1032
 []\OT1/cmr/m/n/12 The watch-dog timer is dis-abled to pre-vent un-wanted re-set
 s, and the helper func-tions \OT1/cmtt/m/n/12 gpio[]init()\OT1/cmr/m/n/12 ,
  []
@@ -1107,7 +1120,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.999 ...DC input and UART pins},label={lst:gpio}]
+l.1039 ...C input and UART pins},label={lst:gpio}]
                                                   
 The following styles weren't loadable:
     ,mspstyle$
@@ -1120,12 +1133,11 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.999 ...DC input and UART pins},label={lst:gpio}]
+l.1039 ...C input and UART pins},label={lst:gpio}]
                                                   
 The style is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-[29]
 
 ! Package Listings Error: Couldn't load requested style.
 
@@ -1133,7 +1145,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1029 ...guration at 9600 baud},label={lst:uart}]
+l.1069 ...guration at 9600 baud},label={lst:uart}]
                                                   
 The following styles weren't loadable:
     ,mspstyle$
@@ -1146,11 +1158,12 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1029 ...guration at 9600 baud},label={lst:uart}]
+l.1069 ...guration at 9600 baud},label={lst:uart}]
                                                   
 The style is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
+[31]
 
 ! LaTeX Error: Invalid UTF-8 byte sequence (�\lst@FillFixed@\lst@EC�).
 
@@ -1158,7 +1171,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1033 ...               // 1 MHz / (16*9600) ≈ 
+l.1073 ...               // 1 MHz / (16*9600) ≈ 
                                                   6.51
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
@@ -1173,7 +1186,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1033 ...               // 1 MHz / (16*9600) ≈ 
+l.1073 ...               // 1 MHz / (16*9600) ≈ 
                                                   6.51
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
@@ -1188,7 +1201,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1034 ...          // UCOS16 + BRF=8 + BRS≈0x20
+l.1074 ...          // UCOS16 + BRF=8 + BRS≈0x20
                                                   
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
@@ -1203,7 +1216,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1034 ...          // UCOS16 + BRF=8 + BRS≈0x20
+l.1074 ...          // UCOS16 + BRF=8 + BRS≈0x20
                                                   
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
@@ -1218,7 +1231,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1034 ...          // UCOS16 + BRF=8 + BRS≈0x20
+l.1074 ...          // UCOS16 + BRF=8 + BRS≈0x20
                                                   
 The document does not appear to be in UTF-8 encoding.
 Try adding \UseRawInputEncoding as the first line of the file
@@ -1226,7 +1239,6 @@ or specify an encoding such as \usepackage [latin1]{inputenc}
 in the document preamble.
 Alternatively, save the file in UTF-8 using your editor or another tool
 
-[30]
 
 ! Package Listings Error: Couldn't load requested style.
 
@@ -1234,7 +1246,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1054 ...10-bit resolution},label={lst:adc_init}]
+l.1094 ...10-bit resolution},label={lst:adc_init}]
                                                   
 The following styles weren't loadable:
     ,mspstyle$
@@ -1247,7 +1259,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1054 ...10-bit resolution},label={lst:adc_init}]
+l.1094 ...10-bit resolution},label={lst:adc_init}]
                                                   
 The style is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -1259,7 +1271,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1066 ...ampling routine},label={lst:adc_sample}]
+l.1106 ...ampling routine},label={lst:adc_sample}]
                                                   
 The following styles weren't loadable:
     ,mspstyle$
@@ -1272,103 +1284,118 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1066 ...ampling routine},label={lst:adc_sample}]
-                                                  
-The style is not loadable. Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! Package Listings Error: Couldn't load requested style.
-
-See the Listings package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1087 ...ion for 10 ms period},label={lst:timer}]
-                                                  
-The following styles weren't loadable:
-    ,mspstyle$
-This may cause errors in the sequel.
-
-
-! Package Listings Error: style mspstyle undefined.
-
-See the Listings package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1087 ...ion for 10 ms period},label={lst:timer}]
-                                                  
-The style is not loadable. Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[31]
-
-! Package Listings Error: Couldn't load requested style.
-
-See the Listings package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1107 ...mit 3-byte frame},label={lst:timer_isr}]
-                                                  
-The following styles weren't loadable:
-    ,mspstyle$
-This may cause errors in the sequel.
-
-
-! Package Listings Error: style mspstyle undefined.
-
-See the Listings package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1107 ...mit 3-byte frame},label={lst:timer_isr}]
+l.1106 ...ampling routine},label={lst:adc_sample}]
                                                   
 The style is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 [32]
 
-LaTeX Warning: Cref reference format for label type `lstlisting' undefined on i
-nput line 1146.
+! Package Listings Error: Couldn't load requested style.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1127 ...ion for 10 ms period},label={lst:timer}]
+                                                  
+The following styles weren't loadable:
+    ,mspstyle$
+This may cause errors in the sequel.
 
 
-Underfull \hbox (badness 7099) in paragraph at lines 1148--1148
-[]\OT1/cmr/m/n/12 Listing 8: Re-assem-bling 10-bit ADC sam-ples from 3-byte se-
-rial pack-ets in
- []
+! Package Listings Error: style mspstyle undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1127 ...ion for 10 ms period},label={lst:timer}]
+                                                  
+The style is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
-LaTeX Warning: Cref reference format for label type `lstlisting' undefined on i
-nput line 1185.
+! Package Listings Error: Couldn't load requested style.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1147 ...mit 3-byte frame},label={lst:timer_isr}]
+                                                  
+The following styles weren't loadable:
+    ,mspstyle$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: style mspstyle undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1147 ...mit 3-byte frame},label={lst:timer_isr}]
+                                                  
+The style is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 [33]
 
 LaTeX Warning: Cref reference format for label type `lstlisting' undefined on i
-nput line 1188.
+nput line 1186.
+
+
+Underfull \hbox (badness 7099) in paragraph at lines 1188--1188
+[]\OT1/cmr/m/n/12 Listing 8: Re-assem-bling 10-bit ADC sam-ples from 3-byte se-
+rial pack-ets in
+ []
 
 [34]
 
 LaTeX Warning: Cref reference format for label type `lstlisting' undefined on i
-nput line 1230.
+nput line 1225.
 
 
-Overfull \hbox (46.17801pt too wide) in paragraph at lines 1230--1231
+LaTeX Warning: Cref reference format for label type `lstlisting' undefined on i
+nput line 1228.
+
+[35]
+
+LaTeX Warning: Cref reference format for label type `lstlisting' undefined on i
+nput line 1270.
+
+
+Overfull \hbox (46.17801pt too wide) in paragraph at lines 1270--1271
 \OT1/cmr/m/n/12 mined once dur-ing the cal-i-bra-tion step. Dur-ing nor-mal op-
 er-a-tion the func-tion \OT1/cmtt/m/n/12 ConvertAdcToDistance
  []
 
 
 LaTeX Warning: Cref reference format for label type `lstlisting' undefined on i
-nput line 1233.
+nput line 1273.
 
+[36]
 LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 
-1254.
-(C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1cmtt.fd
+1294.
+ (C:\Users\gyang\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1cmtt.fd
 File: ts1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-[35] [36] (Lab4.aux)
+[37] [38]
+
+! LaTeX Error: \begin{figure} on input line 961 ended by \end{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1336 \end{document}
+                     
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(Lab4.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
@@ -1377,42 +1404,44 @@ L3 programming layer <2024-01-04>
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `Lab4.out' has not changed.
-(rerunfilecheck)             Checksum: F02B60170401DE546F760371668C876A;9385.
- ) 
+(rerunfilecheck)             Checksum: 79FBB21D95FBD9EC103CDDCB186A675E;9545.
+ )
+(\end occurred inside a group at level 1)
+
+### semi simple group (level 1) entered at line 961 (\begingroup)
+### bottom level 
 Here is how much of TeX's memory you used:
- 47449 strings out of 474486
- 1139740 string characters out of 5743755
- 2107542 words of memory out of 5000000
- 68891 multiletter control sequences out of 15000+600000
+ 47464 strings out of 474486
+ 1140121 string characters out of 5743755
+ 2155542 words of memory out of 5000000
+ 68901 multiletter control sequences out of 15000+600000
  569749 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,13n,93p,677b,2616s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\gyang\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt
-1095.pk> <C:\Users\gyang\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
-0\tcrm1200.pk><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmbx12.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/amsfonts/cm/cmbx8.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gyang/AppData/Local/Programs/
-MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gyang/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gyang/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gyan
-g/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Us
-ers/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb
-><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-mr8.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmsy8.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmti12.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/gyang/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Users/gyang/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on Lab4.pdf (36 pages, 14527139 bytes).
+ 84i,13n,93p,677b,2801s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\gyang\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/
+ec/dpi600\tctt1095.pk> <C:\Users\gyang\AppData\Local\MiKTeX\fonts/pk/ljfour/jkn
+appen/ec/dpi600\tcrm1200.pk><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/gyang/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmbx8.pfb><C:/Users/gyang/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gyang/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gyang/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/User
+s/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb>
+<C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cm
+r17.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmr6.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmr8.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb><C:/Users/gyang/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gyang/AppData/Local/Programs/M
+iKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/gyang/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/gyang/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Users/gya
+ng/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb
+>
+Output written on Lab4.pdf (38 pages, 14601440 bytes).
 PDF statistics:
- 876 PDF objects out of 1000 (max. 8388607)
- 388 named destinations out of 1000 (max. 500000)
- 431 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 900 PDF objects out of 1000 (max. 8388607)
+ 393 named destinations out of 1000 (max. 500000)
+ 444 words of extra memory for PDF output out of 10000 (max. 10000000)
 

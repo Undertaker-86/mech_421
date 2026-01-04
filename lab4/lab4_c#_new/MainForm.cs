@@ -17,9 +17,13 @@ namespace DistanceSensorApp
         private SerialPortService _serialPort;
         private DataLogger _dataLogger;
         private CalibrationService _calibrationService;
+        private NoiseAnalysisService _noiseAnalysisService;
         private CalibrationData? _currentCalibration;
         private System.Windows.Forms.Timer _chartUpdateTimer;
         private bool _isLogging = false;
+        private bool _isRecordingNoise = false;
+        private DateTime _noiseRecordingStartTime;
+        private List<SensorReading> _noiseRecordingData = new List<SensorReading>();
 
         // UI Controls - Main Tab
         private TabControl tabControl;
@@ -56,6 +60,23 @@ namespace DistanceSensorApp
         private NumericUpDown numMinAdc;
         private NumericUpDown numMaxAdc;
 
+        // UI Controls - Noise Analysis Tab
+        private TextBox txtPositionLabel;
+        private NumericUpDown numDuration;
+        private Button btnStartNoise;
+        private Button btnStopNoise;
+        private Label lblNoiseStatus;
+        private Label lblNoiseTimer;
+        private Label lblNoiseSamples;
+        private Label lblCurrentMean;
+        private Label lblCurrentStdDev;
+        private DataGridView dgvNoiseMeasurements;
+        private Button btnRemoveNoise;
+        private Button btnClearNoise;
+        private Button btnExportNoise;
+        private Button btnViewComparison;
+        private FormsPlot plotNoiseHistory;
+
         // Data storage for charts
         private List<double> _adcTimeData = new List<double>();
         private List<double> _adcValueData = new List<double>();
@@ -91,6 +112,11 @@ namespace DistanceSensorApp
             var calibTab = new TabPage("Calibration");
             CreateCalibrationTab(calibTab);
             tabControl.TabPages.Add(calibTab);
+
+            // Create Noise Analysis Tab
+            var noiseTab = new TabPage("Noise Analysis");
+            CreateNoiseAnalysisTab(noiseTab);
+            tabControl.TabPages.Add(noiseTab);
 
             this.Controls.Add(tabControl);
 
@@ -274,6 +300,7 @@ namespace DistanceSensorApp
 
             _dataLogger = new DataLogger();
             _calibrationService = new CalibrationService();
+            _noiseAnalysisService = new NoiseAnalysisService();
             _startTime = DateTime.Now;
         }
 
@@ -406,6 +433,36 @@ namespace DistanceSensorApp
                 var reading = new SensorReading(adcValue, distance, isInRange);
                 _dataLogger.AddReading(reading);
                 lblSampleCount.Text = $"Samples: {_dataLogger.Count}";
+            }
+
+            // Record noise data if noise recording is active
+            if (_isRecordingNoise)
+            {
+                var reading = new SensorReading(adcValue, distance, isInRange);
+                _noiseRecordingData.Add(reading);
+
+                // Update noise recording UI
+                double elapsed = (DateTime.Now - _noiseRecordingStartTime).TotalSeconds;
+                lblNoiseTimer.Text = $"Time: {elapsed:F1} s";
+                lblNoiseSamples.Text = $"Samples: {_noiseRecordingData.Count}";
+
+                // Calculate current statistics
+                if (_noiseRecordingData.Count > 0)
+                {
+                    double[] distances = _noiseRecordingData.Select(r => r.Distance).ToArray();
+                    double meanDist = distances.Average();
+                    double sumSquares = distances.Sum(d => Math.Pow(d - meanDist, 2));
+                    double stdDev = Math.Sqrt(sumSquares / distances.Length);
+
+                    lblCurrentMean.Text = $"Mean: {meanDist:F4} cm";
+                    lblCurrentStdDev.Text = $"Std Dev: {stdDev:F6} cm";
+                }
+
+                // Auto-stop after duration
+                if (elapsed >= (double)numDuration.Value)
+                {
+                    BtnStopNoise_Click(null, EventArgs.Empty);
+                }
             }
         }
 
@@ -677,6 +734,264 @@ namespace DistanceSensorApp
                 MessageBox.Show("Calibration applied to Monitor tab!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 tabControl.SelectedIndex = 0; // Switch to Monitor tab
             }
+        }
+
+        // Noise Analysis Tab Methods
+        private void CreateNoiseAnalysisTab(TabPage tab)
+        {
+            var noisePanel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(10) };
+
+            // Recording Control Panel
+            var recordingPanel = new GroupBox
+            {
+                Text = "Noise Measurement Recording",
+                Location = new Point(10, 10),
+                Size = new Size(500, 200)
+            };
+
+            var lblPosition = new Label { Text = "Position Label:", Location = new Point(10, 25), AutoSize = true };
+            txtPositionLabel = new TextBox { Location = new Point(110, 22), Width = 200, Text = "Middle Range" };
+
+            var lblDuration = new Label { Text = "Duration (s):", Location = new Point(10, 55), AutoSize = true };
+            numDuration = new NumericUpDown { Location = new Point(110, 52), Width = 80, Minimum = 5, Maximum = 60, Value = 10 };
+
+            btnStartNoise = new Button { Text = "Start Recording", Location = new Point(10, 90), Size = new Size(120, 40) };
+            btnStartNoise.Click += BtnStartNoise_Click;
+
+            btnStopNoise = new Button { Text = "Stop Recording", Location = new Point(140, 90), Size = new Size(120, 40), Enabled = false };
+            btnStopNoise.Click += BtnStopNoise_Click;
+
+            lblNoiseStatus = new Label { Text = "Status: Ready", Location = new Point(10, 140), AutoSize = true, Font = new Font("Arial", 10, FontStyle.Bold), ForeColor = Color.Blue };
+            lblNoiseTimer = new Label { Text = "Time: 0.0 s", Location = new Point(200, 140), AutoSize = true };
+            lblNoiseSamples = new Label { Text = "Samples: 0", Location = new Point(320, 140), AutoSize = true };
+
+            lblCurrentMean = new Label { Text = "Mean: --- cm", Location = new Point(10, 165), AutoSize = true };
+            lblCurrentStdDev = new Label { Text = "Std Dev: --- cm", Location = new Point(200, 165), AutoSize = true };
+
+            recordingPanel.Controls.AddRange(new Control[] { 
+                lblPosition, txtPositionLabel, lblDuration, numDuration, 
+                btnStartNoise, btnStopNoise, lblNoiseStatus, lblNoiseTimer, 
+                lblNoiseSamples, lblCurrentMean, lblCurrentStdDev 
+            });
+
+            // Measurements Table
+            var measurementsPanel = new GroupBox
+            {
+                Text = "Noise Measurements",
+                Location = new Point(10, 220),
+                Size = new Size(500, 300)
+            };
+
+            dgvNoiseMeasurements = new DataGridView
+            {
+                Location = new Point(10, 25),
+                Size = new Size(480, 230),
+                AllowUserToAddRows = false,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                ReadOnly = true
+            };
+            dgvNoiseMeasurements.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Position", Name = "Position", Width = 100 });
+            dgvNoiseMeasurements.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Mean Dist (cm)", Name = "MeanDist", Width = 100 });
+            dgvNoiseMeasurements.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "RMS Noise (cm)", Name = "StdDev", Width = 110 });
+            dgvNoiseMeasurements.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Samples", Name = "Samples", Width = 70 });
+
+            btnRemoveNoise = new Button { Text = "Remove", Location = new Point(10, 265), Size = new Size(80, 25) };
+            btnRemoveNoise.Click += BtnRemoveNoise_Click;
+
+            btnClearNoise = new Button { Text = "Clear All", Location = new Point(100, 265), Size = new Size(80, 25) };
+            btnClearNoise.Click += BtnClearNoise_Click;
+
+            measurementsPanel.Controls.AddRange(new Control[] { dgvNoiseMeasurements, btnRemoveNoise, btnClearNoise });
+
+            // Actions Panel
+            var actionsPanel = new GroupBox
+            {
+                Text = "Analysis Actions",
+                Location = new Point(10, 530),
+                Size = new Size(500, 80)
+            };
+
+            btnExportNoise = new Button { Text = "Export to CSV", Location = new Point(10, 25), Size = new Size(120, 35) };
+            btnExportNoise.Click += BtnExportNoise_Click;
+
+            btnViewComparison = new Button { Text = "View Comparison", Location = new Point(140, 25), Size = new Size(130, 35) };
+            btnViewComparison.Click += BtnViewComparison_Click;
+
+            actionsPanel.Controls.AddRange(new Control[] { btnExportNoise, btnViewComparison });
+
+            // Chart for noise history
+            plotNoiseHistory = new FormsPlot { Location = new Point(520, 10), Size = new Size(650, 600) };
+            plotNoiseHistory.Plot.Title("Noise Measurement Comparison");
+            plotNoiseHistory.Plot.XLabel("Position");
+            plotNoiseHistory.Plot.YLabel("RMS Noise (cm)");
+
+            noisePanel.Controls.AddRange(new Control[] { recordingPanel, measurementsPanel, actionsPanel, plotNoiseHistory });
+            tab.Controls.Add(noisePanel);
+        }
+
+        private void BtnStartNoise_Click(object? sender, EventArgs e)
+        {
+            if (!_serialPort.IsConnected)
+            {
+                MessageBox.Show("Please connect to the sensor first.", "Not Connected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (_currentCalibration == null)
+            {
+                MessageBox.Show("Please apply a calibration first.", "No Calibration", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            _isRecordingNoise = true;
+            _noiseRecordingStartTime = DateTime.Now;
+            _noiseRecordingData.Clear();
+
+            btnStartNoise.Enabled = false;
+            btnStopNoise.Enabled = true;
+            txtPositionLabel.Enabled = false;
+            numDuration.Enabled = false;
+            lblNoiseStatus.Text = "Status: Recording...";
+            lblNoiseStatus.ForeColor = Color.Green;
+        }
+
+        private void BtnStopNoise_Click(object? sender, EventArgs e)
+        {
+            if (!_isRecordingNoise) return;
+
+            _isRecordingNoise = false;
+            btnStartNoise.Enabled = true;
+            btnStopNoise.Enabled = false;
+            txtPositionLabel.Enabled = true;
+            numDuration.Enabled = true;
+            lblNoiseStatus.Text = "Status: Processing...";
+            lblNoiseStatus.ForeColor = Color.Blue;
+
+            try
+            {
+                if (_noiseRecordingData.Count == 0)
+                {
+                    MessageBox.Show("No data recorded.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    lblNoiseStatus.Text = "Status: Ready";
+                    return;
+                }
+
+                // Calculate noise measurement
+                var measurement = _noiseAnalysisService.CalculateNoiseMeasurement(_noiseRecordingData, txtPositionLabel.Text);
+                _noiseAnalysisService.AddMeasurement(measurement);
+
+                // Update table
+                dgvNoiseMeasurements.Rows.Add(
+                    measurement.PositionLabel,
+                    measurement.MeanDistance.ToString("F4"),
+                    measurement.StandardDeviation.ToString("F6"),
+                    measurement.SampleCount.ToString()
+                );
+
+                // Update chart
+                PlotNoiseMeasurements();
+
+                lblNoiseStatus.Text = "Status: Complete";
+                lblNoiseStatus.ForeColor = Color.Green;
+
+                MessageBox.Show($"Noise measurement complete!\n\nPosition: {measurement.PositionLabel}\nMean Distance: {measurement.MeanDistance:F4} cm\nRMS Noise: {measurement.StandardDeviation:F6} cm\nSamples: {measurement.SampleCount}", 
+                    "Measurement Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                lblNoiseStatus.Text = "Status: Ready";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error processing measurement: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblNoiseStatus.Text = "Status: Error";
+                lblNoiseStatus.ForeColor = Color.Red;
+            }
+        }
+
+        private void BtnRemoveNoise_Click(object? sender, EventArgs e)
+        {
+            if (dgvNoiseMeasurements.SelectedRows.Count > 0)
+            {
+                int index = dgvNoiseMeasurements.SelectedRows[0].Index;
+                _noiseAnalysisService.RemoveMeasurement(index);
+                dgvNoiseMeasurements.Rows.RemoveAt(index);
+                PlotNoiseMeasurements();
+            }
+        }
+
+        private void BtnClearNoise_Click(object? sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want to clear all measurements?", "Confirm Clear", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                _noiseAnalysisService.Clear();
+                dgvNoiseMeasurements.Rows.Clear();
+                PlotNoiseMeasurements();
+            }
+        }
+
+        private void BtnExportNoise_Click(object? sender, EventArgs e)
+        {
+            if (_noiseAnalysisService.Count == 0)
+            {
+                MessageBox.Show("No measurements to export.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "CSV Files (*.csv)|*.csv";
+                sfd.FileName = $"noise_analysis_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        _noiseAnalysisService.ExportToCsv(sfd.FileName);
+                        MessageBox.Show($"Noise analysis exported successfully to:\n{sfd.FileName}", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Export failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void BtnViewComparison_Click(object? sender, EventArgs e)
+        {
+            if (_noiseAnalysisService.Count == 0)
+            {
+                MessageBox.Show("No measurements available for comparison.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            string summary = _noiseAnalysisService.GetComparisonSummary();
+            MessageBox.Show(summary, "Noise Analysis Comparison", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void PlotNoiseMeasurements()
+        {
+            plotNoiseHistory.Plot.Clear();
+
+            var measurements = _noiseAnalysisService.GetAllMeasurements();
+            if (measurements.Count == 0)
+            {
+                plotNoiseHistory.Refresh();
+                return;
+            }
+
+            double[] x = Enumerable.Range(0, measurements.Count).Select(i => (double)i).ToArray();
+            double[] y = measurements.Select(m => m.StandardDeviation).ToArray();
+            string[] labels = measurements.Select(m => m.PositionLabel).ToArray();
+
+            var bar = plotNoiseHistory.Plot.Add.Bars(x, y);
+            bar.Label = "RMS Noise";
+
+            plotNoiseHistory.Plot.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(
+                x, labels);
+            plotNoiseHistory.Plot.Axes.Bottom.MajorTickStyle.Length = 0;
+            plotNoiseHistory.Plot.HideGrid();
+
+            plotNoiseHistory.Refresh();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

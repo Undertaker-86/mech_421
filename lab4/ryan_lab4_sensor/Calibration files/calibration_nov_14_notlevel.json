@@ -1,0 +1,38 @@
+{
+  "Points": [
+    {
+      "Distance": 0.433,
+      "AdcValue": 350
+    },
+    {
+      "Distance": 1.024,
+      "AdcValue": 287
+    },
+    {
+      "Distance": 2.15,
+      "AdcValue": 134
+    },
+    {
+      "Distance": 3.0,
+      "AdcValue": 79
+    },
+    {
+      "Distance": 3.64,
+      "AdcValue": 58
+    },
+    {
+      "Distance": 4.6,
+      "AdcValue": 46
+    }
+  ],
+  "FitType": 1,
+  "Coefficients": [
+    4.614655373367548E-05,
+    -0.029727185925973478,
+    5.397207630226674
+  ],
+  "RSquared": 0.9558057918372673,
+  "Equation": "y = 4.615E-005x² + -0.029727x + 5.397208",
+  "MinAdcThreshold": 47,
+  "MaxAdcThreshold": 355
+}

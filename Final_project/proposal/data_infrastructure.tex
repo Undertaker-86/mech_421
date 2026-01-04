@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[paperwidth=14in,paperheight=10in,margin=0.5in]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, arrows.meta, positioning, fit, calc}
+
+\begin{document}
+\thispagestyle{empty}
+\centering
+
+\begin{tikzpicture}[
+    >=Latex,
+    node distance=1.5cm and 2cm,
+    % Component Styles
+    sensor/.style={rectangle, draw=blue!60, fill=blue!5, thick, minimum width=2.5cm, minimum height=1cm, align=center, font=\small},
+    actuator/.style={rectangle, draw=red!60, fill=red!5, thick, minimum width=2.5cm, minimum height=1cm, align=center, font=\small},
+    compute/.style={rectangle, draw=black!80, fill=gray!10, very thick, minimum width=3cm, minimum height=4cm, rounded corners, align=center},
+    db/.style={rectangle, draw=purple!60, fill=purple!5, thick, minimum height=1.5cm, minimum width=2cm, align=center, font=\small, rounded corners=2pt},
+    process/.style={rectangle, draw=teal!60, fill=teal!5, thick, minimum width=3cm, minimum height=1.5cm, align=center, rounded corners, font=\small},
+    % Group Styles (No Fill to avoid background layer issues)
+    group_robot/.style={draw=gray!50, dashed, inner sep=0.5cm, rounded corners, thick},
+    group_infra/.style={draw=gray!50, dashed, inner sep=0.5cm, rounded corners, thick},
+    % Connector Styles
+    link/.style={->, thick, draw=black!70},
+    data/.style={->, thick, draw=blue!70},
+    wireless/.style={<->, dashed, thick, draw=black!70}
+]
+
+    % --- Nodes: Robot Hardware (Left) ---
+    
+    % Compute Unit (Central Hub)
+    \node[compute] (pixhawk) {\textbf{Pixhawk Flight Controller}\\(PX4 Firmware)\\[0.2cm] {\footnotesize Control Logic\\State Estimation\\Morphing Control}};
+
+    % Sensors (Inputs to Pixhawk)
+    \node[sensor, left=1.5cm of pixhawk.north west] (imu) {IMU / Mag\\(State)};
+    \node[sensor, left=1.5cm of pixhawk.west] (encoders) {Wheel Encoders\\(Odometry)};
+    \node[sensor, left=1.5cm of pixhawk.south west] (hall) {Hall Sensors\\(Hinge Pos)};
+    \node[sensor, below=0.5cm of hall] (power) {Power Module\\(V/I)};
+
+    % Actuators (Outputs from Pixhawk)
+    \node[actuator, above=0.5cm of imu] (servos) {Hinge Servos\\(Morphing)};
+    \node[actuator, above=0.5cm of servos] (motors) {BLDC Motors\\(Thrust/Drive)};
+
+    % Connections (Robot Internal)
+    \draw[data] (imu) -- (pixhawk.north west);
+    \draw[data] (encoders) -- (pixhawk.west);
+    \draw[data] (hall) -- (pixhawk.south west);
+    \draw[data] (power) -| (pixhawk.south);
+    \draw[link] (pixhawk.north) -| (servos.east);
+    \draw[link] (pixhawk.north) -| (motors.east);
+
+    % --- Data Pipeline (Wireless Bridge) ---
+    \node[process, right=3cm of pixhawk] (middleware) {\textbf{ROS 2 Middleware}\\(MicroXRCE-DDS)};
+    
+    % Wireless Link
+    \draw[wireless] (pixhawk) -- node[midway, above, font=\small] {Wi-Fi (UDP/MAVLink)} node[midway, below, font=\small] {Telemetry Stream} (middleware);
+
+    % --- Nodes: Infrastructure / Workstation (Right) ---
+
+    % Data Logging
+    \node[process, right=2cm of middleware] (rosbag) {\textbf{rosbag2}\\(Raw Data Log)};
+    \node[db, below=1cm of rosbag] (postgres) {\textbf{PostgreSQL}\\(Archival Storage)};
+    
+    % Simulation
+    \node[process, above=1cm of rosbag] (bi_sim) {\textbf{Gazebo / SITL}\\(Physics Sim)};
+    
+    % Monitoring
+    \node[process, right=2cm of rosbag] (monitor) {\textbf{Viz / User}\\(Rviz2 / QGC)};
+
+    % Connections (Infrastructure)
+    \draw[data] (middleware) -- node[midway, above, font=\footnotesize] {Topics} (rosbag);
+    \draw[data] (middleware) -- (monitor);
+    \draw[data] (rosbag) -- (postgres);
+    
+    % Simulation Feedback
+    \draw[wireless] (bi_sim) -| node[midway, above, font=\footnotesize] {Mock Data Injection} (middleware);
+
+    % --- Grouping Boxes (Drawn Last, No Fill) ---
+    % Temporarily commented out to diagnose error
+    % \node[group_robot, fit=(pixhawk) (imu) (motors) (power), label=above:\textbf{ROBOT / EDGE}] (robot_bg) {};
+    % \node[group_infra, fit=(middleware) (rosbag) (postgres) (monitor) (bi_sim), label=above:\textbf{BASE STATION / INFRASTRUCTURE}] (infra_bg) {};
+
+\end{tikzpicture}
+\end{document}

@@ -14,16 +14,26 @@ namespace RyanSensorApp
         private SerialPortService _serialPort;
         private DataLogger _dataLogger;
         private CalibrationService _calibrationService;
+        private NoiseAnalysisService _noiseAnalysisService;
         private CalibrationData? _currentCalibration;
         private System.Windows.Forms.Timer _chartUpdateTimer;
         private bool _isLogging = false;
         private int _currentAdcValue = 0;
+        
+        // Noise analysis
+        private bool _isNoiseTestRunning = false;
+        private NoiseTestResult? _currentNoiseTest;
+        private DateTime _noiseTestStartTime;
+        private System.Windows.Forms.Timer _noiseTestTimer;
 
-        // Left Panel Controls
-        private Panel leftPanel;
+        // Main UI
+        private TabControl mainTabControl;
+        
+        // Monitoring Tab Controls
+        private Panel monitorLeftPanel;
+        private Panel monitorRightPanel;
         private GroupBox connectionGroup;
         private GroupBox readingsGroup;
-        private GroupBox calibrationGroup;
         private GroupBox controlsGroup;
         private ComboBox cmbPortName;
         private ComboBox cmbBaudRate;
@@ -35,28 +45,79 @@ namespace RyanSensorApp
         private Label lblVoltage;
         private Label lblDistance;
         private Label lblRangeStatus;
-        private NumericUpDown numDistance;
-        private Button btnCapturePoint;
-        private Button btnClearPoints;
-        private ComboBox cmbFitType;
-        private Button btnFitCurve;
-        private Label lblEquation;
-        private Label lblRSquared;
         private Button btnStartLogging;
         private Button btnStopLogging;
         private Button btnExport;
-        private Button btnSaveCalib;
-        private Button btnLoadCalib;
         private Label lblSampleCount;
-
-        // Right Panel Controls
-        private Panel rightPanel;
         private FormsPlot plotAdc;
         private FormsPlot plotVoltage;
         private FormsPlot plotDistance;
         private Label lblChart1Title;
         private Label lblChart2Title;
         private Label lblChart3Title;
+
+        // Calibration Tab Controls
+        private Panel calibLeftPanel;
+        private Panel calibCenterPanel;
+        private Panel calibRightPanel;
+        private GroupBox calibPointsGroup;
+        private GroupBox calibPointsListGroup;
+        private GroupBox calibRangeGroup;
+        private GroupBox calibFitGroup;
+        private GroupBox calibVisualizationGroup;
+        private NumericUpDown numDistance;
+        private Button btnCapturePoint;
+        private Button btnClearPoints;
+        private DataGridView dgvCalibrationPoints;
+        private NumericUpDown numMinAdcThreshold;
+        private NumericUpDown numMaxAdcThreshold;
+        private Button btnApplyThresholds;
+        private Button btnPresetVeryClose;
+        private Button btnPresetClose;
+        private Button btnPresetExtended;
+        private Label lblCurrentAdcIndicator;
+        private ProgressBar pbAdcIndicator;
+        private Label lblThresholdStatus;
+        private ComboBox cmbFitType;
+        private Button btnFitCurve;
+        private Label lblEquation;
+        private Label lblRSquared;
+        private Button btnSaveCalib;
+        private Button btnLoadCalib;
+        private Label lblPointCount;
+        private Label lblAdcRange;
+        private FormsPlot plotCalibration;
+
+        // Noise Analysis Tab Controls
+        private Panel noiseLeftPanel;
+        private Panel noiseCenterPanel;
+        private Panel noiseRightPanel;
+        private GroupBox noiseTestSetupGroup;
+        private GroupBox noiseTestControlGroup;
+        private GroupBox noiseTestResultsGroup;
+        private GroupBox noiseVisualizationGroup;
+        private GroupBox noiseHistoryGroup;
+        private GroupBox noiseComparisonGroup;
+        private ComboBox cmbTestPosition;
+        private NumericUpDown numTestDuration;
+        private Label lblTestStatus;
+        private Label lblTestTimer;
+        private ProgressBar pbTestProgress;
+        private Button btnStartTest;
+        private Button btnStopTest;
+        private Label lblCurrentMean;
+        private Label lblCurrentStdDev;
+        private Label lblCurrentSamples;
+        private Label lblTestMean;
+        private Label lblTestStdDev;
+        private Label lblTestRange;
+        private Label lblTestSamples;
+        private FormsPlot plotNoiseTest;
+        private DataGridView dgvNoiseHistory;
+        private TextBox txtComparison;
+        private Button btnExportNoiseTests;
+        private Button btnClearNoiseTests;
+        private FormsPlot plotNoiseComparison;
 
         // Data storage
         private List<double> _timeData = new List<double>();
@@ -81,8 +142,41 @@ namespace RyanSensorApp
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.FromArgb(240, 240, 245);
 
+            // Create main tab control
+            mainTabControl = new TabControl
+            {
+                Dock = DockStyle.Fill,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                Padding = new Point(20, 8)
+            };
+
+            // Create tabs
+            TabPage monitoringTab = new TabPage("📊 Monitoring");
+            TabPage calibrationTab = new TabPage("⚙️ Calibration");
+            TabPage noiseAnalysisTab = new TabPage("📈 Noise Analysis");
+
+            CreateMonitoringTab(monitoringTab);
+            CreateCalibrationTab(calibrationTab);
+            CreateNoiseAnalysisTab(noiseAnalysisTab);
+
+            mainTabControl.TabPages.Add(monitoringTab);
+            mainTabControl.TabPages.Add(calibrationTab);
+            mainTabControl.TabPages.Add(noiseAnalysisTab);
+
+            this.Controls.Add(mainTabControl);
+
+            // Timer for chart updates
+            _chartUpdateTimer = new System.Windows.Forms.Timer();
+            _chartUpdateTimer.Interval = 100;
+            _chartUpdateTimer.Tick += ChartUpdateTimer_Tick;
+        }
+
+        private void CreateMonitoringTab(TabPage tab)
+        {
+            tab.BackColor = Color.FromArgb(240, 240, 245);
+
             // Create left panel (controls)
-            leftPanel = new Panel
+            monitorLeftPanel = new Panel
             {
                 Dock = DockStyle.Left,
                 Width = 400,
@@ -91,26 +185,21 @@ namespace RyanSensorApp
             };
 
             // Create right panel (charts)
-            rightPanel = new Panel
+            monitorRightPanel = new Panel
             {
                 Dock = DockStyle.Fill,
                 BackColor = Color.FromArgb(240, 240, 245),
                 Padding = new Padding(15)
             };
 
-            CreateLeftPanelControls();
-            CreateRightPanelControls();
+            CreateMonitoringLeftPanel();
+            CreateMonitoringRightPanel();
 
-            this.Controls.Add(rightPanel);
-            this.Controls.Add(leftPanel);
-
-            // Timer for chart updates
-            _chartUpdateTimer = new System.Windows.Forms.Timer();
-            _chartUpdateTimer.Interval = 100;
-            _chartUpdateTimer.Tick += ChartUpdateTimer_Tick;
+            tab.Controls.Add(monitorRightPanel);
+            tab.Controls.Add(monitorLeftPanel);
         }
 
-        private void CreateLeftPanelControls()
+        private void CreateMonitoringLeftPanel()
         {
             int yPos = 10;
 
@@ -184,7 +273,7 @@ namespace RyanSensorApp
             {
                 Text = "CURRENT READINGS",
                 Location = new Point(10, yPos),
-                Size = new Size(370, 140),
+                Size = new Size(370, 180),
                 Font = new Font("Segoe UI", 9, FontStyle.Bold)
             };
 
@@ -218,9 +307,9 @@ namespace RyanSensorApp
             lblRangeStatus = new Label
             {
                 Text = "● In Range",
-                Location = new Point(240, 30),
+                Location = new Point(15, 125),
                 AutoSize = true,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                Font = new Font("Segoe UI", 14, FontStyle.Bold),
                 ForeColor = Color.Green
             };
 
@@ -228,109 +317,7 @@ namespace RyanSensorApp
                 lblAdcValue, lblVoltage, lblDistance, lblRangeStatus
             });
 
-            yPos += 150;
-
-            // Calibration Group
-            calibrationGroup = new GroupBox
-            {
-                Text = "CALIBRATION",
-                Location = new Point(10, yPos),
-                Size = new Size(370, 240),
-                Font = new Font("Segoe UI", 9, FontStyle.Bold)
-            };
-
-            var lblDist = new Label
-            {
-                Text = "Enter Distance (cm):",
-                Location = new Point(15, 30),
-                AutoSize = true,
-                Font = new Font("Segoe UI", 9)
-            };
-
-            numDistance = new NumericUpDown
-            {
-                Location = new Point(15, 55),
-                Width = 150,
-                DecimalPlaces = 2,
-                Minimum = 0,
-                Maximum = 500,
-                Value = 10,
-                Font = new Font("Segoe UI", 11)
-            };
-
-            btnCapturePoint = new Button
-            {
-                Text = "📍 Capture Point",
-                Location = new Point(175, 50),
-                Size = new Size(180, 35),
-                BackColor = Color.FromArgb(0, 150, 100),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold)
-            };
-            btnCapturePoint.Click += BtnCapturePoint_Click;
-
-            btnClearPoints = new Button
-            {
-                Text = "Clear All Points",
-                Location = new Point(15, 95),
-                Size = new Size(150, 30),
-                BackColor = Color.FromArgb(150, 150, 150),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            btnClearPoints.Click += BtnClearPoints_Click;
-
-            var lblFit = new Label
-            {
-                Text = "Fit Type:",
-                Location = new Point(15, 135),
-                AutoSize = true,
-                Font = new Font("Segoe UI", 9)
-            };
-
-            cmbFitType = new ComboBox
-            {
-                Location = new Point(75, 132),
-                Width = 180,
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            cmbFitType.Items.AddRange(new object[] { "Linear", "Polynomial (2nd)", "Polynomial (3rd)", "Power", "Inverse" });
-            cmbFitType.SelectedIndex = 1;
-
-            btnFitCurve = new Button
-            {
-                Text = "Fit Curve",
-                Location = new Point(265, 128),
-                Size = new Size(90, 30),
-                BackColor = Color.FromArgb(100, 100, 200),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            btnFitCurve.Click += BtnFitCurve_Click;
-
-            lblEquation = new Label
-            {
-                Text = "Equation: ---",
-                Location = new Point(15, 170),
-                Size = new Size(340, 20),
-                Font = new Font("Segoe UI", 8)
-            };
-
-            lblRSquared = new Label
-            {
-                Text = "R² = ---",
-                Location = new Point(15, 195),
-                AutoSize = true,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold)
-            };
-
-            calibrationGroup.Controls.AddRange(new Control[] {
-                lblDist, numDistance, btnCapturePoint, btnClearPoints,
-                lblFit, cmbFitType, btnFitCurve, lblEquation, lblRSquared
-            });
-
-            yPos += 250;
+            yPos += 190;
 
             // Controls Group
             controlsGroup = new GroupBox
@@ -378,46 +365,23 @@ namespace RyanSensorApp
             {
                 Text = "Export to CSV",
                 Location = new Point(15, 105),
-                Size = new Size(165, 35),
+                Size = new Size(340, 35),
                 BackColor = Color.FromArgb(50, 100, 150),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat
             };
             btnExport.Click += BtnExport_Click;
 
-            btnSaveCalib = new Button
-            {
-                Text = "Save Calibration",
-                Location = new Point(190, 105),
-                Size = new Size(165, 35),
-                BackColor = Color.FromArgb(100, 100, 100),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            btnSaveCalib.Click += BtnSaveCalibration_Click;
-
-            btnLoadCalib = new Button
-            {
-                Text = "Load Calibration",
-                Location = new Point(190, 145),
-                Size = new Size(165, 25),
-                BackColor = Color.FromArgb(120, 120, 120),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 8)
-            };
-            btnLoadCalib.Click += BtnLoadCalibration_Click;
-
             controlsGroup.Controls.AddRange(new Control[] {
-                btnStartLogging, btnStopLogging, lblSampleCount, btnExport, btnSaveCalib, btnLoadCalib
+                btnStartLogging, btnStopLogging, lblSampleCount, btnExport
             });
 
-            leftPanel.Controls.AddRange(new Control[] {
-                connectionGroup, readingsGroup, calibrationGroup, controlsGroup
+            monitorLeftPanel.Controls.AddRange(new Control[] {
+                connectionGroup, readingsGroup, controlsGroup
             });
         }
 
-        private void CreateRightPanelControls()
+        private void CreateMonitoringRightPanel()
         {
             // Chart titles
             lblChart1Title = new Label
@@ -468,10 +432,525 @@ namespace RyanSensorApp
                 BackColor = Color.White
             };
 
-            rightPanel.Controls.AddRange(new Control[] {
+            monitorRightPanel.Controls.AddRange(new Control[] {
                 lblChart1Title, plotAdc,
                 lblChart2Title, plotVoltage,
                 lblChart3Title, plotDistance
+            });
+        }
+
+        private void CreateCalibrationTab(TabPage tab)
+        {
+            tab.BackColor = Color.FromArgb(240, 240, 245);
+
+            // Create three-panel layout
+            calibLeftPanel = new Panel
+            {
+                Dock = DockStyle.Left,
+                Width = 350,
+                BackColor = Color.White,
+                Padding = new Padding(15)
+            };
+
+            calibRightPanel = new Panel
+            {
+                Dock = DockStyle.Right,
+                Width = 350,
+                BackColor = Color.White,
+                Padding = new Padding(15)
+            };
+
+            calibCenterPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(240, 240, 245),
+                Padding = new Padding(15)
+            };
+
+            CreateCalibrationLeftPanel();
+            CreateCalibrationCenterPanel();
+            CreateCalibrationRightPanel();
+
+            tab.Controls.Add(calibCenterPanel);
+            tab.Controls.Add(calibRightPanel);
+            tab.Controls.Add(calibLeftPanel);
+        }
+
+        private void CreateCalibrationLeftPanel()
+        {
+            int yPos = 10;
+
+            // Point Capture Group
+            calibPointsGroup = new GroupBox
+            {
+                Text = "CAPTURE CALIBRATION POINTS",
+                Location = new Point(10, yPos),
+                Size = new Size(320, 180),
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            var lblDist = new Label
+            {
+                Text = "Distance (cm):",
+                Location = new Point(15, 30),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9)
+            };
+
+            numDistance = new NumericUpDown
+            {
+                Location = new Point(15, 55),
+                Width = 140,
+                DecimalPlaces = 2,
+                Minimum = 0,
+                Maximum = 500,
+                Value = 1.0M,
+                Font = new Font("Segoe UI", 11)
+            };
+
+            var lblCurrentAdc = new Label
+            {
+                Text = "Current ADC:",
+                Location = new Point(165, 30),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9)
+            };
+
+            lblCurrentAdcIndicator = new Label
+            {
+                Text = "---",
+                Location = new Point(165, 55),
+                Size = new Size(140, 30),
+                Font = new Font("Segoe UI", 16, FontStyle.Bold),
+                ForeColor = Color.FromArgb(0, 100, 200),
+                TextAlign = ContentAlignment.MiddleCenter,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            btnCapturePoint = new Button
+            {
+                Text = "📍 Capture Point",
+                Location = new Point(15, 95),
+                Size = new Size(290, 40),
+                BackColor = Color.FromArgb(0, 150, 100),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            btnCapturePoint.Click += BtnCapturePoint_Click;
+
+            btnClearPoints = new Button
+            {
+                Text = "Clear All Points",
+                Location = new Point(15, 140),
+                Size = new Size(290, 30),
+                BackColor = Color.FromArgb(150, 150, 150),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnClearPoints.Click += BtnClearPoints_Click;
+
+            calibPointsGroup.Controls.AddRange(new Control[] {
+                lblDist, numDistance, lblCurrentAdc, lblCurrentAdcIndicator, btnCapturePoint, btnClearPoints
+            });
+
+            yPos += 190;
+
+            // Fit Curve Group
+            calibFitGroup = new GroupBox
+            {
+                Text = "CURVE FITTING",
+                Location = new Point(10, yPos),
+                Size = new Size(320, 200),
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            var lblFit = new Label
+            {
+                Text = "Fit Type:",
+                Location = new Point(15, 30),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9)
+            };
+
+            cmbFitType = new ComboBox
+            {
+                Location = new Point(15, 55),
+                Width = 290,
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+            cmbFitType.Items.AddRange(new object[] { "Linear", "Polynomial (2nd)", "Polynomial (3rd)", "Power", "Inverse" });
+            cmbFitType.SelectedIndex = 1;
+
+            btnFitCurve = new Button
+            {
+                Text = "Fit Curve",
+                Location = new Point(15, 90),
+                Size = new Size(290, 35),
+                BackColor = Color.FromArgb(100, 100, 200),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            btnFitCurve.Click += BtnFitCurve_Click;
+
+            lblEquation = new Label
+            {
+                Text = "Equation: ---",
+                Location = new Point(15, 135),
+                Size = new Size(290, 20),
+                Font = new Font("Segoe UI", 8)
+            };
+
+            lblRSquared = new Label
+            {
+                Text = "R² = ---",
+                Location = new Point(15, 160),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            calibFitGroup.Controls.AddRange(new Control[] {
+                lblFit, cmbFitType, btnFitCurve, lblEquation, lblRSquared
+            });
+
+            yPos += 210;
+
+            // Save/Load Group
+            var saveLoadGroup = new GroupBox
+            {
+                Text = "CALIBRATION FILES",
+                Location = new Point(10, yPos),
+                Size = new Size(320, 100),
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            btnSaveCalib = new Button
+            {
+                Text = "Save Calibration",
+                Location = new Point(15, 30),
+                Size = new Size(290, 30),
+                BackColor = Color.FromArgb(100, 100, 100),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnSaveCalib.Click += BtnSaveCalibration_Click;
+
+            btnLoadCalib = new Button
+            {
+                Text = "Load Calibration",
+                Location = new Point(15, 65),
+                Size = new Size(290, 30),
+                BackColor = Color.FromArgb(120, 120, 120),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnLoadCalib.Click += BtnLoadCalibration_Click;
+
+            saveLoadGroup.Controls.AddRange(new Control[] { btnSaveCalib, btnLoadCalib });
+
+            calibLeftPanel.Controls.AddRange(new Control[] {
+                calibPointsGroup, calibFitGroup, saveLoadGroup
+            });
+        }
+
+        private void CreateCalibrationCenterPanel()
+        {
+            int yPos = 10;
+
+            // Points List Group
+            calibPointsListGroup = new GroupBox
+            {
+                Text = "CALIBRATION POINTS",
+                Location = new Point(10, yPos),
+                Size = new Size(660, 400),
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            lblPointCount = new Label
+            {
+                Text = "Points: 0",
+                Location = new Point(15, 25),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+
+            lblAdcRange = new Label
+            {
+                Text = "ADC Range: ---",
+                Location = new Point(150, 25),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 10)
+            };
+
+            dgvCalibrationPoints = new DataGridView
+            {
+                Location = new Point(15, 55),
+                Size = new Size(630, 330),
+                AllowUserToAddRows = false,
+                AllowUserToDeleteRows = false,
+                ReadOnly = true,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                MultiSelect = false,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                RowHeadersVisible = false,
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D
+            };
+
+            dgvCalibrationPoints.Columns.Add("Point", "Point #");
+            dgvCalibrationPoints.Columns.Add("Distance", "Distance (cm)");
+            dgvCalibrationPoints.Columns.Add("ADC", "ADC Value");
+            dgvCalibrationPoints.Columns["Point"].FillWeight = 20;
+            dgvCalibrationPoints.Columns["Distance"].FillWeight = 40;
+            dgvCalibrationPoints.Columns["ADC"].FillWeight = 40;
+
+            var deleteButtonColumn = new DataGridViewButtonColumn
+            {
+                Name = "Delete",
+                Text = "Delete",
+                UseColumnTextForButtonValue = true,
+                FillWeight = 20
+            };
+            dgvCalibrationPoints.Columns.Add(deleteButtonColumn);
+            dgvCalibrationPoints.CellContentClick += DgvCalibrationPoints_CellContentClick;
+
+            calibPointsListGroup.Controls.AddRange(new Control[] {
+                lblPointCount, lblAdcRange, dgvCalibrationPoints
+            });
+
+            yPos += 410;
+
+            // Visualization Group
+            calibVisualizationGroup = new GroupBox
+            {
+                Text = "CALIBRATION CURVE",
+                Location = new Point(10, yPos),
+                Size = new Size(660, 380),
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            plotCalibration = new FormsPlot
+            {
+                Location = new Point(15, 30),
+                Size = new Size(630, 335),
+                BackColor = Color.White
+            };
+
+            calibVisualizationGroup.Controls.Add(plotCalibration);
+
+            calibCenterPanel.Controls.AddRange(new Control[] {
+                calibPointsListGroup, calibVisualizationGroup
+            });
+        }
+
+        private void CreateCalibrationRightPanel()
+        {
+            int yPos = 10;
+
+            // Range Configuration Group
+            calibRangeGroup = new GroupBox
+            {
+                Text = "RANGE CONFIGURATION",
+                Location = new Point(10, yPos),
+                Size = new Size(320, 420),
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            var lblInfo = new Label
+            {
+                Text = "Configure ADC thresholds to define\nwhen sensor is in range:",
+                Location = new Point(15, 25),
+                Size = new Size(290, 35),
+                Font = new Font("Segoe UI", 9)
+            };
+
+            var lblMinThreshold = new Label
+            {
+                Text = "Too Far (Min ADC):",
+                Location = new Point(15, 70),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9)
+            };
+
+            numMinAdcThreshold = new NumericUpDown
+            {
+                Location = new Point(15, 95),
+                Width = 290,
+                Minimum = 0,
+                Maximum = 1023,
+                Value = 200,
+                Font = new Font("Segoe UI", 11)
+            };
+            numMinAdcThreshold.ValueChanged += NumThreshold_ValueChanged;
+
+            var lblMinDesc = new Label
+            {
+                Text = "ADC below this = Too Far",
+                Location = new Point(15, 125),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 8),
+                ForeColor = Color.Gray
+            };
+
+            var lblMaxThreshold = new Label
+            {
+                Text = "Too Close (Max ADC):",
+                Location = new Point(15, 155),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9)
+            };
+
+            numMaxAdcThreshold = new NumericUpDown
+            {
+                Location = new Point(15, 180),
+                Width = 290,
+                Minimum = 0,
+                Maximum = 1023,
+                Value = 800,
+                Font = new Font("Segoe UI", 11)
+            };
+            numMaxAdcThreshold.ValueChanged += NumThreshold_ValueChanged;
+
+            var lblMaxDesc = new Label
+            {
+                Text = "ADC above this = Too Close",
+                Location = new Point(15, 210),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 8),
+                ForeColor = Color.Gray
+            };
+
+            var lblPresets = new Label
+            {
+                Text = "Quick Presets:",
+                Location = new Point(15, 240),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            btnPresetVeryClose = new Button
+            {
+                Text = "Very Close (0.3-2cm)",
+                Location = new Point(15, 265),
+                Size = new Size(290, 30),
+                BackColor = Color.FromArgb(80, 140, 180),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9)
+            };
+            btnPresetVeryClose.Click += (s, e) => { numMinAdcThreshold.Value = 500; numMaxAdcThreshold.Value = 900; };
+
+            btnPresetClose = new Button
+            {
+                Text = "Close (0.5-4cm)",
+                Location = new Point(15, 300),
+                Size = new Size(290, 30),
+                BackColor = Color.FromArgb(80, 140, 180),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9)
+            };
+            btnPresetClose.Click += (s, e) => { numMinAdcThreshold.Value = 300; numMaxAdcThreshold.Value = 850; };
+
+            btnPresetExtended = new Button
+            {
+                Text = "Extended (1-6cm)",
+                Location = new Point(15, 335),
+                Size = new Size(290, 30),
+                BackColor = Color.FromArgb(80, 140, 180),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9)
+            };
+            btnPresetExtended.Click += (s, e) => { numMinAdcThreshold.Value = 100; numMaxAdcThreshold.Value = 900; };
+
+            btnApplyThresholds = new Button
+            {
+                Text = "✓ Apply Thresholds",
+                Location = new Point(15, 375),
+                Size = new Size(290, 35),
+                BackColor = Color.FromArgb(0, 150, 100),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            btnApplyThresholds.Click += BtnApplyThresholds_Click;
+
+            calibRangeGroup.Controls.AddRange(new Control[] {
+                lblInfo, lblMinThreshold, numMinAdcThreshold, lblMinDesc,
+                lblMaxThreshold, numMaxAdcThreshold, lblMaxDesc,
+                lblPresets, btnPresetVeryClose, btnPresetClose, btnPresetExtended, btnApplyThresholds
+            });
+
+            yPos += 430;
+
+            // Current Status Group
+            var statusGroup = new GroupBox
+            {
+                Text = "CURRENT STATUS",
+                Location = new Point(10, yPos),
+                Size = new Size(320, 180),
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            var lblCurrentStatus = new Label
+            {
+                Text = "Current ADC Value:",
+                Location = new Point(15, 30),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9)
+            };
+
+            var lblCurrentAdcValue = new Label
+            {
+                Text = "---",
+                Location = new Point(145, 30),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
+            };
+
+            lblThresholdStatus = new Label
+            {
+                Text = "● Status: ---",
+                Location = new Point(15, 55),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                ForeColor = Color.Gray
+            };
+
+            var lblIndicator = new Label
+            {
+                Text = "ADC Indicator:",
+                Location = new Point(15, 90),
+                AutoSize = true,
+                Font = new Font("Segoe UI", 9)
+            };
+
+            pbAdcIndicator = new ProgressBar
+            {
+                Location = new Point(15, 115),
+                Size = new Size(290, 25),
+                Minimum = 0,
+                Maximum = 1023,
+                Value = 0
+            };
+
+            var lblIndicatorScale = new Label
+            {
+                Text = "0           Too Far          In Range          Too Close          1023",
+                Location = new Point(15, 145),
+                Size = new Size(290, 15),
+                Font = new Font("Segoe UI", 7),
+                ForeColor = Color.Gray
+            };
+
+            statusGroup.Controls.AddRange(new Control[] {
+                lblCurrentStatus, lblCurrentAdcValue, lblThresholdStatus, lblIndicator, pbAdcIndicator, lblIndicatorScale
+            });
+
+            calibRightPanel.Controls.AddRange(new Control[] {
+                calibRangeGroup, statusGroup
             });
         }
 
@@ -484,11 +963,13 @@ namespace RyanSensorApp
 
             _dataLogger = new DataLogger();
             _calibrationService = new CalibrationService();
+            InitializeNoiseAnalysisService();
             _startTime = DateTime.Now;
         }
 
         private void InitializeCharts()
         {
+            // Monitoring charts
             plotAdc.Plot.Title("");
             plotAdc.Plot.XLabel("Time (s)");
             plotAdc.Plot.YLabel("ADC Value");
@@ -500,6 +981,12 @@ namespace RyanSensorApp
             plotDistance.Plot.Title("");
             plotDistance.Plot.XLabel("Time (s)");
             plotDistance.Plot.YLabel("Distance (cm)");
+
+            // Calibration chart
+            plotCalibration.Plot.Title("");
+            plotCalibration.Plot.XLabel("ADC Value");
+            plotCalibration.Plot.YLabel("Distance (cm)");
+            UpdateCalibrationPlot();
         }
 
         private void LoadAvailablePorts()
@@ -568,26 +1055,54 @@ namespace RyanSensorApp
             double voltage = _currentAdcValue * 3.3 / 1023.0;
             double distance = 0;
             bool isInRange = true;
+            string rangeStatus = "In Range";
 
             if (_currentCalibration != null && _currentCalibration.Coefficients.Length > 0)
             {
                 distance = _currentCalibration.ConvertAdcToDistance(_currentAdcValue);
                 isInRange = _currentCalibration.IsInRange(_currentAdcValue);
+                rangeStatus = _currentCalibration.GetRangeStatus(_currentAdcValue);
             }
 
+            // Update monitoring tab
             lblAdcValue.Text = $"ADC: {_currentAdcValue} / 1023";
             lblVoltage.Text = $"Voltage: {voltage:F3} V";
             lblDistance.Text = $"Distance: {distance:F2} cm";
 
-            if (isInRange)
+            if (rangeStatus == "In Range")
             {
                 lblRangeStatus.Text = "● In Range";
                 lblRangeStatus.ForeColor = Color.Green;
             }
+            else if (rangeStatus == "Too Close")
+            {
+                lblRangeStatus.Text = "⚠ Too Close";
+                lblRangeStatus.ForeColor = Color.OrangeRed;
+            }
             else
             {
-                lblRangeStatus.Text = "⚠ Out of Range";
+                lblRangeStatus.Text = "⚠ Too Far";
                 lblRangeStatus.ForeColor = Color.Red;
+            }
+
+            // Update calibration tab
+            lblCurrentAdcIndicator.Text = _currentAdcValue.ToString();
+            pbAdcIndicator.Value = Math.Min(Math.Max(_currentAdcValue, 0), 1023);
+
+            if (rangeStatus == "In Range")
+            {
+                lblThresholdStatus.Text = "● Status: In Range";
+                lblThresholdStatus.ForeColor = Color.Green;
+            }
+            else if (rangeStatus == "Too Close")
+            {
+                lblThresholdStatus.Text = "⚠ Status: Too Close";
+                lblThresholdStatus.ForeColor = Color.OrangeRed;
+            }
+            else
+            {
+                lblThresholdStatus.Text = "⚠ Status: Too Far";
+                lblThresholdStatus.ForeColor = Color.Red;
             }
 
             double elapsedSeconds = (DateTime.Now - _startTime).TotalSeconds;
@@ -670,6 +1185,10 @@ namespace RyanSensorApp
 
             double distance = (double)numDistance.Value;
             _calibrationPoints.Add(new CalibrationPoint(distance, _currentAdcValue));
+            
+            UpdateCalibrationPointsList();
+            UpdateCalibrationPlot();
+            
             MessageBox.Show($"Point captured!\nDistance: {distance:F2} cm\nADC: {_currentAdcValue}",
                 "Point Added", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -680,7 +1199,110 @@ namespace RyanSensorApp
             _currentCalibration = null;
             lblEquation.Text = "Equation: ---";
             lblRSquared.Text = "R² = ---";
+            
+            UpdateCalibrationPointsList();
+            UpdateCalibrationPlot();
+            
             MessageBox.Show("All calibration points cleared!", "Cleared", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void DgvCalibrationPoints_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == dgvCalibrationPoints.Columns["Delete"].Index)
+            {
+                var result = MessageBox.Show(
+                    $"Delete point {e.RowIndex + 1}?",
+                    "Confirm Delete",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    _calibrationPoints.RemoveAt(e.RowIndex);
+                    _currentCalibration = null;
+                    lblEquation.Text = "Equation: ---";
+                    lblRSquared.Text = "R² = ---";
+                    
+                    UpdateCalibrationPointsList();
+                    UpdateCalibrationPlot();
+                }
+            }
+        }
+
+        private void UpdateCalibrationPointsList()
+        {
+            dgvCalibrationPoints.Rows.Clear();
+            
+            for (int i = 0; i < _calibrationPoints.Count; i++)
+            {
+                var point = _calibrationPoints[i];
+                dgvCalibrationPoints.Rows.Add(
+                    (i + 1).ToString(),
+                    point.Distance.ToString("F2"),
+                    point.AdcValue.ToString()
+                );
+            }
+
+            lblPointCount.Text = $"Points: {_calibrationPoints.Count}";
+            
+            if (_calibrationPoints.Count > 0)
+            {
+                int minAdc = _calibrationPoints.Min(p => p.AdcValue);
+                int maxAdc = _calibrationPoints.Max(p => p.AdcValue);
+                lblAdcRange.Text = $"ADC Range: {minAdc} - {maxAdc}";
+            }
+            else
+            {
+                lblAdcRange.Text = "ADC Range: ---";
+            }
+        }
+
+        private void UpdateCalibrationPlot()
+        {
+            plotCalibration.Plot.Clear();
+
+            if (_calibrationPoints.Count > 0)
+            {
+                double[] adcValues = _calibrationPoints.Select(p => (double)p.AdcValue).ToArray();
+                double[] distances = _calibrationPoints.Select(p => p.Distance).ToArray();
+
+                var scatter = plotCalibration.Plot.Add.Scatter(adcValues, distances);
+                scatter.Color = ScottPlot.Color.FromHex("#0064C8");
+                scatter.MarkerSize = 10;
+                scatter.LineWidth = 0;
+                scatter.LegendText = "Calibration Points";
+
+                // If we have a fitted curve, plot it
+                if (_currentCalibration != null && _currentCalibration.Coefficients.Length > 0)
+                {
+                    int minAdc = (int)adcValues.Min();
+                    int maxAdc = (int)adcValues.Max();
+                    int range = maxAdc - minAdc;
+                    minAdc = Math.Max(0, minAdc - range / 4);
+                    maxAdc = Math.Min(1023, maxAdc + range / 4);
+
+                    List<double> fitAdcValues = new List<double>();
+                    List<double> fitDistances = new List<double>();
+
+                    for (int adc = minAdc; adc <= maxAdc; adc += 2)
+                    {
+                        double dist = _currentCalibration.ConvertAdcToDistance(adc);
+                        fitAdcValues.Add(adc);
+                        fitDistances.Add(dist);
+                    }
+
+                    var fitLine = plotCalibration.Plot.Add.Scatter(fitAdcValues.ToArray(), fitDistances.ToArray());
+                    fitLine.Color = ScottPlot.Color.FromHex("#FF6600");
+                    fitLine.LineWidth = 2;
+                    fitLine.MarkerSize = 0;
+                    fitLine.LegendText = "Fitted Curve";
+
+                    plotCalibration.Plot.Legend.IsVisible = true;
+                }
+            }
+
+            plotCalibration.Plot.Axes.AutoScale();
+            plotCalibration.Refresh();
         }
 
         private void BtnFitCurve_Click(object? sender, EventArgs e)
@@ -704,14 +1326,52 @@ namespace RyanSensorApp
             try
             {
                 _currentCalibration = _calibrationService.PerformCalibration(_calibrationPoints, fitType);
+                
+                // Apply current threshold settings
+                _currentCalibration.MinAdcThreshold = (int)numMinAdcThreshold.Value;
+                _currentCalibration.MaxAdcThreshold = (int)numMaxAdcThreshold.Value;
+                
                 lblEquation.Text = $"Equation: {_currentCalibration.Equation}";
                 lblRSquared.Text = $"R² = {_currentCalibration.RSquared:F6}";
+                
+                UpdateCalibrationPlot();
+                
                 MessageBox.Show($"Calibration successful!\nPoints: {_calibrationPoints.Count}\nR² = {_currentCalibration.RSquared:F6}",
                     "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Calibration failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnApplyThresholds_Click(object? sender, EventArgs e)
+        {
+            if (_currentCalibration != null)
+            {
+                _currentCalibration.MinAdcThreshold = (int)numMinAdcThreshold.Value;
+                _currentCalibration.MaxAdcThreshold = (int)numMaxAdcThreshold.Value;
+                MessageBox.Show("Thresholds applied to current calibration!", "Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Thresholds will be applied when you fit a curve.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void NumThreshold_ValueChanged(object? sender, EventArgs e)
+        {
+            // Ensure min < max
+            if (numMinAdcThreshold.Value >= numMaxAdcThreshold.Value)
+            {
+                if (sender == numMinAdcThreshold)
+                {
+                    numMaxAdcThreshold.Value = numMinAdcThreshold.Value + 1;
+                }
+                else
+                {
+                    numMinAdcThreshold.Value = numMaxAdcThreshold.Value - 1;
+                }
             }
         }
 
@@ -796,8 +1456,10 @@ namespace RyanSensorApp
                     {
                         _currentCalibration = _calibrationService.LoadCalibration(ofd.FileName);
                         _calibrationPoints = new List<CalibrationPoint>(_currentCalibration.Points);
+                        
                         lblEquation.Text = $"Equation: {_currentCalibration.Equation}";
                         lblRSquared.Text = $"R² = {_currentCalibration.RSquared:F6}";
+                        
                         cmbFitType.SelectedIndex = _currentCalibration.FitType switch
                         {
                             FitType.Linear => 0,
@@ -807,6 +1469,14 @@ namespace RyanSensorApp
                             FitType.Inverse => 4,
                             _ => 1
                         };
+
+                        // Load thresholds
+                        numMinAdcThreshold.Value = _currentCalibration.MinAdcThreshold;
+                        numMaxAdcThreshold.Value = _currentCalibration.MaxAdcThreshold;
+                        
+                        UpdateCalibrationPointsList();
+                        UpdateCalibrationPlot();
+                        
                         MessageBox.Show("Calibration loaded!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)

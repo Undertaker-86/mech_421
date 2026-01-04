@@ -1,0 +1,190 @@
+MECH 421 – Mechatronic Systems Instrumentation
+Lab 4: Op Amp Circuits for Noisy Environments
+Introduction and Outline
+This lab teaches the design and construction of op amp circuits to create a non-contact optical distance sensor.
+There are 7 exercises in this lab:
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+
+Optical transmitter
+Photodiode amplifier
+High-pass filter and AC amplifier
+Rectifier and low-pass filter
+Assemble complete circuit
+Build firmware and C# program to transmit and acquire data from the distance sensor
+Calibrate distance sensor, measure resolution
+
+Demonstration of Phase 3 indicates full functionality required by this lab, and will receive a full demonstration
+mark. Check-off for Phase 1 and Phase 2 is optional and only for partial marks, in case you could not complete
+Phase 3.
+The lab report should still answer all questions in this lab manual.
+
+Phase 1
+Exercise 1: Optical transmitter
+1. The optical distance sensor will use a red LED as a transmitter. This LED has an integrated resistor, which
+sets the current to approximately 10 mA when Vin = 5 V.
+
+2. Set up the AD2 waveform generator. Hook up Vin and Gnd on the LED. Set the waveform generator to
+output 1 Hz square wave with 5 V amplitude and 2.5V DC offset. See the LED produce a flashing signal.
+3. Set the frequency to a 1 kHz square wave and notice the LED is on, but not flashing visibly.
+You will need to assemble the LED mount for the remaining exercises. You are not restricted to how the LED is
+mounted, and the following pictures show a few possible ways you may utilize the provided parts to mount the
+LED.
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+1
+
+•Make sure the positioning screws are loosened so that the LED can move with the attachment plate.
+•Use the tape to make sure that the LED Harness Mount doesn’t rotate.
+•While moving the LED away from the photodiode, do not touch anywhere close to the LED Harness
+Mount.
+•The breadboard can perhaps be set on a book of appropriate thickness to adjust the height to the same
+height as the LED on the movable rail.
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+2
+
+Exercise 2: Photodiode amplifier and high-pass filter
+1. Design and build the photodiode amplifier circuit shown below, suppose that the photodiode has an
+output current of 1 µA, select the value of R2 to give an output of 100 mV deviation from V1.
+2. Select the value of R3 and R4 to make V1 = 0.5 V.
+3. Select the value of C1 and R5 to give a cut-off frequency of ~100 Hz (i.e. 𝜔𝑐 = 500 𝑟𝑎𝑑/𝑠).
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+3
+
+4. Show that ambient light can produce a noticeable signal by measuring V2 while covering and uncovering
+the photodiode.
+5. Move the LED close to the photodiode. Look for a small 1 kHz square wave on top of the ambient light
+signal.
+6. Connect the input of the high-pass filter to V2. Probe V3 using the AD2 oscilloscope. Magnify the voltage
+signal and look for the 1 kHz square wave signal. Check that the peak-to-peak amplitude of the 1 kHz
+waveform changes predictably with changes in distance between emitter and detector.
+7. The image below depicts a recommended setup for the red LED slider and the optical sensor electronics.
+a. Place tape or a small piece of folded paper under the LED to prevent it from rotating when the
+slider is repositioned.
+b. The photodiode is bent to be directly in-line with the sliding LED.
+c. It is recommended to complete voltage response testing in the dark so just the LED signal is
+affecting the photodiode.
+
+Exercise 3: High-pass filter and AC amplifier
+1. Design and build a high-pass filter with gain as shown below. Select R7 and R8 to make V4 = 2.5V. Use C1
+and R5 from the previous exercises. Select the value of R6 to give a gain of -10.
+2. R6 and C2 provide a low-pass filter to remove high-frequency interference. Select the value of C2 to give
+a low-pass cut-off frequency of ≥16 kHz (i.e. 𝜔𝑐 ≥ 105 𝑟𝑎𝑑/𝑠).
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+4
+
+3. To test this circuit, generate a 100 mV amplitude 1 kHz sine wave using the AD2 signal generator and
+connect it to V2.
+4. Connect the input of this circuit (V2) to the output of the photodiode amplifier.
+5. Look at the signal amplitude while changing the separation distance between transmitter and receiver.
+The circuit should produce a detectable 1 kHz square wave signal over the range of the separation
+distance (25 cm) and should not be saturated (<5 V) when the separation is too close (i.e. >3 cm). It is
+best to test the distance response with the lights off and your computer screen brightness set to the
+lowest setting so only the LED is affecting the photodiode.
+6. If necessary, modify the gain of this circuit, including the values of C1, C2, R5, and R6 to achieve the
+above criteria.
+Final values of circuit components:
+C1 = _________________; C2 = _________________; R5 = _________________; R6 = _________________;
+
+Phase 1 check-off
+1. Demonstrate completion of your Exercises 3 to your TA. Show V5 waveform from 3cm to 25cm
+separation.
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+5
+
+Phase 2
+Exercise 4: High-pass filter, Rectifier, and low-pass filter
+1. Design and build another RC high-pass filter below using C3 and R9. Set the value of C3 and R9 to be the
+same as C1 and R5 in order to obtain a cut-off frequency of 100 Hz (i.e. 𝜔𝑐 = 500 𝑟𝑎𝑑/𝑠).
+2. Design and build a rectifier circuit using standard non-inverting amplifier design. Select the value of R10
+and R11 to give a gain of 11.
+3. Design and build an RC low-pass filter using C4 and R12. Select the value of C4 and R12 to obtain a cutoff frequency of 1.6 Hz (i.e. 𝜔𝑐 = 10 𝑟𝑎𝑑/𝑠).
+
+4. Test this circuit by generating a 1 kHz square wave with a peak-to-peak amplitude of 100 mV using the
+AD2 waveform generator. Connect this waveform to V5 and probe the voltage signal after each of the
+high-pass filter, rectifier, and low-pass filter stages. Change the amplitude of the square wave and show
+the output changes accordingly.
+
+Final values of circuit components:
+C3 = ________________; R9 = ________________; R10 = ________________; R11 = _________________;
+R12 = _______________; C4 = ________________;
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+6
+
+Exercise 5: Assemble complete circuit
+1. Connect together the circuits from exercise 2-4 as shown below.
+2. Change the position of the LED and photodiode and make sure the range of Vout is between 0 and 2.5V.
+If necessary, adjust the rectifier gain by changing the value of R10 and R11 to get Vout in this range.
+
+Final values of circuit components:
+R10 = ________________; R11 = _________________;
+
+Phase 2 check-off
+2. Demonstrate completion of your Exercises 4-5 to your TA.
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+7
+
+Phase 3
+Exercise 6: Build a C# based program to acquire data from the distance sensor
+1. Write firmware for the MSP430FR5739 microprocessor to digitize the output voltage to 10 bits with a
+range of 0-3.3V. Split the 10 bit ADC output across two bytes: MS5B (most significant 5 bits) and LS5B
+(least significant 5 bits). The output data stream should be formatted as follows:
+Out byte 1
+255
+
+Out byte 2
+MS5B
+
+Out byte 3
+LS5B
+
+2. As before, write a C# program to acquire data from the distance sensor
+a. Connect the serialport
+b. Write code to re-assemble the MS5B and LS5B into a 10 bit number.
+c. Write code to display, graph, and store the ADC data stream.
+d. Make an interesting and useful user interface for measuring distance.
+
+Exercise 7: Calibrate distance sensor, measure resolution
+1. Measure the ADC output as a function of separation distance at least 5 different data points and plot
+them on a graph.
+2. Fit a function to this graph using Excel, C#, MATLAB, Python, etc. Visualize raw data and the fitted
+function in your report. Comment on fitting quality.
+3. Convert ADC output to position. Hint: use the fitted function.
+4. Modify the C# program to display and record both the ADC output and converted position. Let the user
+know when the distance sensor is out of range. Reported values and graphs are required.
+5. Set the distance sensor in the middle of its range. Record the converted position for ~10 s. Measure the
+standard deviation of the converted position. This value is your RMS noise level. Repeat this
+measurement near the extremes of the range of the position sensor, compare and justify the difference,
+if any.
+
+Phase 3 demonstration and lab report
+1. Demonstrate completion of your Exercises 6-7 to your TA. Bring a ruler or draw ticks on the extrusion.
+Report your distance sensor’s working range. Show measurement on 3 random distances within this
+range, and show the out-of-range indicator when too close or too far.
+2. Write a lab report describing exercises 1-7 in the standard format. Where appropriate, include diagrams
+of circuits, list component values, waveforms acquired in the lab, and screenshots of the software user
+interface design.
+
+UBC MECH 368 – Measurement and Instrumentation – 2025W
+
+8
+
+

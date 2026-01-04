@@ -1,0 +1,20 @@
+\documentclass[11pt]{article}
+\usepackage[paperwidth=14in,paperheight=10in,margin=0.5in]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, positioning, arrows, fit, calc}
+
+\begin{document}
+\thispagestyle{empty}
+\centering
+
+\begin{tikzpicture}[
+    >=latex,
+    node distance=1.5cm and 2cm,
+    sensor/.style={rectangle, draw=blue!60, fill=blue!5, thick, minimum width=2.5cm, minimum height=1cm, align=center, font=\small},
+    process/.style={rectangle, draw=teal!60, fill=teal!5, thick, minimum width=3cm, minimum height=1.5cm, align=center, rounded corners, font=\small}
+]
+    \node[sensor] (imu) {IMU / Mag};
+    \node[process, right=3cm of imu] (middleware) {ROS 2 Middleware};
+    \draw[->] (imu) -- (middleware);
+\end{tikzpicture}
+\end{document}
